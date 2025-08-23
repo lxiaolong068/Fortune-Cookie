@@ -1,0 +1,74 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hero image for Fortune Cookie -->
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="cookieGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </radialGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="4" dy="4" stdDeviation="8" flood-color="#92400e" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#heroBg)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="40" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="700" cy="500" r="50" fill="#f59e0b" opacity="0.2"/>
+  <circle cx="150" cy="450" r="30" fill="#fef3c7" opacity="0.4"/>
+  <circle cx="650" cy="150" r="35" fill="#d97706" opacity="0.3"/>
+  
+  <!-- Main fortune cookie (large, centered) -->
+  <g transform="translate(400, 300)" filter="url(#shadow)">
+    <!-- Cookie body -->
+    <ellipse cx="0" cy="0" rx="150" ry="100" fill="url(#cookieGradient)" stroke="#92400e" stroke-width="4"/>
+    <!-- Cookie fold -->
+    <path d="M -100 -25 Q 0 -50 100 -25" fill="none" stroke="#92400e" stroke-width="3"/>
+    <!-- Paper slip -->
+    <rect x="-50" y="25" width="100" height="40" rx="5" fill="white" stroke="#92400e" stroke-width="2"/>
+    <!-- Text on paper -->
+    <text x="0" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#92400e" font-weight="bold">
+      Your Fortune Awaits
+    </text>
+  </g>
+  
+  <!-- Lucky numbers floating around -->
+  <g fill="#dc2626" font-family="Arial, sans-serif" font-size="24" font-weight="bold">
+    <text x="200" y="150" opacity="0.7">7</text>
+    <text x="600" y="200" opacity="0.7">21</text>
+    <text x="150" y="350" opacity="0.7">42</text>
+    <text x="650" y="400" opacity="0.7">13</text>
+    <text x="300" y="500" opacity="0.7">88</text>
+    <text x="500" y="100" opacity="0.7">3</text>
+  </g>
+  
+  <!-- Sparkles decoration -->
+  <g fill="#fbbf24" opacity="0.6">
+    <polygon points="100,200 105,210 115,210 107,218 110,228 100,222 90,228 93,218 85,210 95,210" />
+    <polygon points="700,100 705,110 715,110 707,118 710,128 700,122 690,128 693,118 685,110 695,110" />
+    <polygon points="150,500 155,510 165,510 157,518 160,528 150,522 140,528 143,518 135,510 145,510" />
+    <polygon points="650,450 655,460 665,460 657,468 660,478 650,472 640,478 643,468 635,460 645,460" />
+    <polygon points="300,150 305,160 315,160 307,168 310,178 300,172 290,178 293,168 285,160 295,160" />
+    <polygon points="500,450 505,460 515,460 507,468 510,478 500,472 490,478 493,468 485,460 495,460" />
+  </g>
+  
+  <!-- Inspirational quote -->
+  <text x="400" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#92400e">
+    "Wisdom comes to those who seek it"
+  </text>
+  
+  <!-- AI badge -->
+  <g transform="translate(50, 50)">
+    <rect x="0" y="0" width="80" height="30" rx="15" fill="#dc2626" stroke="#991b1b" stroke-width="1"/>
+    <text x="40" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">
+      AI Powered
+    </text>
+  </g>
+</svg>

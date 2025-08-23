@@ -1,0 +1,249 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - link "Home" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6] [cursor=pointer]:
+          - img [ref=e7] [cursor=pointer]
+          - generic [ref=e10] [cursor=pointer]: Home
+      - link "Generator" [ref=e11] [cursor=pointer]:
+        - /url: /generator
+        - generic [ref=e12] [cursor=pointer]:
+          - img [ref=e13] [cursor=pointer]
+          - generic [ref=e15] [cursor=pointer]: Generator
+      - link "Messages" [ref=e16] [cursor=pointer]:
+        - /url: /messages
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e18] [cursor=pointer]
+          - generic [ref=e20] [cursor=pointer]: Messages
+      - link "Browse" [ref=e21] [cursor=pointer]:
+        - /url: /browse
+        - generic [ref=e22] [cursor=pointer]:
+          - img [ref=e23] [cursor=pointer]
+          - generic [ref=e26] [cursor=pointer]: Browse
+      - link "History" [ref=e27] [cursor=pointer]:
+        - /url: /history
+        - generic [ref=e28] [cursor=pointer]:
+          - img [ref=e29] [cursor=pointer]
+          - generic [ref=e32] [cursor=pointer]: History
+      - link "Recipes" [ref=e33] [cursor=pointer]:
+        - /url: /recipes
+        - generic [ref=e34] [cursor=pointer]:
+          - img [ref=e35] [cursor=pointer]
+          - generic [ref=e37] [cursor=pointer]: Recipes
+  - button [ref=e39]:
+    - img [ref=e41]
+  - main [ref=e42]:
+    - generic [ref=e43]:
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+      - generic:
+        - img
+    - generic [ref=e45]:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - img
+              - generic:
+                - img
+        - generic:
+          - generic:
+            - img
+          - generic:
+            - img
+          - generic:
+            - img
+          - generic:
+            - img
+          - generic:
+            - img
+          - generic:
+            - img
+          - generic:
+            - img
+          - generic:
+            - img
+          - heading "Fortune Cookie" [level=1]:
+            - generic: Fortune Cookie
+          - paragraph:
+            - generic: Tap the cookie to crack it open!
+          - generic:
+            - generic:
+              - generic:
+                - img
+              - generic: Magic awaits inside
+              - generic:
+                - img
+    - generic [ref=e46]:
+      - heading "Fortune Cookie - Free Online AI Generator" [level=1] [ref=e47]
+      - paragraph [ref=e48]: Welcome to the best free online AI-powered fortune cookie generator! Create personalized inspirational messages, funny quotes, and discover your lucky numbers. Our AI tool generates unique fortune cookies for entertainment, motivation, and fun.
+      - heading "Features" [level=2] [ref=e49]
+      - list [ref=e50]:
+        - listitem [ref=e51]: Free online fortune cookie generator with AI
+        - listitem [ref=e52]: Inspirational and motivational quotes
+        - listitem [ref=e53]: Funny fortune cookie messages
+        - listitem [ref=e54]: Lucky numbers for each fortune
+        - listitem [ref=e55]: Custom message creation
+        - listitem [ref=e56]: Beautiful animations and effects
+        - listitem [ref=e57]: Mobile-friendly responsive design
+        - listitem [ref=e58]: No registration required
+      - heading "How to Use" [level=2] [ref=e59]
+      - paragraph [ref=e60]: Simply click on the fortune cookie to crack it open and reveal your personalized message. Each fortune comes with lucky numbers and inspirational wisdom to brighten your day.
+  - contentinfo [ref=e61]:
+    - generic [ref=e62]:
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - img [ref=e67]
+            - generic [ref=e69]:
+              - heading "Fortune Cookie AI" [level=3] [ref=e70]
+              - paragraph [ref=e71]: Powered by AI
+          - paragraph [ref=e72]: Create personalized fortune cookies with our AI-powered generator. Discover wisdom, humor, and inspiration in every message.
+          - generic [ref=e73]:
+            - link "Follow us on Twitter" [ref=e74] [cursor=pointer]:
+              - /url: https://twitter.com/fortunecookieai
+              - img [ref=e75] [cursor=pointer]
+            - link "View our GitHub repository" [ref=e77] [cursor=pointer]:
+              - /url: https://github.com/fortune-cookie-ai
+              - img [ref=e78] [cursor=pointer]
+            - link "Contact us via email" [ref=e81] [cursor=pointer]:
+              - /url: mailto:hello@fortune-cookie-ai.com
+              - img [ref=e82] [cursor=pointer]
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - heading "Generate" [level=3] [ref=e88]
+            - list [ref=e89]:
+              - listitem [ref=e90]:
+                - link "Fortune Generator" [ref=e91] [cursor=pointer]:
+                  - /url: /
+              - listitem [ref=e92]:
+                - link "AI Generator" [ref=e93] [cursor=pointer]:
+                  - /url: /generator
+              - listitem [ref=e94]:
+                - link "Browse Messages" [ref=e95] [cursor=pointer]:
+                  - /url: /browse
+          - generic [ref=e96]:
+            - heading "Learn" [level=3] [ref=e97]
+            - list [ref=e98]:
+              - listitem [ref=e99]:
+                - link "History" [ref=e100] [cursor=pointer]:
+                  - /url: /history
+              - listitem [ref=e101]:
+                - link "Who Invented?" [ref=e102] [cursor=pointer]:
+                  - /url: /who-invented-fortune-cookies
+              - listitem [ref=e103]:
+                - link "Recipes" [ref=e104] [cursor=pointer]:
+                  - /url: /recipes
+          - generic [ref=e105]:
+            - heading "Messages" [level=3] [ref=e106]
+            - list [ref=e107]:
+              - listitem [ref=e108]:
+                - link "All Messages" [ref=e109] [cursor=pointer]:
+                  - /url: /messages
+              - listitem [ref=e110]:
+                - link "Funny Messages" [ref=e111] [cursor=pointer]:
+                  - /url: /funny-fortune-cookie-messages
+              - listitem [ref=e112]:
+                - link "How to Make" [ref=e113] [cursor=pointer]:
+                  - /url: /how-to-make-fortune-cookies
+      - generic [ref=e115]:
+        - generic [ref=e116]:
+          - heading "Popular Searches" [level=4] [ref=e117]
+          - list [ref=e118]:
+            - listitem [ref=e119]:
+              - link "Funny Fortune Messages" [ref=e120] [cursor=pointer]:
+                - /url: /funny-fortune-cookie-messages
+            - listitem [ref=e121]:
+              - link "Who Invented Fortune Cookies" [ref=e122] [cursor=pointer]:
+                - /url: /who-invented-fortune-cookies
+            - listitem [ref=e123]:
+              - link "How to Make Fortune Cookies" [ref=e124] [cursor=pointer]:
+                - /url: /how-to-make-fortune-cookies
+            - listitem [ref=e125]:
+              - link "Inspirational Quotes" [ref=e126] [cursor=pointer]:
+                - /url: /messages?category=inspirational
+        - generic [ref=e127]:
+          - heading "Fortune Categories" [level=4] [ref=e128]
+          - list [ref=e129]:
+            - listitem [ref=e130]:
+              - link "Love Fortune Cookies" [ref=e131] [cursor=pointer]:
+                - /url: /messages?category=love
+            - listitem [ref=e132]:
+              - link "Success Messages" [ref=e133] [cursor=pointer]:
+                - /url: /messages?category=success
+            - listitem [ref=e134]:
+              - link "Wisdom Quotes" [ref=e135] [cursor=pointer]:
+                - /url: /messages?category=wisdom
+            - listitem [ref=e136]:
+              - link "Friendship Messages" [ref=e137] [cursor=pointer]:
+                - /url: /messages?category=friendship
+        - generic [ref=e138]:
+          - heading "Learn More" [level=4] [ref=e139]
+          - list [ref=e140]:
+            - listitem [ref=e141]:
+              - link "Fortune Cookie History" [ref=e142] [cursor=pointer]:
+                - /url: /history
+            - listitem [ref=e143]:
+              - link "Fortune Cookie Recipes" [ref=e144] [cursor=pointer]:
+                - /url: /recipes
+            - listitem [ref=e145]:
+              - link "Browse All Messages" [ref=e146] [cursor=pointer]:
+                - /url: /browse
+            - listitem [ref=e147]:
+              - link "AI Generator" [ref=e148] [cursor=pointer]:
+                - /url: /generator
+        - generic [ref=e149]:
+          - heading "Resources" [level=4] [ref=e150]
+          - list [ref=e151]:
+            - listitem [ref=e152]:
+              - link "Fortune Database" [ref=e153] [cursor=pointer]:
+                - /url: /api/fortunes?action=stats
+            - listitem [ref=e154]:
+              - link "Sitemap" [ref=e155] [cursor=pointer]:
+                - /url: /sitemap.xml
+            - listitem [ref=e156]:
+              - link "Open Source" [ref=e157] [cursor=pointer]:
+                - /url: https://github.com/fortune-cookie-ai
+            - listitem [ref=e158]:
+              - link "Contact Us" [ref=e159] [cursor=pointer]:
+                - /url: mailto:hello@fortune-cookie-ai.com
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - paragraph [ref=e163]:
+            - text: © 2025 Fortune Cookie AI. Made with
+            - img [ref=e164]
+            - text: for spreading wisdom and joy.
+          - generic [ref=e166]:
+            - link "Privacy Policy" [ref=e167] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Service" [ref=e168] [cursor=pointer]:
+              - /url: /terms
+            - link "Cookie Policy" [ref=e169] [cursor=pointer]:
+              - /url: /cookies
+        - paragraph [ref=e171]: Fortune Cookie AI is the leading free online fortune cookie generator powered by artificial intelligence. Create personalized inspirational messages, funny quotes, and discover your lucky numbers. Our AI-powered tool generates unique fortune cookies for entertainment, motivation, and sharing. Learn about fortune cookie history, discover who invented fortune cookies, and find easy recipes to make homemade fortune cookies. Browse our extensive collection of fortune cookie messages including funny sayings, inspirational quotes, love messages, and success affirmations. Perfect for parties, gifts, and daily inspiration.
+```

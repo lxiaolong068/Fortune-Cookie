@@ -1,0 +1,43 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo for Fortune Cookie AI -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="cookieGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#logoGradient)" stroke="#92400e" stroke-width="4"/>
+  
+  <!-- Fortune cookie shape -->
+  <g transform="translate(100, 100)">
+    <!-- Cookie body -->
+    <ellipse cx="0" cy="0" rx="60" ry="40" fill="url(#cookieGradient)" stroke="#92400e" stroke-width="2"/>
+    <!-- Cookie fold -->
+    <path d="M -40 -10 Q 0 -20 40 -10" fill="none" stroke="#92400e" stroke-width="2"/>
+    <!-- Paper slip -->
+    <rect x="-20" y="10" width="40" height="15" rx="2" fill="white" stroke="#92400e" stroke-width="1"/>
+    <!-- Text on paper -->
+    <text x="0" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#92400e" font-weight="bold">AI</text>
+  </g>
+  
+  <!-- Sparkles around the cookie -->
+  <g fill="#fbbf24" opacity="0.8">
+    <polygon points="50,50 52,56 58,56 53,60 55,66 50,63 45,66 47,60 42,56 48,56" />
+    <polygon points="150,50 152,56 158,56 153,60 155,66 150,63 145,66 147,60 142,56 148,56" />
+    <polygon points="50,150 52,156 58,156 53,160 55,166 50,163 45,166 47,160 42,156 48,156" />
+    <polygon points="150,150 152,156 158,156 153,160 155,166 150,163 145,166 147,160 142,156 148,156" />
+  </g>
+  
+  <!-- Brand text -->
+  <text x="100" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#92400e">
+    Fortune Cookie AI
+  </text>
+</svg>

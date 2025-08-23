@@ -1,0 +1,67 @@
+# Vercel 部署忽略文件
+# 这些文件和目录不会被上传到 Vercel
+
+# 开发和测试文件
+tests/
+test-results/
+playwright-report/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# 文档和指南
+docs/
+guidelines/
+README-EN.md
+CLAUDE.md
+Attributions.md
+VERCEL-QUICK-START.md
+
+# 开发工具配置
+.env.local
+.env.local.example
+playwright.config.ts
+tsconfig.tsbuildinfo
+
+# 脚本文件（除了必要的）
+scripts/test-*.js
+scripts/create-*.js
+scripts/fix-*.js
+scripts/generate-*.js
+
+# IDE 和编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 临时文件
+.DS_Store
+Thumbs.db
+
+# 分析报告
+.next/analyze/
+
+# 不必要的图标文件
+public/android-chrome-192x192.svg
+public/android-chrome-512x512.svg
+public/apple-touch-icon.svg
+public/favicon-16x16.svg
+public/favicon-32x32.svg
+
+# 保留必要的文件
+!public/android-chrome-192x192.png
+!public/android-chrome-512x512.png
+!public/apple-touch-icon.png
+!public/favicon-16x16.png
+!public/favicon-32x32.png
+!public/favicon.ico
+!public/site.webmanifest

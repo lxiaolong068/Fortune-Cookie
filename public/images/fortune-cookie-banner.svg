@@ -1,0 +1,90 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Banner image for Fortune Cookie -->
+  <defs>
+    <linearGradient id="bannerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="cookieGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </radialGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="3" stdDeviation="6" flood-color="#92400e" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="600" fill="url(#bannerBg)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="40" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="1100" cy="500" r="50" fill="#f59e0b" opacity="0.2"/>
+  <circle cx="200" cy="450" r="30" fill="#fef3c7" opacity="0.4"/>
+  <circle cx="1000" cy="150" r="35" fill="#d97706" opacity="0.3"/>
+  
+  <!-- Multiple fortune cookies -->
+  <g transform="translate(300, 300)" filter="url(#shadow)">
+    <!-- Cookie 1 -->
+    <ellipse cx="0" cy="0" rx="80" ry="50" fill="url(#cookieGradient)" stroke="#92400e" stroke-width="2"/>
+    <path d="M -50 -15 Q 0 -25 50 -15" fill="none" stroke="#92400e" stroke-width="2"/>
+    <rect x="-25" y="15" width="50" height="20" rx="3" fill="white" stroke="#92400e" stroke-width="1"/>
+    <text x="0" y="28" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#92400e" font-weight="bold">Wisdom</text>
+  </g>
+  
+  <g transform="translate(600, 200)" filter="url(#shadow)">
+    <!-- Cookie 2 -->
+    <ellipse cx="0" cy="0" rx="70" ry="45" fill="url(#cookieGradient)" stroke="#92400e" stroke-width="2"/>
+    <path d="M -45 -12 Q 0 -22 45 -12" fill="none" stroke="#92400e" stroke-width="2"/>
+    <rect x="-20" y="12" width="40" height="18" rx="2" fill="white" stroke="#92400e" stroke-width="1"/>
+    <text x="0" y="24" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#92400e" font-weight="bold">Success</text>
+  </g>
+  
+  <g transform="translate(900, 350)" filter="url(#shadow)">
+    <!-- Cookie 3 -->
+    <ellipse cx="0" cy="0" rx="75" ry="48" fill="url(#cookieGradient)" stroke="#92400e" stroke-width="2"/>
+    <path d="M -48 -14 Q 0 -24 48 -14" fill="none" stroke="#92400e" stroke-width="2"/>
+    <rect x="-22" y="14" width="44" height="19" rx="2" fill="white" stroke="#92400e" stroke-width="1"/>
+    <text x="0" y="26" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#92400e" font-weight="bold">Fortune</text>
+  </g>
+  
+  <!-- Title text -->
+  <text x="600" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#92400e">
+    Fortune Cookie AI Generator
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#7c2d12">
+    Discover Your Destiny with AI-Powered Wisdom
+  </text>
+  
+  <!-- Lucky numbers scattered -->
+  <g fill="#dc2626" font-family="Arial, sans-serif" font-size="20" font-weight="bold" opacity="0.6">
+    <text x="150" y="200">7</text>
+    <text x="1050" y="250">21</text>
+    <text x="100" y="400">42</text>
+    <text x="1100" y="400">13</text>
+    <text x="200" y="550">88</text>
+    <text x="1000" y="100">3</text>
+    <text x="500" y="500">77</text>
+    <text x="700" y="550">99</text>
+  </g>
+  
+  <!-- Sparkles decoration -->
+  <g fill="#fbbf24" opacity="0.7">
+    <polygon points="50,150 55,160 65,160 57,168 60,178 50,172 40,178 43,168 35,160 45,160" />
+    <polygon points="1150,100 1155,110 1165,110 1157,118 1160,128 1150,122 1140,128 1143,118 1135,110 1145,110" />
+    <polygon points="100,500 105,510 115,510 107,518 110,528 100,522 90,528 93,518 85,510 95,510" />
+    <polygon points="1100,450 1105,460 1115,460 1107,468 1110,478 1100,472 1090,478 1093,468 1085,460 1095,460" />
+    <polygon points="400,150 405,160 415,160 407,168 410,178 400,172 390,178 393,168 385,160 395,160" />
+    <polygon points="800,500 805,510 815,510 807,518 810,528 800,522 790,528 793,518 785,510 795,510" />
+  </g>
+  
+  <!-- Call to action -->
+  <rect x="450" y="450" width="300" height="50" rx="25" fill="#dc2626" stroke="#991b1b" stroke-width="2"/>
+  <text x="600" y="480" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="white">
+    Generate Your Fortune
+  </text>
+</svg>
