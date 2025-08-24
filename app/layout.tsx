@@ -7,6 +7,7 @@ import { PerformanceMonitor, GoogleAnalytics, CriticalResourcePreloader } from '
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ErrorMonitorInitializer } from '@/components/ErrorMonitorInitializer'
 import { ServiceWorkerInitializer } from '@/components/ServiceWorkerInitializer'
+import { ThemeInitializer, ThemeScript } from '@/components/ThemeInitializer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -85,6 +86,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <ThemeScript />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -92,6 +94,7 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
+        <ThemeInitializer />
         <ServiceWorkerInitializer />
         <ErrorMonitorInitializer />
         <CriticalResourcePreloader />

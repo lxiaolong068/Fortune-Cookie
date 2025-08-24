@@ -12,6 +12,8 @@ import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { sessionManager, type UserPreferences } from '@/lib/session-manager'
 import { captureUserAction } from '@/lib/error-monitoring'
+import { ThemePreview } from '@/components/ThemeToggle'
+import { themeManager } from '@/lib/theme-manager'
 
 interface UserPreferencesProps {
   className?: string
@@ -70,6 +72,11 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
     // 立即保存某些关键设置
     if (key === 'theme' || key === 'language') {
       savePreferences(newPreferences)
+
+      // 同步主题到主题管理器
+      if (key === 'theme') {
+        themeManager.setTheme(value as 'light' | 'dark' | 'system')
+      }
     }
   }
 
@@ -155,24 +162,10 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
             <h3 className="text-sm font-medium">外观设置</h3>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="theme">主题</Label>
-              <Select
-                value={preferences.theme}
-                onValueChange={(value: 'light' | 'dark' | 'system') => 
-                  updatePreference('theme', value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">浅色</SelectItem>
-                  <SelectItem value="dark">深色</SelectItem>
-                  <SelectItem value="system">跟随系统</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="theme">主题选择</Label>
+              <ThemePreview />
             </div>
             
             <div className="space-y-2">

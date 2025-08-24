@@ -8,6 +8,7 @@ import { Menu, X, Home, Sparkles, MessageSquare, Clock, ChefHat, Search, User } 
 import { Button } from './ui/button'
 import { cn } from '@/lib/utils'
 import { OfflineIndicator } from './OfflineIndicator'
+import { ThemeToggle } from './ThemeToggle'
 
 const navigationItems = [
   {
@@ -100,8 +101,9 @@ export function Navigation() {
             })}
           </div>
 
-          {/* 离线状态指示器 */}
-          <div className="ml-4">
+          {/* 主题切换和离线状态指示器 */}
+          <div className="flex items-center gap-2 ml-4">
+            <ThemeToggle />
             <OfflineIndicator />
           </div>
         </motion.div>
