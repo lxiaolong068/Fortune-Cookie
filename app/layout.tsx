@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { Suspense } from 'react'
 import { Navigation } from '@/components/Navigation'
 import { Footer } from '@/components/Footer'
 import { PerformanceMonitor, GoogleAnalytics, CriticalResourcePreloader } from '@/components/PerformanceMonitor'
@@ -102,7 +103,9 @@ export default function RootLayout({
         <PerformanceMonitor />
         <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
         <ErrorBoundary>
-          <AnalyticsInitializer />
+          <Suspense fallback={null}>
+            <AnalyticsInitializer />
+          </Suspense>
           <Navigation />
           {children}
           <Footer />

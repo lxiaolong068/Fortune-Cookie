@@ -211,8 +211,15 @@ export class DatabaseManager {
   }
 }
 
-// 导出数据库实例
-export const db = DatabaseManager.getInstance()
+// 导出数据库实例（惰性初始化，避免在构建阶段读取 DATABASE_URL）
+export const db = new Proxy({} as PrismaClient, {
+  get(_target, prop, receiver) {
+    const instance = DatabaseManager.getInstance()
+    // 将属性访问转发到实际的 PrismaClient 实例
+    // @ts-ignore
+    return Reflect.get(instance, prop, receiver)
+  }
+}) as PrismaClient
 
 // 查询构建器和优化工具
 export class QueryOptimizer {

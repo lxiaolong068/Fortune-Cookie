@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
-import { Wifi, RefreshCw, Home, Heart } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Wifi, Heart } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { OfflineActions } from '@/components/OfflineActions'
 
 export const metadata: Metadata = {
   title: '离线模式 - Fortune Cookie AI',
@@ -64,23 +64,7 @@ export default function OfflinePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button 
-                onClick={() => window.location.reload()}
-                className="flex items-center gap-2"
-              >
-                <RefreshCw className="w-4 h-4" />
-                重新连接
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => window.location.href = '/'}
-                className="flex items-center gap-2"
-              >
-                <Home className="w-4 h-4" />
-                返回首页
-              </Button>
-            </div>
+            <OfflineActions />
           </CardContent>
         </Card>
 
@@ -153,23 +137,7 @@ export default function OfflinePage() {
                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                 <span className="text-sm text-gray-600">网络状态: 离线</span>
               </div>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => {
-                  if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.ready.then(registration => {
-                      // Check if Background Sync is supported
-                      if ('sync' in registration) {
-                        (registration as any).sync.register('background-sync')
-                      }
-                    }).catch(console.error)
-                  }
-                }}
-                className="text-xs"
-              >
-                检查连接
-              </Button>
+
             </div>
           </CardContent>
         </Card>
