@@ -34,13 +34,15 @@ const getHandler = async (request: NextRequest) => {
     const { searchParams } = new URL(request.url)
     const action = searchParams.get('action') || 'health'
     
-    // 限流检查
-    const rateLimitResult = await rateLimiters.api.limit(clientId)
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: 'Rate limit exceeded' },
-        { status: 429 }
-      )
+    // 限流检查 (仅在Redis可用时)
+    if (rateLimiters) {
+      const rateLimitResult = await rateLimiters.api.limit(clientId)
+      if (!rateLimitResult.success) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded' },
+          { status: 429 }
+        )
+      }
     }
     
     switch (action) {
@@ -146,13 +148,15 @@ const postHandler = async (request: NextRequest) => {
       )
     }
     
-    // 严格限流
-    const rateLimitResult = await rateLimiters.strict.limit(clientId)
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: 'Rate limit exceeded' },
-        { status: 429 }
-      )
+    // 严格限流 (仅在Redis可用时)
+    if (rateLimiters) {
+      const rateLimitResult = await rateLimiters.strict.limit(clientId)
+      if (!rateLimitResult.success) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded' },
+          { status: 429 }
+        )
+      }
     }
     
     const body = await request.json()

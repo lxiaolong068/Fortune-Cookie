@@ -15,6 +15,7 @@ const nextConfig = {
   // Performance optimizations
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+    instrumentationHook: true,
   },
   // 安全和SEO优化配置
   async headers() {

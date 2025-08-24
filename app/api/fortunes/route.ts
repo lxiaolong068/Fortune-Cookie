@@ -58,11 +58,12 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now()
 
   try {
-    // 分布式限流检查
+    // 分布式限流检查 (仅在Redis可用时)
     const clientId = getClientIdentifier(request)
-    const rateLimitResult = await rateLimiters.search.limit(clientId)
+    if (rateLimiters) {
+      const rateLimitResult = await rateLimiters.search.limit(clientId)
 
-    if (!rateLimitResult.success) {
+      if (!rateLimitResult.success) {
       captureUserAction('rate_limit_exceeded', 'fortunes_api', clientId, {
         endpoint: '/api/fortunes'
       })
@@ -83,6 +84,7 @@ export async function GET(request: NextRequest) {
           }
         }
       )
+      }
     }
 
     const { searchParams } = new URL(request.url)

@@ -28,20 +28,22 @@ export async function POST(request: NextRequest) {
     // 获取客户端IP地址
     const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? '127.0.0.1'
     
-    // 速率限制检查
-    const rateLimitResult = await rateLimiters.api.limit(ip)
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: 'Rate limit exceeded' },
-        { 
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+    // 速率限制检查 (仅在Redis可用时)
+    if (rateLimiters) {
+      const rateLimitResult = await rateLimiters.api.limit(ip)
+      if (!rateLimitResult.success) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded' },
+          { 
+            status: 429,
+            headers: {
+              'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+              'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
             'X-RateLimit-Reset': rateLimitResult.reset.toString(),
           }
         }
       )
+      }
     }
 
     // 解析请求体
@@ -83,9 +85,6 @@ export async function POST(request: NextRequest) {
     const jsonResponse = new Response(JSON.stringify(response), {
       headers: {
         'Content-Type': 'application/json',
-        'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-        'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-        'X-RateLimit-Reset': rateLimitResult.reset.toString(),
       }
     })
     return jsonResponse

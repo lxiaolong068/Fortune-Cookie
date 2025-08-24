@@ -2,10 +2,12 @@ import { Redis } from '@upstash/redis'
 import { Ratelimit } from '@upstash/ratelimit'
 
 // Redis 客户端配置
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
-})
+const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN 
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    })
+  : null
 
 // 缓存键前缀
 const CACHE_PREFIXES = {
@@ -25,8 +27,8 @@ const CACHE_TTL = {
   API_RESPONSE: 60 * 5, // 5分钟
 } as const
 
-// 分布式限流器
-export const rateLimiters = {
+// 分布式限流器 (仅在Redis可用时启用)
+export const rateLimiters = redis ? {
   // API 请求限流：每个IP每15分钟50次
   api: new Ratelimit({
     redis,
@@ -58,11 +60,11 @@ export const rateLimiters = {
     analytics: true,
     prefix: 'ratelimit:strict',
   }),
-}
+} : null
 
 // 缓存管理类
 export class CacheManager {
-  private redis: Redis
+  private redis: Redis | null
 
   constructor() {
     this.redis = redis
@@ -71,6 +73,7 @@ export class CacheManager {
   // 检查Redis连接
   async isConnected(): Promise<boolean> {
     try {
+      if (!this.redis) return false
       await this.redis.ping()
       return true
     } catch (error) {
@@ -82,6 +85,7 @@ export class CacheManager {
   // 通用缓存设置
   async set(key: string, value: any, ttl?: number): Promise<boolean> {
     try {
+      if (!this.redis) return false
       if (ttl) {
         await this.redis.setex(key, ttl, JSON.stringify(value))
       } else {
@@ -97,6 +101,7 @@ export class CacheManager {
   // 通用缓存获取
   async get<T>(key: string): Promise<T | null> {
     try {
+      if (!this.redis) return null
       const value = await this.redis.get(key)
       return value ? JSON.parse(value as string) : null
     } catch (error) {
@@ -108,6 +113,7 @@ export class CacheManager {
   // 删除缓存
   async del(key: string): Promise<boolean> {
     try {
+      if (!this.redis) return false
       await this.redis.del(key)
       return true
     } catch (error) {
@@ -119,6 +125,7 @@ export class CacheManager {
   // 批量删除缓存（通过模式匹配）
   async delPattern(pattern: string): Promise<number> {
     try {
+      if (!this.redis) return 0
       const keys = await this.redis.keys(pattern)
       if (keys.length > 0) {
         return await this.redis.del(...keys)
@@ -193,6 +200,7 @@ export class CacheManager {
   // 增量计数器
   async increment(key: string, ttl?: number): Promise<number> {
     try {
+      if (!this.redis) return 0
       const result = await this.redis.incr(key)
       if (ttl && result === 1) {
         await this.redis.expire(key, ttl)
@@ -207,6 +215,13 @@ export class CacheManager {
   // 获取缓存统计信息
   async getCacheStats(): Promise<any> {
     try {
+      if (!this.redis) {
+        return {
+          connected: false,
+          error: 'Redis client not configured',
+          timestamp: new Date().toISOString(),
+        }
+      }
       // Basic connection test instead of info()
       await this.redis.ping()
       return {

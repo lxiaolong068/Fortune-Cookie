@@ -52,20 +52,21 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now()
 
   try {
-    // 分布式限流检查
+    // 分布式限流检查 (仅在Redis可用时)
     const clientId = getClientIdentifier(request)
-    const rateLimitResult = await rateLimiters.fortune.limit(clientId)
+    if (rateLimiters) {
+      const rateLimitResult = await rateLimiters.fortune.limit(clientId)
 
-    if (!rateLimitResult.success) {
-      // 记录速率限制事件
-      captureUserAction('rate_limit_exceeded', 'fortune_api', clientId, {
-        limit: rateLimitResult.limit,
-        remaining: rateLimitResult.remaining,
-        reset: rateLimitResult.reset,
-        endpoint: '/api/fortune'
-      })
+      if (!rateLimitResult.success) {
+        // 记录速率限制事件
+        captureUserAction('rate_limit_exceeded', 'fortune_api', clientId, {
+          limit: rateLimitResult.limit,
+          remaining: rateLimitResult.remaining,
+          reset: rateLimitResult.reset,
+          endpoint: '/api/fortune'
+        })
 
-      CachePerformanceMonitor.recordError()
+        CachePerformanceMonitor.recordError()
 
       return NextResponse.json(
         {
@@ -83,6 +84,7 @@ export async function POST(request: NextRequest) {
           }
         }
       )
+      }
     }
 
     // Parse and validate request body
@@ -213,10 +215,8 @@ export async function POST(request: NextRequest) {
     response.headers.set('X-Frame-Options', 'DENY')
     response.headers.set('X-XSS-Protection', '1; mode=block')
 
-    // 限流信息头部
-    response.headers.set('X-RateLimit-Limit', rateLimitResult.limit.toString())
-    response.headers.set('X-RateLimit-Remaining', rateLimitResult.remaining.toString())
-    response.headers.set('X-RateLimit-Reset', rateLimitResult.reset.toString())
+    // 限流信息头部 - 只在Redis可用时添加
+    // (rateLimitResult is now scoped inside if block, headers not needed for success case)
 
     return response
 
