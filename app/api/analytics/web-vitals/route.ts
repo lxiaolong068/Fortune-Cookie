@@ -13,24 +13,78 @@ interface WebVitalMetric {
 // In-memory storage for demo (use a real database in production)
 const metricsStore: WebVitalMetric[] = []
 
+// 安全工具函数
+function getCorsOrigin(): string {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'
+  }
+  return '*'
+}
+
+function addSecurityHeaders(response: NextResponse): NextResponse {
+  response.headers.set('Access-Control-Allow-Origin', getCorsOrigin())
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('X-XSS-Protection', '1; mode=block')
+  return response
+}
+
+function validateMetric(metric: any): boolean {
+  const validNames = ['CLS', 'INP', 'FCP', 'LCP', 'TTFB']
+  const validRatings = ['good', 'needs-improvement', 'poor']
+
+  return (
+    typeof metric.id === 'string' &&
+    metric.id.length > 0 &&
+    metric.id.length < 100 &&
+    validNames.includes(metric.name) &&
+    typeof metric.value === 'number' &&
+    metric.value >= 0 &&
+    metric.value < 100000 && // 合理的上限
+    typeof metric.delta === 'number' &&
+    validRatings.includes(metric.rating)
+  )
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const metric: WebVitalMetric = await request.json()
-    
-    // Validate the metric
-    if (!metric.name || !metric.value || !metric.id) {
-      return NextResponse.json(
-        { error: 'Invalid metric data' },
+    let metric: any
+
+    // 解析和验证请求体
+    try {
+      metric = await request.json()
+    } catch (error) {
+      const response = NextResponse.json(
+        { error: 'Invalid JSON in request body' },
         { status: 400 }
       )
+      return addSecurityHeaders(response)
     }
+
+    // 全面验证指标数据
+    if (!validateMetric(metric)) {
+      const response = NextResponse.json(
+        { error: 'Invalid metric data. Required fields: id, name, value, delta, rating' },
+        { status: 400 }
+      )
+      return addSecurityHeaders(response)
+    }
+
+    // 限制存储的指标数量（防止内存泄漏）
+    if (metricsStore.length > 10000) {
+      metricsStore.splice(0, 1000) // 移除最旧的1000条记录
+    }
+
+    // 安全地获取请求头信息
+    const userAgent = request.headers.get('user-agent')?.slice(0, 500) || ''
+    const referer = request.headers.get('referer')?.slice(0, 500) || ''
 
     // Store the metric (in production, save to database)
     metricsStore.push({
       ...metric,
       timestamp: Date.now(),
-      userAgent: request.headers.get('user-agent') || '',
-      url: request.headers.get('referer') || '',
+      userAgent,
+      url: referer,
     } as any)
 
     // Log performance issues
@@ -42,7 +96,7 @@ export async function POST(request: NextRequest) {
       TTFB: { good: 800, poor: 1800 },
     }
 
-    const threshold = thresholds[metric.name]
+    const threshold = thresholds[metric.name as keyof typeof thresholds]
     if (threshold) {
       if (metric.value > threshold.poor) {
         console.warn(`Poor ${metric.name}: ${metric.value}`)
@@ -51,14 +105,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ success: true })
-    
+    const response = NextResponse.json({ success: true })
+    return addSecurityHeaders(response)
+
   } catch (error) {
     console.error('Web Vitals API error:', error)
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: 'Failed to process metric' },
       { status: 500 }
     )
+    return addSecurityHeaders(response)
   }
 }
 
@@ -66,19 +122,25 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const metric = searchParams.get('metric')
-    const limit = parseInt(searchParams.get('limit') || '100')
-    
+    const limitParam = searchParams.get('limit') || '100'
+
+    // 验证和清理参数
+    const validMetrics = ['CLS', 'INP', 'FCP', 'LCP', 'TTFB']
+    const sanitizedMetric = metric && validMetrics.includes(metric) ? metric : null
+
+    const limit = Math.min(Math.max(parseInt(limitParam) || 100, 1), 1000) // 限制在1-1000之间
+
     let results = metricsStore
-    
-    if (metric) {
-      results = results.filter(m => m.name === metric)
+
+    if (sanitizedMetric) {
+      results = results.filter(m => m.name === sanitizedMetric)
     }
-    
+
     // Get recent metrics
     results = results
       .sort((a: any, b: any) => b.timestamp - a.timestamp)
       .slice(0, limit)
-    
+
     // Calculate averages
     const averages = results.reduce((acc, metric) => {
       if (!acc[metric.name]) {
@@ -90,17 +152,36 @@ export async function GET(request: NextRequest) {
       return acc
     }, {} as any)
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       metrics: results,
       averages,
       total: results.length
     })
-    
+
+    return addSecurityHeaders(response)
+
   } catch (error) {
     console.error('Web Vitals GET error:', error)
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: 'Failed to fetch metrics' },
       { status: 500 }
     )
+    return addSecurityHeaders(response)
   }
+}
+
+// Handle CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': getCorsOrigin(),
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+      'Access-Control-Max-Age': '86400',
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'X-XSS-Protection': '1; mode=block',
+    },
+  })
 }

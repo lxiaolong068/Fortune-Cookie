@@ -1,5 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// 安全工具函数
+function getCorsOrigin(): string {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'
+  }
+  return '*'
+}
+
+function addSecurityHeaders(response: NextResponse): NextResponse {
+  response.headers.set('Access-Control-Allow-Origin', getCorsOrigin())
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('X-XSS-Protection', '1; mode=block')
+  return response
+}
+
+function sanitizeString(input: string, maxLength: number = 100): string {
+  if (typeof input !== 'string') return ''
+
+  return input
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .trim()
+    .slice(0, maxLength)
+}
+
 // Mock analytics data (in production, fetch from real analytics services)
 const mockAnalyticsData = {
   pageViews: {
@@ -87,13 +115,19 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const metric = searchParams.get('metric')
     const timeframe = searchParams.get('timeframe') || '30d'
-    
+
+    // 验证和清理参数
+    const validMetrics = ['pageviews', 'search', 'vitals', 'users', 'fortunes']
+    const sanitizedMetric = metric ? sanitizeString(metric, 20) : null
+    const validTimeframes = ['1d', '7d', '30d', '90d', '1y']
+    const sanitizedTimeframe = validTimeframes.includes(timeframe) ? timeframe : '30d'
+
     // In production, fetch real data from Google Analytics, Search Console, etc.
     let data = mockAnalyticsData
-    
+
     // Filter by specific metric if requested
-    if (metric) {
-      switch (metric) {
+    if (sanitizedMetric && validMetrics.includes(sanitizedMetric)) {
+      switch (sanitizedMetric) {
         case 'pageviews':
           data = { pageViews: mockAnalyticsData.pageViews } as any
           break
@@ -111,57 +145,106 @@ export async function GET(request: NextRequest) {
           break
       }
     }
-    
-    return NextResponse.json({
+
+    const response = NextResponse.json({
       data,
-      timeframe,
+      timeframe: sanitizedTimeframe,
       lastUpdated: new Date().toISOString(),
       status: 'success'
     })
-    
+
+    return addSecurityHeaders(response)
+
   } catch (error) {
     console.error('Analytics dashboard error:', error)
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: 'Failed to fetch analytics data' },
       { status: 500 }
     )
+    return addSecurityHeaders(response)
   }
 }
 
 // POST endpoint for custom events
 export async function POST(request: NextRequest) {
   try {
-    const event = await request.json()
-    
-    // Validate event data
+    let event: any
+
+    // 解析和验证请求体
+    try {
+      event = await request.json()
+    } catch (error) {
+      const response = NextResponse.json(
+        { error: 'Invalid JSON in request body' },
+        { status: 400 }
+      )
+      return addSecurityHeaders(response)
+    }
+
+    // 验证和清理事件数据
     if (!event.name || !event.category) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Event name and category are required' },
         { status: 400 }
       )
+      return addSecurityHeaders(response)
     }
-    
+
+    // 清理和验证事件字段
+    const sanitizedEvent = {
+      name: sanitizeString(event.name, 100),
+      category: sanitizeString(event.category, 50),
+      label: event.label ? sanitizeString(event.label, 100) : undefined,
+      value: typeof event.value === 'number' && event.value >= 0 && event.value <= 999999 ? event.value : undefined,
+      customData: event.customData ? {
+        param1: event.customData.param1 ? sanitizeString(event.customData.param1, 100) : undefined,
+        param2: event.customData.param2 ? sanitizeString(event.customData.param2, 100) : undefined,
+      } : undefined
+    }
+
+    // 验证事件名称和类别的有效性
+    const validEventNames = ['fortune_generated', 'page_view', 'search', 'click', 'download', 'share']
+    const validCategories = ['engagement', 'conversion', 'navigation', 'error', 'performance']
+
+    if (!validEventNames.includes(sanitizedEvent.name) || !validCategories.includes(sanitizedEvent.category)) {
+      const response = NextResponse.json(
+        { error: 'Invalid event name or category' },
+        { status: 400 }
+      )
+      return addSecurityHeaders(response)
+    }
+
     // In production, send to Google Analytics or other analytics service
-    console.log('Custom event:', event)
-    
-    // Send to Google Analytics 4 if available
-    if (typeof gtag !== 'undefined') {
-      gtag('event', event.name, {
-        event_category: event.category,
-        event_label: event.label,
-        value: event.value,
-        custom_parameter_1: event.customData?.param1,
-        custom_parameter_2: event.customData?.param2,
-      })
-    }
-    
-    return NextResponse.json({ success: true })
-    
+    console.log('Custom event:', sanitizedEvent)
+
+    // Send to Google Analytics 4 if available (在客户端处理，这里只是示例)
+    // 实际生产环境中应该使用服务端的Google Analytics Measurement Protocol
+
+    const response = NextResponse.json({ success: true })
+    return addSecurityHeaders(response)
+
   } catch (error) {
     console.error('Custom event error:', error)
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: 'Failed to track event' },
       { status: 500 }
     )
+    return addSecurityHeaders(response)
   }
+}
+
+// Handle CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': getCorsOrigin(),
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+      'Access-Control-Max-Age': '86400',
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'X-XSS-Protection': '1; mode=block',
+    },
+  })
 }
