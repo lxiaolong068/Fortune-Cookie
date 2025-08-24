@@ -8,6 +8,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ErrorMonitorInitializer } from '@/components/ErrorMonitorInitializer'
 import { ServiceWorkerInitializer } from '@/components/ServiceWorkerInitializer'
 import { ThemeInitializer, ThemeScript } from '@/components/ThemeInitializer'
+import { AnalyticsInitializer, AnalyticsConsentBanner } from '@/components/AnalyticsInitializer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -101,9 +102,11 @@ export default function RootLayout({
         <PerformanceMonitor />
         <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
         <ErrorBoundary>
+          <AnalyticsInitializer />
           <Navigation />
           {children}
           <Footer />
+          <AnalyticsConsentBanner />
         </ErrorBoundary>
       </body>
     </html>
