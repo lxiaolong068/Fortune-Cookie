@@ -1,0 +1,146 @@
+// Fortune Cookie AI - 数据库模式
+// 使用 Prisma ORM 进行数据库管理和查询优化
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 幸运饼干表
+model Fortune {
+  id          String   @id @default(cuid())
+  message     String
+  category    String
+  mood        String
+  length      String
+  source      String   @default("database")
+  popularity  Int      @default(0)
+  tags        String?  // JSON 字符串存储标签
+  language    String   @default("zh")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 索引优化
+  @@index([category])
+  @@index([mood])
+  @@index([popularity])
+  @@index([createdAt])
+  @@index([category, mood])
+
+  @@map("fortunes")
+}
+
+// 用户会话表
+model UserSession {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique
+  userId      String?
+  ipAddress   String?
+  userAgent   String?
+  data        String?  // JSON 字符串存储会话数据
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sessionId])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("user_sessions")
+}
+
+// API 使用统计表
+model ApiUsage {
+  id          String   @id @default(cuid())
+  endpoint    String
+  method      String
+  statusCode  Int
+  responseTime Int
+  ipAddress   String?
+  userAgent   String?
+  keyId       String?
+  timestamp   DateTime @default(now())
+
+  @@index([endpoint])
+  @@index([timestamp])
+  @@index([keyId])
+  @@index([endpoint, timestamp])
+  @@map("api_usage")
+}
+
+// Web Vitals 性能指标表
+model WebVital {
+  id            String   @id @default(cuid())
+  name          String   // CLS, INP, FCP, LCP, TTFB
+  value         Float
+  delta         Float
+  rating        String   // good, needs-improvement, poor
+  navigationType String?
+  url           String?
+  userAgent     String?
+  timestamp     DateTime @default(now())
+
+  @@index([name])
+  @@index([timestamp])
+  @@index([name, timestamp])
+  @@map("web_vitals")
+}
+
+// 错误日志表
+model ErrorLog {
+  id          String   @id @default(cuid())
+  level       String   // error, warning, info
+  message     String
+  stack       String?
+  context     String?  // JSON 字符串存储上下文
+  component   String?
+  userId      String?
+  sessionId   String?
+  ipAddress   String?
+  userAgent   String?
+  timestamp   DateTime @default(now())
+
+  @@index([level])
+  @@index([timestamp])
+  @@index([component])
+  @@index([level, timestamp])
+  @@map("error_logs")
+}
+
+// 缓存统计表
+model CacheStats {
+  id          String   @id @default(cuid())
+  key         String
+  operation   String   // get, set, del, hit, miss
+  size        Int?
+  ttl         Int?
+  timestamp   DateTime @default(now())
+
+  @@index([key])
+  @@index([operation])
+  @@index([timestamp])
+  @@map("cache_stats")
+}
+
+// 用户反馈表
+model UserFeedback {
+  id          String   @id @default(cuid())
+  type        String   // rating, comment, bug_report
+  content     String
+  rating      Int?     // 1-5 星评分
+  fortuneId   String?
+  sessionId   String?
+  ipAddress   String?
+  userAgent   String?
+  status      String   @default("pending") // pending, reviewed, resolved
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@map("user_feedback")
+}
