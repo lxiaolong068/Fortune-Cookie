@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Textarea } from "./ui/textarea";
 import { Sparkles, RefreshCw, Wand2, Heart, Smile, TrendingUp, Brain, Shuffle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sessionManager } from "@/lib/session-manager";
+import { captureUserAction } from "@/lib/error-monitoring";
 
 interface Fortune {
   message: string;
@@ -94,6 +96,29 @@ export function AIFortuneCookie() {
       const fortune: Fortune = await response.json();
       setCurrentFortune(fortune);
 
+      // 添加到用户历史记录
+      try {
+        await sessionManager.initializeSession();
+        sessionManager.addFortuneToHistory({
+          fortuneId: undefined,
+          message: fortune.message,
+          category: selectedTheme === 'random' ? 'inspirational' : selectedTheme,
+          mood: 'positive',
+          source: 'ai',
+          liked: false,
+          shared: false,
+          tags: fortune.luckyNumbers ? [`lucky-${fortune.luckyNumbers[0]}`] : undefined,
+          customPrompt: customPrompt.trim() || undefined,
+        });
+
+        captureUserAction('fortune_generated', 'ai_fortune_cookie', undefined, {
+          theme: selectedTheme,
+          hasCustomPrompt: !!customPrompt.trim(),
+        });
+      } catch (error) {
+        console.error('Failed to save to history:', error);
+      }
+
       // Show cracking animation for 2 seconds, then reveal fortune
       setTimeout(() => {
         setState("opened");
@@ -110,7 +135,29 @@ export function AIFortuneCookie() {
         timestamp: new Date().toISOString()
       };
       setCurrentFortune(fallbackFortune);
-      
+
+      // 添加回退幸运饼干到历史记录
+      try {
+        await sessionManager.initializeSession();
+        sessionManager.addFortuneToHistory({
+          fortuneId: undefined,
+          message: fallbackFortune.message,
+          category: selectedTheme === 'random' ? 'inspirational' : selectedTheme,
+          mood: 'positive',
+          source: 'offline',
+          liked: false,
+          shared: false,
+          customPrompt: customPrompt.trim() || undefined,
+        });
+
+        captureUserAction('fortune_generated_fallback', 'ai_fortune_cookie', undefined, {
+          theme: selectedTheme,
+          hasCustomPrompt: !!customPrompt.trim(),
+        });
+      } catch (error) {
+        console.error('Failed to save fallback to history:', error);
+      }
+
       setTimeout(() => {
         setState("opened");
         setIsGenerating(false);

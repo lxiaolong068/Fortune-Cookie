@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Home, Sparkles, MessageSquare, Clock, ChefHat, Search } from 'lucide-react'
+import { Menu, X, Home, Sparkles, MessageSquare, Clock, ChefHat, Search, User } from 'lucide-react'
 import { Button } from './ui/button'
 import { cn } from '@/lib/utils'
 import { OfflineIndicator } from './OfflineIndicator'
@@ -45,6 +45,12 @@ const navigationItems = [
     href: '/recipes',
     icon: ChefHat,
     description: 'Make your own'
+  },
+  {
+    name: 'Profile',
+    href: '/profile',
+    icon: User,
+    description: 'Personal center'
   }
 ]
 
