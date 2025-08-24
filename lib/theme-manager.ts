@@ -230,11 +230,11 @@ export class ThemeManager {
   // 预加载主题资源
   preloadThemeResources(): void {
     // 预加载深色模式可能需要的资源
-    const preloadLinks = [
+    const preloadLinks: string[] = [
       // 可以在这里添加深色模式特定的CSS或图片资源
     ]
 
-    preloadLinks.forEach(href => {
+    preloadLinks.forEach((href: string) => {
       const link = document.createElement('link')
       link.rel = 'preload'
       link.href = href

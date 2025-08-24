@@ -159,7 +159,10 @@ export default function OfflinePage() {
                 onClick={() => {
                   if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.ready.then(registration => {
-                      registration.sync.register('background-sync')
+                      // Check if Background Sync is supported
+                      if ('sync' in registration) {
+                        (registration as any).sync.register('background-sync')
+                      }
                     }).catch(console.error)
                   }
                 }}

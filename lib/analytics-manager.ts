@@ -288,9 +288,9 @@ export class AnalyticsManager {
       fortunesGenerated: userEvents.filter(e => e.action === 'fortune_generated').length,
       fortunesLiked: userEvents.filter(e => e.action === 'fortune_liked').length,
       fortunesShared: userEvents.filter(e => e.action === 'fortune_shared').length,
-      categoriesUsed: [...new Set(userEvents
+      categoriesUsed: Array.from(new Set(userEvents
         .filter(e => e.metadata.category)
-        .map(e => e.metadata.category))],
+        .map(e => e.metadata.category))),
       deviceType: this.getDeviceType(),
       browserType: this.getBrowserType(),
       referrer: document.referrer,

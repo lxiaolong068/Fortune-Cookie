@@ -191,7 +191,7 @@ export class DatabaseManager {
         )
       }
       
-      return result
+      return result as T
     } catch (error) {
       this.queryStats.errors++
       

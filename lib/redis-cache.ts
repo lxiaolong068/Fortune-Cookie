@@ -207,10 +207,10 @@ export class CacheManager {
   // 获取缓存统计信息
   async getCacheStats(): Promise<any> {
     try {
-      const info = await this.redis.info()
+      // Basic connection test instead of info()
+      await this.redis.ping()
       return {
         connected: true,
-        info: info,
         timestamp: new Date().toISOString(),
       }
     } catch (error) {

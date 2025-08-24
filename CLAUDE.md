@@ -20,11 +20,32 @@ npm run type-check      # TypeScript type checking
 
 **Testing Commands:**
 ```bash
+# Unit Tests (Jest)
+npm run test            # Run all unit tests
+npm run test:watch      # Run tests in watch mode
+npm run test:coverage   # Generate coverage report
+npm run test:unit       # Run specific unit tests
+npm run test:api        # Test API endpoints
+npm run test:components # Test React components
+npm run test:lib        # Test utility functions
+
+# E2E Tests (Playwright)
 npm run test:e2e        # Run Playwright E2E tests
 npm run test:e2e:ui     # Run tests with Playwright UI
 npm run test:e2e:debug  # Run tests in debug mode
 npm run test:local      # Test local development server
 npm run test:deployment # Test production deployment
+```
+
+**Database Commands:**
+```bash
+npm run db:generate     # Generate Prisma client
+npm run db:push         # Push schema to database
+npm run db:migrate      # Run database migrations
+npm run db:studio       # Open Prisma Studio
+npm run db:seed         # Seed database with fortune data
+npm run db:seed:clean   # Clean and reseed database
+npm run db:reset        # Reset database and reseed
 ```
 
 **Analysis:**
@@ -52,10 +73,13 @@ npm run analyze         # Bundle analysis with webpack-bundle-analyzer
 - **Icons:** Lucide React
 - **Type Safety:** Full TypeScript implementation
 
-**Data Architecture:**
-- Fortune database in `lib/fortune-database.ts` with 500+ categorized messages
-- Search and filtering functions for content discovery
-- Structured data with categories, tags, popularity ratings
+**Database Architecture:**
+- **Prisma ORM** with SQLite database for development
+- **Schema**: `prisma/schema.prisma` with 7 models
+- **Fortune Model**: Messages with categories, moods, popularity ratings
+- **Analytics Models**: WebVital, ApiUsage, ErrorLog tracking
+- **User Models**: UserSession, UserFeedback for interaction data
+- **Fallback System**: Local fortune database in `lib/fortune-database.ts` (500+ messages)
 
 ## Project Structure
 
@@ -89,10 +113,25 @@ npm run analyze         # Bundle analysis with webpack-bundle-analyzer
 
 **Environment Variables Required:**
 ```bash
-OPENROUTER_API_KEY=your_api_key          # AI generation
+# AI Generation
+OPENROUTER_API_KEY=your_api_key          # OpenRouter API for AI fortune generation
+
+# Database
+DATABASE_URL="file:./dev.db"             # SQLite database path
+
+# App Configuration  
 NEXT_PUBLIC_APP_URL=https://your-domain  # App URL for API requests
-GOOGLE_ANALYTICS_ID=your_ga_id           # Optional analytics
-GOOGLE_VERIFICATION_CODE=your_code       # Optional search console
+
+# Analytics (Optional)
+GOOGLE_ANALYTICS_ID=your_ga_id           # Google Analytics tracking
+GOOGLE_VERIFICATION_CODE=your_code       # Search Console verification
+
+# Rate Limiting (Optional)
+UPSTASH_REDIS_REST_URL=your_redis_url    # Redis for rate limiting
+UPSTASH_REDIS_REST_TOKEN=your_token      # Redis authentication
+
+# Monitoring (Optional) 
+SENTRY_DSN=your_sentry_dsn               # Error tracking with Sentry
 ```
 
 **AI Configuration:**
@@ -128,6 +167,13 @@ GOOGLE_VERIFICATION_CODE=your_code       # Optional search console
 
 ## Testing Strategy
 
+**Unit Testing with Jest:**
+- Test setup: `jest.config.js` with Next.js integration
+- Coverage threshold: 70% for all metrics
+- Test patterns: `__tests__/**/*.{js,jsx,ts,tsx}` and `*.{test,spec}.{js,jsx,ts,tsx}`
+- Components, API endpoints, and utility functions covered
+- Test environment: jsdom for React component testing
+
 **E2E Testing with Playwright:**
 - Tests in `tests/e2e/` directory
 - Cross-browser testing (Chrome, Firefox, Safari, Mobile)
@@ -140,6 +186,7 @@ GOOGLE_VERIFICATION_CODE=your_code       # Optional search console
 - Navigation and page loading
 - SEO metadata presence
 - No hydration warnings or 404 errors
+- Database operations and API endpoints
 
 ## Performance Considerations
 
@@ -170,3 +217,23 @@ GOOGLE_VERIFICATION_CODE=your_code       # Optional search console
 - Framer Motion animations optimized for 60fps
 - GPU acceleration used for transforms and opacity
 - Reduced motion support for accessibility
+
+## Database Development
+
+**Schema Management:**
+- Use `npm run db:migrate` for schema changes
+- Always run `npm run db:generate` after schema updates
+- Database seeding available with categorized fortune data
+- Prisma Studio at `npm run db:studio` for database inspection
+
+**Data Models:**
+- **Fortune**: Core message data with SEO optimization fields
+- **Analytics**: Performance monitoring with WebVital, ApiUsage models
+- **User Tracking**: Session management and feedback collection
+- **Error Logging**: Comprehensive error tracking and debugging
+
+**Development Workflow:**
+1. Modify `prisma/schema.prisma`
+2. Run `npm run db:migrate` to apply changes
+3. Run `npm run db:generate` to update Prisma client
+4. Seed data with `npm run db:seed` if needed

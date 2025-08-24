@@ -133,10 +133,12 @@ export class ServiceWorkerManager {
         }
       }
 
-      navigator.serviceWorker.controller.postMessage(
-        { type: 'GET_CACHE_STATUS' },
-        [messageChannel.port2]
-      )
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage(
+          { type: 'GET_CACHE_STATUS' },
+          [messageChannel.port2]
+        )
+      }
 
       // 超时处理
       setTimeout(() => resolve({}), 5000)
@@ -158,10 +160,12 @@ export class ServiceWorkerManager {
         }
       }
 
-      navigator.serviceWorker.controller.postMessage(
-        { type: 'CLEAR_CACHE' },
-        [messageChannel.port2]
-      )
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage(
+          { type: 'CLEAR_CACHE' },
+          [messageChannel.port2]
+        )
+      }
 
       // 超时处理
       setTimeout(() => resolve(), 5000)
@@ -183,10 +187,12 @@ export class ServiceWorkerManager {
         }
       }
 
-      navigator.serviceWorker.controller.postMessage(
-        { type: 'PREFETCH_CONTENT', payload: urls },
-        [messageChannel.port2]
-      )
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage(
+          { type: 'PREFETCH_CONTENT', payload: urls },
+          [messageChannel.port2]
+        )
+      }
 
       // 超时处理
       setTimeout(() => resolve(), 10000)

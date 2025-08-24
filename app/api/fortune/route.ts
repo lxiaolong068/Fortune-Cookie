@@ -143,9 +143,9 @@ export async function POST(request: NextRequest) {
     }
 
     const fortuneRequest: FortuneRequest = {
-      theme,
-      mood,
-      length,
+      theme: theme as FortuneRequest['theme'],
+      mood: mood as FortuneRequest['mood'],
+      length: length as FortuneRequest['length'],
       customPrompt
     }
 

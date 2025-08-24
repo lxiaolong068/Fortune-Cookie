@@ -49,9 +49,9 @@ export function setupGlobalErrorHandlers() {
 
   // 捕获资源加载错误
   window.addEventListener('error', (event) => {
-    const target = event.target as HTMLElement
+    const target = event.target
     
-    if (target && target !== window) {
+    if (target && target instanceof HTMLElement) {
       const tagName = target.tagName?.toLowerCase()
       const src = (target as any).src || (target as any).href
       

@@ -103,12 +103,12 @@ class DatabaseSeeder {
               data: {
                 message: fortune.message,
                 category: fortune.category,
-                mood: fortune.mood || 'positive',
-                length: fortune.length || 'medium',
+                mood: 'positive',
+                length: 'medium',
                 source: 'database',
                 popularity: fortune.popularity || 0,
                 tags: fortune.tags ? JSON.stringify(fortune.tags) : null,
-                language: fortune.language || 'zh',
+                language: 'zh',
               },
             })
           )

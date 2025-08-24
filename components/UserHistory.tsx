@@ -124,7 +124,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
   }
 
   const getUniqueCategories = () => {
-    const categories = [...new Set(history.map(item => item.category))]
+    const categories = Array.from(new Set(history.map(item => item.category)))
     return categories.sort()
   }
 

@@ -103,8 +103,13 @@ export async function GET(request: NextRequest) {
         if (cachedResults) {
           CachePerformanceMonitor.recordHit()
 
-          const response = EdgeCacheManager.optimizeApiResponse(cachedResults, cacheKey, 300)
-          response.headers.set('X-Cache', 'HIT')
+          const responseData = EdgeCacheManager.optimizeApiResponse(cachedResults, cacheKey, 300)
+          const response = NextResponse.json(cachedResults, {
+            headers: {
+              'X-Cache': 'HIT',
+              ...Object.fromEntries(responseData.headers.entries())
+            }
+          })
           return addSecurityHeaders(response)
         }
 
@@ -121,10 +126,15 @@ export async function GET(request: NextRequest) {
         }
 
         // 缓存结果
-        await cacheManager.cacheFortuneList(cacheKey, responseData)
+        await cacheManager.cacheFortuneList(cacheKey, results)
 
-        const response = EdgeCacheManager.optimizeApiResponse(responseData, cacheKey, 300)
-        response.headers.set('X-Cache', 'MISS')
+        const optimizedResponse = EdgeCacheManager.optimizeApiResponse(responseData, cacheKey, 300)
+        const response = NextResponse.json(responseData, {
+          headers: {
+            'X-Cache': 'MISS',
+            ...Object.fromEntries(optimizedResponse.headers.entries())
+          }
+        })
         return addSecurityHeaders(response)
       }
       
@@ -157,8 +167,13 @@ export async function GET(request: NextRequest) {
 
         if (cachedResults) {
           CachePerformanceMonitor.recordHit()
-          const response = EdgeCacheManager.optimizeApiResponse(cachedResults, cacheKey, 600)
-          response.headers.set('X-Cache', 'HIT')
+          const responseData = EdgeCacheManager.optimizeApiResponse(cachedResults, cacheKey, 600)
+          const response = NextResponse.json(cachedResults, {
+            headers: {
+              'X-Cache': 'HIT',
+              ...Object.fromEntries(responseData.headers.entries())
+            }
+          })
           return addSecurityHeaders(response)
         }
 
@@ -171,10 +186,15 @@ export async function GET(request: NextRequest) {
           cached: false
         }
 
-        await cacheManager.cacheFortuneList(cacheKey, responseData)
+        await cacheManager.cacheFortuneList(cacheKey, results)
 
-        const response = EdgeCacheManager.optimizeApiResponse(responseData, cacheKey, 600)
-        response.headers.set('X-Cache', 'MISS')
+        const optimizedResponse = EdgeCacheManager.optimizeApiResponse(responseData, cacheKey, 600)
+        const response = NextResponse.json(responseData, {
+          headers: {
+            'X-Cache': 'MISS',
+            ...Object.fromEntries(optimizedResponse.headers.entries())
+          }
+        })
         return addSecurityHeaders(response)
       }
       

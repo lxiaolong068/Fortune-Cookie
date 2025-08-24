@@ -25,8 +25,11 @@ interface AnalyticsRequest {
 // POST - 接收分析事件
 export async function POST(request: NextRequest) {
   try {
+    // 获取客户端IP地址
+    const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? '127.0.0.1'
+    
     // 速率限制检查
-    const rateLimitResult = await rateLimiters.api.limit(request)
+    const rateLimitResult = await rateLimiters.api.limit(ip)
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: 'Rate limit exceeded' },
@@ -66,7 +69,7 @@ export async function POST(request: NextRequest) {
     // 记录业务事件
     captureBusinessEvent('analytics_events_received', {
       eventCount: body.events.length,
-      eventTypes: [...new Set(body.events.map(e => e.type))],
+      eventTypes: Array.from(new Set(body.events.map(e => e.type))),
       timestamp: body.timestamp,
     })
 
@@ -77,15 +80,19 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     }
 
-    return EdgeCacheManager.optimizeApiResponse(response, {
-      'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-      'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-      'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+    const jsonResponse = new Response(JSON.stringify(response), {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+        'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+        'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+      }
     })
+    return jsonResponse
 
   } catch (error) {
     console.error('Analytics API error:', error)
-    captureApiError(error, 'analytics', 'POST')
+    captureApiError(error as Error, 'analytics', 'POST')
     
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -133,15 +140,21 @@ export async function GET(request: NextRequest) {
         )
     }
 
-    return EdgeCacheManager.optimizeApiResponse({
+    const response = {
       success: true,
       data,
       timestamp: new Date().toISOString(),
-    })
+    }
+    
+    return EdgeCacheManager.optimizeApiResponse(
+      response,
+      `analytics-${action}-${startDate}-${endDate}`,
+      300
+    )
 
   } catch (error) {
     console.error('Analytics GET API error:', error)
-    captureApiError(error, 'analytics', 'GET')
+    captureApiError(error as Error, 'analytics', 'GET')
     
     return NextResponse.json(
       { error: 'Internal server error' },
