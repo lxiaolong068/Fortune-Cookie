@@ -110,13 +110,14 @@ export class FortuneService {
   static async findRandom(category?: string): Promise<Fortune | null> {
     try {
       const where = category ? { category } : {}
-      
-      // SQLite 随机查询优化
+
+      // PostgreSQL 随机查询优化 - 使用 TABLESAMPLE 或 ORDER BY RANDOM()
+      // 对于小到中等数据集，使用 skip + count 方法仍然有效
       const count = await db.fortune.count({ where })
       if (count === 0) return null
 
       const skip = Math.floor(Math.random() * count)
-      
+
       const fortune = await db.fortune.findFirst({
         where,
         skip,

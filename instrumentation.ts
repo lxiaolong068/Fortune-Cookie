@@ -1,9 +1,10 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     // Server runtime (Node.js)
-    const { default: Sentry } = await import('@sentry/nextjs')
-    
-    Sentry.init({
+    try {
+      const Sentry = await import('@sentry/nextjs')
+
+      Sentry.init({
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
       
       // Adjust this value in production, or use tracesSampler for greater control
@@ -39,13 +40,17 @@ export async function register() {
         },
       },
     })
+    } catch (error) {
+      console.warn('Failed to initialize Sentry for Node.js runtime:', error)
+    }
   }
 
   if (process.env.NEXT_RUNTIME === 'edge') {
     // Edge runtime
-    const { default: Sentry } = await import('@sentry/nextjs')
-    
-    Sentry.init({
+    try {
+      const Sentry = await import('@sentry/nextjs')
+
+      Sentry.init({
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
       
       // Adjust this value in production, or use tracesSampler for greater control
@@ -62,5 +67,8 @@ export async function register() {
         },
       },
     })
+    } catch (error) {
+      console.warn('Failed to initialize Sentry for Edge runtime:', error)
+    }
   }
 }
