@@ -49,16 +49,16 @@ export class ApiKeyManager {
   // 获取API密钥
   static getKey(keyId: string): ApiKey | null {
     const key = this.keys.get(keyId)
-    
+
     if (!key || !key.isActive) {
       return null
     }
-    
+
     // 检查过期时间
     if (key.expiresAt && key.expiresAt < new Date()) {
       return null
     }
-    
+
     return key
   }
 
@@ -79,10 +79,10 @@ export class ApiKeyManager {
         createdAt: new Date(),
         isActive: true,
       }
-      
+
       this.addKey(defaultKey)
     }
-    
+
     // 生产环境密钥（从环境变量加载）
     if (process.env.API_KEY_ID && process.env.API_KEY_SECRET) {
       const prodKey: ApiKey = {
@@ -93,7 +93,7 @@ export class ApiKeyManager {
         createdAt: new Date(),
         isActive: true,
       }
-      
+
       this.addKey(prodKey)
     }
   }
@@ -118,7 +118,7 @@ export class RequestSigner {
       timestamp.toString(),
       nonce,
     ].join('\n')
-    
+
     // 生成HMAC签名
     const hmac = createHmac(SIGNATURE_CONFIG.algorithm, secret)
     hmac.update(signatureString, 'utf8')
@@ -143,15 +143,15 @@ export class RequestSigner {
       timestamp,
       nonce
     )
-    
+
     // 使用时间安全比较防止时序攻击
     const signatureBuffer = Buffer.from(signature, 'hex')
     const expectedBuffer = Buffer.from(expectedSignature, 'hex')
-    
+
     if (signatureBuffer.length !== expectedBuffer.length) {
       return false
     }
-    
+
     return timingSafeEqual(signatureBuffer, expectedBuffer)
   }
 
@@ -181,7 +181,7 @@ export class NonceManager {
   // 标记nonce为已使用
   static markNonceAsUsed(nonce: string): void {
     this.usedNonces.add(nonce)
-    
+
     // 启动清理定时器
     if (!this.cleanupInterval) {
       this.startCleanup()
@@ -271,9 +271,9 @@ export class SignatureValidator {
 
       return { valid: true, keyId }
     } catch (error) {
-      return { 
-        valid: false, 
-        error: `Signature validation error: ${error instanceof Error ? error.message : 'Unknown error'}` 
+      return {
+        valid: false,
+        error: `Signature validation error: ${error instanceof Error ? error.message : 'Unknown error'}`
       }
     }
   }
@@ -296,7 +296,7 @@ export class ClientSigner {
   ): Record<string, string> {
     const timestamp = Math.floor(Date.now() / 1000)
     const nonce = RequestSigner.generateNonce()
-    
+
     const signature = RequestSigner.generateSignature(
       secret,
       method,
@@ -316,4 +316,39 @@ export class ClientSigner {
 }
 
 // 初始化API密钥管理器
+
+// 为 Next.js Route 封装的签名验证辅助函数
+export async function validateApiSignature(
+  request: Request
+): Promise<{ valid: boolean; keyId?: string; error?: string }> {
+  try {
+    const method = request.method || 'GET'
+    const urlObj = new URL(request.url)
+    const pathWithQuery = `${urlObj.pathname}${urlObj.search || ''}`
+
+    // 仅在需要时读取请求体，避免影响后续 request.json()
+    let bodyText = ''
+    const upper = method.toUpperCase()
+    if (upper === 'POST' || upper === 'PUT' || upper === 'PATCH') {
+      try {
+        bodyText = await request.clone().text()
+      } catch (_e) {
+        bodyText = ''
+      }
+    }
+
+    return await SignatureValidator.validateRequest(
+      method,
+      pathWithQuery,
+      request.headers,
+      bodyText
+    )
+  } catch (error) {
+    return {
+      valid: false,
+      error: `Signature wrapper error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    }
+  }
+}
+
 ApiKeyManager.initializeDefaultKeys()

@@ -215,3 +215,31 @@ export const SEOUtils = {
     })),
   }),
 }
+
+
+// 兼容性 SEO 组件（App Router 中建议使用 metadata/generateMetadata）
+// 该组件主要用于注入结构化数据，避免现有代码导入报错
+export type SEOPropsComponent = {
+  title?: string
+  description?: string
+  canonical?: string
+  noIndex?: boolean
+  openGraph?: any
+  jsonLd?: Record<string, any> | Record<string, any>[]
+}
+
+export function SEO({ jsonLd }: SEOPropsComponent) {
+  if (!jsonLd) return null
+  const json = Array.isArray(jsonLd) ? jsonLd : [jsonLd]
+  return (
+    <>
+      {json.map((obj, idx) => (
+        <script
+          key={idx}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(obj) }}
+        />
+      ))}
+    </>
+  )
+}
