@@ -8,6 +8,9 @@ import {
   getFortuneById,
   getDatabaseStats
 } from '@/lib/fortune-database'
+import { rateLimiters, cacheManager, generateCacheKey } from '@/lib/redis-cache'
+import { EdgeCacheManager, CachePerformanceMonitor } from '@/lib/edge-cache'
+import { captureApiError, captureUserAction } from '@/lib/error-monitoring'
 
 // 安全工具函数
 function sanitizeString(input: string, maxLength: number = 100): string {
@@ -45,8 +48,43 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
   return response
 }
 
+function getClientIdentifier(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for')
+  const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
+  return ip
+}
+
 export async function GET(request: NextRequest) {
+  const startTime = Date.now()
+
   try {
+    // 分布式限流检查
+    const clientId = getClientIdentifier(request)
+    const rateLimitResult = await rateLimiters.search.limit(clientId)
+
+    if (!rateLimitResult.success) {
+      captureUserAction('rate_limit_exceeded', 'fortunes_api', clientId, {
+        endpoint: '/api/fortunes'
+      })
+
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded. Please try again later.',
+          limit: rateLimitResult.limit,
+          remaining: rateLimitResult.remaining,
+          reset: rateLimitResult.reset
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+          }
+        }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const action = searchParams.get('action') || 'list'
     
@@ -56,15 +94,37 @@ export async function GET(request: NextRequest) {
         const category = searchParams.get('category') ? sanitizeString(searchParams.get('category')!, 50) : undefined
         const limit = validatePositiveInteger(searchParams.get('limit') || '50', 50, 100)
 
+        // 生成缓存键
+        const cacheKey = generateCacheKey('search', query, category || 'all', limit.toString())
+
+        // 检查缓存
+        let cachedResults = await cacheManager.getCachedFortuneList(cacheKey)
+
+        if (cachedResults) {
+          CachePerformanceMonitor.recordHit()
+
+          const response = EdgeCacheManager.optimizeApiResponse(cachedResults, cacheKey, 300)
+          response.headers.set('X-Cache', 'HIT')
+          return addSecurityHeaders(response)
+        }
+
+        CachePerformanceMonitor.recordMiss()
+
         const results = searchFortunes(query, category).slice(0, limit)
 
-        const response = NextResponse.json({
+        const responseData = {
           results,
           total: results.length,
           query,
-          category
-        })
+          category,
+          cached: false
+        }
 
+        // 缓存结果
+        await cacheManager.cacheFortuneList(cacheKey, responseData)
+
+        const response = EdgeCacheManager.optimizeApiResponse(responseData, cacheKey, 300)
+        response.headers.set('X-Cache', 'MISS')
         return addSecurityHeaders(response)
       }
       
@@ -91,13 +151,30 @@ export async function GET(request: NextRequest) {
 
       case 'popular': {
         const limit = validatePositiveInteger(searchParams.get('limit') || '10', 10, 50)
+
+        const cacheKey = generateCacheKey('popular', limit.toString())
+        let cachedResults = await cacheManager.getCachedFortuneList(cacheKey)
+
+        if (cachedResults) {
+          CachePerformanceMonitor.recordHit()
+          const response = EdgeCacheManager.optimizeApiResponse(cachedResults, cacheKey, 600)
+          response.headers.set('X-Cache', 'HIT')
+          return addSecurityHeaders(response)
+        }
+
+        CachePerformanceMonitor.recordMiss()
+
         const results = getPopularFortunes(limit)
-
-        const response = NextResponse.json({
+        const responseData = {
           results,
-          total: results.length
-        })
+          total: results.length,
+          cached: false
+        }
 
+        await cacheManager.cacheFortuneList(cacheKey, responseData)
+
+        const response = EdgeCacheManager.optimizeApiResponse(responseData, cacheKey, 600)
+        response.headers.set('X-Cache', 'MISS')
         return addSecurityHeaders(response)
       }
       
