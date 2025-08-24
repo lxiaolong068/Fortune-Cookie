@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cacheManager, rateLimiters } from '@/lib/redis-cache'
 import { CachePerformanceMonitor, CacheWarmupManager, CacheInvalidationManager } from '@/lib/edge-cache'
 import { captureApiError, captureUserAction } from '@/lib/error-monitoring'
+import { withSignatureValidation, ApiSignatureHelper } from '@/lib/signature-middleware'
 
 // 获取客户端标识符
 function getClientIdentifier(request: NextRequest): string {
@@ -10,17 +11,25 @@ function getClientIdentifier(request: NextRequest): string {
   return ip
 }
 
-// 验证管理员权限（简单实现，生产环境应使用更安全的方式）
+// 验证管理员权限（现在使用签名验证）
 function isAuthorized(request: NextRequest): boolean {
+  // 检查签名验证状态
+  const { isValidated } = ApiSignatureHelper.getValidationInfo(request)
+  if (isValidated) {
+    return true // 签名验证通过即可
+  }
+
+  // 回退到传统的Bearer token验证（向后兼容）
   const authHeader = request.headers.get('authorization')
   const adminToken = process.env.CACHE_ADMIN_TOKEN
-  
+
   if (!adminToken) return false
-  
+
   return authHeader === `Bearer ${adminToken}`
 }
 
-export async function GET(request: NextRequest) {
+// 使用签名验证装饰器
+const getHandler = async (request: NextRequest) => {
   try {
     const clientId = getClientIdentifier(request)
     const { searchParams } = new URL(request.url)
@@ -81,7 +90,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export const GET = withSignatureValidation(getHandler)
+
+const postHandler = async (request: NextRequest) => {
   try {
     const clientId = getClientIdentifier(request)
     
@@ -213,6 +224,8 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export const POST = withSignatureValidation(postHandler)
 
 export async function OPTIONS() {
   return new NextResponse(null, {
