@@ -91,9 +91,6 @@
     @apply text-gray-400;
   }
 
-  .text-gray-500 {
-    @apply text-gray-500;
-  }
 
   /* 边框颜色调整 */
   .border-gray-200 {
