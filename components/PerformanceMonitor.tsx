@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Script from 'next/script'
+import { capturePerformanceIssue, captureBusinessEvent, errorMonitor } from '@/lib/error-monitoring'
 
 // Core Web Vitals monitoring
 export function PerformanceMonitor() {
@@ -13,6 +14,40 @@ export function PerformanceMonitor() {
         if (process.env.NODE_ENV === 'development') {
           console.log('Web Vital:', metric)
         }
+
+        // 检查性能预算并发送到Sentry
+        const thresholds = {
+          CLS: 0.1,
+          INP: 200,
+          FCP: 1800,
+          LCP: 2500,
+          TTFB: 800,
+        }
+
+        const threshold = thresholds[metric.name as keyof typeof thresholds]
+        if (threshold) {
+          capturePerformanceIssue(
+            metric.name,
+            metric.value,
+            threshold,
+            {
+              component: 'web-vitals',
+              additionalData: {
+                id: metric.id,
+                rating: metric.rating,
+                navigationType: metric.navigationType,
+              }
+            }
+          )
+        }
+
+        // 记录性能指标业务事件
+        captureBusinessEvent('web_vital_measured', {
+          name: metric.name,
+          value: metric.value,
+          rating: metric.rating,
+          id: metric.id,
+        })
 
         // Only send to external services in production
         if (process.env.NODE_ENV === 'production') {
@@ -31,7 +66,19 @@ export function PerformanceMonitor() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(metric),
-          }).catch(console.error)
+          }).catch((error) => {
+            // 记录API错误到Sentry
+            capturePerformanceIssue(
+              'web_vitals_api_error',
+              1,
+              0,
+              {
+                component: 'performance-monitor',
+                additionalData: { error: error.message }
+              }
+            )
+            console.error('Failed to send web vitals:', error)
+          })
         }
       }
 
@@ -49,6 +96,21 @@ export function PerformanceMonitor() {
         for (const entry of list.getEntries()) {
           if (entry.duration > 50) {
             console.warn('Long task detected:', entry)
+
+            // 记录长任务到Sentry
+            capturePerformanceIssue(
+              'long_task',
+              entry.duration,
+              50,
+              {
+                component: 'performance-observer',
+                additionalData: {
+                  name: entry.name,
+                  startTime: entry.startTime,
+                  duration: entry.duration,
+                }
+              }
+            )
           }
         }
       })

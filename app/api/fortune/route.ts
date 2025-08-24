@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { openRouterClient, FortuneRequest } from '@/lib/openrouter'
+import { captureApiError, captureUserAction, captureBusinessEvent } from '@/lib/error-monitoring'
 
 // 输入清理和验证工具
 function sanitizeString(input: string, maxLength: number = 500): string {
@@ -68,16 +69,24 @@ function checkRateLimit(key: string): { allowed: boolean; resetTime?: number } {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
+
   try {
     // Rate limiting
     const rateLimitKey = getRateLimitKey(request)
     const rateLimit = checkRateLimit(rateLimitKey)
-    
+
     if (!rateLimit.allowed) {
+      // 记录速率限制事件
+      captureUserAction('rate_limit_exceeded', 'fortune_api', rateLimitKey, {
+        resetTime: rateLimit.resetTime,
+        endpoint: '/api/fortune'
+      })
+
       return NextResponse.json(
-        { 
+        {
           error: 'Rate limit exceeded. Please try again later.',
-          resetTime: rateLimit.resetTime 
+          resetTime: rateLimit.resetTime
         },
         { status: 429 }
       )
@@ -149,7 +158,24 @@ export async function POST(request: NextRequest) {
 
     // Generate fortune
     const fortune = await openRouterClient.generateFortune(fortuneRequest)
-    
+
+    // 记录成功的业务事件
+    const responseTime = Date.now() - startTime
+    captureBusinessEvent('fortune_generated', {
+      theme: fortuneRequest.theme,
+      mood: fortuneRequest.mood,
+      length: fortuneRequest.length,
+      hasCustomPrompt: !!fortuneRequest.customPrompt,
+      responseTime,
+      source: fortune.source || 'unknown'
+    })
+
+    // 记录用户操作
+    captureUserAction('generate_fortune', 'fortune_generator', rateLimitKey, {
+      theme: fortuneRequest.theme,
+      responseTime
+    })
+
     // 创建响应并添加安全头部
     const response = NextResponse.json(fortune)
 
@@ -165,8 +191,19 @@ export async function POST(request: NextRequest) {
     response.headers.set('X-XSS-Protection', '1; mode=block')
 
     return response
-    
+
   } catch (error) {
+    const responseTime = Date.now() - startTime
+
+    // 记录API错误
+    captureApiError(
+      error instanceof Error ? error : new Error(String(error)),
+      '/api/fortune',
+      'POST',
+      500,
+      responseTime
+    )
+
     console.error('Fortune generation error:', error)
     return NextResponse.json(
       { error: 'Failed to generate fortune. Please try again.' },

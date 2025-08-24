@@ -4,6 +4,8 @@ import './globals.css'
 import { Navigation } from '@/components/Navigation'
 import { Footer } from '@/components/Footer'
 import { PerformanceMonitor, GoogleAnalytics, CriticalResourcePreloader } from '@/components/PerformanceMonitor'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { ErrorMonitorInitializer } from '@/components/ErrorMonitorInitializer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -89,12 +91,15 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
+        <ErrorMonitorInitializer />
         <CriticalResourcePreloader />
         <PerformanceMonitor />
         <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
-        <Navigation />
-        {children}
-        <Footer />
+        <ErrorBoundary>
+          <Navigation />
+          {children}
+          <Footer />
+        </ErrorBoundary>
       </body>
     </html>
   )
