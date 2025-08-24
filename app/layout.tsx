@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer'
 import { PerformanceMonitor, GoogleAnalytics, CriticalResourcePreloader } from '@/components/PerformanceMonitor'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ErrorMonitorInitializer } from '@/components/ErrorMonitorInitializer'
+import { ServiceWorkerInitializer } from '@/components/ServiceWorkerInitializer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -91,6 +92,7 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
+        <ServiceWorkerInitializer />
         <ErrorMonitorInitializer />
         <CriticalResourcePreloader />
         <PerformanceMonitor />

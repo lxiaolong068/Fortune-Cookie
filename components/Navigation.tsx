@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Home, Sparkles, MessageSquare, Clock, ChefHat, Search } from 'lucide-react'
 import { Button } from './ui/button'
 import { cn } from '@/lib/utils'
+import { OfflineIndicator } from './OfflineIndicator'
 
 const navigationItems = [
   {
@@ -91,6 +92,11 @@ export function Navigation() {
                 </Link>
               )
             })}
+          </div>
+
+          {/* 离线状态指示器 */}
+          <div className="ml-4">
+            <OfflineIndicator />
           </div>
         </motion.div>
       </nav>
