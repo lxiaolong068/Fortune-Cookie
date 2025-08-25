@@ -19,7 +19,10 @@ const sitemapPages = [
   '/who-invented-fortune-cookies',
   '/how-to-make-fortune-cookies',
   '/funny-fortune-cookie-messages',
-  '/profile'
+  '/profile',
+  '/privacy',
+  '/terms',
+  '/cookies'
 ]
 
 // 不应该包含在 sitemap 中的页面（设置了 noindex 或功能性页面）

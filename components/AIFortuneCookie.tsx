@@ -96,7 +96,7 @@ export function AIFortuneCookie() {
       const fortune: Fortune = await response.json();
       setCurrentFortune(fortune);
 
-      // 添加到用户历史记录
+      // Add to user history
       try {
         await sessionManager.initializeSession();
         sessionManager.addFortuneToHistory({
@@ -136,7 +136,7 @@ export function AIFortuneCookie() {
       };
       setCurrentFortune(fallbackFortune);
 
-      // 添加回退幸运饼干到历史记录
+      // Add fallback fortune to history
       try {
         await sessionManager.initializeSession();
         sessionManager.addFortuneToHistory({

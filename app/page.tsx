@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      {/* 结构化数据 */}
+      {/* Structured Data */}
       <WebsiteStructuredData />
       <WebApplicationStructuredData />
       <OrganizationStructuredData />
@@ -58,8 +58,8 @@ export default function HomePage() {
         <div className="relative z-10">
           <FortuneCookie />
         </div>
-      
-      {/* SEO优化的隐藏内容 */}
+
+      {/* SEO-optimized hidden content */}
       <div className="sr-only">
         <h1>Fortune Cookie - Free Online AI Generator</h1>
         <p>

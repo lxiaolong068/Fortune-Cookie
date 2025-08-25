@@ -98,13 +98,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 输入验证和清理
+    // Input validation and sanitization
     const theme = body.theme ? sanitizeString(body.theme, 50) : 'random'
     const mood = body.mood ? sanitizeString(body.mood, 50) : 'positive'
     const length = body.length ? sanitizeString(body.length, 50) : 'medium'
     const customPrompt = body.customPrompt ? sanitizeString(body.customPrompt, 500) : undefined
 
-    // 验证参数
+    // Validate parameters
     if (!validateTheme(theme)) {
       return NextResponse.json(
         { error: 'Invalid theme. Must be one of: funny, inspirational, love, success, wisdom, random' },
@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 记录成功的业务事件
+    // Record successful business event
     const responseTime = Date.now() - startTime
     captureBusinessEvent('fortune_generated', {
       theme: fortuneRequest.theme,
@@ -190,21 +190,21 @@ export async function POST(request: NextRequest) {
       cached: !!fortune.cached
     })
 
-    // 记录用户操作
+    // Record user action
     captureUserAction('generate_fortune', 'fortune_generator', clientId, {
       theme: fortuneRequest.theme,
       responseTime,
       cached: !!fortune.cached
     })
 
-    // 创建优化的响应
+    // Create optimized response
     const response = EdgeCacheManager.optimizeApiResponse(
       fortune,
       requestHash,
-      fortuneRequest.customPrompt ? 0 : 300 // 自定义提示不缓存
+      fortuneRequest.customPrompt ? 0 : 300 // Custom prompts are not cached
     )
 
-    // CORS头部
+    // CORS headers
     response.headers.set('Access-Control-Allow-Origin', getCorsOrigin())
     response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS')
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')

@@ -61,7 +61,7 @@ export function Navigation() {
 
   return (
     <>
-      {/* 桌面导航 */}
+      {/* Desktop Navigation */}
       <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
         <motion.div
           initial={{ y: -100, opacity: 0 }}
@@ -101,7 +101,7 @@ export function Navigation() {
             })}
           </div>
 
-          {/* 主题切换和离线状态指示器 */}
+          {/* Theme toggle and offline status indicator */}
           <div className="flex items-center gap-2 ml-4">
             <ThemeToggle />
             <OfflineIndicator />
@@ -109,9 +109,9 @@ export function Navigation() {
         </motion.div>
       </nav>
 
-      {/* 移动端导航 */}
+      {/* Mobile Navigation */}
       <div className="md:hidden">
-        {/* 汉堡菜单按钮 */}
+        {/* Hamburger menu button */}
         <Button
           variant="outline"
           size="icon"
@@ -143,7 +143,7 @@ export function Navigation() {
           </AnimatePresence>
         </Button>
 
-        {/* 移动端菜单覆盖层 */}
+        {/* Mobile menu overlay */}
         <AnimatePresence>
           {isOpen && (
             <>
@@ -195,7 +195,7 @@ export function Navigation() {
                   })}
                 </div>
 
-                {/* 移动端底部装饰 */}
+                {/* Mobile bottom decoration */}
                 <div className="absolute bottom-6 left-6 right-6">
                   <div className="text-center">
                     <motion.div
