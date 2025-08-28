@@ -43,6 +43,7 @@ Thumbs.db
 # Logs
 logs
 *.log
+docs/
 
 # Runtime data
 pids

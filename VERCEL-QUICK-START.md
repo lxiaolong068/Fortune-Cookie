@@ -94,9 +94,9 @@ npm run type-check
 
 ## 📚 更多资源
 
-- 📖 [完整部署文档](./docs/VERCEL-DEPLOYMENT.md)
-- 📋 [部署检查清单](./docs/DEPLOYMENT-CHECKLIST.md)
-- 🔧 [项目配置说明](./README.md)
+- 📖 完整部署与配置：./README.md
+- 🧭 文档索引（精简版）：./docs/DOCUMENTATION-INDEX.md
+- 🔧 环境变量示例：./.env.example
 
 ---
 
