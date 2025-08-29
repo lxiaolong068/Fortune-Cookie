@@ -21,14 +21,14 @@ interface UserPreferencesProps {
 }
 
 const AVAILABLE_CATEGORIES = [
-  { id: 'inspirational', name: '励志', description: '激励人心的话语' },
-  { id: 'motivational', name: '激励', description: '推动行动的力量' },
-  { id: 'wisdom', name: '智慧', description: '人生哲理与智慧' },
-  { id: 'love', name: '爱情', description: '关于爱与情感' },
-  { id: 'success', name: '成功', description: '成功与成就' },
-  { id: 'happiness', name: '快乐', description: '快乐与幸福' },
-  { id: 'peace', name: '平静', description: '内心平静与安宁' },
-  { id: 'courage', name: '勇气', description: '勇敢面对挑战' },
+  { id: 'inspirational', name: 'Inspirational', description: 'Uplifting and motivating messages' },
+  { id: 'motivational', name: 'Motivational', description: 'Messages that drive action' },
+  { id: 'wisdom', name: 'Wisdom', description: 'Life philosophy and wisdom' },
+  { id: 'love', name: 'Love', description: 'About love and emotions' },
+  { id: 'success', name: 'Success', description: 'Success and achievement' },
+  { id: 'happiness', name: 'Happiness', description: 'Joy and happiness' },
+  { id: 'peace', name: 'Peace', description: 'Inner peace and tranquility' },
+  { id: 'courage', name: 'Courage', description: 'Bravely face challenges' },
 ]
 
 export function UserPreferences({ className, onPreferencesChange }: UserPreferencesProps) {
@@ -69,11 +69,11 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
     setPreferences(newPreferences)
     setHasChanges(true)
     
-    // 立即保存某些关键设置
+    // Save critical settings immediately
     if (key === 'theme' || key === 'language') {
       savePreferences(newPreferences)
 
-      // 同步主题到主题管理器
+      // Sync theme to theme manager
       if (key === 'theme') {
         themeManager.setTheme(value as 'light' | 'dark' | 'system')
       }
@@ -109,7 +109,7 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
   }
 
   const resetPreferences = () => {
-    if (confirm('确定要重置所有偏好设置吗？')) {
+    if (confirm('Are you sure you want to reset all preference settings?')) {
       const defaultPrefs: UserPreferences = {
         theme: 'system',
         language: 'zh',
@@ -131,7 +131,7 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Settings className="w-5 h-5" />
-            偏好设置
+            Preferences
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -148,31 +148,31 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Settings className="w-5 h-5" />
-          偏好设置
+          Preferences
         </CardTitle>
         <CardDescription>
-          个性化您的幸运饼干体验
+          Personalize your fortune cookie experience
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* 外观设置 */}
+        {/* Appearance Settings */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Palette className="w-4 h-4" />
-            <h3 className="text-sm font-medium">外观设置</h3>
+            <h3 className="text-sm font-medium">Appearance Settings</h3>
           </div>
-          
+
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="theme">主题选择</Label>
+              <Label htmlFor="theme">Theme Selection</Label>
               <ThemePreview />
             </div>
-            
+
             <div className="space-y-2">
-              <Label htmlFor="displayMode">显示模式</Label>
+              <Label htmlFor="displayMode">Display Mode</Label>
               <Select
                 value={preferences.displayMode}
-                onValueChange={(value: 'card' | 'list' | 'grid') => 
+                onValueChange={(value: 'card' | 'list' | 'grid') =>
                   updatePreference('displayMode', value)
                 }
               >
@@ -180,9 +180,9 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="card">卡片</SelectItem>
-                  <SelectItem value="list">列表</SelectItem>
-                  <SelectItem value="grid">网格</SelectItem>
+                  <SelectItem value="card">Card</SelectItem>
+                  <SelectItem value="list">List</SelectItem>
+                  <SelectItem value="grid">Grid</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -191,18 +191,18 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
 
         <Separator />
 
-        {/* 语言设置 */}
+        {/* Language Settings */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4" />
-            <h3 className="text-sm font-medium">语言设置</h3>
+            <h3 className="text-sm font-medium">Language Settings</h3>
           </div>
-          
+
           <div className="space-y-2">
-            <Label htmlFor="language">界面语言</Label>
+            <Label htmlFor="language">Interface Language</Label>
             <Select
               value={preferences.language}
-              onValueChange={(value: 'zh' | 'en') => 
+              onValueChange={(value: 'zh' | 'en') =>
                 updatePreference('language', value)
               }
             >
@@ -210,7 +210,7 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="zh">中文</SelectItem>
+                <SelectItem value="zh">Chinese</SelectItem>
                 <SelectItem value="en">English</SelectItem>
               </SelectContent>
             </Select>
@@ -219,12 +219,12 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
 
         <Separator />
 
-        {/* 喜欢的类别 */}
+        {/* Favorite Categories */}
         <div className="space-y-4">
           <div>
-            <h3 className="text-sm font-medium mb-1">喜欢的类别</h3>
+            <h3 className="text-sm font-medium mb-1">Favorite Categories</h3>
             <p className="text-xs text-gray-500">
-              选择您喜欢的幸运饼干类别，系统会优先推荐这些类别的内容
+              Select your favorite fortune cookie categories, the system will prioritize content from these categories
             </p>
           </div>
           
@@ -244,7 +244,7 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
                     <span className="text-sm font-medium">{category.name}</span>
                     {preferences.favoriteCategories.includes(category.id) && (
                       <Badge variant="secondary" className="text-xs">
-                        已选择
+                        Selected
                       </Badge>
                     )}
                   </div>
@@ -259,21 +259,21 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
 
         <Separator />
 
-        {/* 通知设置 */}
+        {/* Notification Settings */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Bell className="w-4 h-4" />
-            <h3 className="text-sm font-medium">通知设置</h3>
+            <h3 className="text-sm font-medium">Notification Settings</h3>
           </div>
-          
+
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <Label htmlFor="notifications" className="text-sm font-medium">
-                  启用通知
+                  Enable Notifications
                 </Label>
                 <p className="text-xs text-gray-500">
-                  接收应用更新和新功能通知
+                  Receive app updates and new feature notifications
                 </p>
               </div>
               <Switch
@@ -286,10 +286,10 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
             <div className="flex items-center justify-between">
               <div>
                 <Label htmlFor="autoSave" className="text-sm font-medium">
-                  自动保存
+                  Auto Save
                 </Label>
                 <p className="text-xs text-gray-500">
-                  自动保存您的幸运饼干到历史记录
+                  Automatically save your fortune cookies to history
                 </p>
               </div>
               <Switch
@@ -303,7 +303,7 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
 
         <Separator />
 
-        {/* 操作按钮 */}
+        {/* Action Buttons */}
         <div className="flex items-center justify-between">
           <Button
             variant="outline"
@@ -311,13 +311,13 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
             className="flex items-center gap-2"
           >
             <RotateCcw className="w-4 h-4" />
-            重置设置
+            Reset Settings
           </Button>
-          
+
           <div className="flex gap-2">
             {hasChanges && (
               <Badge variant="outline" className="text-xs">
-                有未保存的更改
+                Unsaved changes
               </Badge>
             )}
             <Button
@@ -328,12 +328,12 @@ export function UserPreferences({ className, onPreferencesChange }: UserPreferen
               {isSaving ? (
                 <>
                   <div className="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  保存中...
+                  Saving...
                 </>
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  保存设置
+                  Save Settings
                 </>
               )}
             </Button>

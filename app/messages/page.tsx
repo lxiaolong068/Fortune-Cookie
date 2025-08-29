@@ -86,7 +86,7 @@ const messageCategories = [
 ]
 
 export default function MessagesPage() {
-  // 准备结构化数据的消息项目
+  // Prepare message items for structured data
   const messageItems = messageCategories.flatMap(category =>
     category.messages.map(message => ({
       name: message,
