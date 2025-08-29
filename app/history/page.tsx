@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, Users, Sparkles } from 'lucide-react'
 import Image from 'next/image'
+import { ArticleStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: 'History of Fortune Cookies - Origins and Cultural Evolution',
@@ -106,6 +107,27 @@ const funFacts = [
 export default function HistoryPage() {
   return (
     <>
+      <ArticleStructuredData
+        headline="History of Fortune Cookies - Origins and Cultural Evolution"
+        description="Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about the cultural evolution and origins of this beloved treat."
+        url="/history"
+        datePublished="2024-01-01"
+        dateModified={new Date().toISOString().split('T')[0]}
+        keywords={[
+          'history of fortune cookies',
+          'fortune cookie origins',
+          'who invented fortune cookies',
+          'fortune cookies japanese roots',
+          'fortune cookies in america',
+          'cultural history',
+          'asian american food history',
+          'fortune cookie facts'
+        ]}
+      />
+      <BreadcrumbStructuredData items={[
+        { name: 'Home', url: '/' },
+        { name: 'History of Fortune Cookies', url: '/history' }
+      ]} />
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <BackgroundEffects />
         <div className="relative z-10">

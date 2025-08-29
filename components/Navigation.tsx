@@ -64,9 +64,9 @@ export function Navigation() {
       {/* Desktop Navigation */}
       <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
         <motion.div
-          initial={{ y: -100, opacity: 0 }}
+          initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-6 py-3"
         >
           <div className="flex items-center space-x-1">
@@ -76,13 +76,11 @@ export function Navigation() {
               
               return (
                 <Link key={item.href} href={item.href}>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <div
                     className={cn(
-                      "relative px-4 py-2 rounded-full transition-all duration-200 flex items-center gap-2",
-                      isActive 
-                        ? "bg-amber-100 text-amber-700" 
+                      "relative px-4 py-2 rounded-full transition-all duration-200 flex items-center gap-2 hover:scale-105 active:scale-95",
+                      isActive
+                        ? "bg-amber-100 text-amber-700"
                         : "text-gray-600 hover:text-amber-600 hover:bg-amber-50"
                     )}
                   >
@@ -92,10 +90,10 @@ export function Navigation() {
                       <motion.div
                         layoutId="activeTab"
                         className="absolute inset-0 bg-amber-100 rounded-full -z-10"
-                        transition={{ type: "spring", duration: 0.5 }}
+                        transition={{ type: "spring", duration: 0.3 }}
                       />
                     )}
-                  </motion.div>
+                  </div>
                 </Link>
               )
             })}
@@ -159,7 +157,7 @@ export function Navigation() {
                 initial={{ x: "100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
-                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 className="fixed top-0 right-0 h-full w-80 bg-white/95 backdrop-blur-md border-l border-amber-200 shadow-xl z-50 p-6"
               >
                 <div className="mt-16 space-y-4">
@@ -168,11 +166,10 @@ export function Navigation() {
                     const isActive = pathname === item.href
                     
                     return (
-                      <motion.div
+                      <div
                         key={item.href}
-                        initial={{ x: 50, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: index * 0.1 }}
+                        className="animate-in slide-in-from-right-4 duration-300"
+                        style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <Link
                           href={item.href}
@@ -190,7 +187,7 @@ export function Navigation() {
                             <div className="text-sm opacity-70">{item.description}</div>
                           </div>
                         </Link>
-                      </motion.div>
+                      </div>
                     )
                   })}
                 </div>

@@ -12,7 +12,7 @@ const STATIC_ASSETS = [
   '/generator',
   '/messages',
   '/tutorial',
-  '/manifest.json',
+  '/manifest.webmanifest',
   '/favicon.ico',
   '/apple-touch-icon.png',
   '/favicon-32x32.png',

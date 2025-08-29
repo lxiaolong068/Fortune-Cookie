@@ -3,6 +3,7 @@ import { BackgroundEffects } from '@/components/BackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles, Heart, Smile, TrendingUp, Star } from 'lucide-react'
+import { ItemListStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: 'Fortune Cookie Messages - Inspirational Quotes & Sayings',
@@ -85,8 +86,27 @@ const messageCategories = [
 ]
 
 export default function MessagesPage() {
+  // 准备结构化数据的消息项目
+  const messageItems = messageCategories.flatMap(category =>
+    category.messages.map(message => ({
+      name: message,
+      description: `${category.name} fortune cookie message`,
+      category: category.name
+    }))
+  )
+
   return (
     <>
+      <ItemListStructuredData
+        name="Fortune Cookie Messages Collection"
+        description="Browse our collection of inspirational fortune cookie messages, funny quotes, and motivational sayings. Find the perfect fortune cookie message for any occasion."
+        url="/messages"
+        items={messageItems}
+      />
+      <BreadcrumbStructuredData items={[
+        { name: 'Home', url: '/' },
+        { name: 'Fortune Cookie Messages', url: '/messages' }
+      ]} />
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <BackgroundEffects />
         <div className="relative z-10">

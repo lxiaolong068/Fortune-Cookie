@@ -6,8 +6,9 @@ import {
   WebApplicationStructuredData,
   OrganizationStructuredData
 } from '@/components/StructuredData'
+import { generateSEOMetadata } from '@/components/SEO'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateSEOMetadata({
   title: 'Fortune Cookie - Free Online AI Generator',
   description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom fortune cookies with our AI tool.',
   keywords: [
@@ -20,30 +21,10 @@ export const metadata: Metadata = {
     'funny fortune cookies',
     'custom fortune cookie creator'
   ],
-  openGraph: {
-    title: 'Fortune Cookie - Free Online AI Generator',
-    description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers.',
-    type: 'website',
-    url: 'https://fortune-cookie-ai.vercel.app',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Fortune Cookie AI Generator - Free Online Tool',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Fortune Cookie - Free Online AI Generator',
-    description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers.',
-    images: ['/twitter-image.jpg'],
-  },
-  alternates: {
-    canonical: '/',
-  },
-}
+  image: '/og-image.png',
+  url: '/',
+  type: 'website'
+})
 
 export default function HomePage() {
   return (

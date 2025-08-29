@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { getSiteUrl, getFullUrl, getImageUrl, getSiteMetadata } from '@/lib/site'
 
 interface SEOProps {
   title?: string
@@ -15,41 +16,37 @@ interface SEOProps {
 }
 
 export function generateSEOMetadata({
-  title = 'Fortune Cookie - Free Online AI Generator',
-  description = 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom fortune cookies with our AI tool.',
-  keywords = [
-    'fortune cookie',
-    'free online fortune cookie generator ai',
-    'custom fortune cookie message creator',
-    'ai fortune cookie sayings app',
-    'inspirational fortune cookie quotes',
-    'funny fortune cookie messages',
-    'lucky numbers generator',
-    'personalized fortune cookies'
-  ],
-  image = '/og-image.jpg',
-  url = 'https://fortune-cookie-ai.vercel.app',
+  title,
+  description,
+  keywords,
+  image = '/og-image.png',
+  url,
   type = 'website',
   publishedTime,
   modifiedTime,
-  author = 'Fortune Cookie AI Team',
+  author,
   section,
   tags = []
 }: SEOProps): Metadata {
-  const baseUrl = 'https://fortune-cookie-ai.vercel.app'
-  const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`
-  const fullImageUrl = image.startsWith('http') ? image : `${baseUrl}${image}`
+  const siteMetadata = getSiteMetadata()
+  const finalTitle = title || siteMetadata.title
+  const finalDescription = description || siteMetadata.description
+  const finalKeywords = keywords || siteMetadata.keywords
+  const finalAuthor = author || siteMetadata.author
+  const baseUrl = siteMetadata.baseUrl
+  const fullUrl = url ? getFullUrl(url) : baseUrl
+  const fullImageUrl = getImageUrl(image)
 
   return {
     title: {
-      default: title,
+      default: finalTitle,
       template: '%s | Fortune Cookie AI'
     },
-    description,
-    keywords,
-    authors: [{ name: author }],
-    creator: 'Fortune Cookie AI',
-    publisher: 'Fortune Cookie AI',
+    description: finalDescription,
+    keywords: finalKeywords,
+    authors: [{ name: finalAuthor }],
+    creator: siteMetadata.creator,
+    publisher: siteMetadata.publisher,
     formatDetection: {
       email: false,
       address: false,
@@ -57,33 +54,33 @@ export function generateSEOMetadata({
     },
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: url === baseUrl ? '/' : url.replace(baseUrl, ''),
+      canonical: url ? (url === baseUrl ? '/' : url.replace(baseUrl, '')) : '/',
     },
     openGraph: {
       type,
-      locale: 'en_US',
+      locale: siteMetadata.locale,
       url: fullUrl,
-      title,
-      description,
-      siteName: 'Fortune Cookie AI',
+      title: finalTitle,
+      description: finalDescription,
+      siteName: siteMetadata.siteName,
       images: [
         {
           url: fullImageUrl,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: finalTitle,
         },
       ],
       ...(publishedTime && { publishedTime }),
       ...(modifiedTime && { modifiedTime }),
-      ...(author && { authors: [author] }),
+      ...(finalAuthor && { authors: [finalAuthor] }),
       ...(section && { section }),
       ...(tags.length > 0 && { tags }),
     },
     twitter: {
       card: 'summary_large_image',
-      title,
-      description,
+      title: finalTitle,
+      description: finalDescription,
       images: [fullImageUrl],
       creator: '@fortunecookieai',
     },

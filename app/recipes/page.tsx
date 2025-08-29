@@ -3,6 +3,7 @@ import { BackgroundEffects } from '@/components/BackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Users, ChefHat, Utensils, Star } from 'lucide-react'
+import { RecipeStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: 'Fortune Cookie Recipes - How to Make Homemade Fortune Cookies',
@@ -144,6 +145,11 @@ const tips = [
 export default function RecipesPage() {
   return (
     <>
+      <RecipeStructuredData recipes={recipes} />
+      <BreadcrumbStructuredData items={[
+        { name: 'Home', url: '/' },
+        { name: 'Fortune Cookie Recipes', url: '/recipes' }
+      ]} />
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <BackgroundEffects />
         <div className="relative z-10">

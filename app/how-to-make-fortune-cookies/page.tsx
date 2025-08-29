@@ -3,7 +3,7 @@ import { BackgroundEffects } from '@/components/BackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Users, ChefHat, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react'
-import { BreadcrumbStructuredData } from '@/components/StructuredData'
+import { BreadcrumbStructuredData, ArticleStructuredData } from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: 'How to Make Fortune Cookies at Home Easy - Step by Step Guide',
@@ -107,6 +107,23 @@ const troubleshooting = [
 export default function HowToMakeFortuneCookiesPage() {
   return (
     <>
+      <ArticleStructuredData
+        headline="How to Make Fortune Cookies at Home Easy - Step by Step Guide"
+        description="Learn how to make delicious homemade fortune cookies with our easy step-by-step tutorial. Perfect recipe for beginners with tips, tricks, and custom message ideas."
+        url="/how-to-make-fortune-cookies"
+        datePublished="2024-01-01"
+        dateModified={new Date().toISOString().split('T')[0]}
+        keywords={[
+          'how to make fortune cookies at home easy',
+          'homemade fortune cookies recipe',
+          'fortune cookie recipe easy',
+          'best homemade fortune cookies ingredients',
+          'fortune cookie baking tutorial',
+          'easy fortune cookie recipe',
+          'make fortune cookies step by step',
+          'fortune cookie recipe for beginners'
+        ]}
+      />
       <BreadcrumbStructuredData items={[
         { name: 'Home', url: '/' },
         { name: 'Recipes', url: '/recipes' },
