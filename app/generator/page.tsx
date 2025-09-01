@@ -4,17 +4,7 @@ import { BackgroundEffects } from '@/components/BackgroundEffects'
 
 export const metadata: Metadata = {
   title: 'AI Fortune Cookie Generator - Create Custom Messages',
-  description: 'Use our advanced AI fortune cookie generator to create personalized inspirational messages, funny quotes, and custom fortune cookies with lucky numbers.',
-  keywords: [
-    'ai fortune cookie generator',
-    'custom fortune cookie creator',
-    'personalized fortune messages',
-    'ai message generator',
-    'custom fortune cookie maker',
-    'inspirational quote generator',
-    'lucky number generator',
-    'fortune cookie ai tool'
-  ],
+  description: 'Free AI fortune cookie generator for personalized messages, funny quotes, and lucky numbers. Create and share custom fortune cookies instantly.',
   openGraph: {
     title: 'AI Fortune Cookie Generator - Create Custom Messages',
     description: 'Use our advanced AI fortune cookie generator to create personalized inspirational messages, funny quotes, and custom fortune cookies.',

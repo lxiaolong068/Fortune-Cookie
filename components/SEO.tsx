@@ -4,7 +4,6 @@ import { getSiteUrl, getFullUrl, getImageUrl, getSiteMetadata } from '@/lib/site
 interface SEOProps {
   title?: string
   description?: string
-  keywords?: string[]
   image?: string
   url?: string
   type?: 'website' | 'article'
@@ -18,7 +17,6 @@ interface SEOProps {
 export function generateSEOMetadata({
   title,
   description,
-  keywords,
   image = '/og-image.png',
   url,
   type = 'website',
@@ -31,7 +29,9 @@ export function generateSEOMetadata({
   const siteMetadata = getSiteMetadata()
   const finalTitle = title || siteMetadata.title
   const finalDescription = description || siteMetadata.description
-  const finalKeywords = keywords || siteMetadata.keywords
+  const normalizedDescription = finalDescription.length > 160
+    ? finalDescription.slice(0, 157) + '...'
+    : finalDescription
   const finalAuthor = author || siteMetadata.author
   const baseUrl = siteMetadata.baseUrl
   const fullUrl = url ? getFullUrl(url) : baseUrl
@@ -42,8 +42,7 @@ export function generateSEOMetadata({
       default: finalTitle,
       template: '%s | Fortune Cookie AI'
     },
-    description: finalDescription,
-    keywords: finalKeywords,
+    description: normalizedDescription,
     authors: [{ name: finalAuthor }],
     creator: siteMetadata.creator,
     publisher: siteMetadata.publisher,

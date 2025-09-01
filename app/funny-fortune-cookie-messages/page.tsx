@@ -8,16 +8,6 @@ import { BreadcrumbStructuredData } from '@/components/StructuredData'
 export const metadata: Metadata = {
   title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
   description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles. Copy and share your favorites.',
-  keywords: [
-    'funny fortune cookie messages',
-    'hilarious fortune cookie sayings',
-    'funny fortune cookie quotes',
-    'humorous fortune cookies',
-    'fortune cookie jokes',
-    'witty fortune cookie messages',
-    'comedy fortune cookies',
-    'amusing fortune cookie sayings'
-  ],
   openGraph: {
     title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
     description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles.',

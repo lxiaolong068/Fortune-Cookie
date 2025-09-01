@@ -7,16 +7,6 @@ import { Cookie, Settings, BarChart3, Shield, Eye, Trash2, RefreshCw, Mail } fro
 export const metadata: Metadata = {
   title: 'Cookie 政策 - Fortune Cookie AI',
   description: 'Fortune Cookie AI Cookie 政策。了解我们如何使用 Cookies 和类似技术来改善您的浏览体验。',
-  keywords: [
-    'Cookie 政策',
-    'Cookies',
-    '网站 Cookies',
-    '浏览器存储',
-    '数据收集',
-    'Fortune Cookie AI',
-    '隐私设置',
-    '本地存储'
-  ],
   openGraph: {
     title: 'Cookie 政策 - Fortune Cookie AI',
     description: '了解 Fortune Cookie AI 如何使用 Cookies 和本地存储技术。',

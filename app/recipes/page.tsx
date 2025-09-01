@@ -7,17 +7,7 @@ import { RecipeStructuredData, BreadcrumbStructuredData } from '@/components/Str
 
 export const metadata: Metadata = {
   title: 'Fortune Cookie Recipes - How to Make Homemade Fortune Cookies',
-  description: 'Learn how to make delicious homemade fortune cookies with our easy step-by-step recipes. Perfect for parties, events, or creating custom messages at home.',
-  keywords: [
-    'fortune cookie recipe',
-    'how to make fortune cookies at home',
-    'homemade fortune cookies',
-    'fortune cookie recipe easy',
-    'best fortune cookie ingredients',
-    'fortune cookie baking tutorial',
-    'custom fortune cookies recipe',
-    'fortune cookie making guide'
-  ],
+  description: 'Learn to make delicious homemade fortune cookies with easy step-by-step recipes. Perfect for parties and creating custom messages at home.',
   openGraph: {
     title: 'Fortune Cookie Recipes - How to Make Homemade Fortune Cookies',
     description: 'Learn how to make delicious homemade fortune cookies with our easy step-by-step recipes.',

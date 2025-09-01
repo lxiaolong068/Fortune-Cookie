@@ -24,7 +24,6 @@ export const metadata: Metadata = {
     template: '%s | Fortune Cookie AI'
   },
   description: siteMetadata.description,
-  keywords: siteMetadata.keywords,
   authors: [{ name: siteMetadata.author }],
   creator: siteMetadata.creator,
   publisher: siteMetadata.publisher,

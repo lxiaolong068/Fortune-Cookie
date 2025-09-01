@@ -6,15 +6,7 @@ import { AnalyticsDashboard } from '@/components/AnalyticsDashboard'
 
 export const metadata: Metadata = {
   title: '数据分析 - Fortune Cookie AI',
-  description: '查看详细的用户行为分析、性能指标和业务数据。了解用户如何使用Fortune Cookie AI。',
-  keywords: [
-    '数据分析',
-    '用户行为',
-    '性能指标',
-    '业务数据',
-    '实时分析',
-    'Fortune Cookie AI'
-  ],
+  description: '查看详细的用户行为分析、性能指标和业务数据。了解用户如何使用 Fortune Cookie AI。',
   robots: 'noindex, nofollow', // 分析页面不需要被搜索引擎索引
 }
 

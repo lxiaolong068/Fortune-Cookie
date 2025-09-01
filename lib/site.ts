@@ -73,7 +73,7 @@ export function getImageUrl(imagePath: string): string {
 export const siteConfig = {
   name: 'Fortune Cookie AI',
   title: 'Fortune Cookie - Free Online AI Generator',
-  description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom fortune cookies with our AI tool.',
+  description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom cookies with our AI.',
   keywords: [
     'fortune cookie',
     'free online fortune cookie generator ai',

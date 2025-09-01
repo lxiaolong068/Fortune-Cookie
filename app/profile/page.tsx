@@ -10,15 +10,6 @@ import { UserStats } from '@/components/UserStats'
 export const metadata: Metadata = {
   title: '个人中心 - Fortune Cookie AI',
   description: '管理您的幸运饼干历史记录、偏好设置和使用统计。',
-  keywords: [
-    '个人中心',
-    '用户设置',
-    '历史记录',
-    '偏好设置',
-    '使用统计',
-    '幸运饼干',
-    'Fortune Cookie AI'
-  ],
   openGraph: {
     title: '个人中心 - Fortune Cookie AI',
     description: '管理您的幸运饼干历史记录、偏好设置和使用统计。',

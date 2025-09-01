@@ -8,17 +8,7 @@ import { ArticleStructuredData, BreadcrumbStructuredData } from '@/components/St
 
 export const metadata: Metadata = {
   title: 'History of Fortune Cookies - Origins and Cultural Evolution',
-  description: 'Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about the cultural evolution and origins of this beloved treat.',
-  keywords: [
-    'history of fortune cookies',
-    'fortune cookie origins',
-    'who invented fortune cookies',
-    'fortune cookies japanese roots',
-    'fortune cookies in america',
-    'cultural history',
-    'asian american food history',
-    'fortune cookie facts'
-  ],
+  description: 'Explore the history of fortune cookies from Japanese roots to American invention. Learn the cultural evolution and origins of this beloved treat.',
   openGraph: {
     title: 'History of Fortune Cookies - Origins and Cultural Evolution',
     description: 'Discover the fascinating history of fortune cookies, from their Japanese roots to American invention.',

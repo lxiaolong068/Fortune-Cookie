@@ -7,17 +7,7 @@ import { BreadcrumbStructuredData, FAQStructuredData } from '@/components/Struct
 
 export const metadata: Metadata = {
   title: 'Who Invented Fortune Cookies? The Surprising History & Origins',
-  description: 'Discover who really invented fortune cookies! Learn about the Japanese origins, American development, and the surprising truth behind this beloved treat\'s creation.',
-  keywords: [
-    'who invented fortune cookies',
-    'fortune cookie inventor',
-    'fortune cookie history',
-    'fortune cookie origins',
-    'Makoto Hagiwara fortune cookies',
-    'Japanese fortune cookies',
-    'fortune cookie creation story',
-    'fortune cookie facts'
-  ],
+  description: 'Discover who invented fortune cookies — from Japanese origins to American development — and the surprising truth behind this beloved treat.',
   openGraph: {
     title: 'Who Invented Fortune Cookies? The Surprising History & Origins',
     description: 'Discover who really invented fortune cookies! Learn about the Japanese origins, American development, and the surprising truth behind this beloved treat\'s creation.',

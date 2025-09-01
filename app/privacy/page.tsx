@@ -6,17 +6,7 @@ import { Shield, Eye, Database, Cookie, Lock, UserCheck, AlertTriangle, Mail } f
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - Fortune Cookie AI',
-  description: 'Fortune Cookie AI Privacy Policy. Learn how we collect, use, and protect your personal information. We are committed to protecting your privacy and data security.',
-  keywords: [
-    'privacy policy',
-    'data protection',
-    'personal information',
-    'data security',
-    'Fortune Cookie AI',
-    'user privacy',
-    'GDPR',
-    'data processing'
-  ],
+  description: 'Privacy Policy for Fortune Cookie AI. Learn how we collect, use, and protect your data. We prioritize your privacy and security.',
   openGraph: {
     title: 'Privacy Policy - Fortune Cookie AI',
     description: 'Learn how Fortune Cookie AI protects your privacy and personal data.',

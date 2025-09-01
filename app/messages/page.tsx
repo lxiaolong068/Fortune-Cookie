@@ -7,17 +7,7 @@ import { ItemListStructuredData, BreadcrumbStructuredData } from '@/components/S
 
 export const metadata: Metadata = {
   title: 'Fortune Cookie Messages - Inspirational Quotes & Sayings',
-  description: 'Browse our collection of inspirational fortune cookie messages, funny quotes, and motivational sayings. Find the perfect fortune cookie message for any occasion.',
-  keywords: [
-    'fortune cookie messages',
-    'inspirational fortune cookie quotes',
-    'funny fortune cookie sayings',
-    'motivational quotes',
-    'fortune cookie wisdom',
-    'positive affirmations',
-    'daily inspiration',
-    'uplifting messages'
-  ],
+  description: 'Browse inspirational fortune cookie messages, funny quotes, and motivational sayings. Find the perfect fortune for any occasion.',
   openGraph: {
     title: 'Fortune Cookie Messages - Inspirational Quotes & Sayings',
     description: 'Browse our collection of inspirational fortune cookie messages, funny quotes, and motivational sayings.',

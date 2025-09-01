@@ -6,17 +6,7 @@ import { FileText, Users, Shield, AlertTriangle, CheckCircle, XCircle, Scale, Ma
 
 export const metadata: Metadata = {
   title: 'Terms of Service - Fortune Cookie AI',
-  description: 'Fortune Cookie AI Terms of Service. Learn about the rules, rights, and responsibilities for using our service. Please read these terms carefully.',
-  keywords: [
-    'terms of service',
-    'terms of use',
-    'user agreement',
-    'service agreement',
-    'Fortune Cookie AI',
-    'legal terms',
-    'user responsibilities',
-    'service rules'
-  ],
+  description: 'Terms of Service for Fortune Cookie AI. Learn the rules, rights, and responsibilities for using our service.',
   openGraph: {
     title: 'Terms of Service - Fortune Cookie AI',
     description: 'Learn about the terms and conditions for using Fortune Cookie AI service.',

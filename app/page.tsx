@@ -10,17 +10,7 @@ import { generateSEOMetadata } from '@/components/SEO'
 
 export const metadata: Metadata = generateSEOMetadata({
   title: 'Fortune Cookie - Free Online AI Generator',
-  description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom fortune cookies with our AI tool.',
-  keywords: [
-    'fortune cookie generator',
-    'free online fortune cookie',
-    'ai fortune cookie',
-    'inspirational quotes',
-    'lucky numbers',
-    'personalized messages',
-    'funny fortune cookies',
-    'custom fortune cookie creator'
-  ],
+  description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom cookies with our AI.',
   image: '/og-image.png',
   url: '/',
   type: 'website'
