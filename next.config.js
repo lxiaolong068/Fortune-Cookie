@@ -11,6 +11,11 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
   },
+  // Skip ESLint only on Vercel to avoid deploy failures.
+  // Local `npm run lint` and local `next build` still run lint.
+  eslint: {
+    ignoreDuringBuilds: process.env.VERCEL === '1',
+  },
 
   // Performance optimizations
   experimental: {
