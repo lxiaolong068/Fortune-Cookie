@@ -28,59 +28,78 @@ const SKIP_PATHS = [
 ]
 
 export function middleware(request: NextRequest) {
+  const startTime = Date.now()
   const { pathname } = request.nextUrl
-  
+
   // 跳过不需要处理的路径
   if (SKIP_PATHS.some(path => pathname.startsWith(path))) {
     return NextResponse.next()
   }
-  
+
   // 处理静态资源
   if (STATIC_PATHS.some(path => pathname.startsWith(path))) {
-    return handleStaticAssets(request)
+    return handleStaticAssets(request, startTime)
   }
-  
+
   // 处理API路由缓存
   if (pathname.startsWith('/api/')) {
-    return handleApiCaching(request)
+    return handleApiCaching(request, startTime)
   }
-  
+
   // 处理页面缓存
-  return handlePageCaching(request)
+  return handlePageCaching(request, startTime)
+}
+
+// 添加Server-Timing头部的工具函数
+function addServerTiming(response: NextResponse, startTime: number, operation: string): void {
+  const duration = Date.now() - startTime
+  const existingTiming = response.headers.get('Server-Timing')
+  const newTiming = `${operation};dur=${duration}`
+
+  if (existingTiming) {
+    response.headers.set('Server-Timing', `${existingTiming}, ${newTiming}`)
+  } else {
+    response.headers.set('Server-Timing', newTiming)
+  }
 }
 
 // 处理静态资源缓存
-function handleStaticAssets(request: NextRequest): NextResponse {
+function handleStaticAssets(request: NextRequest, startTime: number): NextResponse {
   const response = NextResponse.next()
-  
+
   // 设置长期缓存头部
   response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
   response.headers.set('CDN-Cache-Control', 'public, max-age=31536000')
-  
+
+  // 添加Server-Timing头部
+  addServerTiming(response, startTime, 'static')
+
   return response
 }
 
 // 处理API缓存
-function handleApiCaching(request: NextRequest): NextResponse {
+function handleApiCaching(request: NextRequest, startTime: number): NextResponse {
   const { pathname, searchParams } = request.nextUrl
-  
+
   // 检查是否是可缓存的API路径
   const isCacheable = CACHEABLE_PATHS.some(path => pathname.startsWith(path))
-  
+
   if (!isCacheable) {
-    return NextResponse.next()
+    const response = NextResponse.next()
+    addServerTiming(response, startTime, 'api-uncacheable')
+    return response
   }
-  
+
   // 检查条件请求
   const ifNoneMatch = request.headers.get('If-None-Match')
   const ifModifiedSince = request.headers.get('If-Modified-Since')
-  
+
   if (ifNoneMatch || ifModifiedSince) {
     // 生成简单的ETag（实际应用中应该基于内容）
     const etag = generateSimpleETag(pathname + searchParams.toString())
-    
+
     if (ifNoneMatch === etag) {
-      return new NextResponse(null, {
+      const response = new NextResponse(null, {
         status: 304,
         statusText: 'Not Modified',
         headers: {
@@ -88,31 +107,42 @@ function handleApiCaching(request: NextRequest): NextResponse {
           'Cache-Control': 'public, max-age=300',
         },
       })
+      addServerTiming(response, startTime, 'api-304')
+      return response
     }
   }
-  
-  return NextResponse.next()
+
+  const response = NextResponse.next()
+  addServerTiming(response, startTime, 'api-cacheable')
+  return response
 }
 
 // 处理页面缓存
-function handlePageCaching(request: NextRequest): NextResponse {
+function handlePageCaching(request: NextRequest, startTime: number): NextResponse {
   const response = NextResponse.next()
-  
+  const pathname = request.nextUrl.pathname
+
   // 为页面设置适当的缓存头部
-  if (request.nextUrl.pathname === '/') {
+  if (pathname === '/') {
     // 首页 - 短期缓存
     response.headers.set('Cache-Control', 'public, max-age=60, s-maxage=300')
-  } else if (request.nextUrl.pathname.startsWith('/messages')) {
+    addServerTiming(response, startTime, 'page-home')
+  } else if (pathname.startsWith('/messages')) {
     // 消息页面 - 中期缓存
     response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=600')
+    addServerTiming(response, startTime, 'page-messages')
+  } else if (pathname.startsWith('/api/')) {
+    // API路由
+    addServerTiming(response, startTime, 'page-api')
   } else {
     // 其他页面 - 验证缓存
     response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate')
+    addServerTiming(response, startTime, 'page-other')
   }
-  
+
   // 添加Vary头部
   response.headers.set('Vary', 'Accept-Encoding, User-Agent')
-  
+
   return response
 }
 

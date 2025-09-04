@@ -6,6 +6,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getSiteUrl()
   const currentDate = new Date()
 
+  // Pages that should be excluded from sitemap (noindex pages)
+  const excludedPages = new Set(['/analytics'])
+
   // Define all pages that should be included in sitemap
   const pages = [
     { path: '/', priority: 1.0, changeFrequency: 'daily' as const },
@@ -18,12 +21,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/how-to-make-fortune-cookies', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/funny-fortune-cookie-messages', priority: 0.6, changeFrequency: 'weekly' as const },
     { path: '/profile', priority: 0.5, changeFrequency: 'weekly' as const },
-    { path: '/analytics', priority: 0.4, changeFrequency: 'weekly' as const },
     { path: '/cookies', priority: 0.4, changeFrequency: 'monthly' as const },
     { path: '/offline', priority: 0.2, changeFrequency: 'yearly' as const },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/terms', priority: 0.3, changeFrequency: 'yearly' as const },
-  ]
+  ].filter(page => !excludedPages.has(page.path))
 
   // Generate sitemap entries for all locales
   const sitemapEntries: MetadataRoute.Sitemap = []

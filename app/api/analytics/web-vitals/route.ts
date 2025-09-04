@@ -37,6 +37,43 @@ function validateMetric(metric: any): boolean {
   )
 }
 
+// RUM采样率函数 - 根据指标类型和性能情况调整采样率
+function getSamplingRate(metricName: string, value: number): number {
+  // 基础采样率
+  let baseRate = 0.1 // 10% 基础采样率
+
+  // 根据指标类型调整
+  switch (metricName) {
+    case 'LCP':
+      // LCP是关键指标，提高采样率
+      baseRate = 0.2
+      // 对于性能差的情况，提高采样率以便调试
+      if (value > 4000) baseRate = 0.5 // 超过4秒的LCP
+      else if (value > 2500) baseRate = 0.3 // 超过2.5秒的LCP
+      break
+    case 'INP':
+      baseRate = 0.15
+      if (value > 500) baseRate = 0.4 // 超过500ms的INP
+      else if (value > 200) baseRate = 0.25 // 超过200ms的INP
+      break
+    case 'CLS':
+      baseRate = 0.1
+      if (value > 0.25) baseRate = 0.4 // 超过0.25的CLS
+      else if (value > 0.1) baseRate = 0.2 // 超过0.1的CLS
+      break
+    case 'FCP':
+      baseRate = 0.1
+      if (value > 3000) baseRate = 0.3 // 超过3秒的FCP
+      break
+    case 'TTFB':
+      baseRate = 0.1
+      if (value > 1800) baseRate = 0.3 // 超过1.8秒的TTFB
+      break
+  }
+
+  return Math.min(baseRate, 1.0) // 确保不超过100%
+}
+
 export async function POST(request: NextRequest) {
   try {
     let metric: unknown
@@ -70,13 +107,29 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent')?.slice(0, 500) || ''
     const referer = request.headers.get('referer')?.slice(0, 500) || ''
 
+    // 获取额外的RUM数据
+    const connectionType = request.headers.get('connection-type') || 'unknown'
+    const deviceMemory = request.headers.get('device-memory') || 'unknown'
+    const effectiveType = request.headers.get('effective-type') || 'unknown'
+
+    // 实现采样逻辑 - 只存储一定比例的数据以避免存储过载
+    const samplingRate = getSamplingRate(metric.name, metric.value)
+    const shouldSample = Math.random() < samplingRate
+
     // Store the metric (in production, save to database)
-    metricsStore.push({
-      ...metric,
-      timestamp: Date.now(),
-      userAgent,
-      url: referer,
-    } as any)
+    if (shouldSample) {
+      metricsStore.push({
+        ...metric,
+        timestamp: Date.now(),
+        userAgent,
+        url: referer,
+        connectionType,
+        deviceMemory,
+        effectiveType,
+        sampled: true,
+        samplingRate,
+      } as any)
+    }
 
     // Log performance issues
     const thresholds = {
@@ -133,24 +186,62 @@ export async function GET(request: NextRequest) {
         (b.timestamp || 0) - (a.timestamp || 0))
       .slice(0, limit)
 
-    // Calculate averages
+    // Calculate averages and sampling statistics
     const averages = results.reduce((acc, metric) => {
       if (!acc[metric.name]) {
-        acc[metric.name] = { total: 0, count: 0, average: 0 }
+        acc[metric.name] = {
+          total: 0,
+          count: 0,
+          average: 0,
+          sampledCount: 0,
+          totalSampled: 0
+        }
       }
       const metricData = acc[metric.name]
       if (metricData) {
         metricData.total += metric.value
         metricData.count += 1
         metricData.average = metricData.total / metricData.count
+
+        // Track sampling statistics
+        if ((metric as any).sampled) {
+          metricData.sampledCount += 1
+          metricData.totalSampled += metric.value
+        }
       }
       return acc
-    }, {} as Record<string, { total: number; count: number; average: number }>)
+    }, {} as Record<string, {
+      total: number;
+      count: number;
+      average: number;
+      sampledCount: number;
+      totalSampled: number;
+    }>)
+
+    // Calculate performance outliers (values above 95th percentile)
+    const outliers = results
+      .filter(metric => {
+        const thresholds = {
+          CLS: 0.25,
+          INP: 500,
+          FCP: 3000,
+          LCP: 4000,
+          TTFB: 1800,
+        }
+        return metric.value > (thresholds[metric.name as keyof typeof thresholds] || 0)
+      })
+      .slice(0, 50) // Limit outliers to prevent large responses
 
     const response = NextResponse.json(createSuccessResponse({
       metrics: results,
       averages,
-      total: results.length
+      outliers,
+      total: results.length,
+      samplingInfo: {
+        totalSampled: results.filter((m: any) => m.sampled).length,
+        totalReceived: metricsStore.length,
+        samplingRatio: results.filter((m: any) => m.sampled).length / Math.max(metricsStore.length, 1)
+      }
     }))
 
     return addSecurityHeaders(response)
