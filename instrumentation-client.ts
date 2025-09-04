@@ -1,56 +1,45 @@
 // This file configures the initialization of Sentry on the browser/client side
 import * as Sentry from '@sentry/nextjs'
 
-// Export the router transition hook for Sentry navigation instrumentation
-export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
+// Only enable Sentry in production when DSN is provided
+const DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
+const IS_PROD = process.env.NODE_ENV === 'production'
+const ENABLED = !!DSN && IS_PROD && process.env.NEXT_PUBLIC_ENABLE_SENTRY !== 'false'
 
-Sentry.init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  
-  // Adjust this value in production, or use tracesSampler for greater control
-  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-  
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: process.env.NODE_ENV === 'development',
-  
-  replaysOnErrorSampleRate: 1.0,
-  
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 0.1,
-  
-  // You can remove this option if you're not planning to use the Sentry Session Replay feature:
-  integrations: [
-    Sentry.replayIntegration({
-      // Additional Replay configuration goes in here, for example:
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
+// Export router transition hook (no-op if disabled)
+export const onRouterTransitionStart = ENABLED
+  ? Sentry.captureRouterTransitionStart
+  : (() => {})
 
-  // Performance monitoring
-  beforeSend(event, hint) {
-    // Filter out certain errors in production
-    if (process.env.NODE_ENV === 'production') {
-      // Filter out network errors that are not actionable
-      if (event.exception?.values?.[0]?.type === 'NetworkError') {
-        return null
+if (ENABLED) {
+  Sentry.init({
+    dsn: DSN,
+    enabled: true,
+    // Keep debug off to avoid noisy logs
+    debug: false,
+    // Reasonable production sampling; disabled entirely in dev via ENABLED
+    tracesSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+    replaysSessionSampleRate: 0.1,
+    integrations: [
+      Sentry.replayIntegration({
+        maskAllText: true,
+        blockAllMedia: true,
+      }),
+    ],
+    beforeSend(event) {
+      // Filter out less actionable production noise
+      if (IS_PROD) {
+        if (event.exception?.values?.[0]?.type === 'NetworkError') return null
+        if (event.message?.includes('Hydration')) return null
       }
-      
-      // Filter out hydration warnings in production
-      if (event.message?.includes('Hydration')) {
-        return null
-      }
-    }
-    
-    return event
-  },
-  
-  // Set user context
-  initialScope: {
-    tags: {
-      component: 'fortune-cookie-ai',
-      environment: process.env.NODE_ENV,
+      return event
     },
-  },
-})
+    initialScope: {
+      tags: {
+        component: 'fortune-cookie-ai',
+        environment: process.env.NODE_ENV,
+      },
+    },
+  })
+}
