@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react'
 import Script from 'next/script'
-import { capturePerformanceIssue, captureBusinessEvent, errorMonitor } from '@/lib/error-monitoring'
+import { capturePerformanceIssue, captureBusinessEvent } from '@/lib/error-monitoring'
+import { performanceUtils, CORE_WEB_VITALS_THRESHOLDS } from '@/lib/performance-budget'
 
 // Core Web Vitals monitoring
 export function PerformanceMonitor() {
@@ -15,30 +16,33 @@ export function PerformanceMonitor() {
           console.log('Web Vital:', metric)
         }
 
-        // 检查性能预算并发送到Sentry
-        const thresholds = {
-          CLS: 0.1,
-          INP: 200,
-          FCP: 1800,
-          LCP: 2500,
-          TTFB: 800,
-        }
+        // 使用性能预算系统检查阈值
+        const thresholds = CORE_WEB_VITALS_THRESHOLDS[metric.name as keyof typeof CORE_WEB_VITALS_THRESHOLDS]
+        if (thresholds) {
+          const threshold = thresholds.good
 
-        const threshold = thresholds[metric.name as keyof typeof thresholds]
-        if (threshold) {
-          capturePerformanceIssue(
-            metric.name,
-            metric.value,
-            threshold,
-            {
-              component: 'web-vitals',
-              additionalData: {
-                id: metric.id,
-                rating: metric.rating,
-                navigationType: metric.navigationType,
+          // 检查性能预算
+          const budgetReport = performanceUtils.checkBudget({ [metric.name]: metric.value })
+
+          // 如果超出预算，发送到错误监控
+          if (budgetReport.violations.length > 0) {
+            capturePerformanceIssue(
+              metric.name,
+              metric.value,
+              threshold,
+              {
+                component: 'web-vitals',
+                additionalData: {
+                  id: metric.id,
+                  rating: metric.rating,
+                  navigationType: metric.navigationType,
+                  budgetScore: budgetReport.score,
+                  violations: budgetReport.violations,
+                  recommendations: budgetReport.recommendations,
+                }
               }
-            }
-          )
+            )
+          }
         }
 
         // 记录性能指标业务事件
@@ -167,8 +171,8 @@ export function GoogleAnalytics({ measurementId }: { measurementId: string }) {
   )
 }
 
-// Performance optimization utilities
-export const performanceUtils = {
+// Performance optimization utilities (legacy)
+export const legacyPerformanceUtils = {
   // Preload critical resources
   preloadResource: (href: string, as: string, type?: string) => {
     const link = document.createElement('link')
@@ -252,41 +256,38 @@ export const performanceUtils = {
   }
 }
 
-// Performance budget checker
+// Enhanced performance budget checker
 export function checkPerformanceBudget() {
   if (typeof window === 'undefined') return
 
-  const budget = {
-    maxLCP: 2500, // 2.5 seconds
-    maxINP: 200,  // 200 milliseconds (tune per product goals)
-    maxCLS: 0.1,  // 0.1
-    maxTTFB: 800, // 800 milliseconds
-  }
+  import('web-vitals').then(({ onCLS, onLCP, onTTFB, onINP, onFCP }) => {
+    const metrics: Record<string, number> = {}
 
-  import('web-vitals').then(({ onCLS, onLCP, onTTFB, onINP }) => {
-    onCLS((metric) => {
-      if (metric.value > budget.maxCLS) {
-        console.warn(`CLS budget exceeded: ${metric.value} > ${budget.maxCLS}`)
-      }
-    })
+    const checkAndReport = (metricName: string, value: number) => {
+      metrics[metricName] = value
+      const report = performanceUtils.checkBudget(metrics)
 
-    onINP((metric) => {
-      if (metric.value > budget.maxINP) {
-        console.warn(`INP budget exceeded: ${metric.value}ms > ${budget.maxINP}ms`)
+      if (report.violations.length > 0) {
+        console.group(`🚨 Performance Budget Violation: ${metricName}`)
+        console.warn(`Value: ${value}`)
+        console.warn(`Budget Score: ${report.score}/100`)
+        report.violations.forEach(violation => {
+          console.warn(`${violation.metric}: ${violation.actual} > ${violation.budget} (${violation.severity})`)
+        })
+        if (report.recommendations.length > 0) {
+          console.info('Recommendations:', report.recommendations)
+        }
+        console.groupEnd()
+      } else {
+        console.log(`✅ ${metricName}: ${value} (within budget)`)
       }
-    })
+    }
 
-    onLCP((metric) => {
-      if (metric.value > budget.maxLCP) {
-        console.warn(`LCP budget exceeded: ${metric.value}ms > ${budget.maxLCP}ms`)
-      }
-    })
-
-    onTTFB((metric) => {
-      if (metric.value > budget.maxTTFB) {
-        console.warn(`TTFB budget exceeded: ${metric.value}ms > ${budget.maxTTFB}ms`)
-      }
-    })
+    onCLS((metric) => checkAndReport('CLS', metric.value))
+    onINP((metric) => checkAndReport('INP', metric.value))
+    onLCP((metric) => checkAndReport('LCP', metric.value))
+    onTTFB((metric) => checkAndReport('TTFB', metric.value))
+    onFCP((metric) => checkAndReport('FCP', metric.value))
   })
 }
 
@@ -294,12 +295,12 @@ export function checkPerformanceBudget() {
 export function CriticalResourcePreloader() {
   useEffect(() => {
     // Preload critical resources
-    performanceUtils.addResourceHints()
-    performanceUtils.optimizeFonts()
-    
+    legacyPerformanceUtils.addResourceHints()
+    legacyPerformanceUtils.optimizeFonts()
+
     // Register service worker
-    performanceUtils.registerServiceWorker()
-    
+    legacyPerformanceUtils.registerServiceWorker()
+
     // Check performance budget in development
     if (process.env.NODE_ENV === 'development') {
       setTimeout(checkPerformanceBudget, 3000)

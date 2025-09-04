@@ -4,13 +4,14 @@ import './globals.css'
 import { Suspense } from 'react'
 import { DynamicNavigation } from '@/components/DynamicNavigation'
 import { Footer } from '@/components/Footer'
-import { PerformanceMonitor, GoogleAnalytics, CriticalResourcePreloader } from '@/components/PerformanceMonitor'
+import { PerformanceMonitor, GoogleAnalytics } from '@/components/PerformanceMonitor'
+import { OptimizedPreloader } from '@/components/ResourcePreloader'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ErrorMonitorInitializer } from '@/components/ErrorMonitorInitializer'
 import { ServiceWorkerInitializer } from '@/components/ServiceWorkerInitializer'
 import { ThemeInitializer, ThemeScript } from '@/components/ThemeInitializer'
 import { AnalyticsInitializer, AnalyticsConsentBanner } from '@/components/AnalyticsInitializer'
-import { getSiteUrl, getSiteMetadata, getOGImageConfig, getTwitterImageConfig } from '@/lib/site'
+import { getSiteMetadata, getOGImageConfig, getTwitterImageConfig } from '@/lib/site'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -93,7 +94,7 @@ export default function RootLayout({
         <ThemeInitializer />
         <ServiceWorkerInitializer />
         <ErrorMonitorInitializer />
-        <CriticalResourcePreloader />
+        <OptimizedPreloader />
         <PerformanceMonitor />
         <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
         <ErrorBoundary>

@@ -55,10 +55,13 @@ export function ImageWithFallback({
         style={style || { width, height }}
       >
         <div className="flex flex-col items-center justify-center p-4">
-          <img
+          <Image
             src={ERROR_IMG_SRC}
             alt="Error loading image"
-            className="w-12 h-12 opacity-50 mb-2"
+            width={48}
+            height={48}
+            className="opacity-50 mb-2"
+            unoptimized
           />
           <span className="text-xs text-gray-500">Image not found</span>
         </div>

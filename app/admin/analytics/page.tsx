@@ -1,21 +1,17 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  Eye, 
-  MousePointer, 
+import {
+  TrendingUp,
+  Users,
+  Eye,
   Clock,
   Smartphone,
   Monitor,
   Tablet,
-  Globe,
-  Search,
   Zap
 } from 'lucide-react'
 
@@ -61,11 +57,7 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true)
   const [timeframe, setTimeframe] = useState('30d')
 
-  useEffect(() => {
-    fetchAnalyticsData()
-  }, [timeframe])
-
-  const fetchAnalyticsData = async () => {
+  const fetchAnalyticsData = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/analytics/dashboard?timeframe=${timeframe}`)
@@ -76,7 +68,11 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [timeframe])
+
+  useEffect(() => {
+    fetchAnalyticsData()
+  }, [fetchAnalyticsData])
 
   if (loading) {
     return (
@@ -232,7 +228,7 @@ export default function AnalyticsPage() {
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-4">Top Pages</h2>
             <div className="space-y-3">
-              {data.topPages.slice(0, 8).map((page, index) => (
+              {data.topPages.slice(0, 8).map((page) => (
                 <div key={page.path} className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">
@@ -252,7 +248,7 @@ export default function AnalyticsPage() {
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-4">Top Search Queries</h2>
             <div className="space-y-3">
-              {data.searchQueries.slice(0, 8).map((query, index) => (
+              {data.searchQueries.slice(0, 8).map((query) => (
                 <div key={query.query} className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">

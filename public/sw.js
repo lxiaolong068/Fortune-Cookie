@@ -63,7 +63,7 @@ self.addEventListener('install', (event) => {
               results: [
                 {
                   id: 'offline-1',
-                  message: '即使在离线状态下，希望也会照亮前路。',
+                  message: 'Even offline, hope lights the way forward.',
                   category: 'inspirational',
                   mood: 'positive',
                   source: 'offline',
@@ -71,7 +71,7 @@ self.addEventListener('install', (event) => {
                 },
                 {
                   id: 'offline-2',
-                  message: '困难只是成功路上的垫脚石。',
+                  message: 'Challenges are stepping stones to success.',
                   category: 'motivational',
                   mood: 'positive',
                   source: 'offline',
@@ -249,11 +249,11 @@ async function handlePageRequest(request) {
     // 最后的回退 - 返回基本的离线页面
     return new Response(`
       <!DOCTYPE html>
-      <html lang="zh-CN">
+      <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>离线模式 - Fortune Cookie AI</title>
+        <title>Offline Mode - Fortune Cookie AI</title>
         <style>
           body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-align: center; padding: 2rem; }
           .offline-container { max-width: 400px; margin: 0 auto; }
@@ -266,9 +266,9 @@ async function handlePageRequest(request) {
       <body>
         <div class="offline-container">
           <div class="offline-icon">🔮</div>
-          <h1 class="offline-title">离线模式</h1>
-          <p class="offline-message">您当前处于离线状态，请检查网络连接后重试。</p>
-          <button class="retry-button" onclick="window.location.reload()">重新连接</button>
+          <h1 class="offline-title">Offline Mode</h1>
+          <p class="offline-message">You are currently offline. Please check your internet connection and try again.</p>
+          <button class="retry-button" onclick="window.location.reload()">Reconnect</button>
         </div>
       </body>
       </html>
