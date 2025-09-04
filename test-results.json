@@ -1,0 +1,70 @@
+{
+  "timestamp": "2025-09-04T19:24:13.172Z",
+  "consoleMessages": [
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "timestamp": "2025-09-04T19:24:01.310Z"
+    },
+    {
+      "type": "warning",
+      "text": "Sentry Logger [warn]: No DSN provided, client will not send events.",
+      "timestamp": "2025-09-04T19:24:01.342Z"
+    }
+  ],
+  "networkRequests": [
+    {
+      "url": "http://localhost:3000/generator",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:23:55.550Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:00.829Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/css/app/layout.css?v=1757013840660",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:00.832Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/webpack.js?v=1757013840660",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:00.832Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/main-app.js?v=1757013840660",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:00.832Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app-pages-internals.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:00.832Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app/generator/page.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:00.832Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app/layout.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:00.832Z"
+    },
+    {
+      "url": "http://localhost:3000/favicon-32x32.png",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:24:01.903Z"
+    }
+  ],
+  "errors": [
+    {
+      "message": "Invalid or unexpected token",
+      "stack": "",
+      "timestamp": "2025-09-04T19:24:00.986Z"
+    }
+  ],
+  "apiRequests": []
+}

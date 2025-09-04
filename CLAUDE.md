@@ -11,6 +11,8 @@ npm run dev
 
 # Build for production
 npm run build              # Includes Prisma generation
+npm run start             # Start production server
+npm run vercel-build      # Vercel optimized build
 
 # Type checking and linting
 npm run type-check         # TypeScript checking
@@ -28,6 +30,9 @@ npm run db:push          # Push schema to database
 npm run db:migrate       # Run database migrations
 npm run db:studio        # Open Prisma Studio
 npm run db:seed          # Seed database with sample data
+npm run db:seed:clean    # Clean seed with data replacement
+npm run db:seed:force    # Force seed with existing data overwrite
+npm run db:validate      # Validate database schema and data
 npm run db:reset         # Reset database and reseed
 ```
 
@@ -37,15 +42,23 @@ npm run db:reset         # Reset database and reseed
 npm run test             # Run Jest tests
 npm run test:watch       # Watch mode
 npm run test:coverage    # Coverage report
+npm run test:ci          # CI mode with coverage
+npm run test:unit        # Run only unit tests
+npm run test:api         # Run only API tests
+npm run test:components  # Run only component tests
+npm run test:lib         # Run only library tests
 
 # E2E testing
 npm run test:e2e         # Playwright tests
 npm run test:e2e:ui      # With Playwright UI
+npm run test:e2e:headed  # Run with browser visible
 npm run test:e2e:debug   # Debug mode
 
 # Deployment testing
 npm run test:local       # Test local build
 npm run test:deployment  # Test production deployment
+npm run vercel-check     # Check Vercel deployment
+npm run deploy-check     # Alias for vercel-check
 ```
 
 ## Architecture Overview
@@ -97,10 +110,12 @@ npm run test:deployment  # Test production deployment
 - `DATABASE_URL`: PostgreSQL connection string
 - `NEXT_PUBLIC_APP_URL`: Application base URL
 
-### Optional
+### Optional  
 - `GOOGLE_ANALYTICS_ID`: Google Analytics tracking ID
 - `GOOGLE_VERIFICATION_CODE`: Search Console verification
 - `SENTRY_DSN`: Error monitoring configuration
+- `UPSTASH_REDIS_REST_URL`: Redis cache URL for performance optimization
+- `UPSTASH_REDIS_REST_TOKEN`: Redis authentication token
 
 ## Development Guidelines
 
@@ -112,12 +127,13 @@ npm run test:deployment  # Test production deployment
 - **Database**: Prisma schema and migrations in `prisma/`
 
 ### Database Schema Patterns
-The application uses comprehensive database tracking:
-- **Fortune Management**: Message storage with categorization and popularity tracking
-- **User Sessions**: Anonymous session management
-- **Performance Metrics**: Web Vitals and API usage tracking
-- **Error Logging**: Comprehensive error tracking and monitoring
-- **Analytics**: User interaction and feedback collection
+The application uses comprehensive database tracking with PostgreSQL and Prisma ORM:
+- **Fortune Management**: Message storage with categorization, mood classification, and popularity tracking
+- **User Sessions**: Anonymous session management with expiration handling  
+- **Performance Metrics**: Web Vitals v5 monitoring and API usage analytics
+- **Error Logging**: Comprehensive error tracking with stack traces and context
+- **Analytics**: User interaction, feedback collection, and cache statistics
+- **Indexing Strategy**: Optimized indexes for category, mood, popularity, and timestamp queries
 
 ### AI Integration Patterns
 - **Theme-Based Generation**: Different AI prompts for various fortune themes

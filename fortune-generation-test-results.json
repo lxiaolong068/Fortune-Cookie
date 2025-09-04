@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-09-04T19:27:37.844Z",
+  "summary": {
+    "totalAPIRequests": 0,
+    "successfulResponses": 0,
+    "errors": 0,
+    "consoleMessages": 0
+  },
+  "consoleMessages": [],
+  "networkRequests": [],
+  "apiResponses": [],
+  "errors": []
+}

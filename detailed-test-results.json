@@ -1,0 +1,551 @@
+{
+  "timestamp": "2025-09-04T19:25:55.466Z",
+  "consoleMessages": [
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "timestamp": "2025-09-04T19:25:15.410Z"
+    },
+    {
+      "type": "warning",
+      "text": "Sentry Logger [warn]: No DSN provided, client will not send events.",
+      "timestamp": "2025-09-04T19:25:15.440Z"
+    },
+    {
+      "type": "log",
+      "text": "Global error handlers initialized",
+      "timestamp": "2025-09-04T19:25:15.493Z"
+    },
+    {
+      "type": "log",
+      "text": "Global error handlers initialized",
+      "timestamp": "2025-09-04T19:25:15.497Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: FCP, value: 104, rating: good, delta: 104, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:15.528Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: FCP, value: 104, rating: good, delta: 104, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:15.528Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: TTFB, value: 47.400000002235174, rating: good, delta: 47.400000002235174, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:15.528Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: TTFB, value: 47.400000002235174, rating: good, delta: 47.400000002235174, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:15.528Z"
+    },
+    {
+      "type": "error",
+      "text": "Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?%s%s \n\nCheck the render method of `Primitive.button.SlotClone`. \n    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:40:11)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:52:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:20:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-primitive/dist/index.mjs:38:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:52:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:20:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-primitive/dist/index.mjs:38:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-popper/dist/index.mjs:69:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-menu/dist/index.mjs:197:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs:109:13)\n    at DropdownMenuTrigger (webpack-internal:///(app-pages-browser)/./components/ui/dropdown-menu.tsx:57:14)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at Popper (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-popper/dist/index.mjs:54:13)\n    at Menu (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-menu/dist/index.mjs:130:13)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at DropdownMenu (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs:66:13)\n    at DropdownMenu (webpack-internal:///(app-pages-browser)/./components/ui/dropdown-menu.tsx:33:14)\n    at ThemeToggle (webpack-internal:///(app-pages-browser)/./components/ThemeToggle.tsx:29:11)\n    at div\n    at div\n    at MotionComponent (webpack-internal:///(app-pages-browser)/./node_modules/framer-motion/dist/es/motion/index.mjs:54:65)\n    at nav\n    at Navigation (webpack-internal:///(app-pages-browser)/./components/Navigation.tsx:82:80)\n    at BailoutToCSR (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/lazy-dynamic/dynamic-bailout-to-csr.js:13:11)\n    at Suspense\n    at LoadableComponent\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/./components/ErrorBoundary.tsx:246:9)\n    at body\n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:117:11)",
+      "timestamp": "2025-09-04T19:25:15.947Z"
+    },
+    {
+      "type": "log",
+      "text": "Starting intelligent resource preload...",
+      "timestamp": "2025-09-04T19:25:17.501Z"
+    },
+    {
+      "type": "log",
+      "text": "[Fast Refresh] rebuilding",
+      "timestamp": "2025-09-04T19:25:17.776Z"
+    },
+    {
+      "type": "log",
+      "text": "[Fast Refresh] rebuilding",
+      "timestamp": "2025-09-04T19:25:18.429Z"
+    },
+    {
+      "type": "log",
+      "text": "[Fast Refresh] done in 98ms",
+      "timestamp": "2025-09-04T19:25:18.526Z"
+    },
+    {
+      "type": "warning",
+      "text": "[Fast Refresh] performing full reload\n\nFast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.\nYou might have a file which exports a React component but also exports a value that is imported by a non-React component file.\nConsider migrating the non-React component export to a separate file and importing it into both files.\n\nIt is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.\nFast Refresh requires at least one parent function component in your React tree.",
+      "timestamp": "2025-09-04T19:25:19.096Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: CLS, value: 0, rating: good, delta: 0, entries: Array(0)}",
+      "timestamp": "2025-09-04T19:25:19.152Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: CLS, value: 0, rating: good, delta: 0, entries: Array(0)}",
+      "timestamp": "2025-09-04T19:25:19.153Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: LCP, value: 104, rating: good, delta: 104, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:19.153Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: LCP, value: 104, rating: good, delta: 104, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:19.153Z"
+    },
+    {
+      "type": "log",
+      "text": "Sentry Logger [log]: Flushing outcomes...",
+      "timestamp": "2025-09-04T19:25:19.153Z"
+    },
+    {
+      "type": "log",
+      "text": "Sentry Logger [log]: No outcomes to send",
+      "timestamp": "2025-09-04T19:25:19.153Z"
+    },
+    {
+      "type": "log",
+      "text": "Sentry Logger [log]: Captured error event `Page hidden`",
+      "timestamp": "2025-09-04T19:25:19.153Z"
+    },
+    {
+      "type": "error",
+      "text": "Sentry Logger [error]: Transport disabled",
+      "timestamp": "2025-09-04T19:25:19.154Z"
+    },
+    {
+      "type": "log",
+      "text": "Sentry Logger [log]: Captured error event `Page hidden`",
+      "timestamp": "2025-09-04T19:25:19.155Z"
+    },
+    {
+      "type": "error",
+      "text": "Sentry Logger [error]: Transport disabled",
+      "timestamp": "2025-09-04T19:25:19.155Z"
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "timestamp": "2025-09-04T19:25:19.488Z"
+    },
+    {
+      "type": "warning",
+      "text": "Sentry Logger [warn]: No DSN provided, client will not send events.",
+      "timestamp": "2025-09-04T19:25:19.517Z"
+    },
+    {
+      "type": "log",
+      "text": "Global error handlers initialized",
+      "timestamp": "2025-09-04T19:25:19.542Z"
+    },
+    {
+      "type": "log",
+      "text": "Global error handlers initialized",
+      "timestamp": "2025-09-04T19:25:19.543Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: FCP, value: 100, rating: good, delta: 100, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:19.561Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: FCP, value: 100, rating: good, delta: 100, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:19.561Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: TTFB, value: 53.600000001490116, rating: good, delta: 53.600000001490116, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:19.561Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: TTFB, value: 53.600000001490116, rating: good, delta: 53.600000001490116, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:19.561Z"
+    },
+    {
+      "type": "error",
+      "text": "Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?%s%s \n\nCheck the render method of `Primitive.button.SlotClone`. \n    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:40:11)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:52:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:20:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-primitive/dist/index.mjs:38:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:52:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-slot/dist/index.mjs:20:17)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-primitive/dist/index.mjs:38:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-popper/dist/index.mjs:69:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-menu/dist/index.mjs:197:13)\n    at eval (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs:109:13)\n    at DropdownMenuTrigger (webpack-internal:///(app-pages-browser)/./components/ui/dropdown-menu.tsx:57:14)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at Popper (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-popper/dist/index.mjs:54:13)\n    at Menu (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-menu/dist/index.mjs:130:13)\n    at Provider (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-context/dist/index.mjs:34:15)\n    at DropdownMenu (webpack-internal:///(app-pages-browser)/./node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs:66:13)\n    at DropdownMenu (webpack-internal:///(app-pages-browser)/./components/ui/dropdown-menu.tsx:33:14)\n    at ThemeToggle (webpack-internal:///(app-pages-browser)/./components/ThemeToggle.tsx:29:11)\n    at div\n    at div\n    at MotionComponent (webpack-internal:///(app-pages-browser)/./node_modules/framer-motion/dist/es/motion/index.mjs:54:65)\n    at nav\n    at Navigation (webpack-internal:///(app-pages-browser)/./components/Navigation.tsx:82:80)\n    at BailoutToCSR (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/lazy-dynamic/dynamic-bailout-to-csr.js:13:11)\n    at Suspense\n    at LoadableComponent\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/./components/ErrorBoundary.tsx:246:9)\n    at body\n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:117:11)",
+      "timestamp": "2025-09-04T19:25:19.913Z"
+    },
+    {
+      "type": "error",
+      "text": "Global error: TypeError: target.closest is not a function\n    at HTMLDocument.handleMouseEnter (webpack-internal:///(app-pages-browser)/./components/ResourcePreloader.tsx:136:33)",
+      "timestamp": "2025-09-04T19:25:21.137Z"
+    },
+    {
+      "type": "log",
+      "text": "Sentry Logger [log]: Captured error event `target.closest is not a function`",
+      "timestamp": "2025-09-04T19:25:21.137Z"
+    },
+    {
+      "type": "error",
+      "text": "Global error: TypeError: target.closest is not a function\n    at HTMLDocument.handleMouseEnter (webpack-internal:///(app-pages-browser)/./components/ResourcePreloader.tsx:136:33)",
+      "timestamp": "2025-09-04T19:25:21.139Z"
+    },
+    {
+      "type": "log",
+      "text": "Sentry Logger [log]: Not capturing exception because it's already been captured.",
+      "timestamp": "2025-09-04T19:25:21.140Z"
+    },
+    {
+      "type": "error",
+      "text": "Sentry Logger [error]: Transport disabled",
+      "timestamp": "2025-09-04T19:25:21.194Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: LCP, value: 100, rating: good, delta: 100, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:21.195Z"
+    },
+    {
+      "type": "log",
+      "text": "Web Vital: {name: LCP, value: 100, rating: good, delta: 100, entries: Array(1)}",
+      "timestamp": "2025-09-04T19:25:21.195Z"
+    },
+    {
+      "type": "log",
+      "text": "Starting intelligent resource preload...",
+      "timestamp": "2025-09-04T19:25:21.550Z"
+    },
+    {
+      "type": "warning",
+      "text": "The resource http://localhost:3000/og-image.png was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+      "timestamp": "2025-09-04T19:25:24.703Z"
+    },
+    {
+      "type": "warning",
+      "text": "The resource http://localhost:3000/images/fortune-cookie-hero.svg was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+      "timestamp": "2025-09-04T19:25:24.703Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": "2025-09-04T19:25:49.520Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to send analytics events: TypeError: Failed to fetch\n    at AnalyticsManager.flush (webpack-internal:///(app-pages-browser)/./lib/analytics-manager.ts:252:19)\n    at eval (webpack-internal:///(app-pages-browser)/./lib/analytics-manager.ts:34:18)",
+      "timestamp": "2025-09-04T19:25:49.521Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": "2025-09-04T19:25:49.521Z"
+    },
+    {
+      "type": "warning",
+      "text": "The resource http://localhost:3000/og-image.png was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+      "timestamp": "2025-09-04T19:25:52.522Z"
+    },
+    {
+      "type": "warning",
+      "text": "The resource http://localhost:3000/images/fortune-cookie-hero.svg was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+      "timestamp": "2025-09-04T19:25:52.522Z"
+    }
+  ],
+  "networkRequests": [
+    {
+      "url": "http://localhost:3000/generator",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.053Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.103Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/css/app/layout.css?v=1757013915071",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.103Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/webpack.js?v=1757013915071",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.103Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/main-app.js?v=1757013915071",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.103Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app-pages-internals.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.103Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app/generator/page.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.103Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app/layout.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.103Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_node_modules_web-vitals_dist_web-vitals_js.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.497Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_Navigation_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.503Z"
+    },
+    {
+      "url": "http://localhost:3000/favicon-32x32.png",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.514Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:15.527Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_BackgroundEffects_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:15.531Z"
+    },
+    {
+      "url": "http://localhost:3000/generator",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.502Z"
+    },
+    {
+      "url": "http://localhost:3000/browse",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.502Z"
+    },
+    {
+      "url": "http://localhost:3000/messages",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.502Z"
+    },
+    {
+      "url": "http://localhost:3000/images/fortune-cookie-hero.svg",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.502Z"
+    },
+    {
+      "url": "http://localhost:3000/og-image.png",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.502Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_AnalyticsDashboard_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.509Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_UserHistory_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.510Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_node_modules_recharts_es6_index_js.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:17.510Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/webpack/f1cbc452cd5faff3.webpack.hot-update.json",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:18.253Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/webpack/webpack.f1cbc452cd5faff3.hot-update.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:18.261Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/webpack/_app-pages-browser_components_BackgroundEffects_tsx.f1cbc452cd5faff3.hot-update.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:18.261Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/webpack/0790282f64595630.webpack.hot-update.json",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:18.764Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/webpack/webpack.0790282f64595630.hot-update.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.024Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/webpack/_app-pages-browser_components_BackgroundEffects_tsx.0790282f64595630.hot-update.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.024Z"
+    },
+    {
+      "url": "http://localhost:3000/generator",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.097Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:19.098Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.158Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/css/app/layout.css?v=1757013919121",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.158Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/webpack.js?v=1757013919121",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.158Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/main-app.js?v=1757013919121",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.158Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app-pages-internals.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.158Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app/generator/page.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.158Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/app/layout.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.159Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_node_modules_web-vitals_dist_web-vitals_js.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.543Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_Navigation_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.546Z"
+    },
+    {
+      "url": "http://localhost:3000/favicon-32x32.png",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.553Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:19.560Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_BackgroundEffects_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:19.564Z"
+    },
+    {
+      "url": "http://localhost:3000/__nextjs_original-stack-frame?isServer=false&isEdgeServer=false&isAppDirectory=true&errorMessage=TypeError%3A+target.closest+is+not+a+function&file=webpack-internal%3A%2F%2F%2F%28app-pages-browser%29%2F.%2Fcomponents%2FResourcePreloader.tsx&methodName=HTMLDocument.handleMouseEnter&arguments=&lineNumber=136&column=33",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.139Z"
+    },
+    {
+      "url": "http://localhost:3000/__nextjs_original-stack-frame?isServer=false&isEdgeServer=false&isAppDirectory=true&errorMessage=TypeError%3A+target.closest+is+not+a+function&file=webpack-internal%3A%2F%2F%2F%28app-pages-browser%29%2F.%2Fcomponents%2FResourcePreloader.tsx&methodName=HTMLDocument.handleMouseEnter&arguments=&lineNumber=136&column=33",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.162Z"
+    },
+    {
+      "url": "http://localhost:3000/__nextjs_original-stack-frame?isServer=false&isEdgeServer=false&isAppDirectory=true&errorMessage=TypeError%3A+target.closest+is+not+a+function&file=webpack-internal%3A%2F%2F%2F%28app-pages-browser%29%2F.%2Fcomponents%2FResourcePreloader.tsx&methodName=HTMLDocument.handleMouseEnter&arguments=&lineNumber=136&column=33",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.162Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:21.162Z"
+    },
+    {
+      "url": "http://localhost:3000/generator",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.551Z"
+    },
+    {
+      "url": "http://localhost:3000/browse",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.551Z"
+    },
+    {
+      "url": "http://localhost:3000/messages",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.551Z"
+    },
+    {
+      "url": "http://localhost:3000/images/fortune-cookie-hero.svg",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.551Z"
+    },
+    {
+      "url": "http://localhost:3000/og-image.png",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.551Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_AnalyticsDashboard_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.559Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_components_UserHistory_tsx.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.559Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_app-pages-browser_node_modules_recharts_es6_index_js.js",
+      "method": "GET",
+      "timestamp": "2025-09-04T19:25:21.559Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:49.520Z"
+    }
+  ],
+  "errors": [
+    {
+      "message": "target.closest is not a function",
+      "stack": "TypeError: target.closest is not a function\n    at HTMLDocument.handleMouseEnter (webpack-internal:///(app-pages-browser)/./components/ResourcePreloader.tsx:136:33)",
+      "timestamp": "2025-09-04T19:25:21.140Z"
+    }
+  ],
+  "apiRequests": [
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:15.527Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:19.098Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:19.560Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:21.162Z"
+    },
+    {
+      "url": "http://localhost:3000/api/analytics",
+      "method": "POST",
+      "timestamp": "2025-09-04T19:25:49.520Z"
+    }
+  ]
+}
