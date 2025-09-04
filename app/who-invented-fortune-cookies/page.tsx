@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, User, Lightbulb } from 'lucide-react'
 import { BreadcrumbStructuredData, FAQStructuredData } from '@/components/StructuredData'
+import { FAQStructuredData as FAQSchema, whoInventedFAQs } from '@/components/FAQStructuredData'
 
 import { getSiteUrl } from '@/lib/site'
 
@@ -219,6 +220,8 @@ export default function WhoInventedFortuneCookiesPage() {
           </div>
         </div>
       </main>
+
+      <FAQSchema faqs={whoInventedFAQs} />
     </>
   )
 }

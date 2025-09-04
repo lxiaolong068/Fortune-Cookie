@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Users, ChefHat, Utensils, Star } from 'lucide-react'
 import { RecipeStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
+import { FAQStructuredData, recipeFAQs } from '@/components/FAQStructuredData'
 import { getSiteUrl } from '@/lib/site'
 
 const baseUrl = getSiteUrl()
@@ -284,6 +285,8 @@ export default function RecipesPage() {
           </div>
         </div>
       </main>
+
+      <FAQStructuredData faqs={recipeFAQs} />
     </>
   )
 }

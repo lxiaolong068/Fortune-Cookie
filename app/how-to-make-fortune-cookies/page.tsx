@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Users, ChefHat, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react'
 import { BreadcrumbStructuredData, ArticleStructuredData } from '@/components/StructuredData'
+import { FAQStructuredData, howToMakeFAQs } from '@/components/FAQStructuredData'
 import { getSiteUrl } from '@/lib/site'
 
 const baseUrl = getSiteUrl()
@@ -284,6 +285,8 @@ export default function HowToMakeFortuneCookiesPage() {
           </div>
         </div>
       </main>
+
+      <FAQStructuredData faqs={howToMakeFAQs} />
     </>
   )
 }

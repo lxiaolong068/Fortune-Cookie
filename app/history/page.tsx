@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, Users, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import { ArticleStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
+import { FAQStructuredData, historyFAQs } from '@/components/FAQStructuredData'
 import { getSiteUrl } from '@/lib/site'
 
 const baseUrl = getSiteUrl()
@@ -235,6 +236,8 @@ export default function HistoryPage() {
           </div>
         </div>
       </main>
+
+      <FAQStructuredData faqs={historyFAQs} />
     </>
   )
 }
