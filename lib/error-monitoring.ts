@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/nextjs'
+// Lightweight error monitoring (Sentry removed)
 
 // 错误类型定义
 export interface ErrorContext {
@@ -14,10 +14,11 @@ export interface ErrorContext {
 // 错误严重程度
 export type ErrorSeverity = 'fatal' | 'error' | 'warning' | 'info' | 'debug'
 
-// 错误监控类
+// 轻量错误监控（仅控制台输出）
 export class ErrorMonitor {
   private static instance: ErrorMonitor
   private isInitialized = false
+  private currentUser?: { id: string; email?: string; username?: string }
 
   private constructor() {}
 
@@ -28,19 +29,10 @@ export class ErrorMonitor {
     return ErrorMonitor.instance
   }
 
-  // 初始化错误监控
+  // 初始化（可选）
   public initialize(userId?: string) {
     if (this.isInitialized) return
-
-    // 设置用户上下文
-    if (userId) {
-      Sentry.setUser({ id: userId })
-    }
-
-    // 设置全局标签
-    Sentry.setTag('app.version', process.env.npm_package_version || '1.0.0')
-    Sentry.setTag('app.environment', process.env.NODE_ENV || 'development')
-
+    if (userId) this.currentUser = { id: userId }
     this.isInitialized = true
   }
 
@@ -50,50 +42,20 @@ export class ErrorMonitor {
     context?: ErrorContext,
     severity: ErrorSeverity = 'error'
   ) {
-    // 设置上下文
-    if (context) {
-      Sentry.withScope((scope) => {
-        // 设置用户信息
-        if (context.userId) {
-          scope.setUser({ id: context.userId })
-        }
+    const payload = {
+      severity,
+      user: this.currentUser,
+      context,
+      error: typeof error === 'string' ? { message: error } : { name: error.name, message: error.message, stack: error.stack },
+      timestamp: new Date().toISOString(),
+    }
 
-        // 设置标签
-        if (context.component) {
-          scope.setTag('component', context.component)
-        }
-        if (context.action) {
-          scope.setTag('action', context.action)
-        }
-
-        // 设置上下文数据
-        if (context.url) {
-          scope.setContext('url', { url: context.url })
-        }
-        if (context.userAgent) {
-          scope.setContext('browser', { userAgent: context.userAgent })
-        }
-        if (context.additionalData) {
-          scope.setContext('additional', context.additionalData)
-        }
-
-        // 设置严重程度
-        scope.setLevel(severity)
-
-        // 捕获错误
-        if (typeof error === 'string') {
-          Sentry.captureMessage(error)
-        } else {
-          Sentry.captureException(error)
-        }
-      })
+    if (severity === 'fatal' || severity === 'error') {
+      console.error('[ErrorMonitor]', payload)
+    } else if (severity === 'warning') {
+      console.warn('[ErrorMonitor]', payload)
     } else {
-      // 简单错误捕获
-      if (typeof error === 'string') {
-        Sentry.captureMessage(error, severity)
-      } else {
-        Sentry.captureException(error)
-      }
+      console.info('[ErrorMonitor]', payload)
     }
   }
 
@@ -108,12 +70,7 @@ export class ErrorMonitor {
     this.captureError(error, {
       component: 'api',
       action: `${method} ${endpoint}`,
-      additionalData: {
-        endpoint,
-        method,
-        statusCode,
-        responseTime,
-      },
+      additionalData: { endpoint, method, statusCode, responseTime },
     }, statusCode && statusCode >= 500 ? 'error' : 'warning')
   }
 
@@ -127,17 +84,7 @@ export class ErrorMonitor {
     if (value > threshold) {
       this.captureError(
         `Performance issue: ${metric} (${value}) exceeded threshold (${threshold})`,
-        {
-          ...context,
-          component: 'performance',
-          action: metric,
-          additionalData: {
-            metric,
-            value,
-            threshold,
-            exceedBy: value - threshold,
-          },
-        },
+        { ...context, component: 'performance', action: metric, additionalData: { metric, value, threshold, exceedBy: value - threshold } },
         'warning'
       )
     }
@@ -150,16 +97,7 @@ export class ErrorMonitor {
     userId?: string,
     additionalData?: Record<string, any>
   ) {
-    Sentry.addBreadcrumb({
-      message: `User action: ${action}`,
-      category: 'user',
-      data: {
-        component,
-        userId,
-        ...additionalData,
-      },
-      level: 'info',
-    })
+    console.info('[ErrorMonitor][Breadcrumb][User]', { action, component, userId, ...additionalData })
   }
 
   // 记录业务事件
@@ -167,36 +105,21 @@ export class ErrorMonitor {
     event: string,
     data?: Record<string, any>
   ) {
-    Sentry.addBreadcrumb({
-      message: `Business event: ${event}`,
-      category: 'business',
-      data,
-      level: 'info',
-    })
+    console.info('[ErrorMonitor][Breadcrumb][Business]', { event, ...data })
   }
 
-  // 设置用户上下文
+  // 设置/清除用户
   public setUser(userId: string, email?: string, username?: string) {
-    Sentry.setUser({
-      id: userId,
-      email,
-      username,
-    })
+    this.currentUser = { id: userId, email, username }
   }
 
-  // 清除用户上下文
   public clearUser() {
-    Sentry.setUser(null)
+    this.currentUser = undefined
   }
 
-  // 添加面包屑
+  // 添加面包屑（控制台输出）
   public addBreadcrumb(message: string, category: string, data?: Record<string, any>) {
-    Sentry.addBreadcrumb({
-      message,
-      category,
-      data,
-      level: 'info',
-    })
+    console.info('[ErrorMonitor][Breadcrumb]', { message, category, ...data })
   }
 }
 

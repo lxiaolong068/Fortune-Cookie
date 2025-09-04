@@ -85,7 +85,7 @@ npm run deploy-check     # Alias for vercel-check
 
 #### Performance & Monitoring
 - **Web Vitals v5**: Latest performance monitoring APIs
-- **Error Tracking**: Comprehensive error monitoring with Sentry integration
+- **Error Tracking**: Error boundaries and console-based logging (no third-party service)
 - **Performance Budgets**: Core Web Vitals optimization (LCP <2.5s, INP <200ms, CLS <0.1)
 - **Database Optimization**: Connection pooling and query performance monitoring
 
@@ -113,7 +113,7 @@ npm run deploy-check     # Alias for vercel-check
 ### Optional  
 - `GOOGLE_ANALYTICS_ID`: Google Analytics tracking ID
 - `GOOGLE_VERIFICATION_CODE`: Search Console verification
-- `SENTRY_DSN`: Error monitoring configuration
+
 - `UPSTASH_REDIS_REST_URL`: Redis cache URL for performance optimization
 - `UPSTASH_REDIS_REST_TOKEN`: Redis authentication token
 
@@ -163,7 +163,7 @@ The application uses deterministic PRNG for random number generation to prevent 
 Uses singleton pattern with connection pooling and automatic cleanup for optimal performance.
 
 ### Error Boundary Strategy
-Comprehensive error boundaries with Sentry integration for production error tracking.
+Comprehensive error boundaries with console logging; no external error monitoring service is used.
 
 ### SEO Implementation
 - Dynamic metadata generation per page

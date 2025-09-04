@@ -17,10 +17,6 @@ process.env.UPSTASH_REDIS_REST_URL = 'http://localhost:6379'
 process.env.UPSTASH_REDIS_REST_TOKEN = 'test-redis-token'
 process.env.CACHE_ADMIN_TOKEN = 'test-cache-admin-token'
 
-// Mock Sentry configuration
-process.env.NEXT_PUBLIC_SENTRY_DSN = 'https://test@sentry.io/test'
-process.env.SENTRY_ORG = 'test-org'
-process.env.SENTRY_PROJECT = 'test-project'
 
 // Mock Google Analytics
 process.env.GOOGLE_ANALYTICS_ID = 'G-TEST123456'
