@@ -93,7 +93,10 @@ export function AIFortuneCookie() {
         throw new Error('Failed to generate fortune');
       }
 
-      const fortune: Fortune = await response.json();
+      const json = await response.json();
+      const fortune: Fortune = (json && typeof json === 'object' && 'data' in json && json.data)
+        ? (json.data as Fortune)
+        : (json as Fortune);
       setCurrentFortune(fortune);
 
       // Add to user history

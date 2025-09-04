@@ -144,8 +144,9 @@ export function IntelligentPrefetch() {
 
     // 监听鼠标悬停事件，预加载链接
     const handleMouseEnter = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
-      const link = target.closest('a[href]') as HTMLAnchorElement
+      const target = event.target
+      if (!target || !(target instanceof Element)) return
+      const link = target.closest('a[href]') as HTMLAnchorElement | null
       
       if (link && link.href && link.href.startsWith(window.location.origin)) {
         prefetchTimeout = setTimeout(() => {
@@ -165,8 +166,9 @@ export function IntelligentPrefetch() {
 
     // 监听触摸开始事件（移动端）
     const handleTouchStart = (event: TouchEvent) => {
-      const target = event.target as HTMLElement
-      const link = target.closest('a[href]') as HTMLAnchorElement
+      const target = event.target
+      if (!target || !(target instanceof Element)) return
+      const link = target.closest('a[href]') as HTMLAnchorElement | null
       
       if (link && link.href && link.href.startsWith(window.location.origin)) {
         const prefetchLink = document.createElement('link')
