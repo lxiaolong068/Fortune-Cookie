@@ -6,7 +6,7 @@ declare global {
     command: 'config' | 'event' | 'js' | 'set',
     targetId: string | Date,
     config?: {
-      [key: string]: any;
+      [key: string]: unknown;
       event_category?: string;
       event_label?: string;
       value?: number;

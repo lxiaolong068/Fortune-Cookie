@@ -201,7 +201,9 @@ export class AnalyticsManager {
       new PerformanceObserver((list) => {
         const entries = list.getEntries()
         const lastEntry = entries[entries.length - 1]
-        this.trackPerformance('lcp', lastEntry.startTime)
+        if (lastEntry) {
+          this.trackPerformance('lcp', lastEntry.startTime)
+        }
       }).observe({ entryTypes: ['largest-contentful-paint'] })
 
       // FID (First Input Delay)

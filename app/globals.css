@@ -217,6 +217,17 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 防止动画导致布局重排 (CLS) */
+.animate-element {
+  will-change: transform, opacity;
+  transform: translateZ(0); /* 强制硬件加速 */
+}
+
+/* 确保动画容器有稳定尺寸 */
+.stable-container {
+  contain: layout style paint;
+}
+
 /* 无障碍优化 */
 @media (prefers-reduced-motion: reduce) {
   *,

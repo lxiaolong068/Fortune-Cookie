@@ -95,10 +95,15 @@ class DatabaseSeeder {
     
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i]
-      
+
+      if (!batch) {
+        console.warn(`Batch ${i} is undefined, skipping...`)
+        continue
+      }
+
       try {
         await DatabaseManager.transaction(async (prisma) => {
-          const promises = batch.map(fortune => 
+          const promises = batch.map(fortune =>
             prisma.fortune.create({
               data: {
                 message: fortune.message,

@@ -45,7 +45,12 @@ const OFFLINE_FORTUNES = [
 
 export default function OfflinePage() {
   // 随机选择一个离线幸运饼干
-  const randomFortune = OFFLINE_FORTUNES[Math.floor(Math.random() * OFFLINE_FORTUNES.length)]
+  const randomIndex = Math.floor(Math.random() * OFFLINE_FORTUNES.length)
+  const randomFortune = OFFLINE_FORTUNES[randomIndex]
+
+  if (!randomFortune) {
+    throw new Error('No offline fortunes available')
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">

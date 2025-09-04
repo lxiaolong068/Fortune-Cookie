@@ -179,8 +179,18 @@ class OpenRouterClient {
     }
 
     const fortunes = fallbackFortunes[theme as keyof typeof fallbackFortunes] || fallbackFortunes.random
-    const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)]
-    
+
+    if (fortunes.length === 0) {
+      throw new Error('No fallback fortunes available')
+    }
+
+    const randomIndex = Math.floor(Math.random() * fortunes.length)
+    const randomFortune = fortunes[randomIndex]
+
+    if (!randomFortune) {
+      throw new Error('Failed to select fallback fortune')
+    }
+
     return {
       message: randomFortune,
       luckyNumbers: this.generateLuckyNumbers(),

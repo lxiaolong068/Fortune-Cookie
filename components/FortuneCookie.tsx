@@ -192,8 +192,20 @@ export function FortuneCookie() {
     if (state !== "unopened") return;
 
     setState("cracking");
-    const randomFortune =
-      fortunes[Math.floor(Math.random() * fortunes.length)];
+
+    if (fortunes.length === 0) {
+      console.error('No fortunes available');
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * fortunes.length);
+    const randomFortune = fortunes[randomIndex];
+
+    if (!randomFortune) {
+      console.error('Failed to select fortune');
+      return;
+    }
+
     setCurrentFortune(randomFortune);
 
     // Show cracking animation for 2 seconds, then reveal fortune
@@ -209,43 +221,47 @@ export function FortuneCookie() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-orange-50/80 to-amber-100/80 backdrop-blur-sm">
-      <AnimatePresence mode="wait">
-        {state === "unopened" && (
-          <motion.div
-            key="unopened"
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-              duration: 0.6,
-            }}
-            className="flex flex-col items-center"
-          >
+      {/* Reserve space to prevent CLS - stable container dimensions */}
+      <div className="w-full max-w-2xl min-h-[600px] flex flex-col items-center justify-center">
+        <AnimatePresence mode="wait">
+          {state === "unopened" && (
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, 2, -2, 0],
-              }}
+              key="unopened"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              exit={{ scale: 0.8, opacity: 0 }}
               transition={{
-                y: {
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
-                rotate: {
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                duration: 0.6,
               }}
-              onClick={crackCookie}
-              className="cursor-pointer mb-8"
+              className="flex flex-col items-center w-full"
             >
+            {/* Fixed dimensions container to prevent CLS */}
+            <div className="w-32 h-32 flex items-center justify-center mb-8">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  y: [0, -10, 0],
+                  rotate: [0, 2, -2, 0],
+                }}
+                transition={{
+                  y: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
+                  rotate: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
+                }}
+                onClick={crackCookie}
+                className="cursor-pointer"
+              >
               <div className="relative">
                 {/* Cookie Shadow */}
                 <div className="absolute top-2 left-2 w-32 h-20 bg-black/20 rounded-full blur-md" />
@@ -281,7 +297,8 @@ export function FortuneCookie() {
                   </motion.div>
                 </div>
               </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -736,6 +753,7 @@ export function FortuneCookie() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

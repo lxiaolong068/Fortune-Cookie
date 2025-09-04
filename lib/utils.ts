@@ -42,8 +42,16 @@ export function delay(ms: number): Promise<void> {
 
 // 随机选择数组元素 - 使用确定性随机数避免 SSR/CSR 不一致
 export function getRandomElement<T>(array: T[], seed: number = 12345): T {
+  if (array.length === 0) {
+    throw new Error('Cannot select from empty array')
+  }
   const rng = new SeededRandom(seed)
-  return array[Math.floor(rng.next() * array.length)]
+  const index = Math.floor(rng.next() * array.length)
+  const item = array[index]
+  if (item === undefined) {
+    throw new Error('Array index out of bounds')
+  }
+  return item
 }
 
 // 打乱数组 - 使用确定性随机数避免 SSR/CSR 不一致
@@ -51,8 +59,13 @@ export function shuffleArray<T>(array: T[], seed: number = 12345): T[] {
   const shuffled = [...array]
   const rng = new SeededRandom(seed)
   for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(rng.next() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    const j = Math.floor(rng.next() * (i + 1))
+    const itemI = shuffled[i]
+    const itemJ = shuffled[j]
+    if (itemI !== undefined && itemJ !== undefined) {
+      shuffled[i] = itemJ
+      shuffled[j] = itemI
+    }
   }
   return shuffled
 }

@@ -1,9 +1,17 @@
 import { Metadata } from 'next'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, User, Lightbulb } from 'lucide-react'
 import { BreadcrumbStructuredData, FAQStructuredData } from '@/components/StructuredData'
+
+import { getSiteUrl } from '@/lib/site'
+
+const baseUrl = getSiteUrl()
+
+// Static generation configuration
+export const dynamic = 'force-static'
+export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'Who Invented Fortune Cookies? The Surprising History & Origins',
@@ -12,7 +20,7 @@ export const metadata: Metadata = {
     title: 'Who Invented Fortune Cookies? The Surprising History & Origins',
     description: 'Discover who really invented fortune cookies! Learn about the Japanese origins, American development, and the surprising truth behind this beloved treat\'s creation.',
     type: 'article',
-    url: 'https://fortune-cookie-ai.vercel.app/who-invented-fortune-cookies',
+    url: `${baseUrl}/who-invented-fortune-cookies`,
   },
   alternates: {
     canonical: '/who-invented-fortune-cookies',
@@ -79,7 +87,7 @@ export default function WhoInventedFortuneCookiesPage() {
       <FAQStructuredData faqs={faqs} />
       
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        <BackgroundEffects />
+        <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* 页面标题 */}

@@ -4,10 +4,14 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { createSeededRandom } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { StaticBackground } from "./StaticBackground";
 
 export function BackgroundEffects() {
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [saveData, setSaveData] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [canAnimate, setCanAnimate] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -18,8 +22,43 @@ export function BackgroundEffects() {
       setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     };
 
+    const checkDataSaver = () => {
+      // Check for data saver mode
+      const connection = (navigator as any).connection;
+      if (connection) {
+        setSaveData(connection.saveData || false);
+      }
+    };
+
+    const checkVisibility = () => {
+      // Use Intersection Observer to detect when component is visible
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some(entry => entry.isIntersecting)) {
+            setIsVisible(true);
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.1 }
+      );
+
+      observer.observe(document.body);
+      return () => observer.disconnect();
+    };
+
     checkMobile();
     checkMotionPreference();
+    checkDataSaver();
+    const cleanupVisibility = checkVisibility();
+
+    // Use requestIdleCallback to defer animation initialization
+    const idleCallback = typeof window.requestIdleCallback === 'function' ?
+      window.requestIdleCallback(() => {
+        setCanAnimate(true);
+      }) :
+      setTimeout(() => {
+        setCanAnimate(true);
+      }, 100);
 
     window.addEventListener('resize', checkMobile);
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -28,22 +67,24 @@ export function BackgroundEffects() {
     return () => {
       window.removeEventListener('resize', checkMobile);
       motionQuery.removeEventListener('change', checkMotionPreference);
+      cleanupVisibility();
+      if (typeof window.requestIdleCallback === 'function') {
+        window.cancelIdleCallback(idleCallback as number);
+      } else {
+        clearTimeout(idleCallback as number);
+      }
     };
   }, []);
 
-  // Respect user's motion preferences
-  if (prefersReducedMotion) {
-    return (
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Static gradient background only */}
-        <div className="absolute inset-0 bg-gradient-radial from-yellow-200/10 via-amber-200/5 to-transparent" />
-      </div>
-    );
+  // Return static background if animations should be disabled
+  if (prefersReducedMotion || saveData || !isVisible || !canAnimate) {
+    return <StaticBackground />;
   }
 
   // Reduce animation count on mobile for better performance
-  const sparkleCount = isMobile ? 6 : 12;
-  const particleCount = isMobile ? 8 : 20;
+  // Further reduce for data saver mode
+  const sparkleCount = isMobile ? (saveData ? 3 : 6) : (saveData ? 6 : 12);
+  const particleCount = isMobile ? (saveData ? 4 : 8) : (saveData ? 10 : 20);
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">

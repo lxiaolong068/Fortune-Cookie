@@ -1,9 +1,16 @@
 import { Metadata } from 'next'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Users, ChefHat, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react'
 import { BreadcrumbStructuredData, ArticleStructuredData } from '@/components/StructuredData'
+import { getSiteUrl } from '@/lib/site'
+
+const baseUrl = getSiteUrl()
+
+// Static generation configuration
+export const dynamic = 'force-static'
+export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'How to Make Fortune Cookies at Home Easy - Step by Step Guide',
@@ -12,7 +19,7 @@ export const metadata: Metadata = {
     title: 'How to Make Fortune Cookies at Home Easy - Step by Step Guide',
     description: 'Learn how to make delicious homemade fortune cookies with our easy step-by-step tutorial. Perfect recipe for beginners.',
     type: 'article',
-    url: 'https://fortune-cookie-ai.vercel.app/how-to-make-fortune-cookies',
+    url: `${baseUrl}/how-to-make-fortune-cookies`,
   },
   alternates: {
     canonical: '/how-to-make-fortune-cookies',
@@ -121,7 +128,7 @@ export default function HowToMakeFortuneCookiesPage() {
       ]} />
       
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        <BackgroundEffects />
+        <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* 页面标题 */}

@@ -70,30 +70,42 @@ export const targetKeywords = [
   'best ai fortune cookie generator'
 ]
 
+import { getSiteUrl } from './site'
+
 // SEO tracking functions
 export class SEOTracker {
   private apiKey: string
   private siteUrl: string
 
-  constructor(apiKey: string = '', siteUrl: string = 'https://fortune-cookie-ai.vercel.app') {
+  constructor(apiKey: string = '', siteUrl?: string) {
     this.apiKey = apiKey
-    this.siteUrl = siteUrl
+    this.siteUrl = siteUrl || getSiteUrl()
   }
 
   // Track keyword rankings (mock implementation)
   async trackKeywordRankings(keywords: string[]): Promise<KeywordData[]> {
     // In production, integrate with Google Search Console API or SEO tools like SEMrush, Ahrefs
-    const mockData: KeywordData[] = keywords.map((keyword, index) => ({
-      keyword,
-      position: Math.floor(Math.random() * 20) + 1,
-      impressions: Math.floor(Math.random() * 1000) + 100,
-      clicks: Math.floor(Math.random() * 100) + 10,
-      ctr: Math.random() * 10 + 2,
-      url: this.siteUrl,
-      device: ['mobile', 'desktop', 'tablet'][Math.floor(Math.random() * 3)] as any,
-      country: 'US',
-      date: new Date().toISOString().split('T')[0]
-    }))
+    const devices = ['mobile', 'desktop', 'tablet'] as const
+    const mockData: KeywordData[] = keywords.map((keyword, index) => {
+      const deviceIndex = Math.floor(Math.random() * devices.length)
+      const device = devices[deviceIndex]
+
+      if (!device) {
+        throw new Error('Failed to select device type')
+      }
+
+      return {
+        keyword,
+        position: Math.floor(Math.random() * 20) + 1,
+        impressions: Math.floor(Math.random() * 1000) + 100,
+        clicks: Math.floor(Math.random() * 100) + 10,
+        ctr: Math.random() * 10 + 2,
+        url: this.siteUrl,
+        device,
+        country: 'US',
+        date: new Date().toISOString().split('T')[0]!
+      }
+    })
 
     return mockData
   }
@@ -138,10 +150,14 @@ export class SEOTracker {
   async generateSEOReport(): Promise<any> {
     const keywordData = await this.trackKeywordRankings(targetKeywords)
     const metrics = this.calculateSEOMetrics(keywordData)
-    const searchConsoleData = await this.getSearchConsoleData(
-      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      new Date().toISOString().split('T')[0]
-    )
+    const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    const endDate = new Date().toISOString().split('T')[0]
+
+    if (!startDate || !endDate) {
+      throw new Error('Failed to generate date strings')
+    }
+
+    const searchConsoleData = await this.getSearchConsoleData(startDate, endDate)
 
     return {
       summary: metrics,

@@ -7,8 +7,8 @@ import { withSignatureValidation, ApiSignatureHelper } from '@/lib/signature-mid
 // 获取客户端标识符
 function getClientIdentifier(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
-  return ip
+  const ip = forwarded ? forwarded.split(',')[0]?.trim() : request.ip
+  return ip || 'unknown'
 }
 
 // 验证管理员权限（现在使用签名验证）

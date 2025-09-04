@@ -1,14 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-interface WebVitalMetric {
-  id: string
-  name: 'CLS' | 'INP' | 'FCP' | 'LCP' | 'TTFB'
-  value: number
-  delta: number
-  rating: 'good' | 'needs-improvement' | 'poor'
-  entries: any[]
-  navigationType: string
-}
+import { WebVitalMetric, createSuccessResponse, createErrorResponse, isWebVitalMetric } from '@/types/api'
 
 // In-memory storage for demo (use a real database in production)
 const metricsStore: WebVitalMetric[] = []
@@ -48,7 +39,7 @@ function validateMetric(metric: any): boolean {
 
 export async function POST(request: NextRequest) {
   try {
-    let metric: any
+    let metric: unknown
 
     // 解析和验证请求体
     try {
@@ -62,9 +53,9 @@ export async function POST(request: NextRequest) {
     }
 
     // 全面验证指标数据
-    if (!validateMetric(metric)) {
+    if (!isWebVitalMetric(metric)) {
       const response = NextResponse.json(
-        { error: 'Invalid metric data. Required fields: id, name, value, delta, rating' },
+        createErrorResponse('Invalid metric data. Required fields: id, name, value, delta, rating'),
         { status: 400 }
       )
       return addSecurityHeaders(response)
@@ -105,13 +96,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const response = NextResponse.json({ success: true })
+    const response = NextResponse.json(createSuccessResponse({ success: true }))
     return addSecurityHeaders(response)
 
   } catch (error) {
     console.error('Web Vitals API error:', error)
     const response = NextResponse.json(
-      { error: 'Failed to process metric' },
+      createErrorResponse('Failed to process metric'),
       { status: 500 }
     )
     return addSecurityHeaders(response)
@@ -138,7 +129,8 @@ export async function GET(request: NextRequest) {
 
     // Get recent metrics
     results = results
-      .sort((a: any, b: any) => b.timestamp - a.timestamp)
+      .sort((a: WebVitalMetric & { timestamp?: number }, b: WebVitalMetric & { timestamp?: number }) =>
+        (b.timestamp || 0) - (a.timestamp || 0))
       .slice(0, limit)
 
     // Calculate averages
@@ -146,17 +138,20 @@ export async function GET(request: NextRequest) {
       if (!acc[metric.name]) {
         acc[metric.name] = { total: 0, count: 0, average: 0 }
       }
-      acc[metric.name].total += metric.value
-      acc[metric.name].count += 1
-      acc[metric.name].average = acc[metric.name].total / acc[metric.name].count
+      const metricData = acc[metric.name]
+      if (metricData) {
+        metricData.total += metric.value
+        metricData.count += 1
+        metricData.average = metricData.total / metricData.count
+      }
       return acc
-    }, {} as any)
+    }, {} as Record<string, { total: number; count: number; average: number }>)
 
-    const response = NextResponse.json({
+    const response = NextResponse.json(createSuccessResponse({
       metrics: results,
       averages,
       total: results.length
-    })
+    }))
 
     return addSecurityHeaders(response)
 

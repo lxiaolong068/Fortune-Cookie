@@ -6,6 +6,9 @@ import { SEO } from '@/components/SEO'
 import { UserHistory } from '@/components/UserHistory'
 import { UserPreferences } from '@/components/UserPreferences'
 import { UserStats } from '@/components/UserStats'
+import { getSiteUrl } from '@/lib/site'
+
+const baseUrl = getSiteUrl()
 
 export const metadata: Metadata = {
   title: 'Profile - Fortune Cookie AI',
@@ -14,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Profile - Fortune Cookie AI',
     description: 'Manage your fortune cookie history, preferences, and usage stats.',
     type: 'website',
-    url: 'https://fortune-cookie-ai.vercel.app/profile',
+    url: `${baseUrl}/profile`,
   },
   alternates: {
     canonical: '/profile',

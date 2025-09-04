@@ -1,10 +1,10 @@
 import { FortuneCookie } from "./components/FortuneCookie";
-import { BackgroundEffects } from "./components/BackgroundEffects";
+import { DynamicBackgroundEffects } from "./components/DynamicBackgroundEffects";
 
 export default function App() {
   return (
     <div className="min-h-screen w-full overflow-x-hidden relative">
-      <BackgroundEffects />
+      <DynamicBackgroundEffects />
       <div className="relative z-10">
         <FortuneCookie />
       </div>

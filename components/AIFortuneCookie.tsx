@@ -175,10 +175,12 @@ export function AIFortuneCookie() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-orange-50/80 to-amber-100/80 backdrop-blur-sm">
-      <AnimatePresence mode="wait">
-        {state === "unopened" && (
-          <motion.div
-            key="unopened"
+      {/* Reserve space to prevent CLS - stable container dimensions */}
+      <div className="w-full max-w-2xl min-h-[600px] flex flex-col items-center justify-center">
+        <AnimatePresence mode="wait">
+          {state === "unopened" && (
+            <motion.div
+              key="unopened"
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             exit={{ scale: 0.8, opacity: 0 }}
@@ -488,6 +490,7 @@ export function AIFortuneCookie() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

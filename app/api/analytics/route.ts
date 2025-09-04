@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { rateLimiters } from '@/lib/redis-cache'
 import { captureApiError, captureBusinessEvent } from '@/lib/error-monitoring'
 import { EdgeCacheManager } from '@/lib/edge-cache'
+import { createSuccessResponse, createErrorResponse } from '@/types/api'
 import { validateApiSignature } from '@/lib/api-signature'
 
 interface AnalyticsEvent {
@@ -33,8 +34,8 @@ export async function POST(request: NextRequest) {
       const rateLimitResult = await rateLimiters.api.limit(ip)
       if (!rateLimitResult.success) {
         return NextResponse.json(
-          { error: 'Rate limit exceeded' },
-          { 
+          createErrorResponse('Rate limit exceeded'),
+          {
             status: 429,
             headers: {
               'X-RateLimit-Limit': rateLimitResult.limit.toString(),
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
     // 验证请求数据
     if (!body.events || !Array.isArray(body.events)) {
       return NextResponse.json(
-        { error: 'Invalid request: events array required' },
+        createErrorResponse('Invalid request: events array required'),
         { status: 400 }
       )
     }
@@ -60,7 +61,7 @@ export async function POST(request: NextRequest) {
     // 限制事件数量
     if (body.events.length > 100) {
       return NextResponse.json(
-        { error: 'Too many events: maximum 100 events per request' },
+        createErrorResponse('Too many events: maximum 100 events per request'),
         { status: 400 }
       )
     }
@@ -76,13 +77,11 @@ export async function POST(request: NextRequest) {
     })
 
     // 返回成功响应
-    const response = {
-      success: true,
-      processed: processedEvents.length,
-      timestamp: new Date().toISOString(),
-    }
+    const responseData = createSuccessResponse({
+      processed: processedEvents.length
+    })
 
-    const jsonResponse = new Response(JSON.stringify(response), {
+    const jsonResponse = new Response(JSON.stringify(responseData), {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -94,7 +93,7 @@ export async function POST(request: NextRequest) {
     captureApiError(error as Error, 'analytics', 'POST')
     
     return NextResponse.json(
-      { error: 'Internal server error' },
+      createErrorResponse('Internal server error'),
       { status: 500 }
     )
   }
@@ -112,7 +111,7 @@ export async function GET(request: NextRequest) {
     const isAuthorized = await validateAdminAccess(request)
     if (!isAuthorized) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        createErrorResponse('Unauthorized'),
         { status: 401 }
       )
     }
@@ -134,19 +133,15 @@ export async function GET(request: NextRequest) {
         break
       default:
         return NextResponse.json(
-          { error: 'Invalid action parameter' },
+          createErrorResponse('Invalid action parameter'),
           { status: 400 }
         )
     }
 
-    const response = {
-      success: true,
-      data,
-      timestamp: new Date().toISOString(),
-    }
-    
+    const responseData = createSuccessResponse(data)
+
     return EdgeCacheManager.optimizeApiResponse(
-      response,
+      responseData,
       `analytics-${action}-${startDate}-${endDate}`,
       300
     )

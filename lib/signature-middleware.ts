@@ -139,8 +139,8 @@ export class SignatureMiddleware {
   // 获取客户端标识符
   private static getClientIdentifier(request: NextRequest): string {
     const forwarded = request.headers.get('x-forwarded-for')
-    const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
-    return ip
+    const ip = forwarded ? forwarded.split(',')[0]?.trim() : request.ip
+    return ip || 'unknown'
   }
 }
 

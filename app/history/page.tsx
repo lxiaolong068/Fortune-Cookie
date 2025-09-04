@@ -1,10 +1,17 @@
 import { Metadata } from 'next'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, Users, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import { ArticleStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
+import { getSiteUrl } from '@/lib/site'
+
+const baseUrl = getSiteUrl()
+
+// Static generation configuration
+export const dynamic = 'force-static'
+export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'History of Fortune Cookies - Origins and Cultural Evolution',
@@ -13,7 +20,7 @@ export const metadata: Metadata = {
     title: 'History of Fortune Cookies - Origins and Cultural Evolution',
     description: 'Discover the fascinating history of fortune cookies, from their Japanese roots to American invention.',
     type: 'article',
-    url: 'https://fortune-cookie-ai.vercel.app/history',
+    url: `${baseUrl}/history`,
   },
   alternates: {
     canonical: '/history',
@@ -119,7 +126,7 @@ export default function HistoryPage() {
         { name: 'History of Fortune Cookies', url: '/history' }
       ]} />
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        <BackgroundEffects />
+        <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* 页面标题 */}

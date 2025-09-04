@@ -58,6 +58,10 @@ const nextConfig = {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
           // Content Security Policy
           {
             key: 'Content-Security-Policy',

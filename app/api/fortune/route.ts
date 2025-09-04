@@ -3,6 +3,7 @@ import { openRouterClient, FortuneRequest } from '@/lib/openrouter'
 import { captureApiError, captureUserAction, captureBusinessEvent } from '@/lib/error-monitoring'
 import { rateLimiters, cacheManager, generateRequestHash } from '@/lib/redis-cache'
 import { EdgeCacheManager, CachePerformanceMonitor } from '@/lib/edge-cache'
+import { createSuccessResponse, createErrorResponse, type ApiSuccessResponse, type ApiErrorResponse } from '@/types/api'
 
 // 输入清理和验证工具
 function sanitizeString(input: string, maxLength: number = 500): string {
@@ -44,8 +45,8 @@ function getCorsOrigin(): string {
 // 获取客户端标识符
 function getClientIdentifier(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
-  return ip
+  const ip = forwarded ? forwarded.split(',')[0]?.trim() : request.ip
+  return ip || 'unknown'
 }
 
 export async function POST(request: NextRequest) {
@@ -69,12 +70,11 @@ export async function POST(request: NextRequest) {
         CachePerformanceMonitor.recordError()
 
       return NextResponse.json(
-        {
-          error: 'Rate limit exceeded. Please try again later.',
+        createErrorResponse('Rate limit exceeded. Please try again later.', {
           limit: rateLimitResult.limit,
           remaining: rateLimitResult.remaining,
           reset: rateLimitResult.reset
-        },
+        }),
         {
           status: 429,
           headers: {
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
       body = await request.json()
     } catch (error) {
       return NextResponse.json(
-        { error: 'Invalid JSON in request body' },
+        createErrorResponse('Invalid JSON in request body'),
         { status: 400 }
       )
     }
@@ -107,21 +107,21 @@ export async function POST(request: NextRequest) {
     // Validate parameters
     if (!validateTheme(theme)) {
       return NextResponse.json(
-        { error: 'Invalid theme. Must be one of: funny, inspirational, love, success, wisdom, random' },
+        createErrorResponse('Invalid theme. Must be one of: funny, inspirational, love, success, wisdom, random'),
         { status: 400 }
       )
     }
 
     if (!validateMood(mood)) {
       return NextResponse.json(
-        { error: 'Invalid mood. Must be one of: positive, neutral, motivational, humorous' },
+        createErrorResponse('Invalid mood. Must be one of: positive, neutral, motivational, humorous'),
         { status: 400 }
       )
     }
 
     if (!validateLength(length)) {
       return NextResponse.json(
-        { error: 'Invalid length. Must be one of: short, medium, long' },
+        createErrorResponse('Invalid length. Must be one of: short, medium, long'),
         { status: 400 }
       )
     }
@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
 
       if (suspiciousPatterns.some(pattern => pattern.test(customPrompt))) {
         return NextResponse.json(
-          { error: 'Custom prompt contains potentially harmful content' },
+          createErrorResponse('Custom prompt contains potentially harmful content'),
           { status: 400 }
         )
       }
@@ -197,9 +197,15 @@ export async function POST(request: NextRequest) {
       cached: !!fortune.cached
     })
 
-    // Create optimized response
+    // Create optimized response with consistent envelope
+    const responseData = createSuccessResponse(fortune, {
+      cached: !!fortune.cached,
+      cacheKey: requestHash,
+      responseTime
+    })
+
     const response = EdgeCacheManager.optimizeApiResponse(
-      fortune,
+      responseData,
       requestHash,
       fortuneRequest.customPrompt ? 0 : 300 // Custom prompts are not cached
     )
@@ -238,7 +244,9 @@ export async function POST(request: NextRequest) {
     console.error('Fortune generation error:', error)
 
     const errorResponse = NextResponse.json(
-      { error: 'Failed to generate fortune. Please try again.' },
+      createErrorResponse('Failed to generate fortune. Please try again.', {
+        responseTime
+      }),
       { status: 500 }
     )
 
@@ -281,10 +289,14 @@ export async function GET(request: NextRequest) {
       cacheStats: CachePerformanceMonitor.getStats()
     }
 
-    // 缓存健康检查结果
-    await cacheManager.cacheApiResponse('health', 'check', healthData)
+    const responseData = createSuccessResponse(healthData, {
+      cached: false
+    })
 
-    const response = EdgeCacheManager.optimizeApiResponse(healthData, 'health-check', 60)
+    // 缓存健康检查结果
+    await cacheManager.cacheApiResponse('health', 'check', responseData)
+
+    const response = EdgeCacheManager.optimizeApiResponse(responseData, 'health-check', 60)
     response.headers.set('X-Cache', 'MISS')
 
     return response
@@ -299,7 +311,7 @@ export async function GET(request: NextRequest) {
     )
 
     return NextResponse.json(
-      { status: 'error', message: 'Service unavailable' },
+      createErrorResponse('Service unavailable'),
       { status: 503 }
     )
   }

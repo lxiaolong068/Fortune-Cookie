@@ -182,7 +182,13 @@ export class ThemeManager {
     const themeOrder: Theme[] = ['light', 'dark', 'system']
     const currentIndex = themeOrder.indexOf(this.currentTheme)
     const nextIndex = (currentIndex + 1) % themeOrder.length
-    this.setTheme(themeOrder[nextIndex])
+    const nextTheme = themeOrder[nextIndex]
+
+    if (!nextTheme) {
+      throw new Error('Failed to get next theme')
+    }
+
+    this.setTheme(nextTheme)
   }
 
   // 添加主题变化监听器

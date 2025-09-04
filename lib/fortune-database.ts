@@ -364,12 +364,22 @@ export function getPopularFortunes(limit: number = 10): FortuneMessage[] {
 }
 
 export function getRandomFortune(category?: string): FortuneMessage {
-  const filteredFortunes = category 
+  const filteredFortunes = category
     ? getFortunesByCategory(category)
     : fortuneDatabase
-  
+
+  if (filteredFortunes.length === 0) {
+    throw new Error('No fortunes available')
+  }
+
   const randomIndex = Math.floor(Math.random() * filteredFortunes.length)
-  return filteredFortunes[randomIndex]
+  const fortune = filteredFortunes[randomIndex]
+
+  if (!fortune) {
+    throw new Error('Failed to select fortune')
+  }
+
+  return fortune
 }
 
 export function getFortuneById(id: string): FortuneMessage | undefined {

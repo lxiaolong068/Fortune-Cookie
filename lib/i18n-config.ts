@@ -119,8 +119,8 @@ export function getLocaleFromPath(path: string): { locale: Locale; pathname: str
   }
   
   const firstSegment = segments[0]
-  
-  if (isValidLocale(firstSegment)) {
+
+  if (firstSegment && isValidLocale(firstSegment)) {
     const pathname = '/' + segments.slice(1).join('/')
     return { locale: firstSegment, pathname: pathname === '/' ? '/' : pathname }
   }

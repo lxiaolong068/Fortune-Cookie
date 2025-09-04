@@ -1,6 +1,9 @@
 import { Metadata } from 'next'
 import { AIFortuneCookie } from '@/components/AIFortuneCookie'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
+import { getSiteUrl } from '@/lib/site'
+
+const baseUrl = getSiteUrl()
 
 export const metadata: Metadata = {
   title: 'AI Fortune Cookie Generator - Create Custom Messages',
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
     title: 'AI Fortune Cookie Generator - Create Custom Messages',
     description: 'Use our advanced AI fortune cookie generator to create personalized inspirational messages, funny quotes, and custom fortune cookies.',
     type: 'website',
-    url: 'https://fortune-cookie-ai.vercel.app/generator',
+    url: `${baseUrl}/generator`,
   },
   alternates: {
     canonical: '/generator',
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
 export default function GeneratorPage() {
   return (
     <main className="min-h-screen w-full overflow-x-hidden relative">
-      <BackgroundEffects />
+      <DynamicBackgroundEffects />
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center mb-8">

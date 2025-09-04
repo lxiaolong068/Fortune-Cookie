@@ -1,8 +1,12 @@
 import { Metadata } from 'next'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Shield, Eye, Database, Cookie, Lock, UserCheck, AlertTriangle, Mail } from 'lucide-react'
+
+// Static generation configuration
+export const dynamic = 'force-static'
+export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - Fortune Cookie AI',
@@ -142,7 +146,7 @@ export default function PrivacyPage() {
   return (
     <>
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        <BackgroundEffects />
+        <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* Page Title */}

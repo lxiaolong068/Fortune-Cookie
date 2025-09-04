@@ -1,9 +1,18 @@
 import { Metadata } from 'next'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Smile, Laugh, Sparkles, Copy, Share2 } from 'lucide-react'
 import { BreadcrumbStructuredData } from '@/components/StructuredData'
+import { FAQStructuredData, funnyFortuneFAQs } from '@/components/FAQStructuredData'
+import { RelatedPages, messageRelatedPages } from '@/components/RelatedPages'
+import { getSiteUrl } from '@/lib/site'
+
+const baseUrl = getSiteUrl()
+
+// Static generation configuration
+export const dynamic = 'force-static'
+export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
@@ -12,7 +21,7 @@ export const metadata: Metadata = {
     title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
     description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles.',
     type: 'article',
-    url: 'https://fortune-cookie-ai.vercel.app/funny-fortune-cookie-messages',
+    url: `${baseUrl}/funny-fortune-cookie-messages`,
   },
   alternates: {
     canonical: '/funny-fortune-cookie-messages',
@@ -123,7 +132,7 @@ export default function FunnyFortuneCookieMessagesPage() {
       ]} />
       
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        <BackgroundEffects />
+        <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* 页面标题 */}
@@ -250,9 +259,39 @@ export default function FunnyFortuneCookieMessagesPage() {
                 </div>
               </Card>
             </section>
+
+            {/* FAQ Section */}
+            <section className="mb-16">
+              <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
+                Frequently Asked Questions
+              </h2>
+              <Card className="max-w-4xl mx-auto">
+                <div className="p-6 space-y-6">
+                  {funnyFortuneFAQs.map((faq, index) => (
+                    <div key={index} className="border-b border-gray-200 last:border-b-0 pb-4 last:pb-0">
+                      <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                        {faq.question}
+                      </h3>
+                      <p className="text-gray-600">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </section>
+
+            {/* Related Pages */}
+            <RelatedPages
+              title="Explore More Fortune Content"
+              pages={messageRelatedPages}
+              className="mb-8"
+            />
           </div>
         </div>
       </main>
+
+      <FAQStructuredData faqs={funnyFortuneFAQs} />
     </>
   )
 }

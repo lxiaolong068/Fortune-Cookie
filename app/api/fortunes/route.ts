@@ -11,6 +11,7 @@ import {
 import { rateLimiters, cacheManager, generateCacheKey } from '@/lib/redis-cache'
 import { EdgeCacheManager, CachePerformanceMonitor } from '@/lib/edge-cache'
 import { captureApiError, captureUserAction } from '@/lib/error-monitoring'
+import { createSuccessResponse, createErrorResponse } from '@/types/api'
 
 // 安全工具函数
 function sanitizeString(input: string, maxLength: number = 100): string {
@@ -50,8 +51,8 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
 
 function getClientIdentifier(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
-  return ip
+  const ip = forwarded ? forwarded.split(',')[0]?.trim() : request.ip
+  return ip || 'unknown'
 }
 
 export async function GET(request: NextRequest) {
@@ -182,11 +183,12 @@ export async function GET(request: NextRequest) {
         CachePerformanceMonitor.recordMiss()
 
         const results = getPopularFortunes(limit)
-        const responseData = {
+        const responseData = createSuccessResponse({
           results,
-          total: results.length,
+          total: results.length
+        }, {
           cached: false
-        }
+        })
 
         await cacheManager.cacheFortuneList(cacheKey, results)
 
@@ -208,17 +210,20 @@ export async function GET(request: NextRequest) {
           getRandomFortune(category)
         )
 
-        const response = NextResponse.json({
+        const responseData = createSuccessResponse({
           results: count === 1 ? results[0] : results,
           total: count
         })
+
+        const response = NextResponse.json(responseData)
 
         return addSecurityHeaders(response)
       }
 
       case 'stats': {
         const stats = getDatabaseStats()
-        const response = NextResponse.json(stats)
+        const responseData = createSuccessResponse(stats)
+        const response = NextResponse.json(responseData)
         return addSecurityHeaders(response)
       }
 
@@ -226,7 +231,7 @@ export async function GET(request: NextRequest) {
         const id = searchParams.get('id')
         if (!id) {
           const response = NextResponse.json(
-            { error: 'ID parameter is required' },
+            createErrorResponse('ID parameter is required'),
             { status: 400 }
           )
           return addSecurityHeaders(response)
@@ -236,13 +241,14 @@ export async function GET(request: NextRequest) {
         const fortune = getFortuneById(sanitizedId)
         if (!fortune) {
           const response = NextResponse.json(
-            { error: 'Fortune not found' },
+            createErrorResponse('Fortune not found'),
             { status: 404 }
           )
           return addSecurityHeaders(response)
         }
 
-        const response = NextResponse.json(fortune)
+        const responseData = createSuccessResponse(fortune)
+        const response = NextResponse.json(responseData)
         return addSecurityHeaders(response)
       }
       
@@ -279,8 +285,11 @@ export async function GET(request: NextRequest) {
         const endIndex = startIndex + limit
         const paginatedResults = results.slice(startIndex, endIndex)
 
-        const response = NextResponse.json({
+        const responseData = createSuccessResponse({
           results: paginatedResults,
+          category,
+          sortBy: finalSortBy
+        }, {
           pagination: {
             page,
             limit,
@@ -288,10 +297,10 @@ export async function GET(request: NextRequest) {
             totalPages: Math.ceil(results.length / limit),
             hasNext: endIndex < results.length,
             hasPrev: page > 1
-          },
-          category,
-          sortBy: finalSortBy
+          }
         })
+
+        const response = NextResponse.json(responseData)
 
         return addSecurityHeaders(response)
       }

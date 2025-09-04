@@ -1,9 +1,12 @@
 import { Metadata } from 'next'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles, Heart, Smile, TrendingUp, Star } from 'lucide-react'
 import { ItemListStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
+import { getSiteUrl } from '@/lib/site'
+
+const baseUrl = getSiteUrl()
 
 export const metadata: Metadata = {
   title: 'Fortune Cookie Messages - Inspirational Quotes & Sayings',
@@ -12,7 +15,7 @@ export const metadata: Metadata = {
     title: 'Fortune Cookie Messages - Inspirational Quotes & Sayings',
     description: 'Browse our collection of inspirational fortune cookie messages, funny quotes, and motivational sayings.',
     type: 'website',
-    url: 'https://fortune-cookie-ai.vercel.app/messages',
+    url: `${baseUrl}/messages`,
   },
   alternates: {
     canonical: '/messages',
@@ -98,7 +101,7 @@ export default function MessagesPage() {
         { name: 'Fortune Cookie Messages', url: '/messages' }
       ]} />
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        <BackgroundEffects />
+        <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* 页面标题 */}
