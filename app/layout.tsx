@@ -4,7 +4,7 @@ import './globals.css'
 import { Suspense } from 'react'
 import { DynamicNavigation } from '@/components/DynamicNavigation'
 import { Footer } from '@/components/Footer'
-import { PerformanceMonitor, GoogleAnalytics } from '@/components/PerformanceMonitor'
+import { PerformanceMonitor, GoogleAnalytics, GoogleAdSense } from '@/components/PerformanceMonitor'
 import { OptimizedPreloader } from '@/components/ResourcePreloader'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ErrorMonitorInitializer } from '@/components/ErrorMonitorInitializer'
@@ -97,6 +97,7 @@ export default function RootLayout({
         <OptimizedPreloader />
         <PerformanceMonitor />
         <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
+        <GoogleAdSense clientId={process.env.GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-6958408841088360'} />
         <ErrorBoundary>
           <Suspense fallback={null}>
             <AnalyticsInitializer />

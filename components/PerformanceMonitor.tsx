@@ -171,6 +171,39 @@ export function GoogleAnalytics({ measurementId }: { measurementId: string }) {
   )
 }
 
+// Google AdSense component
+export function GoogleAdSense({ clientId }: { clientId: string }) {
+  if (!clientId || process.env.NODE_ENV !== 'production') {
+    return null
+  }
+
+  return (
+    <Script
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
+      strategy="afterInteractive"
+      crossOrigin="anonymous"
+      onLoad={() => {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Google AdSense script loaded successfully')
+        }
+      }}
+      onError={(error) => {
+        console.error('Failed to load Google AdSense script:', error)
+        // 记录 AdSense 加载错误到性能监控
+        capturePerformanceIssue(
+          'adsense_script_error',
+          1,
+          0,
+          {
+            component: 'google-adsense',
+            additionalData: { clientId, error: error.message }
+          }
+        )
+      }}
+    />
+  )
+}
+
 // Performance optimization utilities (legacy)
 export const legacyPerformanceUtils = {
   // Preload critical resources
@@ -244,7 +277,10 @@ export const legacyPerformanceUtils = {
       'fonts.googleapis.com',
       'fonts.gstatic.com',
       'www.google-analytics.com',
-      'openrouter.ai'
+      'openrouter.ai',
+      'pagead2.googlesyndication.com',
+      'www.googleadservices.com',
+      'googleads.g.doubleclick.net'
     ]
 
     domains.forEach((domain) => {
