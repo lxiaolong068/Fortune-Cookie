@@ -164,7 +164,7 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
-            分析仪表板
+            Analytics Dashboard
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -182,12 +182,12 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
-            分析仪表板
+            Analytics Dashboard
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-red-600">
-            {error || '无法加载数据'}
+            {error || 'Unable to load data'}
           </div>
         </CardContent>
       </Card>
@@ -199,19 +199,19 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
       <div className="mb-6">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <BarChart3 className="w-6 h-6" />
-          分析仪表板
+          Analytics Dashboard
         </h2>
         <p className="text-gray-600 mt-1">
-          实时用户行为和性能数据分析
+          Real-time user behavior and performance insights
         </p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">概览</TabsTrigger>
-          <TabsTrigger value="users">用户</TabsTrigger>
-          <TabsTrigger value="performance">性能</TabsTrigger>
-          <TabsTrigger value="realtime">实时</TabsTrigger>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="performance">Performance</TabsTrigger>
+          <TabsTrigger value="realtime">Real-time</TabsTrigger>
         </TabsList>
 
         {/* 概览标签页 */}

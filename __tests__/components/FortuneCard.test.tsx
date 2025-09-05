@@ -35,13 +35,13 @@ describe('FortuneCard', () => {
     render(<FortuneCard fortune={mockFortune} />)
     
     // Check category badge
-    expect(screen.getByText('励志')).toBeInTheDocument() // inspirational category
+    expect(screen.getByText('Inspirational')).toBeInTheDocument() // inspirational category
     
     // Check mood indicator
-    expect(screen.getByText('积极')).toBeInTheDocument() // positive mood
+    expect(screen.getByText('Positive')).toBeInTheDocument() // positive mood
     
     // Check source
-    expect(screen.getByText('AI生成')).toBeInTheDocument() // ai source
+    expect(screen.getByText('AI')).toBeInTheDocument() // ai source
   })
 
   it('shows popularity score when showPopularity is true', () => {
@@ -79,7 +79,7 @@ describe('FortuneCard', () => {
     
     await waitFor(() => {
       expect(mockShare).toHaveBeenCalledWith({
-        title: 'Fortune Cookie AI - 幸运饼干',
+        title: 'Fortune Cookie AI - Fortune Cookie',
         text: mockFortune.message,
         url: expect.any(String),
       })

@@ -52,31 +52,31 @@ export function UserStats({ className }: UserStatsProps) {
 
   const getCategoryName = (category: string) => {
     const categoryMap: Record<string, string> = {
-      inspirational: '励志',
-      motivational: '激励',
-      wisdom: '智慧',
-      love: '爱情',
-      success: '成功',
-      happiness: '快乐',
-      peace: '平静',
-      courage: '勇气',
+      inspirational: 'Inspirational',
+      motivational: 'Motivational',
+      wisdom: 'Wisdom',
+      love: 'Love',
+      success: 'Success',
+      happiness: 'Happiness',
+      peace: 'Peace',
+      courage: 'Courage',
     }
     return categoryMap[category] || category
   }
 
   const getStreakBadge = () => {
-    if (stats.streakDays >= 30) return { text: '月度达人', color: 'bg-purple-500' }
-    if (stats.streakDays >= 7) return { text: '周度活跃', color: 'bg-blue-500' }
-    if (stats.streakDays >= 3) return { text: '连续访问', color: 'bg-green-500' }
-    return { text: '新手', color: 'bg-gray-500' }
+    if (stats.streakDays >= 30) return { text: 'Monthly streak', color: 'bg-purple-500' }
+    if (stats.streakDays >= 7) return { text: 'Weekly streak', color: 'bg-blue-500' }
+    if (stats.streakDays >= 3) return { text: 'Streak', color: 'bg-green-500' }
+    return { text: 'New', color: 'bg-gray-500' }
   }
 
   const getEngagementLevel = () => {
     const likeRate = getLikeRate()
-    if (likeRate >= 80) return { text: '超级粉丝', color: 'text-purple-600' }
-    if (likeRate >= 60) return { text: '活跃用户', color: 'text-blue-600' }
-    if (likeRate >= 40) return { text: '普通用户', color: 'text-green-600' }
-    return { text: '新用户', color: 'text-gray-600' }
+    if (likeRate >= 80) return { text: 'Super fan', color: 'text-purple-600' }
+    if (likeRate >= 60) return { text: 'Active user', color: 'text-blue-600' }
+    if (likeRate >= 40) return { text: 'Regular user', color: 'text-green-600' }
+    return { text: 'New user', color: 'text-gray-600' }
   }
 
   const formatLastVisit = (date: Date) => {
@@ -84,11 +84,11 @@ export function UserStats({ className }: UserStatsProps) {
     const diffMs = now.getTime() - date.getTime()
     const diffDays = Math.floor(diffMs / 86400000)
     
-    if (diffDays === 0) return '今天'
-    if (diffDays === 1) return '昨天'
-    if (diffDays < 7) return `${diffDays}天前`
+    if (diffDays === 0) return 'Today'
+    if (diffDays === 1) return 'Yesterday'
+    if (diffDays < 7) return `${diffDays} days ago`
     
-    return date.toLocaleDateString('zh-CN')
+    return date.toLocaleDateString('en-US')
   }
 
   if (isLoading) {
@@ -97,7 +97,7 @@ export function UserStats({ className }: UserStatsProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
-            使用统计
+            Usage stats
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -117,20 +117,20 @@ export function UserStats({ className }: UserStatsProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5" />
-          使用统计
+          Usage stats
         </CardTitle>
         <CardDescription>
-          您的幸运饼干使用数据
+          Your fortune usage data
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* 基础统计 */}
+        {/* Basic stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center p-3 bg-orange-50 rounded-lg">
             <div className="text-2xl font-bold text-orange-600">
               {stats.totalGenerated}
             </div>
-            <div className="text-xs text-gray-600">总生成数</div>
+            <div className="text-xs text-gray-600">Total generated</div>
           </div>
           
           <div className="text-center p-3 bg-red-50 rounded-lg">
@@ -138,7 +138,7 @@ export function UserStats({ className }: UserStatsProps) {
               <Heart className="w-5 h-5" />
               {stats.totalLiked}
             </div>
-            <div className="text-xs text-gray-600">总点赞数</div>
+            <div className="text-xs text-gray-600">Total likes</div>
           </div>
           
           <div className="text-center p-3 bg-blue-50 rounded-lg">
@@ -146,7 +146,7 @@ export function UserStats({ className }: UserStatsProps) {
               <Share2 className="w-5 h-5" />
               {stats.totalShared}
             </div>
-            <div className="text-xs text-gray-600">总分享数</div>
+            <div className="text-xs text-gray-600">Total shares</div>
           </div>
           
           <div className="text-center p-3 bg-green-50 rounded-lg">
@@ -154,14 +154,14 @@ export function UserStats({ className }: UserStatsProps) {
               <Calendar className="w-5 h-5" />
               {stats.streakDays}
             </div>
-            <div className="text-xs text-gray-600">连续天数</div>
+            <div className="text-xs text-gray-600">Streak days</div>
           </div>
         </div>
 
-        {/* 用户等级和徽章 */}
+        {/* User level and badges */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">用户等级</span>
+            <span className="text-sm font-medium">User level</span>
             <div className="flex items-center gap-2">
               <Badge className={`${streakBadge.color} text-white`}>
                 <Trophy className="w-3 h-3 mr-1" />
@@ -174,17 +174,17 @@ export function UserStats({ className }: UserStatsProps) {
           </div>
         </div>
 
-        {/* 参与度分析 */}
+        {/* Engagement */}
         <div className="space-y-4">
           <h3 className="text-sm font-medium flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
-            参与度分析
+            Engagement
           </h3>
           
           <div className="space-y-3">
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span>点赞率</span>
+                <span>Like rate</span>
                 <span>{getLikeRate()}%</span>
               </div>
               <Progress value={getLikeRate()} className="h-2" />
@@ -192,7 +192,7 @@ export function UserStats({ className }: UserStatsProps) {
             
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span>分享率</span>
+                <span>Share rate</span>
                 <span>{getShareRate()}%</span>
               </div>
               <Progress value={getShareRate()} className="h-2" />
@@ -200,13 +200,13 @@ export function UserStats({ className }: UserStatsProps) {
           </div>
         </div>
 
-        {/* 偏好分析 */}
+        {/* Preferences */}
         {stats.favoriteCategory && (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">偏好分析</h3>
+            <h3 className="text-sm font-medium">Preferences</h3>
             <div className="p-3 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">最喜欢的类别</span>
+                <span className="text-sm text-gray-600">Favorite category</span>
                 <Badge variant="secondary">
                   {getCategoryName(stats.favoriteCategory)}
                 </Badge>
@@ -215,45 +215,45 @@ export function UserStats({ className }: UserStatsProps) {
           </div>
         )}
 
-        {/* 访问信息 */}
+        {/* Visit info */}
         <div className="space-y-2">
-          <h3 className="text-sm font-medium">访问信息</h3>
+          <h3 className="text-sm font-medium">Visit info</h3>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">会话次数:</span>
+              <span className="text-gray-600">Session count:</span>
               <span className="font-medium">{stats.sessionCount}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">上次访问:</span>
+              <span className="text-gray-600">Last visit:</span>
               <span className="font-medium">{formatLastVisit(stats.lastVisit)}</span>
             </div>
           </div>
         </div>
 
-        {/* 成就提示 */}
+        {/* Achievements */}
         {stats.totalGenerated > 0 && (
           <div className="p-3 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg border border-orange-200">
             <div className="text-sm">
               <div className="font-medium text-orange-800 mb-1">
-                🎉 恭喜您！
+                🎉 Congratulations!
               </div>
               <div className="text-orange-700">
-                {stats.totalGenerated >= 100 && '您已经生成了超过100个幸运饼干！'}
-                {stats.totalGenerated >= 50 && stats.totalGenerated < 100 && '您已经生成了超过50个幸运饼干！'}
-                {stats.totalGenerated >= 10 && stats.totalGenerated < 50 && '您已经生成了超过10个幸运饼干！'}
-                {stats.totalGenerated < 10 && '继续探索更多幸运饼干吧！'}
+                {stats.totalGenerated >= 100 && "You've generated over 100 fortunes!"}
+                {stats.totalGenerated >= 50 && stats.totalGenerated < 100 && "You've generated over 50 fortunes!"}
+                {stats.totalGenerated >= 10 && stats.totalGenerated < 50 && "You've generated over 10 fortunes!"}
+                {stats.totalGenerated < 10 && 'Keep exploring more fortunes!'}
               </div>
             </div>
           </div>
         )}
 
-        {/* 下一个目标 */}
+        {/* Next goal */}
         {stats.totalGenerated > 0 && (
           <div className="text-center text-sm text-gray-500">
-            {stats.totalGenerated < 10 && `还需要 ${10 - stats.totalGenerated} 个就能解锁"初级探索者"徽章`}
-            {stats.totalGenerated >= 10 && stats.totalGenerated < 50 && `还需要 ${50 - stats.totalGenerated} 个就能解锁"中级探索者"徽章`}
-            {stats.totalGenerated >= 50 && stats.totalGenerated < 100 && `还需要 ${100 - stats.totalGenerated} 个就能解锁"高级探索者"徽章`}
-            {stats.totalGenerated >= 100 && '您已经是幸运饼干大师了！'}
+            {stats.totalGenerated < 10 && `Only ${10 - stats.totalGenerated} to unlock the "Beginner Explorer" badge`}
+            {stats.totalGenerated >= 10 && stats.totalGenerated < 50 && `Only ${50 - stats.totalGenerated} to unlock the "Intermediate Explorer" badge`}
+            {stats.totalGenerated >= 50 && stats.totalGenerated < 100 && `Only ${100 - stats.totalGenerated} to unlock the "Advanced Explorer" badge`}
+            {stats.totalGenerated >= 100 && "You're a Fortune Cookie master!"}
           </div>
         )}
       </CardContent>

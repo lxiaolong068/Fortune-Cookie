@@ -5,11 +5,11 @@ import { Badge } from '@/components/ui/badge'
 import { Cookie, Settings, BarChart3, Shield, Eye, Trash2, RefreshCw, Mail } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Cookie 政策 - Fortune Cookie AI',
-  description: 'Fortune Cookie AI Cookie 政策。了解我们如何使用 Cookies 和类似技术来改善您的浏览体验。',
+  title: 'Cookie Policy - Fortune Cookie AI',
+  description: 'Fortune Cookie AI Cookie Policy. Learn how we use cookies and similar technologies to improve your browsing experience.',
   openGraph: {
-    title: 'Cookie 政策 - Fortune Cookie AI',
-    description: '了解 Fortune Cookie AI 如何使用 Cookies 和本地存储技术。',
+    title: 'Cookie Policy - Fortune Cookie AI',
+    description: 'Learn how Fortune Cookie AI uses cookies and local storage technologies.',
     type: 'article',
     url: 'https://www.fortune-cookie.cc/cookies',
   },
@@ -22,84 +22,84 @@ export const metadata: Metadata = {
 const cookieCategories = [
   {
     id: 'essential',
-    name: '必要 Cookies',
+    name: 'Essential Cookies',
     icon: Shield,
     required: true,
-    description: '这些 Cookies 对网站正常运行至关重要，无法禁用。',
-    purpose: '确保网站基本功能和安全性',
+    description: 'These cookies are necessary for the website to function and cannot be disabled.',
+    purpose: 'Ensure core functionality and security',
     examples: [
       {
         name: 'fortune_session',
-        purpose: '管理用户会话状态',
-        duration: '会话结束时',
+        purpose: 'Manage session state',
+        duration: 'End of session',
         type: 'Session Storage'
       },
       {
         name: 'fortune_preferences',
-        purpose: '保存用户偏好设置',
-        duration: '永久（用户控制）',
+        purpose: 'Save user preferences',
+        duration: 'Persistent (user-controlled)',
         type: 'Local Storage'
       },
       {
         name: 'theme_preference',
-        purpose: '记住主题选择',
-        duration: '永久（用户控制）',
+        purpose: 'Remember theme selection',
+        duration: 'Persistent (user-controlled)',
         type: 'Local Storage'
       }
     ]
   },
   {
     id: 'analytics',
-    name: '分析 Cookies',
+    name: 'Analytics Cookies',
     icon: BarChart3,
     required: false,
-    description: '帮助我们了解网站使用情况，改善用户体验。',
-    purpose: '收集匿名使用统计数据',
+    description: 'Help us understand site usage and improve the user experience.',
+    purpose: 'Collect anonymous usage statistics',
     examples: [
       {
         name: '_ga',
-        purpose: 'Google Analytics 主要标识符',
-        duration: '2 年',
+        purpose: 'Google Analytics primary identifier',
+        duration: '2 years',
         type: 'HTTP Cookie'
       },
       {
         name: '_ga_*',
-        purpose: 'Google Analytics 4 属性标识符',
-        duration: '2 年',
+        purpose: 'Google Analytics 4 property identifier',
+        duration: '2 years',
         type: 'HTTP Cookie'
       },
       {
         name: '_gid',
-        purpose: 'Google Analytics 会话标识符',
-        duration: '24 小时',
+        purpose: 'Google Analytics session identifier',
+        duration: '24 hours',
         type: 'HTTP Cookie'
       }
     ]
   },
   {
     id: 'functional',
-    name: '功能 Cookies',
+    name: 'Functional Cookies',
     icon: Settings,
     required: false,
-    description: '增强网站功能，提供个性化体验。',
-    purpose: '记住用户选择和偏好',
+    description: 'Enhance site features and provide a personalized experience.',
+    purpose: 'Remember user choices and preferences',
     examples: [
       {
         name: 'fortune_history',
-        purpose: '保存生成的幸运饼干历史',
-        duration: '永久（用户控制）',
+        purpose: 'Save generated fortune history',
+        duration: 'Persistent (user-controlled)',
         type: 'Local Storage'
       },
       {
         name: 'user_stats',
-        purpose: '保存用户使用统计',
-        duration: '永久（用户控制）',
+        purpose: 'Save usage statistics',
+        duration: 'Persistent (user-controlled)',
         type: 'Local Storage'
       },
       {
         name: 'display_mode',
-        purpose: '记住显示模式偏好',
-        duration: '永久（用户控制）',
+        purpose: 'Remember display mode preference',
+        duration: 'Persistent (user-controlled)',
         type: 'Local Storage'
       }
     ]
@@ -109,21 +109,21 @@ const cookieCategories = [
 const storageTypes = [
   {
     name: 'HTTP Cookies',
-    description: '存储在浏览器中的小型文本文件',
-    characteristics: ['可设置过期时间', '可跨页面访问', '自动发送到服务器'],
-    control: '可通过浏览器设置管理'
+    description: 'Small text files stored in your browser',
+    characteristics: ['Configurable expiration', 'Accessible across pages', 'Automatically sent to the server'],
+    control: 'Manageable in browser settings'
   },
   {
     name: 'Local Storage',
-    description: '浏览器本地存储，数据持久保存',
-    characteristics: ['永久存储（除非手动清除）', '仅在客户端访问', '存储容量较大'],
-    control: '可通过浏览器开发者工具或设置清除'
+    description: 'Persistent storage in your browser',
+    characteristics: ['Persistent until manually cleared', 'Client-side only', 'Larger storage capacity'],
+    control: 'Clear via browser developer tools or settings'
   },
   {
     name: 'Session Storage',
-    description: '会话级别的本地存储',
-    characteristics: ['标签页关闭时自动清除', '仅在当前会话有效', '不跨标签页共享'],
-    control: '标签页关闭时自动清除'
+    description: 'Per-tab session storage',
+    characteristics: ['Automatically cleared when the tab closes', 'Valid for the current session only', 'Not shared across tabs'],
+    control: 'Cleared when the tab closes'
   }
 ]
 
@@ -131,28 +131,28 @@ const managementSteps = [
   {
     browser: 'Chrome',
     steps: [
-      '点击右上角三点菜单 → 设置',
-      '隐私设置和安全性 → Cookies 及其他网站数据',
-      '选择"阻止第三方 Cookie"或"阻止所有 Cookie"',
-      '或点击"查看所有 Cookie 和网站数据"进行详细管理'
+      'Menu (⋮) → Settings',
+      'Privacy and security → Cookies and other site data',
+      'Choose “Block third‑party cookies” or “Block all cookies”',
+      'Or use “See all cookies and site data” for detailed control'
     ]
   },
   {
     browser: 'Firefox',
     steps: [
-      '点击右上角菜单按钮 → 设置',
-      '隐私与安全 → Cookie 和网站数据',
-      '选择合适的 Cookie 设置',
-      '点击"管理数据"查看和删除特定 Cookie'
+      'Menu → Settings',
+      'Privacy & Security → Cookies and Site Data',
+      'Choose the cookie settings you prefer',
+      'Click “Manage Data…” to view/delete specific cookies'
     ]
   },
   {
     browser: 'Safari',
     steps: [
-      'Safari 菜单 → 偏好设置',
-      '隐私标签页',
-      '选择"阻止所有 Cookie"或其他选项',
-      '点击"管理网站数据"进行详细设置'
+      'Safari → Preferences',
+      'Privacy tab',
+      'Choose “Block all cookies” or another option',
+      'Click “Manage Website Data…” for detailed control'
     ]
   }
 ]
@@ -164,56 +164,56 @@ export default function CookiesPage() {
         <BackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
-            {/* 页面标题 */}
+            {/* Page title */}
             <div className="text-center mb-12">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-4">
                 <Cookie className="w-8 h-8 text-amber-600" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-amber-800 bg-clip-text text-transparent mb-4">
-                Cookie 政策
+                Cookie Policy
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
-                本政策说明了 Fortune Cookie AI 如何使用 Cookies 和类似技术来改善您的浏览体验，
-                以及您如何控制这些技术的使用。
+                This policy explains how Fortune Cookie AI uses cookies and similar technologies to improve your experience
+                and how you can control their use.
               </p>
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                <span>最后更新：2024年8月25日</span>
-                <Badge className="bg-amber-100 text-amber-800">有效</Badge>
+                <span>Last updated: August 25, 2024</span>
+                <Badge className="bg-amber-100 text-amber-800">Active</Badge>
               </div>
             </div>
 
-            {/* 什么是 Cookies */}
+            {/* What are cookies */}
             <section className="mb-12">
               <Card className="p-6 bg-amber-50/50 backdrop-blur-sm border-amber-200">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-3">
                   <Eye className="w-6 h-6 text-amber-600" />
-                  什么是 Cookies？
+                  What are cookies?
                 </h2>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Cookies 是网站存储在您浏览器中的小型文本文件。它们帮助网站记住您的偏好、
-                  改善功能性，并提供更好的用户体验。我们还使用本地存储等类似技术。
+                  Cookies are small text files stored in your browser. They help websites remember your preferences,
+                  improve functionality, and provide a better user experience. We also use similar technologies like local storage.
                 </p>
                 <div className="grid md:grid-cols-3 gap-4 text-sm">
                   <div className="flex items-center gap-2 text-gray-600">
                     <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                    <span>改善网站功能</span>
+                    <span>Improve site functionality</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-600">
                     <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                    <span>记住用户偏好</span>
+                    <span>Remember your preferences</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-600">
                     <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                    <span>分析使用情况</span>
+                    <span>Analyze usage</span>
                   </div>
                 </div>
               </Card>
             </section>
 
-            {/* Cookie 类别 */}
+            {/* Cookie categories */}
             <section className="mb-12">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                我们使用的 Cookie 类型
+                Types of cookies we use
               </h2>
               <div className="space-y-6">
                 {cookieCategories.map((category) => (
@@ -233,17 +233,17 @@ export default function CookiesPage() {
                         </div>
                       </div>
                       <Badge className={category.required ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}>
-                        {category.required ? '必需' : '可选'}
+                        {category.required ? 'Required' : 'Optional'}
                       </Badge>
                     </div>
 
                     <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">用途：</h4>
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">Purpose:</h4>
                       <p className="text-sm text-gray-600">{category.purpose}</p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-gray-700 mb-3">具体示例：</h4>
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">Examples:</h4>
                       <div className="space-y-3">
                         {category.examples.map((example, index) => (
                           <div key={index} className="bg-gray-50 rounded-lg p-3">
@@ -255,7 +255,7 @@ export default function CookiesPage() {
                             </div>
                             <p className="text-xs text-gray-600 mb-1">{example.purpose}</p>
                             <p className="text-xs text-gray-500">
-                              <span className="font-medium">保留期限：</span>{example.duration}
+                              <span className="font-medium">Retention:</span> {example.duration}
                             </p>
                           </div>
                         ))}
@@ -266,10 +266,10 @@ export default function CookiesPage() {
               </div>
             </section>
 
-            {/* 存储技术说明 */}
+            {/* Storage technologies */}
             <section className="mb-12">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                存储技术说明
+                Storage technologies
               </h2>
               <div className="grid md:grid-cols-3 gap-6">
                 {storageTypes.map((type, index) => (
@@ -281,7 +281,7 @@ export default function CookiesPage() {
                       {type.description}
                     </p>
                     <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">特点：</h4>
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">Characteristics:</h4>
                       <ul className="space-y-1">
                         {type.characteristics.map((char, charIndex) => (
                           <li key={charIndex} className="text-xs text-gray-600 flex items-center gap-2">
@@ -292,7 +292,7 @@ export default function CookiesPage() {
                       </ul>
                     </div>
                     <div className="text-xs text-gray-500">
-                      <span className="font-medium">控制方式：</span>
+                      <span className="font-medium">Control:</span>
                       {type.control}
                     </div>
                   </Card>
@@ -300,16 +300,16 @@ export default function CookiesPage() {
               </div>
             </section>
 
-            {/* Cookie 管理 */}
+            {/* Cookie management */}
             <section className="mb-12">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center gap-3">
                 <Settings className="w-6 h-6 text-gray-600" />
-                如何管理 Cookies
+                How to manage cookies
               </h2>
               
-              {/* 浏览器设置 */}
+              {/* Browser settings */}
               <div className="space-y-6 mb-8">
-                <h3 className="text-lg font-medium text-gray-800">浏览器设置</h3>
+                <h3 className="text-lg font-medium text-gray-800">Browser settings</h3>
                 {managementSteps.map((browser, index) => (
                   <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm border-gray-200">
                     <h4 className="text-md font-semibold text-gray-800 mb-3">
@@ -329,79 +329,79 @@ export default function CookiesPage() {
                 ))}
               </div>
 
-              {/* 快速操作 */}
+              {/* Quick actions */}
               <Card className="p-6 bg-blue-50/50 backdrop-blur-sm border-blue-200">
                 <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
                   <RefreshCw className="w-5 h-5 text-blue-600" />
-                  快速清除本站数据
+                  Quickly clear site data
                 </h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  您可以通过以下方式快速清除本网站存储的所有数据：
+                  You can quickly clear all data stored by this website by:
                 </p>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
                     <Trash2 className="w-4 h-4 text-red-500" />
-                    <span>清除浏览器历史记录和网站数据</span>
+                    <span>Clearing browsing history and site data</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Trash2 className="w-4 h-4 text-red-500" />
-                    <span>使用浏览器的"清除浏览数据"功能</span>
+                    <span>Using your browser’s “Clear browsing data” feature</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Trash2 className="w-4 h-4 text-red-500" />
-                    <span>在开发者工具中清除应用程序存储</span>
+                    <span>Clearing Application Storage in developer tools</span>
                   </div>
                 </div>
               </Card>
             </section>
 
-            {/* 第三方服务 */}
+            {/* Third-party services */}
             <section className="mb-12">
               <Card className="p-6 bg-yellow-50/50 backdrop-blur-sm border-yellow-200">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                  第三方服务
+                  Third‑party services
                 </h2>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  我们使用 Google Analytics 来分析网站使用情况。Google Analytics 会设置自己的 Cookies。
-                  您可以通过以下方式选择退出：
+                  We use Google Analytics to analyze usage. Google Analytics may set its own cookies.
+                  You can opt out by:
                 </p>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span>访问 Google Analytics 退出页面</span>
+                    <span>Visiting the Google Analytics opt‑out page</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span>安装 Google Analytics 退出浏览器插件</span>
+                    <span>Installing the Google Analytics opt‑out browser add‑on</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span>在浏览器中禁用第三方 Cookies</span>
+                    <span>Disabling third‑party cookies in your browser</span>
                   </div>
                 </div>
               </Card>
             </section>
 
-            {/* 联系信息 */}
+            {/* Contact information */}
             <section>
               <Card className="p-6 bg-gray-50/50 backdrop-blur-sm border-gray-200">
                 <div className="flex items-center gap-3 mb-4">
                   <Mail className="w-6 h-6 text-gray-600" />
                   <h2 className="text-xl font-semibold text-gray-800">
-                    联系我们
+                    Contact us
                   </h2>
                 </div>
                 <p className="text-gray-600 mb-4">
-                  如果您对我们的 Cookie 使用有任何疑问，请联系我们：
+                  If you have any questions about our use of cookies, please contact us:
                 </p>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium">邮箱：</span>
+                    <span className="font-medium">Email:</span>
                     <span>privacy@fortune-cookie.cc</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-medium">主题：</span>
-                    <span>Cookie 政策咨询</span>
+                    <span className="font-medium">Subject:</span>
+                    <span>Cookie policy inquiry</span>
                   </div>
                 </div>
               </Card>

@@ -77,13 +77,13 @@ export function ThemeToggle({
   const getThemeName = (theme: Theme) => {
     switch (theme) {
       case 'light':
-        return '浅色'
+        return 'Light'
       case 'dark':
-        return '深色'
+        return 'Dark'
       case 'system':
-        return '跟随系统'
+        return 'System'
       default:
-        return '浅色'
+        return 'Light'
     }
   }
 
@@ -99,7 +99,7 @@ export function ThemeToggle({
         size="icon"
         onClick={() => themeManager.toggleTheme()}
         className={className}
-        title={`当前: ${getThemeName(themeConfig.theme)}`}
+        title={`Current: ${getThemeName(themeConfig.theme)}`}
       >
         {getCurrentIcon()}
         {showLabel && (
@@ -119,7 +119,7 @@ export function ThemeToggle({
         size="sm"
         onClick={() => themeManager.cycleTheme()}
         className={`${className} flex items-center gap-2`}
-        title={`当前: ${getThemeName(themeConfig.theme)}`}
+        title={`Current: ${getThemeName(themeConfig.theme)}`}
       >
         {getCurrentIcon()}
         {showLabel && (
@@ -137,13 +137,13 @@ export function ThemeToggle({
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className={className}>
           {getCurrentIcon()}
-          <span className="sr-only">切换主题</span>
+          <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuLabel className="flex items-center gap-2">
           <Palette className="h-4 w-4" />
-          主题设置
+          Theme settings
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         
@@ -153,11 +153,11 @@ export function ThemeToggle({
         >
           <div className="flex items-center gap-2">
             <Sun className="h-4 w-4" />
-            浅色模式
+            Light
           </div>
           {themeConfig.theme === 'light' && (
             <Badge variant="secondary" className="text-xs">
-              当前
+              Current
             </Badge>
           )}
         </DropdownMenuItem>
@@ -168,11 +168,11 @@ export function ThemeToggle({
         >
           <div className="flex items-center gap-2">
             <Moon className="h-4 w-4" />
-            深色模式
+            Dark
           </div>
           {themeConfig.theme === 'dark' && (
             <Badge variant="secondary" className="text-xs">
-              当前
+              Current
             </Badge>
           )}
         </DropdownMenuItem>
@@ -183,11 +183,11 @@ export function ThemeToggle({
         >
           <div className="flex items-center gap-2">
             <Monitor className="h-4 w-4" />
-            跟随系统
+            System
           </div>
           {themeConfig.theme === 'system' && (
             <Badge variant="secondary" className="text-xs">
-              当前
+              Current
             </Badge>
           )}
         </DropdownMenuItem>
@@ -196,14 +196,14 @@ export function ThemeToggle({
         
         <div className="px-2 py-1.5 text-xs text-muted-foreground">
           <div className="flex items-center justify-between">
-            <span>系统偏好:</span>
+            <span>System preference:</span>
             <div className="flex items-center gap-1">
               {getThemeIcon(themeConfig.systemPreference)}
               <span>{getThemeName(themeConfig.systemPreference)}</span>
             </div>
           </div>
           <div className="flex items-center justify-between mt-1">
-            <span>当前显示:</span>
+            <span>Currently showing:</span>
             <div className="flex items-center gap-1">
               {getThemeIcon(themeConfig.effectiveTheme)}
               <span>{getThemeName(themeConfig.effectiveTheme)}</span>
@@ -250,8 +250,8 @@ export function ThemeIndicator({ className }: { className?: string }) {
     <div className={`flex items-center gap-1 text-xs text-muted-foreground ${className}`}>
       {getThemeIcon(themeConfig.effectiveTheme)}
       <span>
-        {themeConfig.theme === 'system' ? '自动' : 
-         themeConfig.effectiveTheme === 'light' ? '浅色' : '深色'}
+        {themeConfig.theme === 'system' ? 'System' : 
+         themeConfig.effectiveTheme === 'light' ? 'Light' : 'Dark'}
       </span>
     </div>
   )

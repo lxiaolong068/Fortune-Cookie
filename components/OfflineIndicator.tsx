@@ -80,9 +80,9 @@ export function OfflineIndicator({ className, showDetails = false }: OfflineIndi
     const seconds = Math.floor((duration % 60000) / 1000)
     
     if (minutes > 0) {
-      return `${minutes}分${seconds}秒`
+      return `${minutes}m ${seconds}s`
     }
-    return `${seconds}秒`
+    return `${seconds}s`
   }
 
   // 简单的状态指示器
@@ -93,14 +93,14 @@ export function OfflineIndicator({ className, showDetails = false }: OfflineIndi
           <>
             <WifiOff className="w-4 h-4 text-red-500" />
             <Badge variant="destructive" className="text-xs">
-              离线
+              Offline
             </Badge>
           </>
         ) : (
           <>
             <Wifi className="w-4 h-4 text-green-500" />
             <Badge variant="default" className="text-xs">
-              在线
+              Online
             </Badge>
           </>
         )}
@@ -118,20 +118,20 @@ export function OfflineIndicator({ className, showDetails = false }: OfflineIndi
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="text-sm font-medium text-orange-900">
-                  网络连接中断
+                  Connection lost
                 </h3>
                 {lastOnlineTime && (
                   <Badge variant="outline" className="text-xs">
-                    已离线 {getOfflineDuration()}
+                    Offline for {getOfflineDuration()}
                   </Badge>
                 )}
               </div>
               <p className="text-xs text-orange-700">
-                您当前处于离线状态。某些功能可能不可用，但您仍可以浏览缓存的内容。
+                You are currently offline. Some features may be unavailable, but you can still browse cached content.
               </p>
               {connectionAttempts > 0 && (
                 <p className="text-xs text-orange-600 mt-1">
-                  已尝试重连 {connectionAttempts} 次
+                  Reconnect attempts: {connectionAttempts}
                 </p>
               )}
             </div>
@@ -142,7 +142,7 @@ export function OfflineIndicator({ className, showDetails = false }: OfflineIndi
                 onClick={handleRetryConnection}
                 className="text-xs h-7"
               >
-                重试连接
+                Retry connection
               </Button>
               <Button
                 size="sm"
@@ -150,30 +150,30 @@ export function OfflineIndicator({ className, showDetails = false }: OfflineIndi
                 onClick={handleDismissBanner}
                 className="text-xs h-7"
               >
-                关闭
+                Dismiss
               </Button>
             </div>
           </div>
           
-          {/* 离线功能提示 */}
+          {/* Offline capabilities */}
           <div className="mt-3 pt-3 border-t border-orange-200">
-            <p className="text-xs text-orange-700 mb-2">离线可用功能：</p>
+            <p className="text-xs text-orange-700 mb-2">Available offline:</p>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="flex items-center gap-1">
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                <span>浏览缓存内容</span>
+                <span>Browse cached content</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                <span>查看历史记录</span>
+                <span>View history</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full" />
-                <span>生成新内容</span>
+                <span>Generate new content</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full" />
-                <span>分享功能</span>
+                <span>Sharing</span>
               </div>
             </div>
           </div>

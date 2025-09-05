@@ -49,7 +49,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
   const filterHistory = () => {
     let filtered = [...history]
 
-    // 搜索过滤
+// Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(item =>
@@ -59,12 +59,12 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
       )
     }
 
-    // 类别过滤
+// Category filter
     if (categoryFilter !== 'all') {
       filtered = filtered.filter(item => item.category === categoryFilter)
     }
 
-    // 来源过滤
+// Source filter
     if (sourceFilter !== 'all') {
       filtered = filtered.filter(item => item.source === sourceFilter)
     }
@@ -82,13 +82,13 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
     try {
       if (navigator.share) {
         await navigator.share({
-          title: 'Fortune Cookie AI - 幸运饼干',
+          title: 'Fortune Cookie AI - Fortune Cookie',
           text: fortune.message,
           url: window.location.origin,
         })
       } else {
         await navigator.clipboard.writeText(
-          `${fortune.message}\n\n来自 Fortune Cookie AI - ${window.location.origin}`
+          `${fortune.message}\n\nFrom Fortune Cookie AI - ${window.location.origin}`
         )
       }
       
@@ -101,7 +101,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
   }
 
   const handleClearHistory = () => {
-    if (confirm('确定要清除所有历史记录吗？此操作无法撤销。')) {
+    if (confirm('Are you sure you want to clear all history? This action cannot be undone.')) {
       sessionManager.clearHistory()
       setHistory([])
       captureUserAction('history_cleared_by_user', 'user_history')
@@ -130,23 +130,23 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
 
   const getCategoryName = (category: string) => {
     const categoryMap: Record<string, string> = {
-      inspirational: '励志',
-      motivational: '激励',
-      wisdom: '智慧',
-      love: '爱情',
-      success: '成功',
-      happiness: '快乐',
-      peace: '平静',
-      courage: '勇气',
+      inspirational: 'Inspirational',
+      motivational: 'Motivational',
+      wisdom: 'Wisdom',
+      love: 'Love',
+      success: 'Success',
+      happiness: 'Happiness',
+      peace: 'Peace',
+      courage: 'Courage',
     }
     return categoryMap[category] || category
   }
 
   const getSourceName = (source: string) => {
     const sourceMap: Record<string, string> = {
-      ai: 'AI生成',
-      database: '数据库',
-      offline: '离线',
+      ai: 'AI',
+      database: 'Database',
+      offline: 'Offline',
     }
     return sourceMap[source] || source
   }
@@ -158,12 +158,12 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
     const diffHours = Math.floor(diffMs / 3600000)
     const diffDays = Math.floor(diffMs / 86400000)
 
-    if (diffMins < 1) return '刚刚'
-    if (diffMins < 60) return `${diffMins}分钟前`
-    if (diffHours < 24) return `${diffHours}小时前`
-    if (diffDays < 7) return `${diffDays}天前`
+    if (diffMins < 1) return 'just now'
+    if (diffMins < 60) return `${diffMins} minutes ago`
+    if (diffHours < 24) return `${diffHours} hours ago`
+    if (diffDays < 7) return `${diffDays} days ago`
     
-    return date.toLocaleDateString('zh-CN')
+    return date.toLocaleDateString('en-US')
   }
 
   if (isLoading) {
@@ -172,7 +172,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="w-5 h-5" />
-            历史记录
+            History
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -189,10 +189,10 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Clock className="w-5 h-5" />
-          历史记录
+          History
         </CardTitle>
         <CardDescription>
-          您的幸运饼干历史记录 ({history.length} 条)
+          Your fortune history ({history.length})
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -202,7 +202,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
             <div className="flex gap-2">
               <div className="flex-1">
                 <Input
-                  placeholder="搜索历史记录..."
+                  placeholder="Search history..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full"
@@ -216,10 +216,10 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
             <div className="flex gap-2">
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="w-32">
-                  <SelectValue placeholder="类别" />
+                  <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">所有类别</SelectItem>
+                  <SelectItem value="all">All categories</SelectItem>
                   {getUniqueCategories().map(category => (
                     <SelectItem key={category} value={category}>
                       {getCategoryName(category)}
@@ -230,13 +230,13 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
               
               <Select value={sourceFilter} onValueChange={setSourceFilter}>
                 <SelectTrigger className="w-32">
-                  <SelectValue placeholder="来源" />
+                  <SelectValue placeholder="Source" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">所有来源</SelectItem>
-                  <SelectItem value="ai">AI生成</SelectItem>
-                  <SelectItem value="database">数据库</SelectItem>
-                  <SelectItem value="offline">离线</SelectItem>
+                  <SelectItem value="all">All sources</SelectItem>
+                  <SelectItem value="ai">AI</SelectItem>
+                  <SelectItem value="database">Database</SelectItem>
+                  <SelectItem value="offline">Offline</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -253,7 +253,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
               className="flex items-center gap-1"
             >
               <Download className="w-3 h-3" />
-              导出
+              Export
             </Button>
             <Button
               variant="outline"
@@ -262,27 +262,27 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
               className="flex items-center gap-1 text-red-600 hover:text-red-700"
             >
               <Trash2 className="w-3 h-3" />
-              清空
+              Clear
             </Button>
           </div>
         )}
 
         <Separator />
 
-        {/* 历史记录列表 */}
+        {/* History list */}
         {filteredHistory.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             {history.length === 0 ? (
               <div>
                 <Clock className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>还没有历史记录</p>
-                <p className="text-sm">生成您的第一个幸运饼干吧！</p>
+                <p>No history yet</p>
+                <p className="text-sm">Generate your first fortune!</p>
               </div>
             ) : (
               <div>
                 <Filter className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>没有找到匹配的记录</p>
-                <p className="text-sm">尝试调整搜索条件</p>
+                <p>No matching records found</p>
+                <p className="text-sm">Try adjusting your search</p>
               </div>
             )}
           </div>
@@ -326,7 +326,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
                           className={`h-7 px-2 ${item.liked ? 'text-red-500' : 'text-gray-500'}`}
                         >
                           <Heart className={`w-3 h-3 mr-1 ${item.liked ? 'fill-current' : ''}`} />
-                          {item.liked ? '已喜欢' : '喜欢'}
+                          {item.liked ? 'Liked' : 'Like'}
                         </Button>
                         <Button
                           variant="ghost"
@@ -335,13 +335,13 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
                           className="h-7 px-2 text-gray-500"
                         >
                           <Share2 className="w-3 h-3 mr-1" />
-                          分享
+                          Share
                         </Button>
                       </div>
                       
                       {item.customPrompt && (
                         <Badge variant="outline" className="text-xs">
-                          自定义
+                          Custom
                         </Badge>
                       )}
                     </div>
