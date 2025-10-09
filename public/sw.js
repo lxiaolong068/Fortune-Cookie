@@ -256,19 +256,25 @@ async function handlePageRequest(request) {
       // 只缓存允许的页面，并设置较短的TTL
       if (shouldCachePage(pathname)) {
         const cache = await caches.open(DYNAMIC_CACHE_NAME)
+        const responseClone = networkResponse.clone()
 
-        // 为缓存的响应添加时间戳头部，用于TTL检查
-        const responseToCache = new Response(networkResponse.body, {
-          status: networkResponse.status,
-          statusText: networkResponse.statusText,
-          headers: {
-            ...Object.fromEntries(networkResponse.headers.entries()),
-            'sw-cached-at': Date.now().toString(),
-            'sw-cache-ttl': (5 * 60 * 1000).toString(), // 5分钟TTL
-          }
-        })
+        try {
+          // clone response to avoid locking the stream we return to the browser
+          const headers = new Headers(responseClone.headers)
+          headers.set('sw-cached-at', Date.now().toString())
+          headers.set('sw-cache-ttl', (5 * 60 * 1000).toString()) // 5分钟TTL
 
-        cache.put(request, responseToCache)
+          const body = await responseClone.blob()
+          const responseToCache = new Response(body, {
+            status: responseClone.status,
+            statusText: responseClone.statusText,
+            headers,
+          })
+
+          await cache.put(request, responseToCache)
+        } catch (cacheError) {
+          console.warn('Service Worker: Failed to cache page response', cacheError)
+        }
       }
       return networkResponse
     }
