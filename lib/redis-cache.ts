@@ -1,15 +1,32 @@
+/**
+ * Redis Cache and Rate Limiting Module
+ *
+ * Provides distributed caching and rate limiting functionality using Upstash Redis.
+ * Supports multi-tier caching with configurable TTLs and sliding window rate limiting.
+ *
+ * @module lib/redis-cache
+ */
+
 import { Redis } from '@upstash/redis'
 import { Ratelimit } from '@upstash/ratelimit'
 
-// Redis clientconfiguration
-const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN 
+/**
+ * Redis client instance
+ * Initialized only if UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are provided
+ * @private
+ */
+const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
   ? new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL,
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
     })
   : null
 
-// Cache key prefix
+/**
+ * Cache key prefixes for different data types
+ * Used to namespace cache keys and prevent collisions
+ * @constant
+ */
 const CACHE_PREFIXES = {
   FORTUNE: 'fortune:',
   FORTUNE_LIST: 'fortune_list:',
@@ -18,42 +35,64 @@ const CACHE_PREFIXES = {
   API_RESPONSE: 'api:',
 } as const
 
-// Cache expiration time（seconds）
+/**
+ * Cache TTL (Time To Live) values in seconds
+ * Defines how long different types of data should be cached
+ * @constant
+ */
 const CACHE_TTL = {
-  FORTUNE: 60 * 60 * 24, // 24hour(s)
-  FORTUNE_LIST: 60 * 60, // 1hour(s)
-  ANALYTICS: 60 * 30, // 30minute(s)
-  USER_SESSION: 60 * 60 * 24 * 7, // 7day(s)
-  API_RESPONSE: 60 * 5, // 5minute(s)
+  FORTUNE: 60 * 60 * 24, // 24 hours
+  FORTUNE_LIST: 60 * 60, // 1 hour
+  ANALYTICS: 60 * 30, // 30 minutes
+  USER_SESSION: 60 * 60 * 24 * 7, // 7 days
+  API_RESPONSE: 60 * 5, // 5 minutes
 } as const
 
-// Distributed rate limiter (Only enabled when Redis is available)
+/**
+ * Distributed rate limiters using sliding window algorithm
+ * Only enabled when Redis is available
+ *
+ * @property {Ratelimit} api - API request rate limiter (50 requests per 15 minutes per IP)
+ * @property {Ratelimit} fortune - Fortune generation rate limiter (10 requests per minute per IP)
+ * @property {Ratelimit} search - Search rate limiter (30 requests per minute per IP)
+ * @property {Ratelimit} strict - Strict rate limiter for sensitive operations (100 requests per hour per IP)
+ *
+ * @example
+ * ```typescript
+ * if (rateLimiters) {
+ *   const { success } = await rateLimiters.api.limit(ipAddress)
+ *   if (!success) {
+ *     return new Response('Rate limit exceeded', { status: 429 })
+ *   }
+ * }
+ * ```
+ */
 export const rateLimiters = redis ? {
-  // API Request rate limiting：perIP每15minute(s)50times
+  // API Request rate limiting: 50 requests per 15 minutes per IP
   api: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(50, '15 m'),
     analytics: true,
     prefix: 'ratelimit:api',
   }),
-  
-  // Fortune cookie generation rate limiting：perIP每minute(s)10times
+
+  // Fortune cookie generation rate limiting: 10 requests per minute per IP
   fortune: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(10, '1 m'),
     analytics: true,
     prefix: 'ratelimit:fortune',
   }),
-  
-  // Search rate limiting：perIP每minute(s)30times
+
+  // Search rate limiting: 30 requests per minute per IP
   search: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(30, '1 m'),
     analytics: true,
     prefix: 'ratelimit:search',
   }),
-  
-  // Strict rate limiting：perIP每hour(s)100times（For sensitive operations）
+
+  // Strict rate limiting: 100 requests per hour per IP (for sensitive operations)
   strict: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(100, '1 h'),
@@ -62,7 +101,28 @@ export const rateLimiters = redis ? {
   }),
 } : null
 
-// Cache manager class
+/**
+ * Cache Manager
+ *
+ * Manages distributed caching operations using Redis.
+ * Provides methods for storing, retrieving, and managing cached data.
+ * Gracefully handles Redis unavailability by returning null/false.
+ *
+ * @class
+ * @example
+ * ```typescript
+ * const cache = new CacheManager()
+ *
+ * // Check connection
+ * const connected = await cache.isConnected()
+ *
+ * // Set cache
+ * await cache.set('key', { data: 'value' }, 3600)
+ *
+ * // Get cache
+ * const data = await cache.get('key')
+ * ```
+ */
 export class CacheManager {
   private redis: Redis | null
 
@@ -70,7 +130,19 @@ export class CacheManager {
     this.redis = redis
   }
 
-  // Check Redis connection
+  /**
+   * Check if Redis connection is available
+   *
+   * @returns {Promise<boolean>} True if connected, false otherwise
+   *
+   * @example
+   * ```typescript
+   * const cache = new CacheManager()
+   * if (await cache.isConnected()) {
+   *   console.log('Redis is available')
+   * }
+   * ```
+   */
   async isConnected(): Promise<boolean> {
     try {
       if (!this.redis) return false
@@ -82,7 +154,23 @@ export class CacheManager {
     }
   }
 
-  // Generic cache set
+  /**
+   * Set a value in cache with optional TTL
+   *
+   * @param {string} key - Cache key
+   * @param {any} value - Value to cache (will be JSON stringified)
+   * @param {number} [ttl] - Time to live in seconds (optional)
+   * @returns {Promise<boolean>} True if successful, false otherwise
+   *
+   * @example
+   * ```typescript
+   * // Set with TTL
+   * await cache.set('user:123', { name: 'John' }, 3600)
+   *
+   * // Set without TTL (permanent)
+   * await cache.set('config', { theme: 'dark' })
+   * ```
+   */
   async set(key: string, value: any, ttl?: number): Promise<boolean> {
     try {
       if (!this.redis) return false
@@ -98,7 +186,21 @@ export class CacheManager {
     }
   }
 
-  // Generic cache get
+  /**
+   * Get a value from cache
+   *
+   * @template T - Type of the cached value
+   * @param {string} key - Cache key
+   * @returns {Promise<T | null>} Cached value or null if not found/error
+   *
+   * @example
+   * ```typescript
+   * const user = await cache.get<User>('user:123')
+   * if (user) {
+   *   console.log(user.name)
+   * }
+   * ```
+   */
   async get<T>(key: string): Promise<T | null> {
     try {
       if (!this.redis) return null
@@ -110,7 +212,17 @@ export class CacheManager {
     }
   }
 
-  // Delete cache
+  /**
+   * Delete a cache entry
+   *
+   * @param {string} key - Cache key to delete
+   * @returns {Promise<boolean>} True if successful, false otherwise
+   *
+   * @example
+   * ```typescript
+   * await cache.del('user:123')
+   * ```
+   */
   async del(key: string): Promise<boolean> {
     try {
       if (!this.redis) return false
@@ -122,7 +234,19 @@ export class CacheManager {
     }
   }
 
-  // Batch delete cache（By pattern matching）
+  /**
+   * Delete multiple cache entries by pattern
+   *
+   * @param {string} pattern - Redis key pattern (e.g., 'user:*')
+   * @returns {Promise<number>} Number of keys deleted
+   *
+   * @example
+   * ```typescript
+   * // Delete all user caches
+   * const deleted = await cache.delPattern('user:*')
+   * console.log(`Deleted ${deleted} keys`)
+   * ```
+   */
   async delPattern(pattern: string): Promise<number> {
     try {
       if (!this.redis) return 0
@@ -137,67 +261,161 @@ export class CacheManager {
     }
   }
 
-  // Cache fortune cookie
+  /**
+   * Cache a fortune cookie result
+   *
+   * @param {string} requestHash - Hash of the fortune request parameters
+   * @param {any} fortune - Fortune object to cache
+   * @returns {Promise<boolean>} True if successful, false otherwise
+   *
+   * @example
+   * ```typescript
+   * const hash = generateRequestHash({ theme: 'inspirational' })
+   * await cache.cacheFortune(hash, {
+   *   message: 'Your future is bright',
+   *   luckyNumbers: [1, 2, 3, 4, 5, 6]
+   * })
+   * ```
+   */
   async cacheFortune(requestHash: string, fortune: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.FORTUNE}${requestHash}`
     return this.set(key, fortune, CACHE_TTL.FORTUNE)
   }
 
-  // Get cached fortune cookie
+  /**
+   * Get a cached fortune cookie
+   *
+   * @param {string} requestHash - Hash of the fortune request parameters
+   * @returns {Promise<any | null>} Cached fortune or null if not found
+   *
+   * @example
+   * ```typescript
+   * const hash = generateRequestHash({ theme: 'inspirational' })
+   * const fortune = await cache.getCachedFortune(hash)
+   * ```
+   */
   async getCachedFortune(requestHash: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.FORTUNE}${requestHash}`
     return this.get(key)
   }
 
-  // Cache fortune cookie list
+  /**
+   * Cache a list of fortune cookies
+   *
+   * @param {string} listKey - Key for the fortune list
+   * @param {any[]} fortunes - Array of fortune objects
+   * @returns {Promise<boolean>} True if successful, false otherwise
+   *
+   * @example
+   * ```typescript
+   * await cache.cacheFortuneList('category:inspirational', fortunes)
+   * ```
+   */
   async cacheFortuneList(listKey: string, fortunes: any[]): Promise<boolean> {
     const key = `${CACHE_PREFIXES.FORTUNE_LIST}${listKey}`
     return this.set(key, fortunes, CACHE_TTL.FORTUNE_LIST)
   }
 
-  // Get cached fortune cookie list
+  /**
+   * Get a cached fortune list
+   *
+   * @param {string} listKey - Key for the fortune list
+   * @returns {Promise<any[] | null>} Cached fortune list or null if not found
+   *
+   * @example
+   * ```typescript
+   * const fortunes = await cache.getCachedFortuneList('category:inspirational')
+   * ```
+   */
   async getCachedFortuneList(listKey: string): Promise<any[] | null> {
     const key = `${CACHE_PREFIXES.FORTUNE_LIST}${listKey}`
     return this.get(key)
   }
 
-  // Cache analytics data
+  /**
+   * Cache analytics data
+   *
+   * @param {string} analyticsKey - Key for analytics data
+   * @param {any} data - Analytics data to cache
+   * @returns {Promise<boolean>} True if successful
+   */
   async cacheAnalytics(analyticsKey: string, data: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.ANALYTICS}${analyticsKey}`
     return this.set(key, data, CACHE_TTL.ANALYTICS)
   }
 
-  // Get cached analytics data
+  /**
+   * Get cached analytics data
+   *
+   * @param {string} analyticsKey - Key for analytics data
+   * @returns {Promise<any | null>} Cached analytics or null
+   */
   async getCachedAnalytics(analyticsKey: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.ANALYTICS}${analyticsKey}`
     return this.get(key)
   }
 
-  // Cache API response
+  /**
+   * Cache API response
+   *
+   * @param {string} endpoint - API endpoint
+   * @param {string} params - Request parameters
+   * @param {any} response - Response data to cache
+   * @returns {Promise<boolean>} True if successful
+   */
   async cacheApiResponse(endpoint: string, params: string, response: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.API_RESPONSE}${endpoint}:${params}`
     return this.set(key, response, CACHE_TTL.API_RESPONSE)
   }
 
-  // Get cached API response
+  /**
+   * Get cached API response
+   *
+   * @param {string} endpoint - API endpoint
+   * @param {string} params - Request parameters
+   * @returns {Promise<any | null>} Cached response or null
+   */
   async getCachedApiResponse(endpoint: string, params: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.API_RESPONSE}${endpoint}:${params}`
     return this.get(key)
   }
 
-  // User session management
+  /**
+   * Set user session data
+   *
+   * @param {string} sessionId - Session identifier
+   * @param {any} sessionData - Session data to store
+   * @returns {Promise<boolean>} True if successful
+   */
   async setUserSession(sessionId: string, sessionData: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.USER_SESSION}${sessionId}`
     return this.set(key, sessionData, CACHE_TTL.USER_SESSION)
   }
 
-  // Get user session
+  /**
+   * Get user session data
+   *
+   * @param {string} sessionId - Session identifier
+   * @returns {Promise<any | null>} Session data or null
+   */
   async getUserSession(sessionId: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.USER_SESSION}${sessionId}`
     return this.get(key)
   }
 
-  // Increment counter
+  /**
+   * Increment a counter with optional TTL
+   *
+   * @param {string} key - Counter key
+   * @param {number} [ttl] - Time to live in seconds (set on first increment)
+   * @returns {Promise<number>} New counter value
+   *
+   * @example
+   * ```typescript
+   * // Increment daily counter
+   * const count = await cache.increment('requests:2024-01-01', 86400)
+   * ```
+   */
   async increment(key: string, ttl?: number): Promise<number> {
     try {
       if (!this.redis) return 0
@@ -212,7 +430,17 @@ export class CacheManager {
     }
   }
 
-  // Get cache statistics
+  /**
+   * Get cache statistics
+   *
+   * @returns {Promise<any>} Cache statistics object with connection status
+   *
+   * @example
+   * ```typescript
+   * const stats = await cache.getCacheStats()
+   * console.log(`Connected: ${stats.connected}`)
+   * ```
+   */
   async getCacheStats(): Promise<any> {
     try {
       if (!this.redis) {
@@ -237,10 +465,15 @@ export class CacheManager {
     }
   }
 
-  // Cleanup expired cache
+  /**
+   * Cleanup expired cache entries
+   * Note: Redis automatically cleans up expired keys, this is a placeholder for custom logic
+   *
+   * @returns {Promise<void>}
+   */
   async cleanup(): Promise<void> {
     try {
-      // Redis Automatically cleans up expired keys，Custom cleanup logic can be added here
+      // Redis automatically cleans up expired keys, custom cleanup logic can be added here
       console.log('Cache cleanup completed')
     } catch (error) {
       console.error('Cache cleanup error:', error)
@@ -248,16 +481,50 @@ export class CacheManager {
   }
 }
 
-// Export singleton instance
+/**
+ * Singleton cache manager instance
+ * Use this instance for all caching operations
+ *
+ * @example
+ * ```typescript
+ * import { cacheManager } from '@/lib/redis-cache'
+ *
+ * await cacheManager.set('key', 'value', 3600)
+ * const value = await cacheManager.get('key')
+ * ```
+ */
 export const cacheManager = new CacheManager()
 
-// Utility function: Generate cache key
+/**
+ * Generate a cache key from prefix and parts
+ *
+ * @param {string} prefix - Key prefix
+ * @param {...string} parts - Key parts to join
+ * @returns {string} Generated cache key
+ *
+ * @example
+ * ```typescript
+ * const key = generateCacheKey('user', '123', 'profile')
+ * // Returns: 'user123:profile'
+ * ```
+ */
 export function generateCacheKey(prefix: string, ...parts: string[]): string {
   return `${prefix}${parts.join(':')}`
 }
 
-// Utility function: Generate request hash
-// Use SHA-256 cryptographic hash algorithm to avoid Base64 encoding collision risk
+/**
+ * Generate a SHA-256 hash for request caching
+ * Uses cryptographic hashing to avoid collision risks
+ *
+ * @param {any} data - Data to hash (will be JSON stringified)
+ * @returns {string} 32-character hex hash
+ *
+ * @example
+ * ```typescript
+ * const hash = generateRequestHash({ theme: 'inspirational', mood: 'positive' })
+ * // Returns: '3f2a1b4c...' (32 chars)
+ * ```
+ */
 export function generateRequestHash(data: any): string {
   // Use dynamic import for Node.js crypto module
   // eslint-disable-next-line @typescript-eslint/no-require-imports
