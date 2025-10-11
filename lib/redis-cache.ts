@@ -1,7 +1,7 @@
 import { Redis } from '@upstash/redis'
 import { Ratelimit } from '@upstash/ratelimit'
 
-// Redis 客户端配置
+// Redis clientconfiguration
 const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN 
   ? new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL,
@@ -9,7 +9,7 @@ const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_RE
     })
   : null
 
-// 缓存键前缀
+// Cache key prefix
 const CACHE_PREFIXES = {
   FORTUNE: 'fortune:',
   FORTUNE_LIST: 'fortune_list:',
@@ -18,18 +18,18 @@ const CACHE_PREFIXES = {
   API_RESPONSE: 'api:',
 } as const
 
-// 缓存过期时间（秒）
+// Cache expiration time（seconds）
 const CACHE_TTL = {
-  FORTUNE: 60 * 60 * 24, // 24小时
-  FORTUNE_LIST: 60 * 60, // 1小时
-  ANALYTICS: 60 * 30, // 30分钟
-  USER_SESSION: 60 * 60 * 24 * 7, // 7天
-  API_RESPONSE: 60 * 5, // 5分钟
+  FORTUNE: 60 * 60 * 24, // 24hour(s)
+  FORTUNE_LIST: 60 * 60, // 1hour(s)
+  ANALYTICS: 60 * 30, // 30minute(s)
+  USER_SESSION: 60 * 60 * 24 * 7, // 7day(s)
+  API_RESPONSE: 60 * 5, // 5minute(s)
 } as const
 
-// 分布式限流器 (仅在Redis可用时启用)
+// Distributed rate limiter (Only enabled when Redis is available)
 export const rateLimiters = redis ? {
-  // API 请求限流：每个IP每15分钟50次
+  // API Request rate limiting：perIP每15minute(s)50times
   api: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(50, '15 m'),
@@ -37,7 +37,7 @@ export const rateLimiters = redis ? {
     prefix: 'ratelimit:api',
   }),
   
-  // 幸运饼干生成限流：每个IP每分钟10次
+  // Fortune cookie generation rate limiting：perIP每minute(s)10times
   fortune: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(10, '1 m'),
@@ -45,7 +45,7 @@ export const rateLimiters = redis ? {
     prefix: 'ratelimit:fortune',
   }),
   
-  // 搜索限流：每个IP每分钟30次
+  // Search rate limiting：perIP每minute(s)30times
   search: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(30, '1 m'),
@@ -53,7 +53,7 @@ export const rateLimiters = redis ? {
     prefix: 'ratelimit:search',
   }),
   
-  // 严格限流：每个IP每小时100次（用于敏感操作）
+  // Strict rate limiting：perIP每hour(s)100times（For sensitive operations）
   strict: new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(100, '1 h'),
@@ -62,7 +62,7 @@ export const rateLimiters = redis ? {
   }),
 } : null
 
-// 缓存管理类
+// Cache manager class
 export class CacheManager {
   private redis: Redis | null
 
@@ -70,7 +70,7 @@ export class CacheManager {
     this.redis = redis
   }
 
-  // 检查Redis连接
+  // Check Redis connection
   async isConnected(): Promise<boolean> {
     try {
       if (!this.redis) return false
@@ -82,7 +82,7 @@ export class CacheManager {
     }
   }
 
-  // 通用缓存设置
+  // Generic cache set
   async set(key: string, value: any, ttl?: number): Promise<boolean> {
     try {
       if (!this.redis) return false
@@ -98,7 +98,7 @@ export class CacheManager {
     }
   }
 
-  // 通用缓存获取
+  // Generic cache get
   async get<T>(key: string): Promise<T | null> {
     try {
       if (!this.redis) return null
@@ -110,7 +110,7 @@ export class CacheManager {
     }
   }
 
-  // 删除缓存
+  // Delete cache
   async del(key: string): Promise<boolean> {
     try {
       if (!this.redis) return false
@@ -122,7 +122,7 @@ export class CacheManager {
     }
   }
 
-  // 批量删除缓存（通过模式匹配）
+  // Batch delete cache（By pattern matching）
   async delPattern(pattern: string): Promise<number> {
     try {
       if (!this.redis) return 0
@@ -137,67 +137,67 @@ export class CacheManager {
     }
   }
 
-  // 缓存幸运饼干
+  // Cache fortune cookie
   async cacheFortune(requestHash: string, fortune: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.FORTUNE}${requestHash}`
     return this.set(key, fortune, CACHE_TTL.FORTUNE)
   }
 
-  // 获取缓存的幸运饼干
+  // Get cached fortune cookie
   async getCachedFortune(requestHash: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.FORTUNE}${requestHash}`
     return this.get(key)
   }
 
-  // 缓存幸运饼干列表
+  // Cache fortune cookie list
   async cacheFortuneList(listKey: string, fortunes: any[]): Promise<boolean> {
     const key = `${CACHE_PREFIXES.FORTUNE_LIST}${listKey}`
     return this.set(key, fortunes, CACHE_TTL.FORTUNE_LIST)
   }
 
-  // 获取缓存的幸运饼干列表
+  // Get cached fortune cookie list
   async getCachedFortuneList(listKey: string): Promise<any[] | null> {
     const key = `${CACHE_PREFIXES.FORTUNE_LIST}${listKey}`
     return this.get(key)
   }
 
-  // 缓存分析数据
+  // Cache analytics data
   async cacheAnalytics(analyticsKey: string, data: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.ANALYTICS}${analyticsKey}`
     return this.set(key, data, CACHE_TTL.ANALYTICS)
   }
 
-  // 获取缓存的分析数据
+  // Get cached analytics data
   async getCachedAnalytics(analyticsKey: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.ANALYTICS}${analyticsKey}`
     return this.get(key)
   }
 
-  // 缓存API响应
+  // Cache API response
   async cacheApiResponse(endpoint: string, params: string, response: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.API_RESPONSE}${endpoint}:${params}`
     return this.set(key, response, CACHE_TTL.API_RESPONSE)
   }
 
-  // 获取缓存的API响应
+  // Get cached API response
   async getCachedApiResponse(endpoint: string, params: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.API_RESPONSE}${endpoint}:${params}`
     return this.get(key)
   }
 
-  // 用户会话管理
+  // User session management
   async setUserSession(sessionId: string, sessionData: any): Promise<boolean> {
     const key = `${CACHE_PREFIXES.USER_SESSION}${sessionId}`
     return this.set(key, sessionData, CACHE_TTL.USER_SESSION)
   }
 
-  // 获取用户会话
+  // Get user session
   async getUserSession(sessionId: string): Promise<any | null> {
     const key = `${CACHE_PREFIXES.USER_SESSION}${sessionId}`
     return this.get(key)
   }
 
-  // 增量计数器
+  // Increment counter
   async increment(key: string, ttl?: number): Promise<number> {
     try {
       if (!this.redis) return 0
@@ -212,7 +212,7 @@ export class CacheManager {
     }
   }
 
-  // 获取缓存统计信息
+  // Get cache statistics
   async getCacheStats(): Promise<any> {
     try {
       if (!this.redis) {
@@ -237,10 +237,10 @@ export class CacheManager {
     }
   }
 
-  // 清理过期缓存
+  // Cleanup expired cache
   async cleanup(): Promise<void> {
     try {
-      // Redis 会自动清理过期键，这里可以添加自定义清理逻辑
+      // Redis Automatically cleans up expired keys，Custom cleanup logic can be added here
       console.log('Cache cleanup completed')
     } catch (error) {
       console.error('Cache cleanup error:', error)
@@ -248,17 +248,19 @@ export class CacheManager {
   }
 }
 
-// 导出单例实例
+// Export singleton instance
 export const cacheManager = new CacheManager()
 
-// 工具函数：生成缓存键
+// Utility function: Generate cache key
 export function generateCacheKey(prefix: string, ...parts: string[]): string {
   return `${prefix}${parts.join(':')}`
 }
 
-// 工具函数：生成请求哈希
-// 使用 SHA-256 加密哈希算法，避免 Base64 编码的碰撞风险
+// Utility function: Generate request hash
+// Use SHA-256 cryptographic hash algorithm to avoid Base64 encoding collision risk
 export function generateRequestHash(data: any): string {
+  // Use dynamic import for Node.js crypto module
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const crypto = require('crypto')
   return crypto
     .createHash('sha256')

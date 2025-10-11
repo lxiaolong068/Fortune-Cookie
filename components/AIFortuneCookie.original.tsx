@@ -1,65 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+import { Sparkles, RefreshCw, Wand2, Heart, Smile, TrendingUp, Brain, Shuffle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sessionManager } from "@/lib/session-manager";
 import { captureUserAction } from "@/lib/error-monitoring";
-
-// Dynamic imports for Lucide icons (~10KB saved)
-// Icons are lazy loaded with emoji fallbacks for better initial load performance
-
-// Lucide Icons (~10KB) - lazy loaded with emoji fallbacks
-const Sparkles = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.Sparkles })),
-  { loading: () => <span className="inline-block w-4 h-4">✨</span> }
-);
-
-const RefreshCw = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.RefreshCw })),
-  { loading: () => <span className="inline-block w-4 h-4">🔄</span> }
-);
-
-const Wand2 = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.Wand2 })),
-  { loading: () => <span className="inline-block w-4 h-4">🪄</span> }
-);
-
-const Heart = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.Heart })),
-  { loading: () => <span className="inline-block w-4 h-4">❤️</span> }
-);
-
-const Smile = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.Smile })),
-  { loading: () => <span className="inline-block w-4 h-4">😊</span> }
-);
-
-const TrendingUp = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.TrendingUp })),
-  { loading: () => <span className="inline-block w-4 h-4">📈</span> }
-);
-
-const Brain = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.Brain })),
-  { loading: () => <span className="inline-block w-4 h-4">🧠</span> }
-);
-
-const Shuffle = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.Shuffle })),
-  { loading: () => <span className="inline-block w-4 h-4">🔀</span> }
-);
-
-const Loader2 = dynamic(
-  () => import("lucide-react").then(m => ({ default: m.Loader2 })),
-  { loading: () => <span className="inline-block w-4 h-4 animate-spin">⏳</span> }
-);
 
 interface Fortune {
   message: string;

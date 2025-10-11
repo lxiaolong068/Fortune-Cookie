@@ -4,16 +4,16 @@ import { CachePerformanceMonitor, CacheWarmupManager, CacheInvalidationManager }
 import { captureApiError, captureUserAction } from '@/lib/error-monitoring'
 import { withSignatureValidation, ApiSignatureHelper } from '@/lib/signature-middleware'
 
-// 获取客户端标识符
+// get/retrieveclient标识符
 function getClientIdentifier(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for')
   const ip = forwarded ? forwarded.split(',')[0]?.trim() : request.ip
   return ip || 'unknown'
 }
 
-// 验证管理员权限（现在使用签名验证）
+// 验证management员权限（现在use签名验证）
 function isAuthorized(request: NextRequest): boolean {
-  // 检查签名验证状态
+  // check签名验证状态
   const { isValidated } = ApiSignatureHelper.getValidationInfo(request)
   if (isValidated) {
     return true // 签名验证通过即可
@@ -28,14 +28,14 @@ function isAuthorized(request: NextRequest): boolean {
   return authHeader === `Bearer ${adminToken}`
 }
 
-// 使用签名验证装饰器
+// use签名验证装饰器
 const getHandler = async (request: NextRequest) => {
   try {
     const clientId = getClientIdentifier(request)
     const { searchParams } = new URL(request.url)
     const action = searchParams.get('action') || 'stats'
     
-    // 限流检查 (仅在Redis可用时)
+    // 限流check (only whenRedisavailable)
     if (rateLimiters) {
       const rateLimitResult = await rateLimiters.api.limit(clientId)
       if (!rateLimitResult.success) {
@@ -48,7 +48,7 @@ const getHandler = async (request: NextRequest) => {
     
     switch (action) {
       case 'stats': {
-        // 获取缓存统计信息
+        // Get cache statistics
         const cacheStats = await cacheManager.getCacheStats()
         const performanceStats = CachePerformanceMonitor.getStats()
         
@@ -60,7 +60,7 @@ const getHandler = async (request: NextRequest) => {
       }
       
       case 'health': {
-        // 检查缓存健康状态
+        // checkcache健康状态
         const isConnected = await cacheManager.isConnected()
         
         return NextResponse.json({
@@ -98,7 +98,7 @@ const postHandler = async (request: NextRequest) => {
   try {
     const clientId = getClientIdentifier(request)
     
-    // 验证管理员权限
+    // 验证management员权限
     if (!isAuthorized(request)) {
       captureUserAction('unauthorized_cache_access', 'cache_api', clientId)
       return NextResponse.json(
@@ -107,7 +107,7 @@ const postHandler = async (request: NextRequest) => {
       )
     }
     
-    // 严格限流 (仅在Redis可用时)
+    // Strict rate limiting (only whenRedisavailable)
     if (rateLimiters) {
       const rateLimitResult = await rateLimiters.strict.limit(clientId)
       if (!rateLimitResult.success) {
@@ -123,12 +123,12 @@ const postHandler = async (request: NextRequest) => {
     
     switch (action) {
       case 'warmup': {
-        // 缓存预热
+        // cache预热
         const baseUrl = data?.baseUrl || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
         
         captureUserAction('cache_warmup_initiated', 'cache_api', clientId, { baseUrl })
         
-        // 异步执行预热，不阻塞响应
+        // 异步execute预热，不阻塞response
         CacheWarmupManager.warmupCache(baseUrl).catch(error => {
           captureApiError(error, '/api/cache', 'POST:warmup', 500)
         })
@@ -140,7 +140,7 @@ const postHandler = async (request: NextRequest) => {
       }
       
       case 'invalidate': {
-        // 缓存失效
+        // cache失效
         const pattern = data?.pattern
         if (!pattern) {
           return NextResponse.json(
@@ -153,7 +153,7 @@ const postHandler = async (request: NextRequest) => {
         
         const deletedCount = await cacheManager.delPattern(pattern)
         
-        // 智能失效相关缓存
+        // 智能失效相关cache
         await CacheInvalidationManager.invalidateRelatedCache(pattern)
         
         return NextResponse.json({
@@ -165,7 +165,7 @@ const postHandler = async (request: NextRequest) => {
       }
       
       case 'clear': {
-        // 清空所有缓存（危险操作）
+        // 清空allcache（危险操作）
         const confirmToken = data?.confirmToken
         if (confirmToken !== 'CONFIRM_CLEAR_ALL_CACHE') {
           return NextResponse.json(
@@ -176,7 +176,7 @@ const postHandler = async (request: NextRequest) => {
         
         captureUserAction('cache_clear_all', 'cache_api', clientId)
         
-        // 清空所有缓存模式
+        // 清空allcache模式
         const patterns = ['fortune:*', 'fortune_list:*', 'analytics:*', 'api:*']
         let totalDeleted = 0
         
@@ -185,7 +185,7 @@ const postHandler = async (request: NextRequest) => {
           totalDeleted += deleted
         }
         
-        // 重置性能统计
+        // resetperformancestatistics
         CachePerformanceMonitor.resetStats()
         
         return NextResponse.json({
@@ -196,7 +196,7 @@ const postHandler = async (request: NextRequest) => {
       }
       
       case 'optimize': {
-        // 缓存优化
+        // cacheoptimization
         captureUserAction('cache_optimization', 'cache_api', clientId)
         
         await cacheManager.cleanup()

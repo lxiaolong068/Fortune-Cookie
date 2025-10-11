@@ -14,7 +14,7 @@ export interface ErrorContext {
 // 错误严重程度
 export type ErrorSeverity = 'fatal' | 'error' | 'warning' | 'info' | 'debug'
 
-// 轻量错误监控（仅控制台输出）
+// 轻量错误monitoring（仅控制台输出）
 export class ErrorMonitor {
   private static instance: ErrorMonitor
   private isInitialized = false
@@ -36,7 +36,7 @@ export class ErrorMonitor {
     this.isInitialized = true
   }
 
-  // 记录错误
+  // record/log错误
   public captureError(
     error: Error | string,
     context?: ErrorContext,
@@ -59,7 +59,7 @@ export class ErrorMonitor {
     }
   }
 
-  // 记录API错误
+  // record/logAPI错误
   public captureApiError(
     error: Error | string,
     endpoint: string,
@@ -74,7 +74,7 @@ export class ErrorMonitor {
     }, statusCode && statusCode >= 500 ? 'error' : 'warning')
   }
 
-  // 记录性能问题
+  // record/logperformance问题
   public capturePerformanceIssue(
     metric: string,
     value: number,
@@ -90,7 +90,7 @@ export class ErrorMonitor {
     }
   }
 
-  // 记录用户操作
+  // record/log用户操作
   public captureUserAction(
     action: string,
     component: string,
@@ -100,7 +100,7 @@ export class ErrorMonitor {
     console.info('[ErrorMonitor][Breadcrumb][User]', { action, component, userId, ...additionalData })
   }
 
-  // 记录业务事件
+  // record/log业务event
   public captureBusinessEvent(
     event: string,
     data?: Record<string, any>
@@ -108,7 +108,7 @@ export class ErrorMonitor {
     console.info('[ErrorMonitor][Breadcrumb][Business]', { event, ...data })
   }
 
-  // 设置/清除用户
+  // setup/configuration/clear用户
   public setUser(userId: string, email?: string, username?: string) {
     this.currentUser = { id: userId, email, username }
   }
@@ -117,16 +117,16 @@ export class ErrorMonitor {
     this.currentUser = undefined
   }
 
-  // 添加面包屑（控制台输出）
+  // add面bundle屑（控制台输出）
   public addBreadcrumb(message: string, category: string, data?: Record<string, any>) {
     console.info('[ErrorMonitor][Breadcrumb]', { message, category, ...data })
   }
 }
 
-// 导出单例实例
+// Export singleton instance
 export const errorMonitor = ErrorMonitor.getInstance()
 
-// 便捷函数
+// 便捷function
 export const captureError = (error: Error | string, context?: ErrorContext, severity?: ErrorSeverity) => {
   errorMonitor.captureError(error, context, severity)
 }

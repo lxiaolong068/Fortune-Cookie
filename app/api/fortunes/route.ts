@@ -13,7 +13,7 @@ import { EdgeCacheManager, CachePerformanceMonitor } from '@/lib/edge-cache'
 import { captureApiError, captureUserAction } from '@/lib/error-monitoring'
 import { createSuccessResponse, createErrorResponse } from '@/types/api'
 
-// 安全工具函数
+// 安全utility function
 function sanitizeString(input: string, maxLength: number = 100): string {
   if (typeof input !== 'string') return ''
 
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now()
 
   try {
-    // 分布式限流检查 (仅在Redis可用时)
+    // distributed限流check (only whenRedisavailable)
     const clientId = getClientIdentifier(request)
     if (rateLimiters) {
       const rateLimitResult = await rateLimiters.search.limit(clientId)
@@ -97,10 +97,10 @@ export async function GET(request: NextRequest) {
         const category = searchParams.get('category') ? sanitizeString(searchParams.get('category')!, 50) : undefined
         const limit = validatePositiveInteger(searchParams.get('limit') || '50', 50, 100)
 
-        // 生成缓存键
+        // generation/generatecachekey
         const cacheKey = generateCacheKey('search', query, category || 'all', limit.toString())
 
-        // 检查缓存
+        // checkcache
         let cachedResults = await cacheManager.getCachedFortuneList(cacheKey)
 
         if (cachedResults) {
@@ -128,7 +128,7 @@ export async function GET(request: NextRequest) {
           cached: false
         }
 
-        // 缓存结果
+        // cache结果
         await cacheManager.cacheFortuneList(cacheKey, results)
 
         const optimizedResponse = EdgeCacheManager.optimizeApiResponse(responseData, cacheKey, 300)
@@ -259,7 +259,7 @@ export async function GET(request: NextRequest) {
         const category = searchParams.get('category') ? sanitizeString(searchParams.get('category')!, 50) : undefined
         const sortBy = sanitizeString(searchParams.get('sort') || 'popularity', 20)
 
-        // 验证排序参数
+        // 验证sort/sorting参数
         const validSortOptions = ['popularity', 'recent', 'alphabetical']
         const finalSortBy = validSortOptions.includes(sortBy) ? sortBy : 'popularity'
 

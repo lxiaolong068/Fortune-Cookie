@@ -5,14 +5,14 @@ import { withSignatureValidation, ApiSignatureHelper } from '@/lib/signature-mid
 import { rateLimiters } from '@/lib/redis-cache'
 import { captureApiError, captureUserAction } from '@/lib/error-monitoring'
 
-// 获取客户端标识符
+// get/retrieveclient标识符
 function getClientIdentifier(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for')
   const ip = forwarded ? forwarded.split(',')[0]?.trim() : request.ip
   return ip || 'unknown'
 }
 
-// 验证管理员权限
+// 验证management员权限
 function isAuthorized(request: NextRequest): boolean {
   const { isValidated } = ApiSignatureHelper.getValidationInfo(request)
   if (isValidated && ApiSignatureHelper.hasPermission(request, 'admin')) {
@@ -34,7 +34,7 @@ const getHandler = async (request: NextRequest) => {
     const { searchParams } = new URL(request.url)
     const action = searchParams.get('action') || 'health'
     
-    // 限流检查 (仅在Redis可用时)
+    // 限流check (only whenRedisavailable)
     if (rateLimiters) {
       const rateLimitResult = await rateLimiters.api.limit(clientId)
       if (!rateLimitResult.success) {
@@ -47,7 +47,7 @@ const getHandler = async (request: NextRequest) => {
     
     switch (action) {
       case 'health': {
-        // 数据库健康检查
+        // databaseHealth check
         const isHealthy = await DatabaseManager.healthCheck()
         const stats = DatabaseManager.getStats()
         
@@ -60,7 +60,7 @@ const getHandler = async (request: NextRequest) => {
       }
       
       case 'stats': {
-        // 数据库统计信息
+        // databasestatisticsinformation
         if (!isAuthorized(request)) {
           return NextResponse.json(
             { error: 'Unauthorized' },
@@ -81,7 +81,7 @@ const getHandler = async (request: NextRequest) => {
       }
       
       case 'analytics': {
-        // 分析数据统计
+        // analyticsdatastatistics
         if (!isAuthorized(request)) {
           return NextResponse.json(
             { error: 'Unauthorized' },
@@ -91,7 +91,7 @@ const getHandler = async (request: NextRequest) => {
         
         const startDate = searchParams.get('startDate') 
           ? new Date(searchParams.get('startDate')!) 
-          : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 默认7天前
+          : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 默认7day(s)前
         
         const endDate = searchParams.get('endDate') 
           ? new Date(searchParams.get('endDate')!) 
@@ -139,7 +139,7 @@ const postHandler = async (request: NextRequest) => {
   try {
     const clientId = getClientIdentifier(request)
     
-    // 验证管理员权限
+    // 验证management员权限
     if (!isAuthorized(request)) {
       captureUserAction('unauthorized_database_access', 'database_api', clientId)
       return NextResponse.json(
@@ -148,7 +148,7 @@ const postHandler = async (request: NextRequest) => {
       )
     }
     
-    // 严格限流 (仅在Redis可用时)
+    // Strict rate limiting (only whenRedisavailable)
     if (rateLimiters) {
       const rateLimitResult = await rateLimiters.strict.limit(clientId)
       if (!rateLimitResult.success) {
@@ -164,7 +164,7 @@ const postHandler = async (request: NextRequest) => {
     
     switch (action) {
       case 'cleanup': {
-        // 清理过期数据
+        // cleanup过期data
         captureUserAction('database_cleanup_initiated', 'database_api', clientId)
         
         const cleanupResults = await Promise.allSettled([
@@ -186,10 +186,10 @@ const postHandler = async (request: NextRequest) => {
       }
       
       case 'optimize': {
-        // 数据库优化
+        // databaseoptimization
         captureUserAction('database_optimization', 'database_api', clientId)
         
-        // SQLite 优化命令
+        // SQLite optimization命令
         try {
           await DatabaseManager.getInstance().$executeRaw`VACUUM`
           await DatabaseManager.getInstance().$executeRaw`ANALYZE`
@@ -207,10 +207,10 @@ const postHandler = async (request: NextRequest) => {
       }
       
       case 'backup': {
-        // 数据库备份（简单实现）
+        // database备份（简单实现）
         captureUserAction('database_backup_requested', 'database_api', clientId)
         
-        // 在实际应用中，这里应该实现真正的备份逻辑
+        // 在实际应用中，这里应该实现真正的备份logic
         return NextResponse.json({
           message: 'Database backup initiated',
           note: 'Backup functionality should be implemented based on deployment environment',
@@ -219,7 +219,7 @@ const postHandler = async (request: NextRequest) => {
       }
       
       case 'reset_stats': {
-        // 重置数据库统计
+        // resetdatabasestatistics
         captureUserAction('database_stats_reset', 'database_api', clientId)
         
         DatabaseManager.resetStats()

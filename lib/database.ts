@@ -1,30 +1,30 @@
 import { PrismaClient } from '@prisma/client'
 import { captureError, capturePerformanceIssue } from './error-monitoring'
 
-// 数据库连接配置
+// Database connection configuration
 const DATABASE_CONFIG = {
-  // 连接池配置
+  // Connection pool configuration
   connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '10'),
   
-  // 查询超时配置
-  queryTimeout: parseInt(process.env.DB_QUERY_TIMEOUT || '10000'), // 10秒
+  // Query timeout configuration
+  queryTimeout: parseInt(process.env.DB_QUERY_TIMEOUT || '10000'), // 10seconds
   
-  // 连接超时配置
-  connectionTimeout: parseInt(process.env.DB_CONNECTION_TIMEOUT || '5000'), // 5秒
+  // Connection timeout configuration
+  connectionTimeout: parseInt(process.env.DB_CONNECTION_TIMEOUT || '5000'), // 5seconds
   
-  // 日志级别
+  // Log level
   logLevel: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['warn', 'error'],
   
-  // 性能监控阈值
-  slowQueryThreshold: parseInt(process.env.DB_SLOW_QUERY_THRESHOLD || '1000'), // 1秒
+  // Performance monitoring threshold
+  slowQueryThreshold: parseInt(process.env.DB_SLOW_QUERY_THRESHOLD || '1000'), // 1seconds
 } as const
 
-// 全局 Prisma 客户端实例
+// Global Prisma client instance
 declare global {
   var __prisma: PrismaClient | undefined
 }
 
-// 数据库连接管理器
+// Database connection manager
 export class DatabaseManager {
   private static instance: PrismaClient
   private static connectionCount = 0
@@ -35,12 +35,12 @@ export class DatabaseManager {
     totalTime: 0,
   }
 
-  // 获取数据库实例
+  // Get database instance
   static getInstance(): PrismaClient {
     if (!this.instance) {
       this.instance = this.createPrismaClient()
       
-      // 开发环境下复用连接
+      // Reuse connection in development environment
       if (process.env.NODE_ENV === 'development') {
         global.__prisma = this.instance
       }
@@ -49,7 +49,7 @@ export class DatabaseManager {
     return this.instance
   }
 
-  // 创建 Prisma 客户端
+  // Create Prisma client
   private static createPrismaClient(): PrismaClient {
     const prisma = new PrismaClient({
       log: DATABASE_CONFIG.logLevel as any,
@@ -60,19 +60,19 @@ export class DatabaseManager {
       },
     })
 
-    // 连接事件监听（使用process事件）
+    // Connection event listener（useprocessevent）
     process.on('beforeExit', () => {
       console.log('Database connection closing...')
       this.connectionCount--
     })
 
-    // 查询性能监控
+    // Query performance monitoring
     if (process.env.NODE_ENV === 'development') {
       prisma.$on('query' as any, (e: any) => {
         this.queryStats.total++
         this.queryStats.totalTime += e.duration
         
-        // 慢查询监控
+        // Slow query monitoring
         if (e.duration > DATABASE_CONFIG.slowQueryThreshold) {
           this.queryStats.slow++
           
@@ -80,7 +80,7 @@ export class DatabaseManager {
           console.warn(`Query: ${e.query}`)
           console.warn(`Params: ${e.params}`)
           
-          // 记录慢查询到监控系统
+          // Log slow query to monitoring system
           capturePerformanceIssue(
             'slow_database_query',
             e.duration,
@@ -104,7 +104,7 @@ export class DatabaseManager {
     return prisma
   }
 
-  // 健康检查
+  // Health check
   static async healthCheck(): Promise<boolean> {
     try {
       const prisma = this.getInstance()
@@ -122,7 +122,7 @@ export class DatabaseManager {
     }
   }
 
-  // 获取连接统计
+  // Get connection statistics
   static getStats(): any {
     return {
       connectionCount: this.connectionCount,
@@ -139,7 +139,7 @@ export class DatabaseManager {
     }
   }
 
-  // 重置统计
+  // Reset statistics
   static resetStats(): void {
     this.queryStats = {
       total: 0,
@@ -149,7 +149,7 @@ export class DatabaseManager {
     }
   }
 
-  // 关闭连接
+  // Close connection
   static async disconnect(): Promise<void> {
     if (this.instance) {
       await this.instance.$disconnect()
@@ -159,7 +159,7 @@ export class DatabaseManager {
     }
   }
 
-  // 执行事务
+  // Execute transaction
   static async transaction<T>(
     fn: (prisma: PrismaClient) => Promise<T>,
     options?: {
@@ -178,7 +178,7 @@ export class DatabaseManager {
       
       const duration = Date.now() - startTime
       
-      // 监控长事务
+      // Monitor long transaction
       if (duration > 5000) {
         capturePerformanceIssue(
           'long_database_transaction',
@@ -211,19 +211,19 @@ export class DatabaseManager {
   }
 }
 
-// 导出数据库实例（惰性初始化，避免在构建阶段读取 DATABASE_URL）
+// Export database instance（Lazy initialization to avoid reading during build phase DATABASE_URL）
 export const db = new Proxy({} as PrismaClient, {
   get(_target, prop, receiver) {
     const instance = DatabaseManager.getInstance()
-    // 将属性访问转发到实际的 PrismaClient 实例
+    // 将propertyaccessforward到实际的 PrismaClient instance
     // @ts-ignore
     return Reflect.get(instance, prop, receiver)
   }
 }) as PrismaClient
 
-// 查询构建器和优化工具
+// Query builder and optimization utilities
 export class QueryOptimizer {
-  // 分页查询优化
+  // Pagination query optimization
   static buildPaginationQuery(
     page: number = 1,
     limit: number = 20,
@@ -238,7 +238,7 @@ export class QueryOptimizer {
     }
   }
 
-  // 搜索查询优化
+  // Search query optimization
   static buildSearchQuery(query: string): any {
     if (!query || query.trim().length === 0) {
       return {}
@@ -256,7 +256,7 @@ export class QueryOptimizer {
     }
   }
 
-  // 排序查询优化
+  // Sort query optimization
   static buildSortQuery(
     sortBy: string = 'createdAt',
     sortOrder: 'asc' | 'desc' = 'desc'
@@ -276,26 +276,26 @@ export class QueryOptimizer {
     }
   }
 
-  // 过滤查询优化
+  // Filter query optimization
   static buildFilterQuery(filters: Record<string, any>): any {
     const where: any = {}
 
-    // 类别过滤
+    // Category filter
     if (filters.category && typeof filters.category === 'string') {
       where.category = filters.category
     }
 
-    // 心情过滤
+    // Mood filter
     if (filters.mood && typeof filters.mood === 'string') {
       where.mood = filters.mood
     }
 
-    // 长度过滤
+    // Length filter
     if (filters.length && typeof filters.length === 'string') {
       where.length = filters.length
     }
 
-    // 日期范围过滤
+    // Date range filter
     if (filters.dateFrom || filters.dateTo) {
       where.createdAt = {}
       
@@ -308,7 +308,7 @@ export class QueryOptimizer {
       }
     }
 
-    // 受欢迎程度过滤
+    // Popularity filter
     if (filters.minPopularity && typeof filters.minPopularity === 'number') {
       where.popularity = {
         gte: filters.minPopularity,
@@ -319,9 +319,9 @@ export class QueryOptimizer {
   }
 }
 
-// 数据库迁移和种子数据工具
+// Database migration and seed data utilities
 export class DatabaseSeeder {
-  // 检查是否需要种子数据
+  // Check if seed data is needed
   static async needsSeeding(): Promise<boolean> {
     try {
       const count = await db.fortune.count()
@@ -331,13 +331,13 @@ export class DatabaseSeeder {
     }
   }
 
-  // 创建种子数据
+  // Create seed data
   static async seedDatabase(): Promise<void> {
     console.log('Seeding database...')
     
     try {
-      // 这里可以添加种子数据创建逻辑
-      // 例如从现有的 fortune-database.ts 导入数据
+      // Seed data creation logic can be added here
+      // for examplefromexisting fortune-database.ts importdata
       
       console.log('Database seeded successfully')
     } catch (error) {

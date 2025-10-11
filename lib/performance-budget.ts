@@ -1,67 +1,67 @@
 /**
- * 性能预算配置和监控
- * 定义各种性能指标的阈值和监控逻辑
+ * performancebudgetconfiguration和monitoring
+ * 定义各种performancemetrics的threshold和monitoringlogic
  */
 
-// Core Web Vitals 阈值配置
+// Core Web Vitals threshold configuration
 export const CORE_WEB_VITALS_THRESHOLDS = {
-  // Largest Contentful Paint (LCP) - 最大内容绘制
+  // Largest Contentful Paint (LCP) - Largest Contentful Paint
   LCP: {
-    good: 2500,    // 2.5秒以内为良好
-    poor: 4000,    // 4秒以上为差
+    good: 2500,    // 2.5secondswithinis good
+    poor: 4000,    // 4secondsaboveis poor
   },
   // First Input Delay (FID) / Interaction to Next Paint (INP)
   INP: {
-    good: 200,     // 200毫秒以内为良好
-    poor: 500,     // 500毫秒以上为差
+    good: 200,     // 200millisecondswithinis good
+    poor: 500,     // 500millisecondsaboveis poor
   },
-  // Cumulative Layout Shift (CLS) - 累积布局偏移
+  // Cumulative Layout Shift (CLS) - Cumulative Layout Shift
   CLS: {
-    good: 0.1,     // 0.1以内为良好
-    poor: 0.25,    // 0.25以上为差
+    good: 0.1,     // 0.1withinis good
+    poor: 0.25,    // 0.25aboveis poor
   },
-  // First Contentful Paint (FCP) - 首次内容绘制
+  // First Contentful Paint (FCP) - First Contentful Paint
   FCP: {
-    good: 1800,    // 1.8秒以内为良好
-    poor: 3000,    // 3秒以上为差
+    good: 1800,    // 1.8secondswithinis good
+    poor: 3000,    // 3secondsaboveis poor
   },
-  // Time to First Byte (TTFB) - 首字节时间
+  // Time to First Byte (TTFB) - Time to First Byte
   TTFB: {
-    good: 800,     // 800毫秒以内为良好
-    poor: 1800,    // 1.8秒以上为差
+    good: 800,     // 800millisecondswithinis good
+    poor: 1800,    // 1.8secondsaboveis poor
   },
 } as const
 
-// 资源大小预算
+// resourcesizebudget
 export const RESOURCE_BUDGETS = {
-  // JavaScript 包大小限制
+  // JavaScript bundlesizelimit
   javascript: {
-    // 首屏 JS 总大小
+    // initial/above-the-fold JS totalsize
     firstLoad: 250 * 1024,      // 250KB
-    // 单个页面额外 JS 大小
+    // singlepageadditional JS size
     pageSpecific: 50 * 1024,    // 50KB
-    // 单个 chunk 大小
+    // single chunk size
     chunkSize: 100 * 1024,      // 100KB
   },
-  // CSS 大小限制
+  // CSS sizelimit
   css: {
     total: 50 * 1024,           // 50KB
-    critical: 14 * 1024,        // 14KB (关键CSS)
+    critical: 14 * 1024,        // 14KB (criticalCSS)
   },
-  // 图片大小限制
+  // imagesizelimit
   images: {
-    hero: 200 * 1024,           // 200KB (主要图片)
-    thumbnail: 50 * 1024,       // 50KB (缩略图)
+    hero: 200 * 1024,           // 200KB (main/primaryimage)
+    thumbnail: 50 * 1024,       // 50KB (thumbnail)
     icon: 10 * 1024,            // 10KB (图标)
   },
-  // 字体大小限制
+  // 字体sizelimit
   fonts: {
     total: 100 * 1024,          // 100KB
-    perFont: 30 * 1024,         // 30KB (单个字体)
+    perFont: 30 * 1024,         // 30KB (single字体)
   },
 } as const
 
-// 性能评分函数
+// performance评分function
 export function getPerformanceScore(metric: string, value: number): 'good' | 'needs-improvement' | 'poor' {
   const thresholds = CORE_WEB_VITALS_THRESHOLDS[metric as keyof typeof CORE_WEB_VITALS_THRESHOLDS]
   if (!thresholds) return 'good'
@@ -71,7 +71,7 @@ export function getPerformanceScore(metric: string, value: number): 'good' | 'ne
   return 'poor'
 }
 
-// 性能预算检查器
+// performancebudgetcheck器
 export class PerformanceBudgetChecker {
   private violations: Array<{
     type: string
@@ -81,7 +81,7 @@ export class PerformanceBudgetChecker {
     severity: 'warning' | 'error'
   }> = []
 
-  // 检查 Core Web Vitals
+  // check Core Web Vitals
   checkCoreWebVitals(metrics: Record<string, number>) {
     Object.entries(metrics).forEach(([metric, value]) => {
       const score = getPerformanceScore(metric, value)
@@ -105,7 +105,7 @@ export class PerformanceBudgetChecker {
     })
   }
 
-  // 检查资源大小
+  // checkresourcesize
   checkResourceSizes(resources: {
     javascript?: number
     css?: number
@@ -143,17 +143,17 @@ export class PerformanceBudgetChecker {
     }
   }
 
-  // 获取违规报告
+  // get/retrieve违规报告
   getViolations() {
     return this.violations
   }
 
-  // 清除违规记录
+  // clear违规record/log
   clearViolations() {
     this.violations = []
   }
 
-  // 生成性能报告
+  // generation/generateperformance报告
   generateReport() {
     const errors = this.violations.filter(v => v.severity === 'error')
     const warnings = this.violations.filter(v => v.severity === 'warning')
@@ -201,12 +201,12 @@ export class PerformanceBudgetChecker {
   }
 }
 
-// 全局性能预算检查器实例
+// globalperformancebudgetcheck器instance
 export const performanceBudgetChecker = new PerformanceBudgetChecker()
 
-// 性能监控工具函数
+// performancemonitoringutility function
 export const performanceUtils = {
-  // 测量资源加载时间
+  // 测量resourceload/loading时间
   measureResourceTiming: (resourceType: string) => {
     if (typeof window === 'undefined') return null
     
@@ -221,7 +221,7 @@ export const performanceUtils = {
       }))
   },
 
-  // 获取页面加载性能指标
+  // get/retrievepageload/loadingperformancemetrics
   getPageLoadMetrics: () => {
     if (typeof window === 'undefined') return null
     
@@ -239,7 +239,7 @@ export const performanceUtils = {
     }
   },
 
-  // 检查是否超出性能预算
+  // check是否超出performancebudget
   checkBudget: (metrics: Record<string, number>, resources?: Record<string, number>) => {
     performanceBudgetChecker.clearViolations()
     performanceBudgetChecker.checkCoreWebVitals(metrics)

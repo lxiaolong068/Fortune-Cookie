@@ -13,7 +13,7 @@ import {
   getRateLimitErrorResponse
 } from '@/lib/api-auth'
 
-// 输入清理和验证工具
+// 输入cleanup和验证utility/tool
 function sanitizeString(input: string, maxLength: number = 500): string {
   if (typeof input !== 'string') return ''
 
@@ -22,9 +22,9 @@ function sanitizeString(input: string, maxLength: number = 500): string {
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // 移除script标签
     .replace(/<[^>]*>/g, '') // 移除HTML标签
     .replace(/javascript:/gi, '') // 移除javascript协议
-    .replace(/on\w+\s*=/gi, '') // 移除事件处理器
+    .replace(/on\w+\s*=/gi, '') // 移除event处理器
     .trim()
-    .slice(0, maxLength) // 限制长度
+    .slice(0, maxLength) // limitlength
 }
 
 function validateTheme(theme: string): boolean {
@@ -42,7 +42,7 @@ function validateLength(length: string): boolean {
   return validLengths.includes(length)
 }
 
-// CORS配置
+// CORSconfiguration
 function getCorsOrigin(): string {
   if (process.env.NODE_ENV === 'production') {
     return process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'
@@ -50,7 +50,7 @@ function getCorsOrigin(): string {
   return '*'
 }
 
-// 获取客户端标识符
+// get/retrieveclient标识符
 function getClientIdentifier(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for')
   const ip = forwarded ? forwarded.split(',')[0]?.trim() : request.ip
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 检查自定义提示的内容安全性
+    // checkcustom提示的内容安全性
     if (customPrompt && customPrompt.length > 0) {
       const suspiciousPatterns = [
         /ignore\s+previous\s+instructions/i,
@@ -176,14 +176,14 @@ export async function POST(request: NextRequest) {
       customPrompt
     }
 
-    // 生成请求哈希用于缓存
+    // generation/generaterequesthashused forcache
     const requestHash = generateRequestHash(fortuneRequest)
 
-    // 检查缓存
+    // checkcache
     let fortune = await cacheManager.getCachedFortune(requestHash)
 
     if (fortune) {
-      // 缓存命中
+      // cache命中
       CachePerformanceMonitor.recordHit()
 
       captureBusinessEvent('fortune_cache_hit', {
@@ -192,12 +192,12 @@ export async function POST(request: NextRequest) {
         responseTime: Date.now() - startTime
       })
     } else {
-      // 缓存未命中，生成新的幸运饼干
+      // cache未命中，generation/generate新的fortune cookie
       CachePerformanceMonitor.recordMiss()
 
       fortune = await openRouterClient.generateFortune(fortuneRequest)
 
-      // 缓存结果（如果不是自定义提示）
+      // cache结果（如果不是custom提示）
       if (!fortuneRequest.customPrompt) {
         await cacheManager.cacheFortune(requestHash, fortune)
       }
@@ -241,12 +241,12 @@ export async function POST(request: NextRequest) {
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
     response.headers.set('Access-Control-Max-Age', '86400')
 
-    // 额外的安全头部
+    // additional的安全头部
     response.headers.set('X-Content-Type-Options', 'nosniff')
     response.headers.set('X-Frame-Options', 'DENY')
     response.headers.set('X-XSS-Protection', '1; mode=block')
 
-    // 限流信息头部 - 只在Redis可用时添加
+    // 限流information头部 - 只在Redisavailableadd
     // (rateLimitResult is now scoped inside if block, headers not needed for success case)
 
     return response
@@ -254,10 +254,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const responseTime = Date.now() - startTime
 
-    // 记录缓存错误
+    // record/logcache错误
     CachePerformanceMonitor.recordError()
 
-    // 记录API错误
+    // record/logAPI错误
     captureApiError(
       error instanceof Error ? error : new Error(String(error)),
       '/api/fortune',
@@ -275,7 +275,7 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
 
-    // 添加安全头部
+    // add安全头部
     errorResponse.headers.set('X-Content-Type-Options', 'nosniff')
     errorResponse.headers.set('X-Frame-Options', 'DENY')
     errorResponse.headers.set('X-XSS-Protection', '1; mode=block')
@@ -289,7 +289,7 @@ export async function GET(request: NextRequest) {
   try {
     const clientId = getClientIdentifier(request)
 
-    // 检查缓存的健康状态
+    // checkcache的健康状态
     const cachedHealth = await cacheManager.getCachedApiResponse('health', 'check')
 
     if (cachedHealth) {
@@ -302,7 +302,7 @@ export async function GET(request: NextRequest) {
 
     CachePerformanceMonitor.recordMiss()
 
-    // 检查Redis连接
+    // Check Redis connection
     const redisHealthy = await cacheManager.isConnected()
     const isHealthy = await openRouterClient.healthCheck()
 
@@ -318,7 +318,7 @@ export async function GET(request: NextRequest) {
       cached: false
     })
 
-    // 缓存健康检查结果
+    // cacheHealth check结果
     await cacheManager.cacheApiResponse('health', 'check', responseData)
 
     const response = EdgeCacheManager.optimizeApiResponse(responseData, 'health-check', 60)

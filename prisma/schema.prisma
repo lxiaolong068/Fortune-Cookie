@@ -1,5 +1,5 @@
-// Fortune Cookie AI - 数据库模式
-// 使用 Prisma ORM 进行数据库管理和查询优化
+// Fortune Cookie AI - database模式
+// use Prisma ORM 进行databasemanagement和queryoptimization
 
 generator client {
   provider = "prisma-client-js"
@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 幸运饼干表
+// fortune cookie表
 model Fortune {
   id          String   @id @default(cuid())
   message     String
@@ -24,7 +24,7 @@ model Fortune {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // 索引优化
+  // 索引optimization
   @@index([category])
   @@index([mood])
   @@index([popularity])
@@ -34,14 +34,14 @@ model Fortune {
   @@map("fortunes")
 }
 
-// 用户会话表
+// 用户session表
 model UserSession {
   id          String   @id @default(cuid())
   sessionId   String   @unique
   userId      String?
   ipAddress   String?
   userAgent   String?
-  data        String?  // JSON 字符串存储会话数据
+  data        String?  // JSON 字符串存储sessiondata
   expiresAt   DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -52,7 +52,7 @@ model UserSession {
   @@map("user_sessions")
 }
 
-// API 使用统计表
+// API usestatistics表
 model ApiUsage {
   id          String   @id @default(cuid())
   endpoint    String
@@ -71,7 +71,7 @@ model ApiUsage {
   @@map("api_usage")
 }
 
-// Web Vitals 性能指标表
+// Web Vitals performancemetrics表
 model WebVital {
   id            String   @id @default(cuid())
   name          String   // CLS, INP, FCP, LCP, TTFB
@@ -89,7 +89,7 @@ model WebVital {
   @@map("web_vitals")
 }
 
-// 错误日志表
+// 错误log表
 model ErrorLog {
   id          String   @id @default(cuid())
   level       String   // error, warning, info
@@ -110,7 +110,7 @@ model ErrorLog {
   @@map("error_logs")
 }
 
-// 缓存统计表
+// cachestatistics表
 model CacheStats {
   id          String   @id @default(cuid())
   key         String

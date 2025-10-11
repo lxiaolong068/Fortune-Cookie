@@ -1,5 +1,5 @@
-// 增强分析系统
-// 用户行为跟踪、性能分析和业务指标收集
+// Enhanced analytics system
+// User behavior tracking, performance analysis, and business metrics collection
 
 import { captureUserAction, captureBusinessEvent } from './error-monitoring'
 
@@ -59,7 +59,7 @@ export class AnalyticsManager {
   private pageViewCount: number = 0
   private isTrackingEnabled: boolean = true
   private batchSize: number = 10
-  private flushInterval: number = 30000 // 30秒
+  private flushInterval: number = 30000 // 30seconds
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -74,9 +74,9 @@ export class AnalyticsManager {
     return AnalyticsManager.instance
   }
 
-  // 初始化跟踪
+  // 初始化tracking
   private initializeTracking(): void {
-    // 页面可见性变化跟踪
+    // page可见性变化tracking
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         this.trackEvent('user_action', 'page', 'hidden')
@@ -85,25 +85,25 @@ export class AnalyticsManager {
       }
     })
 
-    // 页面卸载跟踪
+    // page卸载tracking
     window.addEventListener('beforeunload', () => {
       this.trackSessionEnd()
       this.flush()
     })
 
-    // 定期批量发送事件
+    // Periodically send events in batches
     setInterval(() => {
       this.flush()
     }, this.flushInterval)
 
-    // 跟踪页面加载性能
+    // Track page load performance
     this.trackPagePerformance()
 
-    // 跟踪用户交互
+    // Track user interactions
     this.setupInteractionTracking()
   }
 
-  // 跟踪事件
+  // Track event
   trackEvent(
     type: AnalyticsEvent['type'],
     category: string,
@@ -135,12 +135,12 @@ export class AnalyticsManager {
 
     this.events.push(event)
 
-    // 如果事件数量达到批量大小，立即发送
+    // Send immediately if event count reaches batch size
     if (this.events.length >= this.batchSize) {
       this.flush()
     }
 
-    // 同时发送到现有的错误监控系统
+    // Also send to existing error monitoring system
     if (type === 'user_action') {
       captureUserAction(action, category, label, metadata)
     } else if (type === 'business_event') {
@@ -148,7 +148,7 @@ export class AnalyticsManager {
     }
   }
 
-  // 跟踪页面浏览
+  // Track page view
   trackPageView(page: string, title?: string): void {
     this.pageViewCount++
     
@@ -158,22 +158,22 @@ export class AnalyticsManager {
     })
   }
 
-  // 跟踪用户行为
+  // Track user behavior
   trackUserBehavior(action: string, data: Record<string, any> = {}): void {
     this.trackEvent('user_action', 'behavior', action, undefined, undefined, data)
   }
 
-  // 跟踪业务事件
+  // Track business event
   trackBusinessEvent(event: string, data: Record<string, any> = {}): void {
     this.trackEvent('business_event', 'business', event, undefined, undefined, data)
   }
 
-  // 跟踪性能指标
+  // Track performance metrics
   trackPerformance(metric: string, value: number, metadata: Record<string, any> = {}): void {
     this.trackEvent('performance', 'performance', metric, undefined, value, metadata)
   }
 
-  // 跟踪页面性能
+  // Track page performance
   private trackPagePerformance(): void {
     if ('performance' in window) {
       window.addEventListener('load', () => {
@@ -193,9 +193,9 @@ export class AnalyticsManager {
     }
   }
 
-  // 跟踪Web Vitals
+  // trackingWeb Vitals
   private trackWebVitals(): void {
-    // 使用web-vitals库的数据
+    // useweb-vitals库的data
     if ('PerformanceObserver' in window) {
       // LCP (Largest Contentful Paint)
       new PerformanceObserver((list) => {
@@ -228,9 +228,9 @@ export class AnalyticsManager {
     }
   }
 
-  // 设置交互跟踪
+  // Setup interaction tracking
   private setupInteractionTracking(): void {
-    // 点击跟踪
+    // Click tracking
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement
       const tagName = target.tagName.toLowerCase()
@@ -244,7 +244,7 @@ export class AnalyticsManager {
       })
     })
 
-    // 滚动跟踪
+    // Scroll tracking
     let scrollDepth = 0
     window.addEventListener('scroll', () => {
       const currentDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
@@ -255,13 +255,13 @@ export class AnalyticsManager {
       }
     })
 
-    // 表单交互跟踪
+    // Form interaction tracking
     document.addEventListener('submit', (event) => {
       const form = event.target as HTMLFormElement
       this.trackEvent('user_action', 'form', 'submit', form.id || form.className)
     })
 
-    // 输入框焦点跟踪
+    // Input field focus tracking
     document.addEventListener('focus', (event) => {
       const target = event.target as HTMLElement
       if (target.tagName.toLowerCase() === 'input' || target.tagName.toLowerCase() === 'textarea') {
@@ -270,7 +270,7 @@ export class AnalyticsManager {
     }, true)
   }
 
-  // 跟踪会话结束
+  // Track session end
   private trackSessionEnd(): void {
     const sessionDuration = Date.now() - this.sessionStartTime
     
@@ -280,7 +280,7 @@ export class AnalyticsManager {
     })
   }
 
-  // 获取用户行为数据
+  // Get user behavior data
   getUserBehaviorData(): UserBehaviorData {
     const userEvents = this.events.filter(e => e.type === 'user_action')
     
@@ -299,7 +299,7 @@ export class AnalyticsManager {
     }
   }
 
-  // 获取性能指标
+  // Get performance metrics
   getPerformanceMetrics(): Partial<PerformanceMetrics> {
     const performanceEvents = this.events.filter(e => e.type === 'performance')
     
@@ -327,7 +327,7 @@ export class AnalyticsManager {
     return metrics
   }
 
-  // 批量发送事件
+  // Send events in batch
   private async flush(): Promise<void> {
     if (this.events.length === 0) return
 
@@ -335,7 +335,7 @@ export class AnalyticsManager {
     this.events = []
 
     try {
-      // 发送到分析端点
+      // Send to analytics endpoint
       await fetch('/api/analytics', {
         method: 'POST',
         headers: {
@@ -348,12 +348,12 @@ export class AnalyticsManager {
       })
     } catch (error) {
       console.error('Failed to send analytics events:', error)
-      // 如果发送失败，将事件放回队列
+      // Put events back to queue if sending fails
       this.events.unshift(...eventsToSend)
     }
   }
 
-  // 工具方法
+  // Utility methods
   private generateEventId(): string {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
   }
@@ -385,7 +385,7 @@ export class AnalyticsManager {
     return 'Unknown'
   }
 
-  // 启用/禁用跟踪
+  // Enable/disable tracking
   setTrackingEnabled(enabled: boolean): void {
     this.isTrackingEnabled = enabled
     
@@ -397,13 +397,13 @@ export class AnalyticsManager {
     }
   }
 
-  // 清除所有数据
+  // Clear all data
   clearData(): void {
     this.events = []
     this.trackEvent('user_action', 'privacy', 'data_cleared')
   }
 
-  // 导出分析数据
+  // Export analytics data
   exportData(): string {
     const data = {
       events: this.events,
@@ -416,5 +416,5 @@ export class AnalyticsManager {
   }
 }
 
-// 全局分析管理器实例
+// Global analytics manager instance
 export const analyticsManager = AnalyticsManager.getInstance()

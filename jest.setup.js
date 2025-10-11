@@ -1,6 +1,38 @@
 // Jest setup file
 import '@testing-library/jest-dom'
 
+// Polyfill Response and Response.json for Jest environment
+if (typeof global.Response === 'undefined') {
+  global.Response = class Response {
+    constructor(body, init) {
+      this.body = body
+      this.init = init || {}
+      this.status = init?.status || 200
+      this.statusText = init?.statusText || 'OK'
+      this.headers = new Map(Object.entries(init?.headers || {}))
+      this.ok = this.status >= 200 && this.status < 300
+    }
+
+    async json() {
+      return JSON.parse(this.body)
+    }
+
+    async text() {
+      return this.body
+    }
+
+    static json(data, init) {
+      return new Response(JSON.stringify(data), {
+        ...init,
+        headers: {
+          'Content-Type': 'application/json',
+          ...init?.headers,
+        },
+      })
+    }
+  }
+}
+
 // Mock Next.js router
 jest.mock('next/router', () => ({
   useRouter() {

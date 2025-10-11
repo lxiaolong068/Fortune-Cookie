@@ -1,5 +1,5 @@
-// 用户会话管理系统
-// 处理用户会话、历史记录和偏好设置
+// User session managementsystem
+// 处理用户session、历史record/log和偏好setup/configuration
 
 import { v4 as uuidv4 } from 'uuid'
 import { captureUserAction, captureBusinessEvent } from './error-monitoring'
@@ -65,7 +65,7 @@ export interface SessionMetadata {
   referrer?: string
 }
 
-// 默认用户偏好设置
+// 默认用户偏好setup/configuration
 const DEFAULT_PREFERENCES: UserPreferences = {
   theme: 'system',
   language: 'zh',
@@ -75,7 +75,7 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   displayMode: 'card',
 }
 
-// 默认用户统计
+// 默认用户statistics
 const DEFAULT_STATS: UserStats = {
   totalGenerated: 0,
   totalLiked: 0,
@@ -106,10 +106,10 @@ export class SessionManager {
     return SessionManager.instance
   }
 
-  // 初始化会话
+  // 初始化session
   async initializeSession(): Promise<UserSession> {
     try {
-      // 尝试恢复现有会话
+      // 尝试恢复现有session
       const existingSession = this.getStoredSession()
       if (existingSession && !this.isSessionExpired(existingSession)) {
         this.currentSession = existingSession
@@ -118,7 +118,7 @@ export class SessionManager {
         return existingSession
       }
 
-      // 创建新会话
+      // create新session
       const newSession = await this.createNewSession()
       this.currentSession = newSession
       this.storeSession(newSession)
@@ -136,12 +136,12 @@ export class SessionManager {
     }
   }
 
-  // 创建新会话
+  // create新session
   private async createNewSession(): Promise<UserSession> {
     const sessionId = uuidv4()
     const userId = this.getOrCreateUserId()
     const now = new Date()
-    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7天后过期
+    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7day(s)后过期
 
     const metadata = this.collectSessionMetadata()
     
@@ -165,7 +165,7 @@ export class SessionManager {
     return session
   }
 
-  // 获取或创建用户ID
+  // get/retrieve或create用户ID
   private getOrCreateUserId(): string {
     if (!this.localStorage) return uuidv4()
 
@@ -177,7 +177,7 @@ export class SessionManager {
     return userId
   }
 
-  // 收集会话元数据
+  // collectionsession元data
   private collectSessionMetadata(): SessionMetadata {
     const userAgent = navigator.userAgent
     
@@ -191,7 +191,7 @@ export class SessionManager {
     }
   }
 
-  // 获取设备类型
+  // get/retrieve设备类型
   private getDeviceType(userAgent: string): string {
     if (/Mobile|Android|iPhone|iPad/.test(userAgent)) {
       return 'mobile'
@@ -201,7 +201,7 @@ export class SessionManager {
     return 'desktop'
   }
 
-  // 获取浏览器名称
+  // get/retrieveview器名称
   private getBrowserName(userAgent: string): string {
     if (userAgent.includes('Chrome')) return 'Chrome'
     if (userAgent.includes('Firefox')) return 'Firefox'
@@ -210,7 +210,7 @@ export class SessionManager {
     return 'Unknown'
   }
 
-  // 获取操作系统
+  // get/retrieve操作system
   private getOperatingSystem(userAgent: string): string {
     if (userAgent.includes('Windows')) return 'Windows'
     if (userAgent.includes('Mac')) return 'macOS'
@@ -220,7 +220,7 @@ export class SessionManager {
     return 'Unknown'
   }
 
-  // 获取客户端IP（简化版）
+  // get/retrieveclientIP（简化版）
   private async getClientIP(): Promise<string | undefined> {
     try {
       // 在实际应用中，这通常由服务器端提供
@@ -230,7 +230,7 @@ export class SessionManager {
     }
   }
 
-  // 获取会话计数
+  // get/retrievesession计数
   private getSessionCount(): number {
     if (!this.localStorage) return 0
     
@@ -238,26 +238,26 @@ export class SessionManager {
     return count ? parseInt(count, 10) : 0
   }
 
-  // 存储会话
+  // 存储session
   private storeSession(session: UserSession): void {
     if (!this.sessionStorage || !this.localStorage) return
 
     try {
-      // 会话数据存储在 sessionStorage 中
+      // sessiondata存储在 sessionStorage 中
       this.sessionStorage.setItem('fortune_session', JSON.stringify(session))
       
-      // 用户ID和会话计数存储在 localStorage 中
+      // 用户ID和session计数存储在 localStorage 中
       this.localStorage.setItem('fortune_user_id', session.userId)
       this.localStorage.setItem('fortune_session_count', session.data.stats.sessionCount.toString())
       
-      // 存储用户偏好设置
+      // 存储用户偏好setup/configuration
       this.localStorage.setItem('fortune_preferences', JSON.stringify(session.data.preferences))
     } catch (error) {
       console.error('Failed to store session:', error)
     }
   }
 
-  // 获取存储的会话
+  // get/retrieve存储的session
   private getStoredSession(): UserSession | null {
     if (!this.sessionStorage) return null
 
@@ -273,7 +273,7 @@ export class SessionManager {
       session.expiresAt = new Date(session.expiresAt)
       session.data.stats.lastVisit = new Date(session.data.stats.lastVisit)
       
-      // 转换历史记录中的日期
+      // 转换历史record/log中的日期
       session.data.history = session.data.history.map(item => ({
         ...item,
         timestamp: new Date(item.timestamp),
@@ -286,7 +286,7 @@ export class SessionManager {
     }
   }
 
-  // 检查会话是否过期
+  // checksession是否过期
   private isSessionExpired(session: UserSession): boolean {
     return new Date() > session.expiresAt
   }
@@ -299,12 +299,12 @@ export class SessionManager {
     this.storeSession(this.currentSession)
   }
 
-  // 获取当前会话
+  // get/retrieve当前session
   getCurrentSession(): UserSession | null {
     return this.currentSession
   }
 
-  // 添加幸运饼干到历史记录
+  // addfortune cookie到历史record/log
   addFortuneToHistory(fortune: Omit<FortuneHistory, 'id' | 'timestamp'>): void {
     if (!this.currentSession) return
 
@@ -316,12 +316,12 @@ export class SessionManager {
 
     this.currentSession.data.history.unshift(historyItem)
     
-    // 限制历史记录数量
+    // limit历史record/log数量
     if (this.currentSession.data.history.length > 100) {
       this.currentSession.data.history = this.currentSession.data.history.slice(0, 100)
     }
 
-    // 更新统计信息
+    // 更新statisticsinformation
     this.currentSession.data.stats.totalGenerated++
     this.updateLastActive()
     this.storeSession(this.currentSession)
@@ -332,7 +332,7 @@ export class SessionManager {
     })
   }
 
-  // 获取历史记录
+  // get/retrieve历史record/log
   getHistory(limit?: number): FortuneHistory[] {
     if (!this.currentSession) return []
 
@@ -340,7 +340,7 @@ export class SessionManager {
     return limit ? history.slice(0, limit) : history
   }
 
-  // 更新用户偏好设置
+  // 更新用户偏好setup/configuration
   updatePreferences(preferences: Partial<UserPreferences>): void {
     if (!this.currentSession) return
 
@@ -356,12 +356,12 @@ export class SessionManager {
     })
   }
 
-  // 获取用户偏好设置
+  // get/retrieve用户偏好setup/configuration
   getPreferences(): UserPreferences {
     return this.currentSession?.data.preferences || DEFAULT_PREFERENCES
   }
 
-  // 更新统计信息
+  // 更新statisticsinformation
   updateStats(updates: Partial<UserStats>): void {
     if (!this.currentSession) return
 
@@ -373,12 +373,12 @@ export class SessionManager {
     this.storeSession(this.currentSession)
   }
 
-  // 获取统计信息
+  // get/retrievestatisticsinformation
   getStats(): UserStats {
     return this.currentSession?.data.stats || DEFAULT_STATS
   }
 
-  // 标记幸运饼干为喜欢
+  // 标记fortune cookie为喜欢
   likeFortuneInHistory(fortuneId: string): void {
     if (!this.currentSession) return
 
@@ -392,7 +392,7 @@ export class SessionManager {
     }
   }
 
-  // 标记幸运饼干为已分享
+  // 标记fortune cookie为已分享
   shareFortuneInHistory(fortuneId: string): void {
     if (!this.currentSession) return
 
@@ -406,7 +406,7 @@ export class SessionManager {
     }
   }
 
-  // 清除历史记录
+  // clear历史record/log
   clearHistory(): void {
     if (!this.currentSession) return
 
@@ -416,7 +416,7 @@ export class SessionManager {
     captureUserAction('history_cleared', 'session_management')
   }
 
-  // 销毁会话
+  // 销毁session
   destroySession(): void {
     if (this.sessionStorage) {
       this.sessionStorage.removeItem('fortune_session')
@@ -427,7 +427,7 @@ export class SessionManager {
     captureUserAction('session_destroyed', 'session_management')
   }
 
-  // 导出用户数据
+  // export用户data
   exportUserData(): string {
     if (!this.currentSession) return '{}'
 
@@ -445,5 +445,5 @@ export class SessionManager {
   }
 }
 
-// 全局会话管理器实例
+// globalsessionmanagerinstance
 export const sessionManager = SessionManager.getInstance()
