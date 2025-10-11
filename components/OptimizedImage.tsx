@@ -155,6 +155,7 @@ export function OptimizedImage({
       <div className={cn('relative', className)} style={{ width, height }}>
         <Image
           src={src}
+          alt={alt}
           fill
           style={{ objectFit }}
           {...imageProps}
@@ -167,6 +168,7 @@ export function OptimizedImage({
   return (
     <Image
       src={src}
+      alt={alt}
       width={width}
       height={height}
       style={{ objectFit }}
