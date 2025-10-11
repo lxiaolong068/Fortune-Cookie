@@ -1,18 +1,21 @@
 // OpenRouter API client for AI-powered fortune generation
 
+import {
+  FortuneGenerator,
+  FortuneTheme,
+  FortuneMood,
+  FortuneLength,
+  type Fortune
+} from './fortune-utils'
+
 export interface FortuneRequest {
-  theme?: 'funny' | 'inspirational' | 'love' | 'success' | 'wisdom' | 'random'
-  mood?: 'positive' | 'neutral' | 'motivational'
-  length?: 'short' | 'medium' | 'long'
+  theme?: FortuneTheme
+  mood?: FortuneMood
+  length?: FortuneLength
   customPrompt?: string
 }
 
-export interface FortuneResponse {
-  message: string
-  luckyNumbers: number[]
-  theme: string
-  timestamp: string
-}
+export type FortuneResponse = Fortune
 
 class OpenRouterClient {
   private apiKey: string
@@ -45,12 +48,9 @@ class OpenRouterClient {
     return prompts[theme as keyof typeof prompts] || prompts.random
   }
 
+  // Use FortuneGenerator for lucky numbers
   private generateLuckyNumbers(): number[] {
-    const numbers = new Set<number>()
-    while (numbers.size < 6) {
-      numbers.add(Math.floor(Math.random() * 69) + 1)
-    }
-    return Array.from(numbers).sort((a, b) => a - b)
+    return FortuneGenerator.generateLuckyNumbers()
   }
 
   async generateFortune(request: FortuneRequest): Promise<FortuneResponse> {
@@ -114,16 +114,12 @@ class OpenRouterClient {
 
       const data = await response.json()
       const message = data.choices?.[0]?.message?.content?.trim() || ''
-      
-      // Clean up the message (remove quotes if present)
-      const cleanMessage = message.replace(/^["']|["']$/g, '').trim()
-      
-      return {
-        message: cleanMessage,
-        luckyNumbers: this.generateLuckyNumbers(),
-        theme,
-        timestamp: new Date().toISOString()
-      }
+
+      // Use FortuneGenerator to format and create fortune
+      const cleanMessage = FortuneGenerator.cleanMessage(message)
+      const formattedMessage = FortuneGenerator.formatFortune(cleanMessage)
+
+      return FortuneGenerator.createFortune(formattedMessage, theme)
       
     } catch (error) {
       console.error('Error generating fortune:', error)
@@ -191,12 +187,8 @@ class OpenRouterClient {
       throw new Error('Failed to select fallback fortune')
     }
 
-    return {
-      message: randomFortune,
-      luckyNumbers: this.generateLuckyNumbers(),
-      theme,
-      timestamp: new Date().toISOString()
-    }
+    // Use FortuneGenerator to create fortune
+    return FortuneGenerator.createFortune(randomFortune, theme as FortuneTheme)
   }
 
   // Health check method
