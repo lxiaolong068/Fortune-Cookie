@@ -60,11 +60,16 @@ const customJestConfig = {
     '<rootDir>/node_modules/',
     '<rootDir>/tests/e2e/', // Exclude Playwright tests
   ],
-  
+
   // Transform configuration
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
   },
+
+  // Transform ignore patterns - allow transforming ESM modules
+  transformIgnorePatterns: [
+    'node_modules/(?!(uncrypto|@upstash)/)',
+  ],
   
   // Module file extensions
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],

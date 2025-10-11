@@ -74,6 +74,27 @@ process.env.NEXT_PUBLIC_APP_NAME = 'Fortune Cookie AI Test'
 // Mock fetch globally
 global.fetch = jest.fn()
 
+// Mock Request and Response for Next.js server components
+if (typeof global.Request === 'undefined') {
+  global.Request = class Request {
+    constructor(input, init) {
+      this.url = typeof input === 'string' ? input : input.url
+      this.method = init?.method || 'GET'
+      this.headers = new Map(Object.entries(init?.headers || {}))
+    }
+  }
+}
+
+if (typeof global.Response === 'undefined') {
+  global.Response = class Response {
+    constructor(body, init) {
+      this.body = body
+      this.status = init?.status || 200
+      this.headers = new Map(Object.entries(init?.headers || {}))
+    }
+  }
+}
+
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
@@ -105,6 +126,21 @@ if (typeof window !== 'undefined') {
   })
 }
 
+// Mock localStorage and sessionStorage
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+}
+
+const sessionStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+}
+
 // Mock scrollTo (only in jsdom environment)
 if (typeof window !== 'undefined') {
   Object.defineProperty(window, 'scrollTo', {
@@ -112,24 +148,12 @@ if (typeof window !== 'undefined') {
     value: jest.fn(),
   })
 
-  // Mock localStorage
-  const localStorageMock = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
-  }
+  // Apply localStorage mock
   Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
   })
 
-  // Mock sessionStorage
-  const sessionStorageMock = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
-  }
+  // Apply sessionStorage mock
   Object.defineProperty(window, 'sessionStorage', {
     value: sessionStorageMock,
   })

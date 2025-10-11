@@ -4,6 +4,14 @@ import { captureApiError, captureUserAction, captureBusinessEvent } from '@/lib/
 import { rateLimiters, cacheManager, generateRequestHash } from '@/lib/redis-cache'
 import { EdgeCacheManager, CachePerformanceMonitor } from '@/lib/edge-cache'
 import { createSuccessResponse, createErrorResponse, type ApiSuccessResponse, type ApiErrorResponse } from '@/types/api'
+import {
+  validateApiKey,
+  getEnhancedRateLimit,
+  getAuthTier,
+  getMaskedApiKey,
+  getRateLimitHeaders,
+  getRateLimitErrorResponse
+} from '@/lib/api-auth'
 
 // 输入清理和验证工具
 function sanitizeString(input: string, maxLength: number = 500): string {
@@ -53,37 +61,54 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now()
 
   try {
-    // 分布式限流检查 (仅在Redis可用时)
+    // Validate API key (if provided)
+    if (!validateApiKey(request)) {
+      return NextResponse.json(
+        createErrorResponse('Invalid API key provided'),
+        { status: 401 }
+      )
+    }
+
+    // Get authentication tier and enhanced rate limit
+    const authTier = getAuthTier(request)
+    const enhancedLimit = getEnhancedRateLimit(request)
     const clientId = getClientIdentifier(request)
+    const maskedKey = getMaskedApiKey(request)
+
+    // Distributed rate limiting check (only when Redis is available)
     if (rateLimiters) {
+      // Use enhanced rate limit based on authentication
       const rateLimitResult = await rateLimiters.fortune.limit(clientId)
 
       if (!rateLimitResult.success) {
-        // 记录速率限制事件
+        // Record rate limit event with authentication tier
         captureUserAction('rate_limit_exceeded', 'fortune_api', clientId, {
-          limit: rateLimitResult.limit,
+          limit: enhancedLimit,
           remaining: rateLimitResult.remaining,
           reset: rateLimitResult.reset,
-          endpoint: '/api/fortune'
+          endpoint: '/api/fortune',
+          authTier,
+          apiKey: maskedKey,
         })
 
         CachePerformanceMonitor.recordError()
 
-      return NextResponse.json(
-        createErrorResponse('Rate limit exceeded. Please try again later.', {
-          limit: rateLimitResult.limit,
-          remaining: rateLimitResult.remaining,
-          reset: rateLimitResult.reset
-        }),
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+        return NextResponse.json(
+          getRateLimitErrorResponse(
+            enhancedLimit,
+            rateLimitResult.remaining,
+            rateLimitResult.reset,
+            authTier
+          ),
+          {
+            status: 429,
+            headers: getRateLimitHeaders(
+              enhancedLimit,
+              rateLimitResult.remaining,
+              rateLimitResult.reset
+            ),
           }
-        }
-      )
+        )
       }
     }
 

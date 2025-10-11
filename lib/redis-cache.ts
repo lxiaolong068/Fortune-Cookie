@@ -257,6 +257,12 @@ export function generateCacheKey(prefix: string, ...parts: string[]): string {
 }
 
 // 工具函数：生成请求哈希
+// 使用 SHA-256 加密哈希算法，避免 Base64 编码的碰撞风险
 export function generateRequestHash(data: any): string {
-  return Buffer.from(JSON.stringify(data)).toString('base64').slice(0, 32)
+  const crypto = require('crypto')
+  return crypto
+    .createHash('sha256')
+    .update(JSON.stringify(data))
+    .digest('hex')
+    .slice(0, 32) // 32-char hash for cache key
 }
