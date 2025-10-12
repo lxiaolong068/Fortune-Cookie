@@ -12,6 +12,7 @@ import { ServiceWorkerInitializer } from '@/components/ServiceWorkerInitializer'
 import { ThemeInitializer, ThemeScript } from '@/components/ThemeInitializer'
 import { AnalyticsInitializer, AnalyticsConsentBanner } from '@/components/AnalyticsInitializer'
 import { getSiteMetadata, getOGImageConfig, getTwitterImageConfig } from '@/lib/site'
+import { DeferredScripts } from '@/components/DeferredScripts'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -95,9 +96,11 @@ export default function RootLayout({
         <ServiceWorkerInitializer />
         <ErrorMonitorInitializer />
         <OptimizedPreloader />
-        <PerformanceMonitor />
-        <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
-        <GoogleAdSense clientId={process.env.GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-6958408841088360'} />
+        <DeferredScripts>
+          <PerformanceMonitor />
+          <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
+          <GoogleAdSense clientId={process.env.GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-6958408841088360'} />
+        </DeferredScripts>
         <ErrorBoundary>
           <Suspense fallback={null}>
             <AnalyticsInitializer />

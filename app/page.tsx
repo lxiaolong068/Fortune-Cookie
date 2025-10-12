@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { FortuneCookie } from '@/components/FortuneCookie'
+import dynamic from 'next/dynamic'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import {
   WebsiteStructuredData,
@@ -7,6 +7,15 @@ import {
   OrganizationStructuredData
 } from '@/components/StructuredData'
 import { generateSEOMetadata } from '@/components/SEO'
+import { FortuneCookieHero } from '@/components/FortuneCookieHero'
+
+const FortuneCookieExperience = dynamic(
+  () => import('@/components/FortuneCookie').then((mod) => mod.FortuneCookie),
+  {
+    ssr: false,
+    loading: () => <FortuneCookieHero />,
+  }
+)
 
 export const metadata: Metadata = generateSEOMetadata({
   title: 'Fortune Cookie - Free Online AI Generator',
@@ -27,7 +36,7 @@ export default function HomePage() {
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />
         <div className="relative z-10">
-          <FortuneCookie />
+          <FortuneCookieExperience />
         </div>
 
       {/* SEO-optimized hidden content */}
