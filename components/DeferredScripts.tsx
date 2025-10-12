@@ -10,6 +10,9 @@ interface DeferredScriptsProps extends PropsWithChildren {
   idleDelay?: number
 }
 
+type RequestIdleCallback = (callback: () => void, options?: { timeout?: number }) => number
+type CancelIdleCallback = (handle: number) => void
+
 /**
  * Defers rendering of child script components until the browser is idle
  * or the user has interacted with the page. This keeps third-party scripts
@@ -19,11 +22,19 @@ export function DeferredScripts({ children, idleDelay = 3000 }: DeferredScriptsP
   const [shouldRender, setShouldRender] = useState(false)
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      // No-op during SSR; scripts will render on client hydration pass.
+      return
+    }
+
     if (shouldRender) {
       return
     }
 
-    let idleHandle: number | null = null
+    type TimeoutHandle = ReturnType<typeof setTimeout>
+    let idleHandle: number | TimeoutHandle | null = null
+    let handleType: 'idle' | 'timeout' | null = null
+
     const events = ['pointerdown', 'keydown', 'touchstart', 'scroll']
 
     const triggerRender = () => setShouldRender(true)
@@ -33,14 +44,20 @@ export function DeferredScripts({ children, idleDelay = 3000 }: DeferredScriptsP
         return
       }
 
-      if ('requestIdleCallback' in window) {
-        idleHandle = (window as any).requestIdleCallback(() => {
+      const requestIdle = (window as typeof window & {
+        requestIdleCallback?: RequestIdleCallback
+      }).requestIdleCallback
+
+      if (typeof requestIdle === 'function') {
+        idleHandle = requestIdle(() => {
           setShouldRender(true)
         }, { timeout: idleDelay })
+        handleType = 'idle'
       } else {
-        idleHandle = window.setTimeout(() => {
+        idleHandle = setTimeout(() => {
           setShouldRender(true)
         }, idleDelay)
+        handleType = 'timeout'
       }
     }
 
@@ -51,10 +68,17 @@ export function DeferredScripts({ children, idleDelay = 3000 }: DeferredScriptsP
 
     return () => {
       if (idleHandle !== null) {
-        if ('cancelIdleCallback' in window) {
-          (window as any).cancelIdleCallback(idleHandle)
-        } else {
-          window.clearTimeout(idleHandle)
+        if (handleType === 'idle' && typeof window !== 'undefined') {
+          const cancelIdle = (window as typeof window & {
+            cancelIdleCallback?: CancelIdleCallback
+          }).cancelIdleCallback
+          if (typeof cancelIdle === 'function') {
+            cancelIdle(idleHandle as number)
+          }
+        }
+
+        if (handleType === 'timeout') {
+          clearTimeout(idleHandle as TimeoutHandle)
         }
       }
       events.forEach((event) => {
