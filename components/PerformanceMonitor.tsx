@@ -65,23 +65,50 @@ export function PerformanceMonitor() {
             })
           }
 
-          // Send to custom analytics endpoint
-          fetch('/api/analytics/web-vitals', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(metric),
-          }).catch((error) => {
-            // 记录API错误到Sentry
-            capturePerformanceIssue(
-              'web_vitals_api_error',
-              1,
-              0,
-              {
-                component: 'performance-monitor',
-                additionalData: { error: error.message }
+          // Send to custom analytics endpoint with retry mechanism
+          const sendWithRetry = async (retries = 3, delay = 1000) => {
+            for (let i = 0; i < retries; i++) {
+              try {
+                const response = await fetch('/api/analytics/web-vitals', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(metric),
+                })
+
+                if (response.ok) {
+                  return // Success
+                }
+
+                // If not the last retry, wait before retrying
+                if (i < retries - 1) {
+                  await new Promise(resolve => setTimeout(resolve, delay * (i + 1)))
+                }
+              } catch (error) {
+                // If not the last retry, wait before retrying
+                if (i < retries - 1) {
+                  await new Promise(resolve => setTimeout(resolve, delay * (i + 1)))
+                } else {
+                  // Last retry failed, log error
+                  capturePerformanceIssue(
+                    'web_vitals_api_error',
+                    1,
+                    0,
+                    {
+                      component: 'performance-monitor',
+                      additionalData: {
+                        error: error instanceof Error ? error.message : 'Unknown error',
+                        retries: i + 1
+                      }
+                    }
+                  )
+                  console.error('Failed to send web vitals after retries:', error)
+                }
               }
-            )
-            console.error('Failed to send web vitals:', error)
+            }
+          }
+
+          sendWithRetry().catch(() => {
+            // Silent catch to prevent unhandled promise rejection
           })
         }
       }

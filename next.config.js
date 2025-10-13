@@ -154,7 +154,9 @@ const nextConfig = {
   transpilePackages: [],
 
   // 生产环境优化
-  productionBrowserSourceMaps: false, // 禁用 source maps 以减少 bundle 大小
+  // 启用 source maps 以便于调试和错误追踪
+  // Source maps 将被上传到错误监控服务，不会暴露给最终用户
+  productionBrowserSourceMaps: true,
 
   // 实验性性能优化
   experimental: {
