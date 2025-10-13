@@ -101,30 +101,54 @@ function handleApiCaching(request: NextRequest, startTime: number, nonce: string
     return response
   }
 
+  // 生成 ETag 用于条件请求
+  const etag = generateSimpleETag(pathname + searchParams.toString())
+
   // 检查条件请求
   const ifNoneMatch = request.headers.get('If-None-Match')
   const ifModifiedSince = request.headers.get('If-Modified-Since')
 
-  if (ifNoneMatch || ifModifiedSince) {
-    // 生成简单的ETag（实际应用中应该基于内容）
-    const etag = generateSimpleETag(pathname + searchParams.toString())
-
-    if (ifNoneMatch === etag) {
-      const response = new NextResponse(null, {
-        status: 304,
-        statusText: 'Not Modified',
-        headers: {
-          'ETag': etag,
-          'Cache-Control': 'public, max-age=300',
-        },
-      })
-      addServerTiming(response, startTime, 'api-304')
-      addSecurityHeaders(response, nonce)
-      return response
-    }
+  if (ifNoneMatch === etag) {
+    // 返回 304 Not Modified
+    const response = new NextResponse(null, {
+      status: 304,
+      statusText: 'Not Modified',
+      headers: {
+        'ETag': etag,
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=60',
+        'CDN-Cache-Control': 'public, max-age=300',
+      },
+    })
+    addServerTiming(response, startTime, 'api-304')
+    addSecurityHeaders(response, nonce)
+    return response
   }
 
+  // 继续处理请求，添加缓存头
   const response = NextResponse.next()
+
+  // 根据 API 类型设置不同的缓存策略
+  if (pathname.includes('/fortunes')) {
+    // 幸运饼干数据 - 中等缓存时间
+    response.headers.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60')
+    response.headers.set('CDN-Cache-Control', 'public, max-age=300')
+  } else if (pathname.includes('/analytics')) {
+    // 分析数据 - 短缓存时间
+    response.headers.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=30')
+    response.headers.set('CDN-Cache-Control', 'public, max-age=60')
+  } else {
+    // 默认 API 缓存
+    response.headers.set('Cache-Control', 'public, max-age=180, stale-while-revalidate=60')
+    response.headers.set('CDN-Cache-Control', 'public, max-age=180')
+  }
+
+  // 添加 ETag 和 Last-Modified
+  response.headers.set('ETag', etag)
+  response.headers.set('Last-Modified', new Date().toUTCString())
+
+  // 添加 Vary 头以支持内容协商
+  response.headers.set('Vary', 'Accept-Encoding, Accept')
+
   addServerTiming(response, startTime, 'api-cacheable')
   addSecurityHeaders(response, nonce)
   return response

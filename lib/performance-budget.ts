@@ -3,6 +3,18 @@
  * 定义各种performancemetrics的threshold和monitoringlogic
  */
 
+// 告警配置
+export const ALERT_CONFIG = {
+  // 告警阈值 - 超过多少次违规触发告警
+  violationThreshold: 3,
+  // 告警冷却时间（毫秒）- 避免重复告警
+  cooldownPeriod: 5 * 60 * 1000, // 5 分钟
+  // 是否启用控制台告警
+  consoleAlerts: true,
+  // 是否启用 API 告警（发送到监控服务）
+  apiAlerts: process.env.NODE_ENV === 'production',
+} as const
+
 // Core Web Vitals threshold configuration
 export const CORE_WEB_VITALS_THRESHOLDS = {
   // Largest Contentful Paint (LCP) - Largest Contentful Paint
@@ -249,3 +261,94 @@ export const performanceUtils = {
     return performanceBudgetChecker.generateReport()
   },
 }
+
+// 性能告警管理器
+class PerformanceAlertManager {
+  private violationCounts: Map<string, number> = new Map()
+  private lastAlertTime: Map<string, number> = new Map()
+
+  // 记录违规
+  recordViolation(metric: string, value: number, threshold: number) {
+    const key = `${metric}:${threshold}`
+    const count = (this.violationCounts.get(key) || 0) + 1
+    this.violationCounts.set(key, count)
+
+    // 检查是否需要触发告警
+    if (count >= ALERT_CONFIG.violationThreshold) {
+      this.triggerAlert(metric, value, threshold, count)
+      // 重置计数
+      this.violationCounts.set(key, 0)
+    }
+  }
+
+  // 触发告警
+  private triggerAlert(metric: string, value: number, threshold: number, count: number) {
+    const key = `${metric}:${threshold}`
+    const now = Date.now()
+    const lastAlert = this.lastAlertTime.get(key) || 0
+
+    // 检查冷却时间
+    if (now - lastAlert < ALERT_CONFIG.cooldownPeriod) {
+      return // 在冷却期内，不发送告警
+    }
+
+    this.lastAlertTime.set(key, now)
+
+    const alertData = {
+      metric,
+      value,
+      threshold,
+      violationCount: count,
+      timestamp: new Date().toISOString(),
+      url: typeof window !== 'undefined' ? window.location.href : 'unknown',
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+    }
+
+    // 控制台告警
+    if (ALERT_CONFIG.consoleAlerts) {
+      console.error('🚨 Performance Budget Alert:', alertData)
+    }
+
+    // API 告警（发送到监控服务）
+    if (ALERT_CONFIG.apiAlerts && typeof window !== 'undefined') {
+      this.sendAlertToApi(alertData).catch(err => {
+        console.error('Failed to send performance alert:', err)
+      })
+    }
+  }
+
+  // 发送告警到 API
+  private async sendAlertToApi(alertData: any) {
+    try {
+      const response = await fetch('/api/analytics/performance-alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(alertData),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Alert API returned ${response.status}`)
+      }
+    } catch (error) {
+      // 静默失败，不影响用户体验
+      console.warn('Performance alert API failed:', error)
+    }
+  }
+
+  // 清除违规计数
+  clearViolations() {
+    this.violationCounts.clear()
+  }
+
+  // 获取违规统计
+  getViolationStats() {
+    const stats: Record<string, number> = {}
+    this.violationCounts.forEach((count, key) => {
+      stats[key] = count
+    })
+    return stats
+  }
+}
+
+// 导出告警管理器实例
+export const performanceAlertManager = new PerformanceAlertManager()

@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import Script from 'next/script'
 import { capturePerformanceIssue, captureBusinessEvent } from '@/lib/error-monitoring'
-import { performanceUtils, CORE_WEB_VITALS_THRESHOLDS } from '@/lib/performance-budget'
+import { performanceUtils, CORE_WEB_VITALS_THRESHOLDS, performanceAlertManager } from '@/lib/performance-budget'
 
 // Core Web Vitals monitoring
 export function PerformanceMonitor() {
@@ -42,6 +42,9 @@ export function PerformanceMonitor() {
                 }
               }
             )
+
+            // 记录违规到告警管理器
+            performanceAlertManager.recordViolation(metric.name, metric.value, threshold)
           }
         }
 
@@ -164,6 +167,91 @@ export function PerformanceMonitor() {
         layoutShiftObserver.observe({ entryTypes: ['layout-shift'] })
       } catch (e) {
         // Layout shift observer not supported
+      }
+
+      // Monitor resource timing
+      const resourceObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const resource = entry as PerformanceResourceTiming
+
+          // 只监控大型资源或慢速资源
+          if (resource.transferSize > 100000 || resource.duration > 1000) {
+            console.warn('Large/slow resource:', {
+              name: resource.name,
+              size: resource.transferSize,
+              duration: resource.duration,
+              type: resource.initiatorType,
+            })
+
+            capturePerformanceIssue(
+              'slow_resource',
+              resource.duration,
+              1000,
+              {
+                component: 'resource-timing',
+                additionalData: {
+                  url: resource.name,
+                  size: resource.transferSize,
+                  duration: resource.duration,
+                  type: resource.initiatorType,
+                  protocol: resource.nextHopProtocol,
+                }
+              }
+            )
+          }
+        }
+      })
+
+      try {
+        resourceObserver.observe({ entryTypes: ['resource'] })
+      } catch (e) {
+        // Resource observer not supported
+      }
+
+      // Monitor navigation timing
+      const navigationObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const nav = entry as PerformanceNavigationTiming
+
+          // 收集详细的导航时序数据
+          const timings = {
+            dns: nav.domainLookupEnd - nav.domainLookupStart,
+            tcp: nav.connectEnd - nav.connectStart,
+            request: nav.responseStart - nav.requestStart,
+            response: nav.responseEnd - nav.responseStart,
+            dom: nav.domContentLoadedEventEnd - nav.domContentLoadedEventStart,
+            load: nav.loadEventEnd - nav.loadEventStart,
+            total: nav.loadEventEnd - nav.fetchStart,
+          }
+
+          console.log('Navigation timings:', timings)
+
+          // 记录导航性能
+          captureBusinessEvent('navigation_timing', {
+            ...timings,
+            type: nav.type,
+            redirectCount: nav.redirectCount,
+          })
+
+          // 检查是否有性能问题
+          if (timings.total > 5000) {
+            capturePerformanceIssue(
+              'slow_page_load',
+              timings.total,
+              5000,
+              {
+                component: 'navigation-timing',
+                additionalData: timings
+              }
+            )
+          }
+        }
+      })
+
+      try {
+        navigationObserver.observe({ entryTypes: ['navigation'] })
+      } catch (e) {
+        // Navigation observer not supported
       }
     }
   }, [])

@@ -38,6 +38,46 @@ const nextConfig = {
   // 安全和SEO优化配置
   async headers() {
     return [
+      // 静态资源缓存 - 长期缓存不可变资源
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // 图片资源缓存
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Favicon 和图标缓存
+      {
+        source: '/:path(favicon\\.ico|apple-touch-icon\\.png|favicon-.*\\.png|android-chrome-.*\\.png|.*\\.svg)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      // Manifest 文件缓存
+      {
+        source: '/manifest.webmanifest',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
       {
         source: '/(.*)',
         headers: [

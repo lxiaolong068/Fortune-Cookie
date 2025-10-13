@@ -162,72 +162,113 @@ self.addEventListener('fetch', (event) => {
   }
 })
 
-// 处理API请求 - 网络优先策略
+// 处理API请求 - Stale-While-Revalidate 策略
 async function handleApiRequest(request) {
   const url = new URL(request.url)
-  
-  try {
-    // 尝试网络请求
-    const networkResponse = await fetch(request)
-    
-    if (networkResponse.ok) {
-      // 缓存成功的API响应
-      if (isCacheableApi(url.pathname)) {
-        const cache = await caches.open(API_CACHE_NAME)
-        cache.put(request, networkResponse.clone())
+  const cache = await caches.open(API_CACHE_NAME)
+
+  // 立即从缓存获取（如果有）
+  const cachedResponse = await cache.match(request)
+
+  // 在后台发起网络请求更新缓存
+  const networkPromise = fetch(request)
+    .then(async (networkResponse) => {
+      if (networkResponse.ok && isCacheableApi(url.pathname)) {
+        // 添加时间戳到响应头
+        const headers = new Headers(networkResponse.headers)
+        headers.set('sw-cached-at', Date.now().toString())
+
+        const body = await networkResponse.clone().blob()
+        const responseToCache = new Response(body, {
+          status: networkResponse.status,
+          statusText: networkResponse.statusText,
+          headers,
+        })
+
+        // 异步更新缓存，不阻塞响应
+        cache.put(request, responseToCache).catch(err => {
+          console.warn('Failed to update cache:', err)
+        })
       }
       return networkResponse
-    }
-    
-    throw new Error(`Network response not ok: ${networkResponse.status}`)
-    
-  } catch (error) {
-    console.log('Service Worker: Network request failed, trying cache:', error)
-    
-    // 网络失败，尝试从缓存获取
-    const cachedResponse = await caches.match(request)
-    if (cachedResponse) {
-      return cachedResponse
-    }
-    
-    // 缓存也没有，返回离线响应
-    return new Response(JSON.stringify(OFFLINE_API_RESPONSE), {
-      status: 503,
-      statusText: 'Service Unavailable',
-      headers: { 'Content-Type': 'application/json' }
     })
+    .catch(error => {
+      console.log('Service Worker: Network request failed:', error)
+      return null
+    })
+
+  // 如果有缓存，立即返回缓存（Stale）
+  if (cachedResponse) {
+    // 在后台更新缓存（Revalidate）
+    networkPromise.catch(() => {}) // 静默处理网络错误
+    return cachedResponse
   }
+
+  // 没有缓存，等待网络请求
+  const networkResponse = await networkPromise
+  if (networkResponse) {
+    return networkResponse
+  }
+
+  // 网络失败且无缓存，返回离线响应
+  return new Response(JSON.stringify(OFFLINE_API_RESPONSE), {
+    status: 503,
+    statusText: 'Service Unavailable',
+    headers: { 'Content-Type': 'application/json' }
+  })
 }
 
-// 处理静态资源请求 - 缓存优先策略
+// 处理静态资源请求 - Cache First with Background Refresh
 async function handleStaticRequest(request) {
-  try {
-    // 先尝试从缓存获取
-    const cachedResponse = await caches.match(request)
-    if (cachedResponse) {
-      return cachedResponse
-    }
-    
-    // 缓存没有，尝试网络请求
-    const networkResponse = await fetch(request)
-    
-    if (networkResponse.ok) {
-      // 缓存新的静态资源
-      const cache = await caches.open(STATIC_CACHE_NAME)
-      cache.put(request, networkResponse.clone())
-    }
-    
-    return networkResponse
-    
-  } catch (error) {
-    console.log('Service Worker: Static asset request failed:', error)
-    
-    // 返回一个基本的错误响应
-    return new Response('Resource not available offline', {
-      status: 503,
-      statusText: 'Service Unavailable'
+  const cache = await caches.open(STATIC_CACHE_NAME)
+
+  // 立即从缓存获取
+  const cachedResponse = await cache.match(request)
+
+  // 在后台刷新缓存
+  const networkPromise = fetch(request)
+    .then(async (networkResponse) => {
+      if (networkResponse.ok) {
+        // 添加时间戳
+        const headers = new Headers(networkResponse.headers)
+        headers.set('sw-cached-at', Date.now().toString())
+
+        const body = await networkResponse.clone().blob()
+        const responseToCache = new Response(body, {
+          status: networkResponse.status,
+          statusText: networkResponse.statusText,
+          headers,
+        })
+
+        // 异步更新缓存
+        cache.put(request, responseToCache).catch(err => {
+          console.warn('Failed to update static cache:', err)
+        })
+      }
+      return networkResponse
     })
+    .catch(error => {
+      console.log('Service Worker: Static asset network request failed:', error)
+      return null
+    })
+
+  // 如果有缓存，立即返回
+  if (cachedResponse) {
+    networkPromise.catch(() => {}) // 静默处理网络错误
+    return cachedResponse
   }
+
+  // 没有缓存，等待网络请求
+  const networkResponse = await networkPromise
+  if (networkResponse) {
+    return networkResponse
+  }
+
+  // 网络失败且无缓存
+  return new Response('Resource not available offline', {
+    status: 503,
+    statusText: 'Service Unavailable'
+  })
 }
 
 // 检查路径是否应该被缓存
