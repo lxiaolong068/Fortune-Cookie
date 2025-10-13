@@ -163,6 +163,7 @@ export function ServiceWorkerInitializer() {
                 variant="ghost"
                 onClick={handleDismissUpdate}
                 className="flex-shrink-0 h-6 w-6 p-0"
+                aria-label="关闭更新通知"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -204,6 +205,7 @@ export function ServiceWorkerInitializer() {
                 variant="ghost"
                 onClick={handleDismissOffline}
                 className="flex-shrink-0 h-6 w-6 p-0"
+                aria-label="关闭离线通知"
               >
                 <X className="w-4 h-4" />
               </Button>

@@ -314,13 +314,15 @@ export function AnalyticsConsentBanner() {
         <div className="flex gap-2">
           <button
             onClick={handleAccept}
-            className="flex-1 bg-orange-500 text-white text-xs py-2 px-3 rounded hover:bg-orange-600 transition-colors"
+            className="flex-1 bg-orange-600 text-white text-xs py-2 px-3 rounded hover:bg-orange-700 transition-colors font-medium"
+            aria-label="同意数据收集和分析"
           >
             同意
           </button>
           <button
             onClick={handleDecline}
-            className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
+            aria-label="拒绝数据收集和分析"
           >
             拒绝
           </button>

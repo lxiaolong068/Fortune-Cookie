@@ -115,6 +115,8 @@ export function Navigation() {
           size="icon"
           onClick={() => setIsOpen(!isOpen)}
           className="fixed top-4 right-4 z-50 bg-white/90 backdrop-blur-md border-amber-200 hover:bg-amber-50"
+          aria-label={isOpen ? "关闭导航菜单" : "打开导航菜单"}
+          aria-expanded={isOpen}
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
