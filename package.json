@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "AI-powered Fortune Cookie Generator with SEO optimization",
   "private": true,
+  "sideEffects": [
+    "*.css",
+    "*.scss",
+    "./app/globals.css",
+    "./lib/global-error-handler.ts",
+    "./lib/service-worker.ts"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",

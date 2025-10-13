@@ -1,7 +1,23 @@
 import { Metadata } from 'next'
-import { AIFortuneCookie } from '@/components/AIFortuneCookie'
+import dynamic from 'next/dynamic'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { getSiteUrl } from '@/lib/site'
+
+// Dynamic import for heavy AIFortuneCookie component to reduce initial bundle
+const AIFortuneCookie = dynamic(
+  () => import('@/components/AIFortuneCookie').then(mod => ({ default: mod.AIFortuneCookie })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-amber-700">Loading AI Fortune Cookie Generator...</p>
+        </div>
+      </div>
+    ),
+  }
+)
 
 const baseUrl = getSiteUrl()
 

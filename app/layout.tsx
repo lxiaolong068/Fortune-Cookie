@@ -2,18 +2,25 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Suspense } from 'react'
-import { DynamicNavigation } from '@/components/DynamicNavigation'
-import { Footer } from '@/components/Footer'
-import { PerformanceMonitor, GoogleAnalytics, GoogleAdSense } from '@/components/PerformanceMonitor'
-import { OptimizedPreloader } from '@/components/ResourcePreloader'
+import dynamic from 'next/dynamic'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
-import { ErrorMonitorInitializer } from '@/components/ErrorMonitorInitializer'
-import { ServiceWorkerInitializer } from '@/components/ServiceWorkerInitializer'
-import { ThemeInitializer, ThemeScript } from '@/components/ThemeInitializer'
-import { AnalyticsInitializer, AnalyticsConsentBanner } from '@/components/AnalyticsInitializer'
+import { ThemeScript } from '@/components/ThemeInitializer'
 import { getSiteMetadata, getOGImageConfig, getTwitterImageConfig } from '@/lib/site'
-import { DeferredScripts } from '@/components/DeferredScripts'
 import { CriticalCSS } from '@/components/CriticalCSS'
+
+// Dynamic imports for non-critical components to reduce initial bundle size
+const DynamicNavigation = dynamic(() => import('@/components/DynamicNavigation').then(mod => ({ default: mod.DynamicNavigation })), { ssr: true })
+const Footer = dynamic(() => import('@/components/Footer').then(mod => ({ default: mod.Footer })), { ssr: true })
+const PerformanceMonitor = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.PerformanceMonitor })), { ssr: false })
+const GoogleAnalytics = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.GoogleAnalytics })), { ssr: false })
+const GoogleAdSense = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.GoogleAdSense })), { ssr: false })
+const OptimizedPreloader = dynamic(() => import('@/components/ResourcePreloader').then(mod => ({ default: mod.OptimizedPreloader })), { ssr: false })
+const ErrorMonitorInitializer = dynamic(() => import('@/components/ErrorMonitorInitializer').then(mod => ({ default: mod.ErrorMonitorInitializer })), { ssr: false })
+const ServiceWorkerInitializer = dynamic(() => import('@/components/ServiceWorkerInitializer').then(mod => ({ default: mod.ServiceWorkerInitializer })), { ssr: false })
+const ThemeInitializer = dynamic(() => import('@/components/ThemeInitializer').then(mod => ({ default: mod.ThemeInitializer })), { ssr: false })
+const AnalyticsInitializer = dynamic(() => import('@/components/AnalyticsInitializer').then(mod => ({ default: mod.AnalyticsInitializer })), { ssr: false })
+const AnalyticsConsentBanner = dynamic(() => import('@/components/AnalyticsInitializer').then(mod => ({ default: mod.AnalyticsConsentBanner })), { ssr: false })
+const DeferredScripts = dynamic(() => import('@/components/DeferredScripts').then(mod => ({ default: mod.DeferredScripts })), { ssr: false })
 
 const inter = Inter({
   subsets: ['latin'],

@@ -188,40 +188,73 @@ const nextConfig = {
 
     // 性能优化配置
     if (!dev) {
-      // 代码分割优化
+      // 代码分割优化 - 减少初始 bundle 大小
       config.optimization = {
         ...config.optimization,
         splitChunks: {
           ...config.optimization.splitChunks,
+          chunks: 'all',
+          maxInitialRequests: 25,
+          minSize: 20000,
           cacheGroups: {
             ...config.optimization.splitChunks.cacheGroups,
-            // 将大型UI库分离到单独的chunk
+            // 默认 vendor chunk
+            defaultVendors: {
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+              reuseExistingChunk: true,
+              name(module) {
+                const match = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)
+                if (!match) return 'vendors'
+                const packageName = match[1]
+                return `npm.${packageName.replace('@', '')}`
+              },
+            },
+            // 将大型UI库分离到单独的chunk（异步加载）
             radixui: {
               test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
               name: 'radix-ui',
-              chunks: 'all',
+              chunks: 'async',
               priority: 30,
+              reuseExistingChunk: true,
             },
-            // 将图表库分离
+            // 将图表库分离（异步加载）
             recharts: {
               test: /[\\/]node_modules[\\/]recharts[\\/]/,
               name: 'recharts',
               chunks: 'async',
               priority: 25,
+              reuseExistingChunk: true,
             },
-            // 将动画库分离
+            // 将动画库分离（异步加载以减少初始 bundle）
             framerMotion: {
               test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
               name: 'framer-motion',
-              chunks: 'all',
+              chunks: 'async',
               priority: 20,
+              reuseExistingChunk: true,
             },
-            // 将图标库分离
+            // 将图标库分离（异步加载）
             lucide: {
               test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
               name: 'lucide-react',
-              chunks: 'all',
+              chunks: 'async',
               priority: 15,
+              reuseExistingChunk: true,
+            },
+            // React 核心库保持同步
+            react: {
+              test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+              name: 'react',
+              chunks: 'all',
+              priority: 40,
+              reuseExistingChunk: true,
+            },
+            // 公共代码
+            common: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
             },
           },
         },
