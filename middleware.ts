@@ -27,9 +27,19 @@ const SKIP_PATHS = [
   '/__nextjs_original-stack-frame',
 ]
 
+// 生成 CSP Nonce
+function generateNonce(): string {
+  const array = new Uint8Array(16)
+  crypto.getRandomValues(array)
+  return Buffer.from(array).toString('base64')
+}
+
 export function middleware(request: NextRequest) {
   const startTime = Date.now()
   const { pathname } = request.nextUrl
+
+  // 生成 CSP Nonce
+  const nonce = generateNonce()
 
   // 跳过不需要处理的路径
   if (SKIP_PATHS.some(path => pathname.startsWith(path))) {
@@ -43,11 +53,11 @@ export function middleware(request: NextRequest) {
 
   // 处理API路由缓存
   if (pathname.startsWith('/api/')) {
-    return handleApiCaching(request, startTime)
+    return handleApiCaching(request, startTime, nonce)
   }
 
   // 处理页面缓存
-  return handlePageCaching(request, startTime)
+  return handlePageCaching(request, startTime, nonce)
 }
 
 // 添加Server-Timing头部的工具函数
@@ -78,7 +88,7 @@ function handleStaticAssets(request: NextRequest, startTime: number): NextRespon
 }
 
 // 处理API缓存
-function handleApiCaching(request: NextRequest, startTime: number): NextResponse {
+function handleApiCaching(request: NextRequest, startTime: number, nonce: string): NextResponse {
   const { pathname, searchParams } = request.nextUrl
 
   // 检查是否是可缓存的API路径
@@ -87,6 +97,7 @@ function handleApiCaching(request: NextRequest, startTime: number): NextResponse
   if (!isCacheable) {
     const response = NextResponse.next()
     addServerTiming(response, startTime, 'api-uncacheable')
+    addSecurityHeaders(response, nonce)
     return response
   }
 
@@ -108,17 +119,47 @@ function handleApiCaching(request: NextRequest, startTime: number): NextResponse
         },
       })
       addServerTiming(response, startTime, 'api-304')
+      addSecurityHeaders(response, nonce)
       return response
     }
   }
 
   const response = NextResponse.next()
   addServerTiming(response, startTime, 'api-cacheable')
+  addSecurityHeaders(response, nonce)
   return response
 }
 
+// 添加安全标头（包括 CSP Nonce 和 Trusted Types）
+function addSecurityHeaders(response: NextResponse, nonce: string): void {
+  // 将 nonce 添加到响应头，供页面使用
+  response.headers.set('x-nonce', nonce)
+
+  // 更新 CSP 标头以使用 nonce 和 Trusted Types
+  const csp = [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https://openrouter.ai https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com",
+    "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://fundingchoicesmessages.google.com",
+    "media-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "upgrade-insecure-requests",
+    // Trusted Types 配置
+    "require-trusted-types-for 'script'",
+    "trusted-types default 'allow-duplicates'"
+  ].join('; ')
+
+  response.headers.set('Content-Security-Policy', csp)
+}
+
 // 处理页面缓存
-function handlePageCaching(request: NextRequest, startTime: number): NextResponse {
+function handlePageCaching(request: NextRequest, startTime: number, nonce: string): NextResponse {
   const response = NextResponse.next()
   const pathname = request.nextUrl.pathname
 
@@ -142,6 +183,9 @@ function handlePageCaching(request: NextRequest, startTime: number): NextRespons
 
   // 添加Vary头部
   response.headers.set('Vary', 'Accept-Encoding, User-Agent')
+
+  // 添加安全标头
+  addSecurityHeaders(response, nonce)
 
   return response
 }
