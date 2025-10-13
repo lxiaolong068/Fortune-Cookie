@@ -13,7 +13,8 @@ const DynamicNavigation = dynamic(() => import('@/components/DynamicNavigation')
 const Footer = dynamic(() => import('@/components/Footer').then(mod => ({ default: mod.Footer })), { ssr: true })
 const PerformanceMonitor = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.PerformanceMonitor })), { ssr: false })
 const GoogleAnalytics = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.GoogleAnalytics })), { ssr: false })
-const GoogleAdSense = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.GoogleAdSense })), { ssr: false })
+// Use optimized AdSense Facade instead of direct AdSense component
+const OptimizedAdSense = dynamic(() => import('@/components/AdSenseFacade'), { ssr: false })
 const OptimizedPreloader = dynamic(() => import('@/components/ResourcePreloader').then(mod => ({ default: mod.OptimizedPreloader })), { ssr: false })
 const ErrorMonitorInitializer = dynamic(() => import('@/components/ErrorMonitorInitializer').then(mod => ({ default: mod.ErrorMonitorInitializer })), { ssr: false })
 const ServiceWorkerInitializer = dynamic(() => import('@/components/ServiceWorkerInitializer').then(mod => ({ default: mod.ServiceWorkerInitializer })), { ssr: false })
@@ -124,7 +125,8 @@ export default function RootLayout({
         <DeferredScripts>
           <PerformanceMonitor />
           <GoogleAnalytics measurementId={process.env.GOOGLE_ANALYTICS_ID || ''} />
-          <GoogleAdSense clientId={process.env.GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-6958408841088360'} />
+          {/* Use optimized AdSense Facade for better LCP performance */}
+          <OptimizedAdSense clientId={process.env.GOOGLE_ADSENSE_CLIENT_ID || 'ca-pub-6958408841088360'} />
         </DeferredScripts>
         <ErrorBoundary>
           <Suspense fallback={null}>
