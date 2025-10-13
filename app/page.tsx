@@ -9,6 +9,12 @@ import {
 import { generateSEOMetadata } from '@/components/SEO'
 import { FortuneCookieHero } from '@/components/FortuneCookieHero'
 
+// Optimize for Edge Runtime - faster TTFB
+export const runtime = 'edge'
+
+// Enable static generation with revalidation for optimal performance
+export const revalidate = 3600 // Revalidate every hour
+
 const FortuneCookieExperience = dynamic(
   () => import('@/components/FortuneCookie').then((mod) => mod.FortuneCookie),
   {

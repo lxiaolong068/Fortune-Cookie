@@ -353,50 +353,28 @@ export function FortuneCookie() {
                 </motion.div>
               ))}
 
-              {/* Enhanced title with gradient and glow */}
+              {/* Optimized title - removed expensive drop-shadow and textShadow for better LCP performance */}
               <motion.h1
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{
-                  delay: 0.7,
-                  duration: 0.8,
-                  ease: "backOut",
+                  delay: 0.3,
+                  duration: 0.5,
+                  ease: "easeOut",
                 }}
-                className="text-3xl mb-3 bg-gradient-to-r from-amber-700 via-yellow-600 to-orange-700 bg-clip-text text-transparent relative z-10"
-                style={{
-                  filter:
-                    "drop-shadow(0 2px 8px rgba(251, 191, 36, 0.4))",
-                  textShadow:
-                    "0 0 30px rgba(251, 191, 36, 0.6)",
-                }}
+                className="text-3xl mb-3 font-semibold bg-gradient-to-r from-amber-700 via-yellow-600 to-orange-700 bg-clip-text text-transparent relative z-10"
               >
-                <motion.span
-                  animate={{
-                    scale: [1, 1.02, 1],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  Fortune Cookie
-                </motion.span>
+                Fortune Cookie
               </motion.h1>
 
-              {/* Enhanced subtitle with shimmer effect */}
+              {/* Optimized subtitle - simplified animation for faster render */}
               <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
                 className="text-amber-700 mb-4 relative z-10"
-                style={{
-                  textShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                }}
               >
-                <motion.span className="bg-clip-text">
-                  Tap the cookie to crack it open!
-                </motion.span>
+                Tap the cookie to crack it open!
               </motion.p>
 
               {/* Enhanced magic text with pulsing border */}

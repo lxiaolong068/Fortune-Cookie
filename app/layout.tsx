@@ -13,8 +13,13 @@ import { ThemeInitializer, ThemeScript } from '@/components/ThemeInitializer'
 import { AnalyticsInitializer, AnalyticsConsentBanner } from '@/components/AnalyticsInitializer'
 import { getSiteMetadata, getOGImageConfig, getTwitterImageConfig } from '@/lib/site'
 import { DeferredScripts } from '@/components/DeferredScripts'
+import { CriticalCSS } from '@/components/CriticalCSS'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap', // Optimize font loading to prevent FOIT
+  preload: true,
+})
 
 const siteMetadata = getSiteMetadata()
 const ogImage = getOGImageConfig()
@@ -85,6 +90,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <CriticalCSS />
+
+        {/* DNS Prefetch for third-party domains - improves connection time */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+
+        {/* Preconnect to critical third-party origins - establishes early connection */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
         <ThemeScript />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
