@@ -127,6 +127,20 @@ const nextConfig = {
   // 构建优化
   swcMinify: true,
 
+  // Compiler 配置 - 针对现代浏览器优化
+  // Next.js 14 使用 SWC，会自动读取 package.json 中的 browserslist
+  // 这将移除不必要的 polyfills 和转译
+  compiler: {
+    // 不移除 console.log，保持原有行为
+    removeConsole: false,
+  },
+
+  // 针对现代浏览器的目标配置
+  transpilePackages: [],
+
+  // 生产环境优化
+  productionBrowserSourceMaps: false, // 禁用 source maps 以减少 bundle 大小
+
   // 实验性性能优化
   experimental: {
     optimizePackageImports: [
