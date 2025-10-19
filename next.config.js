@@ -174,6 +174,21 @@ const nextConfig = {
       },
     ];
   },
+  // 确保 ads.txt 和 robots.txt 在所有域名上都可访问（不重定向）
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/ads.txt',
+          destination: '/ads.txt',
+        },
+        {
+          source: '/robots.txt',
+          destination: '/robots.txt',
+        },
+      ],
+    };
+  },
   // 性能优化
   compress: true,
   poweredByHeader: false,

@@ -74,6 +74,24 @@
       "permanent": true
     }
   ],
+  "routes": [
+    {
+      "src": "/ads.txt",
+      "dest": "/ads.txt",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=3600"
+      }
+    }
+  ],
   "crons": [
     {
       "path": "/api/analytics/cleanup",
