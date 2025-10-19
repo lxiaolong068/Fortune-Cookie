@@ -78,6 +78,20 @@ const nextConfig = {
           },
         ],
       },
+      // ads.txt 和 robots.txt - 确保正确的 Content-Type 和缓存
+      {
+        source: '/:path(ads\\.txt|robots\\.txt)',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/plain; charset=utf-8',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, must-revalidate',
+          },
+        ],
+      },
       {
         source: '/(.*)',
         headers: [
