@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
+import { headers } from 'next/headers'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ThemeScript } from '@/components/ThemeInitializer'
 import { getSiteMetadata, getOGImageConfig, getTwitterImageConfig } from '@/lib/site'
@@ -95,6 +96,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // 获取 nonce 用于 CSP（仅在生产环境）
+  const nonce = process.env.NODE_ENV === 'production'
+    ? headers().get('x-nonce')
+    : null
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -122,7 +128,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        <ThemeScript />
+        <ThemeScript nonce={nonce} />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

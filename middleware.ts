@@ -97,7 +97,10 @@ function handleApiCaching(request: NextRequest, startTime: number, nonce: string
   if (!isCacheable) {
     const response = NextResponse.next()
     addServerTiming(response, startTime, 'api-uncacheable')
-    addSecurityHeaders(response, nonce)
+    // 仅在生产环境启用安全头部
+    if (process.env.NODE_ENV === 'production') {
+      addSecurityHeaders(response, nonce)
+    }
     return response
   }
 
@@ -120,7 +123,10 @@ function handleApiCaching(request: NextRequest, startTime: number, nonce: string
       },
     })
     addServerTiming(response, startTime, 'api-304')
-    addSecurityHeaders(response, nonce)
+    // 仅在生产环境启用安全头部
+    if (process.env.NODE_ENV === 'production') {
+      addSecurityHeaders(response, nonce)
+    }
     return response
   }
 
@@ -150,7 +156,10 @@ function handleApiCaching(request: NextRequest, startTime: number, nonce: string
   response.headers.set('Vary', 'Accept-Encoding, Accept')
 
   addServerTiming(response, startTime, 'api-cacheable')
-  addSecurityHeaders(response, nonce)
+  // 仅在生产环境启用安全头部
+  if (process.env.NODE_ENV === 'production') {
+    addSecurityHeaders(response, nonce)
+  }
   return response
 }
 
@@ -160,9 +169,15 @@ function addSecurityHeaders(response: NextResponse, nonce: string): void {
   response.headers.set('x-nonce', nonce)
 
   // 更新 CSP 标头以使用 nonce 和 Trusted Types
+  // 开发模式需要 'unsafe-eval' 用于 HMR (Hot Module Replacement)
+  const isDev = process.env.NODE_ENV === 'development'
+  const scriptSrc = isDev
+    ? `script-src 'self' 'unsafe-eval' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com`
+    : `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com`
+
   const csp = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com`,
+    scriptSrc,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
@@ -173,13 +188,21 @@ function addSecurityHeaders(response: NextResponse, nonce: string): void {
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "upgrade-insecure-requests",
-    // Trusted Types 配置
-    "require-trusted-types-for 'script'",
-    "trusted-types default 'allow-duplicates'"
-  ].join('; ')
+    "upgrade-insecure-requests"
+  ]
 
-  response.headers.set('Content-Security-Policy', csp)
+  // Trusted Types 仅在生产环境启用（开发环境会导致 Next.js dev overlay 问题）
+  if (process.env.NODE_ENV === 'production') {
+    csp.push(
+      "require-trusted-types-for 'script'",
+      "trusted-types nextjs nextjs#bundler default 'allow-duplicates'"
+    )
+  }
+
+  const cspString = csp.join('; ')
+
+  // 设置 CSP 头部
+  response.headers.set('Content-Security-Policy', cspString)
 }
 
 // 处理页面缓存
@@ -208,8 +231,10 @@ function handlePageCaching(request: NextRequest, startTime: number, nonce: strin
   // 添加Vary头部
   response.headers.set('Vary', 'Accept-Encoding, User-Agent')
 
-  // 添加安全标头
-  addSecurityHeaders(response, nonce)
+  // 添加安全标头（仅在生产环境）
+  if (process.env.NODE_ENV === 'production') {
+    addSecurityHeaders(response, nonce)
+  }
 
   return response
 }

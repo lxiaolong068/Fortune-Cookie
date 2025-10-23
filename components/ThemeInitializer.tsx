@@ -46,7 +46,7 @@ export function ThemeInitializer() {
 }
 
 // 主题脚本 - 防止闪烁
-export function ThemeScript() {
+export function ThemeScript({ nonce }: { nonce?: string | null }) {
   const script = `
     (function() {
       try {
@@ -132,6 +132,7 @@ export function ThemeScript() {
 
   return (
     <script
+      {...(nonce ? { nonce } : {})}
       dangerouslySetInnerHTML={{ __html: script }}
       suppressHydrationWarning
     />
