@@ -191,13 +191,16 @@ function addSecurityHeaders(response: NextResponse, nonce: string): void {
     "upgrade-insecure-requests"
   ]
 
-  // Trusted Types 仅在生产环境启用（开发环境会导致 Next.js dev overlay 问题）
-  if (process.env.NODE_ENV === 'production') {
-    csp.push(
-      "require-trusted-types-for 'script'",
-      "trusted-types nextjs nextjs#bundler default 'allow-duplicates'"
-    )
-  }
+  // Trusted Types 临时禁用
+  // 原因：Next.js 14 和 Framer Motion 与 Trusted Types 存在兼容性问题
+  // 错误：This document requires 'TrustedHTML' assignment
+  // TODO: 在未来版本中重新启用，需要为所有第三方库添加适当的策略
+  // if (process.env.NODE_ENV === 'production') {
+  //   csp.push(
+  //     "require-trusted-types-for 'script'",
+  //     "trusted-types nextjs nextjs#bundler default 'allow-duplicates'"
+  //   )
+  // }
 
   const cspString = csp.join('; ')
 
