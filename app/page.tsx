@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import {
   WebsiteStructuredData,
@@ -6,14 +7,22 @@ import {
   OrganizationStructuredData
 } from '@/components/StructuredData'
 import { generateSEOMetadata } from '@/components/SEO'
-import { FortuneCookie } from '@/components/FortuneCookie'
+import { FortuneCookieHero } from '@/components/FortuneCookieHero'
 
-// 注意：Edge Runtime 已禁用，因为它与某些客户端组件（如 Framer Motion）不兼容
-// 如果需要启用，请确保所有依赖都支持 Edge Runtime
-// export const runtime = 'edge'
+// Optimize for Edge Runtime - faster TTFB
+export const runtime = 'edge'
 
 // Enable static generation with revalidation for optimal performance
 export const revalidate = 3600 // Revalidate every hour
+
+// Dynamic import with SSR disabled to prevent hydration issues with Framer Motion
+const FortuneCookieExperience = dynamic(
+  () => import('@/components/FortuneCookie').then((mod) => mod.FortuneCookie),
+  {
+    ssr: false,
+    loading: () => <FortuneCookieHero />,
+  }
+)
 
 export const metadata: Metadata = generateSEOMetadata({
   title: 'Fortune Cookie - Free Online AI Generator',
@@ -34,7 +43,7 @@ export default function HomePage() {
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />
         <div className="relative z-10">
-          <FortuneCookie />
+          <FortuneCookieExperience />
         </div>
 
         {/* SEO-optimized visible content */}

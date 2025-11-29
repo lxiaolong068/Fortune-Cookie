@@ -8,9 +8,9 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ThemeScript } from '@/components/ThemeInitializer'
 import { getSiteMetadata, getOGImageConfig, getTwitterImageConfig } from '@/lib/site'
 import { CriticalCSS } from '@/components/CriticalCSS'
+import { Navigation } from '@/components/Navigation'
 
 // Dynamic imports for non-critical components to reduce initial bundle size
-const DynamicNavigation = dynamic(() => import('@/components/DynamicNavigation').then(mod => ({ default: mod.DynamicNavigation })), { ssr: true })
 const Footer = dynamic(() => import('@/components/Footer').then(mod => ({ default: mod.Footer })), { ssr: true })
 const PerformanceMonitor = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.PerformanceMonitor })), { ssr: false })
 const GoogleAnalytics = dynamic(() => import('@/components/PerformanceMonitor').then(mod => ({ default: mod.GoogleAnalytics })), { ssr: false })
@@ -149,7 +149,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <AnalyticsInitializer />
           </Suspense>
-          <DynamicNavigation />
+          <Navigation />
           {children}
           <Footer />
           <AnalyticsConsentBanner />

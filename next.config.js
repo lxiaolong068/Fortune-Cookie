@@ -124,26 +124,16 @@ const nextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
           },
-          // 严格传输安全 (HSTS)
+          // 严格传输安全 (HSTS) - 仅在生产环境有效
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains; preload',
           },
-          // Cross-Origin-Opener-Policy (COOP)
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
-          // Cross-Origin-Embedder-Policy (COEP)
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp',
-          },
-          // Cross-Origin-Resource-Policy (CORP)
-          {
-            key: 'Cross-Origin-Resource-Policy',
-            value: 'same-origin',
-          },
+          // Cross-Origin 策略已移除
+          // 原因：COOP/COEP/CORP 头部会导致 Next.js 开发模式下的 hydration 失败
+          // 这些头部主要用于启用 SharedArrayBuffer 等高级功能
+          // 对于大多数 Web 应用来说，这些头部不是必需的
+          // 如果需要这些功能，请在生产环境的 CDN/反向代理层配置
         ],
       },
       // API路由的CORS配置

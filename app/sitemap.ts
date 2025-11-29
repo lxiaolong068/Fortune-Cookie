@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next'
 import { getSiteUrl } from '@/lib/site'
 import { i18n, getLocalizedPath, getAlternateLinks } from '@/lib/i18n-config'
 import { getDatabaseStats } from '@/lib/fortune-database'
+import { getBlogPosts } from '@/lib/blog'
 
 /**
  * Generate XML Sitemap for SEO
@@ -149,6 +150,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
       changeFrequency: 'weekly' as const,
       lastModified: weeklyContentDate
+    })
+  })
+
+  // Add blog pages dynamically
+  pages.push({
+    path: '/blog',
+    priority: 0.8,
+    changeFrequency: 'weekly' as const,
+    lastModified: weeklyContentDate
+  })
+
+  // Add individual blog posts
+  const blogPosts = getBlogPosts()
+  blogPosts.forEach(post => {
+    pages.push({
+      path: `/blog/${post.slug}`,
+      priority: 0.7,
+      changeFrequency: 'monthly' as const,
+      lastModified: new Date(post.date)
     })
   })
 

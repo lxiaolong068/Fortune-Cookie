@@ -341,6 +341,24 @@ const response = EdgeCacheManager.optimizeApiResponse(
 - Test health endpoint: GET `/api/fortune`
 - Review OpenRouter dashboard for quota/errors
 
+**Turbopack/HMR Issues**:
+- Next.js Turbopack (experimental) may have aggressive caching
+- `DynamicNavigation` uses `ssr: false` which can cause client-side caching
+- If component changes don't reflect in browser:
+  1. Try `rm -rf .next node_modules/.cache && npm run dev`
+  2. Try disabling Turbopack: `next dev` without turbo config
+  3. Check `docs/blog-navigation-issue.md` for known navigation issues
+
+## Blog Feature
+
+The blog feature uses MDX files in `content/blog/` directory:
+- **List page**: `app/blog/page.tsx` - displays all blog posts
+- **Detail page**: `app/blog/[slug]/page.tsx` - renders MDX content with SSG
+- **Data utilities**: `lib/blog.ts` - getBlogPosts(), getPostBySlug(), getAllTags()
+- **Components**: `components/blog/` - BlogCard, MDXComponents
+
+**Known Issue**: Blog navigation link may not appear in desktop navbar due to Turbopack caching. See `docs/blog-navigation-issue.md` for details. Workaround: access blog via Footer link or direct URL `/blog`.
+
 ## Code Quality Standards
 
 - **TypeScript Strict Mode**: All code must compile with strict checks

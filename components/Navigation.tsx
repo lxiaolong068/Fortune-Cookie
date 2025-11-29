@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Home, Sparkles, MessageSquare, Clock, ChefHat, Search, User } from 'lucide-react'
+import { Menu, X, Home, Sparkles, MessageSquare, Clock, ChefHat, Search, User, BookOpen } from 'lucide-react'
 import { Button } from './ui/button'
 import { cn } from '@/lib/utils'
 import { OfflineIndicator } from './OfflineIndicator'
@@ -48,6 +48,12 @@ const navigationItems = [
     description: 'Make your own'
   },
   {
+    name: 'Blog',
+    href: '/blog',
+    icon: BookOpen,
+    description: 'Articles & insights'
+  },
+  {
     name: 'Profile',
     href: '/profile',
     icon: User,
@@ -67,42 +73,44 @@ export function Navigation() {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-6 py-3"
+          className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-4 py-3"
         >
-          <div className="flex items-center space-x-1">
-            {navigationItems.map((item) => {
-              const Icon = item.icon
-              const isActive = pathname === item.href
-              
-              return (
-                <Link key={item.href} href={item.href}>
-                  <div
-                    className={cn(
-                      "relative px-4 py-2 rounded-full transition-all duration-200 flex items-center gap-2 hover:scale-105 active:scale-95",
-                      isActive
-                        ? "bg-amber-100 text-amber-700"
-                        : "text-gray-600 hover:text-amber-600 hover:bg-amber-50"
-                    )}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span className="text-sm font-medium">{item.name}</span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 bg-amber-100 rounded-full -z-10"
-                        transition={{ type: "spring", duration: 0.3 }}
-                      />
-                    )}
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
+          <div className="flex items-center">
+            <div className="flex items-center space-x-0.5">
+              {navigationItems.map((item) => {
+                const Icon = item.icon
+                const isActive = pathname === item.href
 
-          {/* Theme toggle and offline status indicator */}
-          <div className="flex items-center gap-2 ml-4">
-            <ThemeToggle />
-            <OfflineIndicator />
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <div
+                      className={cn(
+                        "relative px-3 py-2 rounded-full transition-all duration-200 flex items-center gap-1.5 hover:scale-105 active:scale-95",
+                        isActive
+                          ? "bg-amber-100 text-amber-700"
+                          : "text-gray-600 hover:text-amber-600 hover:bg-amber-50"
+                      )}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span className="text-sm font-medium">{item.name}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-amber-100 rounded-full -z-10"
+                          transition={{ type: "spring", duration: 0.3 }}
+                        />
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+
+            {/* Theme toggle and offline status indicator */}
+            <div className="flex items-center gap-2 ml-3 pl-3 border-l border-amber-200">
+              <ThemeToggle />
+              <OfflineIndicator />
+            </div>
           </div>
         </motion.div>
       </nav>

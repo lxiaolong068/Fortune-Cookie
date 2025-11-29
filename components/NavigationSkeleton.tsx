@@ -11,26 +11,28 @@ export function NavigationSkeleton() {
     <>
       {/* Desktop Navigation Skeleton */}
       <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-6 py-3">
-          <div className="flex items-center space-x-1">
-            {/* Navigation items skeleton */}
-            {Array.from({ length: 7 }).map((_, index) => (
-              <div
-                key={index}
-                className="px-4 py-2 rounded-full flex items-center gap-2"
-              >
-                {/* Icon skeleton */}
-                <div className="w-4 h-4 bg-gray-200 rounded animate-pulse" />
-                {/* Text skeleton */}
-                <div className="w-12 h-4 bg-gray-200 rounded animate-pulse" />
-              </div>
-            ))}
-          </div>
+        <div className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-4 py-3">
+          <div className="flex items-center">
+            <div className="flex items-center space-x-0.5">
+              {/* Navigation items skeleton - 8 items including Blog */}
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="px-3 py-2 rounded-full flex items-center gap-1.5"
+                >
+                  {/* Icon skeleton */}
+                  <div className="w-4 h-4 bg-gray-200 rounded animate-pulse" />
+                  {/* Text skeleton */}
+                  <div className="w-12 h-4 bg-gray-200 rounded animate-pulse" />
+                </div>
+              ))}
+            </div>
 
-          {/* Theme toggle and offline status skeleton */}
-          <div className="flex items-center gap-2 ml-4">
-            <div className="w-8 h-8 bg-gray-200 rounded animate-pulse" />
-            <div className="w-8 h-8 bg-gray-200 rounded animate-pulse" />
+            {/* Theme toggle and offline status skeleton */}
+            <div className="flex items-center gap-2 ml-3 pl-3 border-l border-amber-200">
+              <div className="w-8 h-8 bg-gray-200 rounded animate-pulse" />
+              <div className="w-8 h-8 bg-gray-200 rounded animate-pulse" />
+            </div>
           </div>
         </div>
       </nav>
@@ -58,6 +60,7 @@ export function NavigationStatic() {
     { name: 'Browse', href: '/browse' },
     { name: 'History', href: '/history' },
     { name: 'Recipes', href: '/recipes' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Profile', href: '/profile' }
   ]
 
@@ -65,20 +68,22 @@ export function NavigationStatic() {
     <>
       {/* Desktop Navigation - Static Version */}
       <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-6 py-3">
-          <div className="flex items-center space-x-1">
-            {navigationItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "px-4 py-2 rounded-full transition-colors duration-200 flex items-center gap-2",
-                  "text-gray-600 hover:text-amber-600 hover:bg-amber-50"
-                )}
-              >
-                <span className="text-sm font-medium">{item.name}</span>
-              </a>
-            ))}
+        <div className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-4 py-3">
+          <div className="flex items-center">
+            <div className="flex items-center space-x-0.5">
+              {navigationItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "px-3 py-2 rounded-full transition-colors duration-200 flex items-center gap-1.5",
+                    "text-gray-600 hover:text-amber-600 hover:bg-amber-50"
+                  )}
+                >
+                  <span className="text-sm font-medium">{item.name}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </nav>

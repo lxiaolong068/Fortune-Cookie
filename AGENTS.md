@@ -33,3 +33,14 @@ This Next.js app powers Fortune Cookie AI; use these guardrails to ship confiden
 ## Configuration & Environment
 - Copy `.env.example` to `.env.local` and supply Upstash, Prisma, and analytics keys before running seeds.
 - Use `npm run db:migrate` for schema work, followed by `npm run db:seed` (or `db:seed:clean`) to refresh fixtures.
+
+## Blog Feature
+- Blog uses MDX files in `content/blog/` with frontmatter (title, description, date, author, tags, image, featured).
+- Data layer: `lib/blog.ts` exports `getBlogPosts()`, `getPostBySlug()`, `getAllTags()`.
+- Components: `components/blog/BlogCard.tsx`, `components/blog/MDXComponents.tsx`.
+- Pages: `app/blog/page.tsx` (list), `app/blog/[slug]/page.tsx` (detail with SSG via `generateStaticParams`).
+- SEO: Article JSON-LD structured data, Open Graph metadata, sitemap integration.
+
+## Known Issues
+- **Blog Navigation**: Desktop navbar may not show Blog link due to Turbopack caching + `DynamicNavigation` (`ssr: false`). See `docs/blog-navigation-issue.md`. Workaround: access via Footer or `/blog` URL directly.
+- **Turbopack HMR**: If component changes don't reflect, try `rm -rf .next node_modules/.cache && npm run dev`.

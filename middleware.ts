@@ -97,10 +97,7 @@ function handleApiCaching(request: NextRequest, startTime: number, nonce: string
   if (!isCacheable) {
     const response = NextResponse.next()
     addServerTiming(response, startTime, 'api-uncacheable')
-    // 仅在生产环境启用安全头部
-    if (process.env.NODE_ENV === 'production') {
-      addSecurityHeaders(response, nonce)
-    }
+    addSecurityHeaders(response, nonce)
     return response
   }
 
@@ -123,10 +120,7 @@ function handleApiCaching(request: NextRequest, startTime: number, nonce: string
       },
     })
     addServerTiming(response, startTime, 'api-304')
-    // 仅在生产环境启用安全头部
-    if (process.env.NODE_ENV === 'production') {
-      addSecurityHeaders(response, nonce)
-    }
+    addSecurityHeaders(response, nonce)
     return response
   }
 
@@ -156,56 +150,51 @@ function handleApiCaching(request: NextRequest, startTime: number, nonce: string
   response.headers.set('Vary', 'Accept-Encoding, Accept')
 
   addServerTiming(response, startTime, 'api-cacheable')
-  // 仅在生产环境启用安全头部
-  if (process.env.NODE_ENV === 'production') {
-    addSecurityHeaders(response, nonce)
-  }
+  addSecurityHeaders(response, nonce)
   return response
 }
 
-// 添加安全标头（包括 CSP Nonce 和 Trusted Types）
+// 添加安全标头（包括 CSP Nonce）
 function addSecurityHeaders(response: NextResponse, nonce: string): void {
   // 将 nonce 添加到响应头，供页面使用
   response.headers.set('x-nonce', nonce)
 
-  // 更新 CSP 标头以使用 nonce 和 Trusted Types
-  // 开发模式需要 'unsafe-eval' 用于 HMR (Hot Module Replacement)
+  // 更新 CSP 标头以使用 nonce
+  // Note: 在开发环境中使用更宽松的 CSP 策略以避免 hydration 问题
+  // 生产环境应该使用更严格的策略
   const isDev = process.env.NODE_ENV === 'development'
-  const scriptSrc = isDev
-    ? `script-src 'self' 'unsafe-eval' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com`
-    : `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com`
 
-  const csp = [
-    "default-src 'self'",
-    scriptSrc,
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://openrouter.ai https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com",
-    "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://fundingchoicesmessages.google.com",
-    "media-src 'self'",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-    "frame-ancestors 'none'",
-    "upgrade-insecure-requests"
-  ]
+  const csp = isDev
+    ? [
+        "default-src 'self'",
+        `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "font-src 'self' https://fonts.gstatic.com",
+        "img-src 'self' data: https: blob:",
+        "connect-src 'self' https://openrouter.ai https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net",
+        "frame-src 'self'",
+        "media-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'"
+      ].join('; ')
+    : [
+        "default-src 'self'",
+        `script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com`,
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "font-src 'self' https://fonts.gstatic.com",
+        "img-src 'self' data: https: blob:",
+        "connect-src 'self' https://openrouter.ai https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com",
+        "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://fundingchoicesmessages.google.com",
+        "media-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'none'",
+        "upgrade-insecure-requests"
+      ].join('; ')
 
-  // Trusted Types 临时禁用
-  // 原因：Next.js 14 和 Framer Motion 与 Trusted Types 存在兼容性问题
-  // 错误：This document requires 'TrustedHTML' assignment
-  // TODO: 在未来版本中重新启用，需要为所有第三方库添加适当的策略
-  // if (process.env.NODE_ENV === 'production') {
-  //   csp.push(
-  //     "require-trusted-types-for 'script'",
-  //     "trusted-types nextjs nextjs#bundler default 'allow-duplicates'"
-  //   )
-  // }
-
-  const cspString = csp.join('; ')
-
-  // 设置 CSP 头部
-  response.headers.set('Content-Security-Policy', cspString)
+  response.headers.set('Content-Security-Policy', csp)
 }
 
 // 处理页面缓存
@@ -234,10 +223,8 @@ function handlePageCaching(request: NextRequest, startTime: number, nonce: strin
   // 添加Vary头部
   response.headers.set('Vary', 'Accept-Encoding, User-Agent')
 
-  // 添加安全标头（仅在生产环境）
-  if (process.env.NODE_ENV === 'production') {
-    addSecurityHeaders(response, nonce)
-  }
+  // 添加安全标头
+  addSecurityHeaders(response, nonce)
 
   return response
 }

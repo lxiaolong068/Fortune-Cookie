@@ -93,7 +93,7 @@ export function Footer() {
                 <ul className="space-y-2 text-gray-600">
                   <li><Link href="/history" className="hover:text-amber-600 transition-colors">Fortune Cookie History</Link></li>
                   <li><Link href="/recipes" className="hover:text-amber-600 transition-colors">Fortune Cookie Recipes</Link></li>
-                  <li><Link href="/browse" className="hover:text-amber-600 transition-colors">Browse All Messages</Link></li>
+                  <li><Link href="/blog" className="hover:text-amber-600 transition-colors">Blog & Articles</Link></li>
                   <li><Link href="/generator" className="hover:text-amber-600 transition-colors">AI Generator</Link></li>
                 </ul>
               </div>
