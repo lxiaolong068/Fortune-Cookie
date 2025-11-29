@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from 'react'
+import Link from 'next/link'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -36,15 +37,15 @@ export default function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'popularity' | 'recent' | 'alphabetical'>('popularity')
-  
+
   const stats = getDatabaseStats()
-  
+
   const filteredAndSortedFortunes = useMemo(() => {
     let results = searchFortunes(
-      searchQuery, 
+      searchQuery,
       selectedCategory === 'all' ? undefined : selectedCategory
     )
-    
+
     // Sort results
     switch (sortBy) {
       case 'popularity':
@@ -57,7 +58,7 @@ export default function BrowsePage() {
         results.sort((a, b) => a.message.localeCompare(b.message))
         break
     }
-    
+
     return results
   }, [searchQuery, selectedCategory, sortBy])
 
@@ -76,7 +77,7 @@ export default function BrowsePage() {
                 Explore our collection of {stats.total}+ fortune cookie messages across {Object.keys(stats.categories).length} categories.
                 Find the perfect message for any occasion!
               </p>
-              
+
               {/* 统计信息 */}
               <div className="flex flex-wrap justify-center gap-4 mb-8">
                 <Badge className="bg-blue-100 text-blue-800">
@@ -88,6 +89,17 @@ export default function BrowsePage() {
                 <Badge className="bg-purple-100 text-purple-800">
                   {stats.tags} Unique Tags
                 </Badge>
+              </div>
+
+              {/* SEO Category Links */}
+              <div className="flex flex-wrap justify-center gap-2 mb-8 max-w-3xl mx-auto">
+                {Object.keys(stats.categories).map((category) => (
+                  <Link key={category} href={`/browse/category/${category}`}>
+                    <Badge variant="outline" className="hover:bg-amber-50 cursor-pointer transition-colors py-1 px-3">
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </Badge>
+                  </Link>
+                ))}
               </div>
             </div>
 
@@ -103,7 +115,7 @@ export default function BrowsePage() {
                     className="pl-10"
                   />
                 </div>
-                
+
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger>
                     <SelectValue placeholder="All Categories" />
@@ -124,7 +136,7 @@ export default function BrowsePage() {
                     })}
                   </SelectContent>
                 </Select>
-                
+
                 <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
                   <SelectTrigger>
                     <SelectValue />
@@ -152,24 +164,26 @@ export default function BrowsePage() {
               {filteredAndSortedFortunes.map((fortune) => {
                 const Icon = categoryIcons[fortune.category as keyof typeof categoryIcons]
                 const colorClass = categoryColors[fortune.category as keyof typeof categoryColors]
-                
+
                 return (
                   <Card key={fortune.id} className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 hover:scale-105">
                     <div className="flex items-start justify-between mb-3">
-                      <Badge className={colorClass}>
-                        {Icon && <Icon className="w-3 h-3 mr-1" />}
-                        {fortune.category}
-                      </Badge>
+                      <Link href={`/browse/category/${fortune.category}`} className="hover:opacity-80 transition-opacity">
+                        <Badge className={colorClass}>
+                          {Icon && <Icon className="w-3 h-3 mr-1" />}
+                          {fortune.category}
+                        </Badge>
+                      </Link>
                       <div className="flex items-center gap-1">
                         <Sparkles className="w-3 h-3 text-amber-500" />
                         <span className="text-xs text-gray-500">{fortune.popularity}/10</span>
                       </div>
                     </div>
-                    
+
                     <blockquote className="text-gray-700 italic leading-relaxed mb-4">
                       "{fortune.message}"
                     </blockquote>
-                    
+
                     <div className="space-y-3">
                       <div>
                         <p className="text-xs text-gray-500 mb-1">Lucky Numbers:</p>
@@ -184,7 +198,7 @@ export default function BrowsePage() {
                           ))}
                         </div>
                       </div>
-                      
+
                       {fortune.tags.length > 0 && (
                         <div>
                           <p className="text-xs text-gray-500 mb-1">Tags:</p>

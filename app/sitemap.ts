@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getSiteUrl } from '@/lib/site'
 import { i18n, getLocalizedPath, getAlternateLinks } from '@/lib/i18n-config'
+import { getDatabaseStats } from '@/lib/fortune-database'
 
 /**
  * Generate XML Sitemap for SEO
@@ -139,6 +140,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: legalPagesDate // Terms of service
     },
   ].filter(page => !excludedPages.has(page.path))
+
+  // Add category pages dynamically
+  const stats = getDatabaseStats()
+  Object.keys(stats.categories).forEach(category => {
+    pages.push({
+      path: `/browse/category/${category}`,
+      priority: 0.7,
+      changeFrequency: 'weekly' as const,
+      lastModified: weeklyContentDate
+    })
+  })
 
   /**
    * Generate sitemap entries for all locales

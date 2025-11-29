@@ -37,33 +37,67 @@ export default function HomePage() {
           <FortuneCookie />
         </div>
 
-      {/* SEO-optimized hidden content */}
-      <div className="sr-only">
-        <h1>Fortune Cookie - Free Online AI Generator</h1>
-        <p>
-          Welcome to the best free online AI-powered fortune cookie generator! 
-          Create personalized inspirational messages, funny quotes, and discover 
-          your lucky numbers. Our AI tool generates unique fortune cookies for 
-          entertainment, motivation, and fun.
-        </p>
-        <h2>Features</h2>
-        <ul>
-          <li>Free online fortune cookie generator with AI</li>
-          <li>Inspirational and motivational quotes</li>
-          <li>Funny fortune cookie messages</li>
-          <li>Lucky numbers for each fortune</li>
-          <li>Custom message creation</li>
-          <li>Beautiful animations and effects</li>
-          <li>Mobile-friendly responsive design</li>
-          <li>No registration required</li>
-        </ul>
-        <h2>How to Use</h2>
-        <p>
-          Simply click on the fortune cookie to crack it open and reveal your
-          personalized message. Each fortune comes with lucky numbers and
-          inspirational wisdom to brighten your day.
-        </p>
-      </div>
+        {/* SEO-optimized visible content */}
+        <div className="relative z-10 bg-white/80 backdrop-blur-sm border-t border-amber-200 mt-[-50px] pt-20 pb-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center mb-16">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+                Fortune Cookie - Free Online AI Generator
+              </h1>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Welcome to the best free online AI-powered fortune cookie generator!
+                Create personalized inspirational messages, funny quotes, and discover
+                your lucky numbers. Our AI tool generates unique fortune cookies for
+                entertainment, motivation, and fun.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+              <section>
+                <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
+                  <span className="text-3xl">✨</span> Why Use Our Generator?
+                </h2>
+                <ul className="space-y-4">
+                  {[
+                    'Free online fortune cookie generator with AI',
+                    'Inspirational and motivational quotes',
+                    'Funny fortune cookie messages',
+                    'Lucky numbers for each fortune',
+                    'Custom message creation',
+                    'Beautiful animations and effects',
+                    'Mobile-friendly responsive design',
+                    'No registration required'
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-start gap-3 text-gray-700">
+                      <span className="text-amber-500 mt-1">✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
+                  <span className="text-3xl">🥠</span> How to Use
+                </h2>
+                <div className="prose prose-amber text-gray-600">
+                  <p className="mb-4">
+                    Simply click on the fortune cookie above to crack it open and reveal your
+                    personalized message. Each fortune comes with:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-2 mb-6">
+                    <li>A unique wisdom or prediction</li>
+                    <li>Your daily lucky numbers</li>
+                    <li>Shareable wisdom to brighten your day</li>
+                  </ul>
+                  <p>
+                    Want more specific fortunes? Try our <a href="/generator" className="text-amber-600 hover:underline font-medium">AI Generator</a> to create custom messages for friends and family!
+                  </p>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
       </main>
     </>
   )
