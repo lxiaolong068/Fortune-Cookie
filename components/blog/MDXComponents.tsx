@@ -38,7 +38,7 @@ function CustomLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-amber-600 hover:text-amber-700 underline underline-offset-4 transition-colors"
+      className="text-amber-600 hover:text-amber-700 underline underline-offset-4 transition-colors font-medium decoration-amber-300 hover:decoration-amber-500"
       {...props}
     >
       {children}
@@ -64,18 +64,18 @@ function CustomImage({
   // Use Next.js Image for optimized images
   if (src.startsWith('/') || src.startsWith('http')) {
     return (
-      <figure className="my-8">
-        <div className="relative w-full overflow-hidden rounded-lg">
+      <figure className="my-10">
+        <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-gray-100 dark:border-gray-800">
           <Image
             src={src}
             alt={alt || 'Blog image'}
             width={Number(width) || 800}
             height={Number(height) || 450}
-            className="w-full h-auto object-cover"
+            className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
           />
         </div>
         {alt && (
-          <figcaption className="mt-2 text-center text-sm text-gray-500">
+          <figcaption className="mt-3 text-center text-sm text-gray-500 dark:text-gray-400 italic">
             {alt}
           </figcaption>
         )}
@@ -144,16 +144,19 @@ function CodeBlock({
   ...props
 }: React.HTMLAttributes<HTMLPreElement>) {
   return (
-    <pre
-      className={cn(
-        'bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto my-6',
-        'text-sm font-mono',
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </pre>
+    <div className="relative group">
+      <div className="absolute -inset-2 bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity -z-10 blur-sm" />
+      <pre
+        className={cn(
+          'bg-gray-900 text-gray-100 rounded-xl p-6 overflow-x-auto my-8 shadow-xl border border-gray-800',
+          'text-sm font-mono leading-relaxed',
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </pre>
+    </div>
   )
 }
 
@@ -183,7 +186,7 @@ function Blockquote({
 }: React.BlockquoteHTMLAttributes<HTMLQuoteElement>) {
   return (
     <blockquote
-      className="border-l-4 border-amber-400 pl-4 my-6 italic text-gray-600"
+      className="border-l-4 border-amber-500 bg-amber-50/50 dark:bg-amber-900/10 pl-6 py-4 my-8 italic text-gray-700 dark:text-gray-300 rounded-r-lg"
       {...props}
     >
       {children}

@@ -117,24 +117,26 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Back Link */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700 mb-6 transition-colors"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-amber-600 mb-8 transition-colors group font-medium"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <div className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm group-hover:shadow-md transition-all border border-gray-100 dark:border-gray-700">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            </div>
             Back to Blog
           </Link>
 
           {/* Article Header */}
-          <header className="mb-8">
+          <header className="mb-12 text-center max-w-3xl mx-auto">
             {/* Tags */}
             {post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
                 {post.tags.map((tag) => (
                   <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`}>
                     <Badge
-                      variant="outline"
-                      className="bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100"
+                      variant="secondary"
+                      className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-transparent px-3 py-1 text-sm transition-colors"
                     >
-                      <Tag className="w-3 h-3 mr-1" />
+                      <Tag className="w-3 h-3 mr-1.5" />
                       {tag}
                     </Badge>
                   </Link>
@@ -143,29 +145,34 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
 
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-50 mb-6 leading-tight tracking-tight">
               {post.title}
             </h1>
 
             {/* Meta Info */}
-            <div className="flex flex-wrap items-center gap-4 text-gray-600">
-              <span className="flex items-center gap-1">
-                <User className="w-4 h-4" />
-                {post.author}
-              </span>
-              <span className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-gray-600 dark:text-gray-400 text-sm md:text-base">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-gray-100 dark:bg-gray-800 rounded-full">
+                  <User className="w-4 h-4" />
+                </div>
+                <span className="font-medium">{post.author}</span>
+              </div>
+              <div className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full" />
+              <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                {formatDate(post.date)}
-              </span>
-              <span className="flex items-center gap-1">
+                <time dateTime={post.date}>{formatDate(post.date)}</time>
+              </div>
+              <div className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full" />
+              <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                {post.readingTime} min read
-              </span>
+                <span>{post.readingTime} min read</span>
+              </div>
             </div>
           </header>
 
           {/* Article Content */}
-          <article className="prose prose-amber prose-lg max-w-none mb-12">
+          {/* Article Content */}
+          <article className="prose prose-lg prose-amber dark:prose-invert max-w-3xl mx-auto mb-16 prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-img:rounded-xl prose-img:shadow-lg prose-a:text-amber-600 hover:prose-a:text-amber-700 prose-blockquote:border-l-amber-500 prose-blockquote:bg-amber-50/50 dark:prose-blockquote:bg-amber-900/10 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic">
             <MDXRemote source={post.content} components={mdxComponents} />
           </article>
 
