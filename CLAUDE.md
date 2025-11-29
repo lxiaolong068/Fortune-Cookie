@@ -105,8 +105,12 @@ npm run vercel-check           # Verify Vercel deployment health
 - `BackgroundEffects.tsx` - Animated background with particles
 - `SEO.tsx` - SEO metadata management
 - `StructuredData.tsx` - JSON-LD schema generation
-- `PerformanceMonitor.tsx` - Web Vitals monitoring
+- `PerformanceMonitor.tsx` - Web Vitals monitoring with retry mechanism (exponential backoff, up to 3 retries)
+- `AdSenseFacade.tsx` - OptimizedAdSense component using Facade pattern for delayed AdSense script loading (improves LCP)
 - `ui/` - shadcn/ui component library
+
+**Dynamic Pages** (`app/browse/`):
+- `category/[category]/page.tsx` - Dynamic category pages for browsing fortunes by category with SEO optimization
 
 **Database** (`prisma/`):
 - `schema.prisma` - PostgreSQL schema with 7 models (Fortune, UserSession, ApiUsage, WebVital, ErrorLog, CacheStats, UserFeedback)
@@ -358,6 +362,29 @@ The blog feature uses MDX files in `content/blog/` directory:
 - **Components**: `components/blog/` - BlogCard, MDXComponents
 
 **Known Issue**: Blog navigation link may not appear in desktop navbar due to Turbopack caching. See `docs/blog-navigation-issue.md` for details. Workaround: access blog via Footer link or direct URL `/blog`.
+
+## Security Configuration
+
+**Dynamic CSP with Nonce** (`middleware.ts`):
+- Generates unique nonce for each request via `generateNonce()` function
+- Nonce applied to inline scripts and styles in CSP header
+- Used by `ThemeScript` component for theme initialization
+
+**Security Headers** (configured in `middleware.ts` and `next.config.js`):
+- **CSP**: Content Security Policy with dynamic nonce, restricting script/style sources
+- **COOP**: Cross-Origin-Opener-Policy set to `same-origin`
+- **COEP**: Cross-Origin-Embedder-Policy set to `require-corp`
+- **CORP**: Cross-Origin-Resource-Policy set to `same-origin`
+
+**Known Security Limitation**:
+- Trusted Types temporarily disabled due to incompatibility with Next.js 14 and Framer Motion
+- Results in "TrustedHTML" assignment errors when enabled
+- TODO: Re-enable after adding appropriate policies for third-party libraries
+
+**ads.txt and robots.txt Configuration**:
+- `next.config.js` uses rewrites to prevent Next.js redirects on these files
+- `vercel.json` sets `Content-Type: text/plain` and `Cache-Control: public, max-age=3600`
+- Ensures Google AdSense can correctly detect `ads.txt`
 
 ## Code Quality Standards
 
