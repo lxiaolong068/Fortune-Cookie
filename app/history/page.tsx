@@ -1,106 +1,120 @@
-import { Metadata } from 'next'
-import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Calendar, MapPin, Users, Sparkles } from 'lucide-react'
-import Image from 'next/image'
-import { ArticleStructuredData, BreadcrumbStructuredData } from '@/components/StructuredData'
-import { FAQStructuredData, historyFAQs } from '@/components/FAQStructuredData'
-import { getSiteUrl } from '@/lib/site'
+import { Metadata } from "next";
+import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Sparkles } from "lucide-react";
+import {
+  ArticleStructuredData,
+  BreadcrumbStructuredData,
+} from "@/components/StructuredData";
+import { FAQStructuredData, historyFAQs } from "@/components/FAQStructuredData";
+import { getSiteUrl } from "@/lib/site";
 
-const baseUrl = getSiteUrl()
+const baseUrl = getSiteUrl();
 
 // Static generation configuration
-export const dynamic = 'force-static'
-export const revalidate = 86400 // 24 hours
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: 'History of Fortune Cookies - Origins and Cultural Evolution',
-  description: 'Explore the history of fortune cookies from Japanese roots to American invention. Learn the cultural evolution and origins of this beloved treat.',
+  title: "History of Fortune Cookies - Origins and Cultural Evolution",
+  description:
+    "Explore the history of fortune cookies from Japanese roots to American invention. Learn the cultural evolution and origins of this beloved treat.",
   openGraph: {
-    title: 'History of Fortune Cookies - Origins and Cultural Evolution',
-    description: 'Discover the fascinating history of fortune cookies, from their Japanese roots to American invention.',
-    type: 'article',
+    title: "History of Fortune Cookies - Origins and Cultural Evolution",
+    description:
+      "Discover the fascinating history of fortune cookies, from their Japanese roots to American invention.",
+    type: "article",
     url: `${baseUrl}/history`,
   },
   alternates: {
-    canonical: '/history',
+    canonical: "/history",
   },
-}
+};
 
 const timelineEvents = [
   {
-    year: '1870s',
-    title: 'Japanese Origins',
-    location: 'Kyoto, Japan',
-    description: 'The earliest known predecessor to fortune cookies appears in Japan as "tsujiura senbei" - crackers containing fortunes sold near temples and shrines.',
-    icon: '🏮',
-    color: 'bg-red-100 text-red-800'
+    year: "1870s",
+    title: "Japanese Origins",
+    location: "Kyoto, Japan",
+    description:
+      'The earliest known predecessor to fortune cookies appears in Japan as "tsujiura senbei" - crackers containing fortunes sold near temples and shrines.',
+    icon: "🏮",
+    color: "bg-red-100 text-red-800",
   },
   {
-    year: '1890s-1900s',
-    title: 'Immigration to America',
-    location: 'California, USA',
-    description: 'Japanese immigrants bring the concept to California, where it begins to evolve in the diverse cultural landscape of the American West Coast.',
-    icon: '🚢',
-    color: 'bg-blue-100 text-blue-800'
+    year: "1890s-1900s",
+    title: "Immigration to America",
+    location: "California, USA",
+    description:
+      "Japanese immigrants bring the concept to California, where it begins to evolve in the diverse cultural landscape of the American West Coast.",
+    icon: "🚢",
+    color: "bg-blue-100 text-blue-800",
   },
   {
-    year: '1910s',
-    title: 'First American Fortune Cookies',
-    location: 'San Francisco, CA',
-    description: 'Makoto Hagiwara at the Japanese Tea Garden in Golden Gate Park is credited with serving the first fortune cookies in America.',
-    icon: '🌸',
-    color: 'bg-pink-100 text-pink-800'
+    year: "1910s",
+    title: "First American Fortune Cookies",
+    location: "San Francisco, CA",
+    description:
+      "Makoto Hagiwara at the Japanese Tea Garden in Golden Gate Park is credited with serving the first fortune cookies in America.",
+    icon: "🌸",
+    color: "bg-pink-100 text-pink-800",
   },
   {
-    year: '1920s-1930s',
-    title: 'Chinese Restaurant Adoption',
-    location: 'Los Angeles & San Francisco',
-    description: 'Chinese restaurants begin serving fortune cookies, gradually becoming associated with Chinese cuisine in American popular culture.',
-    icon: '🥠',
-    color: 'bg-yellow-100 text-yellow-800'
+    year: "1920s-1930s",
+    title: "Chinese Restaurant Adoption",
+    location: "Los Angeles & San Francisco",
+    description:
+      "Chinese restaurants begin serving fortune cookies, gradually becoming associated with Chinese cuisine in American popular culture.",
+    icon: "🥠",
+    color: "bg-yellow-100 text-yellow-800",
   },
   {
-    year: '1940s-1950s',
-    title: 'Mass Production Begins',
-    location: 'California',
-    description: 'Automated fortune cookie machines are invented, allowing for mass production and widespread distribution across the United States.',
-    icon: '🏭',
-    color: 'bg-gray-100 text-gray-800'
+    year: "1940s-1950s",
+    title: "Mass Production Begins",
+    location: "California",
+    description:
+      "Automated fortune cookie machines are invented, allowing for mass production and widespread distribution across the United States.",
+    icon: "🏭",
+    color: "bg-gray-100 text-gray-800",
   },
   {
-    year: '1960s-Present',
-    title: 'Cultural Icon',
-    location: 'Worldwide',
-    description: 'Fortune cookies become a beloved cultural symbol, spreading globally and evolving into the digital age with AI-powered generators.',
-    icon: '🌍',
-    color: 'bg-green-100 text-green-800'
-  }
-]
+    year: "1960s-Present",
+    title: "Cultural Icon",
+    location: "Worldwide",
+    description:
+      "Fortune cookies become a beloved cultural symbol, spreading globally and evolving into the digital age with AI-powered generators.",
+    icon: "🌍",
+    color: "bg-green-100 text-green-800",
+  },
+];
 
 const funFacts = [
   {
-    title: 'Not Actually Chinese',
-    description: 'Despite popular belief, fortune cookies were invented in America, not China. They are rarely found in China today.',
-    icon: '🤔'
+    title: "Not Actually Chinese",
+    description:
+      "Despite popular belief, fortune cookies were invented in America, not China. They are rarely found in China today.",
+    icon: "🤔",
   },
   {
-    title: 'Japanese Inspiration',
-    description: 'The concept originated from Japanese "omikuji" fortune-telling papers and "tsujiura senbei" crackers.',
-    icon: '🎌'
+    title: "Japanese Inspiration",
+    description:
+      'The concept originated from Japanese "omikuji" fortune-telling papers and "tsujiura senbei" crackers.',
+    icon: "🎌",
   },
   {
-    title: 'World War II Impact',
-    description: 'During WWII, Japanese Americans were interned, leading Chinese restaurants to adopt and popularize fortune cookies.',
-    icon: '📜'
+    title: "World War II Impact",
+    description:
+      "During WWII, Japanese Americans were interned, leading Chinese restaurants to adopt and popularize fortune cookies.",
+    icon: "📜",
   },
   {
-    title: 'Billions Produced',
-    description: 'Over 3 billion fortune cookies are produced annually, with most made in the United States.',
-    icon: '📊'
-  }
-]
+    title: "Billions Produced",
+    description:
+      "Over 3 billion fortune cookies are produced annually, with most made in the United States.",
+    icon: "📊",
+  },
+];
 
 export default function HistoryPage() {
   return (
@@ -110,22 +124,24 @@ export default function HistoryPage() {
         description="Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about the cultural evolution and origins of this beloved treat."
         url="/history"
         datePublished="2024-01-01"
-        dateModified={new Date().toISOString().split('T')[0]}
+        dateModified={new Date().toISOString().split("T")[0]}
         keywords={[
-          'history of fortune cookies',
-          'fortune cookie origins',
-          'who invented fortune cookies',
-          'fortune cookies japanese roots',
-          'fortune cookies in america',
-          'cultural history',
-          'asian american food history',
-          'fortune cookie facts'
+          "history of fortune cookies",
+          "fortune cookie origins",
+          "who invented fortune cookies",
+          "fortune cookies japanese roots",
+          "fortune cookies in america",
+          "cultural history",
+          "asian american food history",
+          "fortune cookie facts",
         ]}
       />
-      <BreadcrumbStructuredData items={[
-        { name: 'Home', url: '/' },
-        { name: 'History of Fortune Cookies', url: '/history' }
-      ]} />
+      <BreadcrumbStructuredData
+        items={[
+          { name: "Home", url: "/" },
+          { name: "History of Fortune Cookies", url: "/history" },
+        ]}
+      />
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />
         <div className="relative z-10">
@@ -136,8 +152,9 @@ export default function HistoryPage() {
                 History of Fortune Cookies
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Discover the fascinating journey of fortune cookies from their Japanese origins to becoming 
-                an iconic symbol of American-Chinese cuisine and culture.
+                Discover the fascinating journey of fortune cookies from their
+                Japanese origins to becoming an iconic symbol of
+                American-Chinese cuisine and culture.
               </p>
             </div>
 
@@ -148,7 +165,10 @@ export default function HistoryPage() {
               </h2>
               <div className="space-y-8">
                 {timelineEvents.map((event, index) => (
-                  <div key={index} className="flex flex-col md:flex-row gap-6 items-start">
+                  <div
+                    key={index}
+                    className="flex flex-col md:flex-row gap-6 items-start"
+                  >
                     <div className="flex-shrink-0">
                       <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-sm border-2 border-amber-200 flex items-center justify-center text-2xl">
                         {event.icon}
@@ -156,9 +176,7 @@ export default function HistoryPage() {
                     </div>
                     <Card className="flex-1 p-6 bg-white/90 backdrop-blur-sm border-amber-200">
                       <div className="flex flex-wrap items-center gap-3 mb-3">
-                        <Badge className={event.color}>
-                          {event.year}
-                        </Badge>
+                        <Badge className={event.color}>{event.year}</Badge>
                         <div className="flex items-center gap-1 text-sm text-gray-500">
                           <MapPin className="w-4 h-4" />
                           {event.location}
@@ -183,7 +201,10 @@ export default function HistoryPage() {
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {funFacts.map((fact, index) => (
-                  <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200">
+                  <Card
+                    key={index}
+                    className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200"
+                  >
                     <div className="flex items-start gap-4">
                       <div className="text-3xl">{fact.icon}</div>
                       <div>
@@ -207,16 +228,21 @@ export default function HistoryPage() {
                   The Cultural Impact of Fortune Cookies
                 </h2>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Fortune cookies represent a unique example of cultural fusion in American cuisine. While often 
-                  associated with Chinese restaurants, their true origins lie in Japanese tradition, and their 
-                  modern form was developed in the United States. This fascinating history reflects the complex 
-                  nature of cultural exchange and adaptation in immigrant communities.
+                  Fortune cookies represent a unique example of cultural fusion
+                  in American cuisine. While often associated with Chinese
+                  restaurants, their true origins lie in Japanese tradition, and
+                  their modern form was developed in the United States. This
+                  fascinating history reflects the complex nature of cultural
+                  exchange and adaptation in immigrant communities.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  Today, fortune cookies have transcended their restaurant origins to become a beloved cultural 
-                  symbol, inspiring everything from digital fortune generators to philosophical discussions about 
-                  fate and wisdom. Their evolution from traditional Japanese temple treats to modern AI-powered 
-                  message generators demonstrates how cultural traditions adapt and thrive in new environments.
+                  Today, fortune cookies have transcended their restaurant
+                  origins to become a beloved cultural symbol, inspiring
+                  everything from digital fortune generators to philosophical
+                  discussions about fate and wisdom. Their evolution from
+                  traditional Japanese temple treats to modern AI-powered
+                  message generators demonstrates how cultural traditions adapt
+                  and thrive in new environments.
                 </p>
               </section>
 
@@ -225,11 +251,13 @@ export default function HistoryPage() {
                   Modern Fortune Cookies and Technology
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  In the digital age, fortune cookies have found new life through online generators and AI-powered 
-                  message creation. These modern interpretations maintain the spirit of the original while offering 
-                  personalized, themed messages that can be customized for different occasions and preferences. 
-                  The tradition continues to evolve, bringing ancient wisdom and modern technology together in 
-                  delightful new ways.
+                  In the digital age, fortune cookies have found new life
+                  through online generators and AI-powered message creation.
+                  These modern interpretations maintain the spirit of the
+                  original while offering personalized, themed messages that can
+                  be customized for different occasions and preferences. The
+                  tradition continues to evolve, bringing ancient wisdom and
+                  modern technology together in delightful new ways.
                 </p>
               </section>
             </div>
@@ -239,5 +267,5 @@ export default function HistoryPage() {
 
       <FAQStructuredData faqs={historyFAQs} />
     </>
-  )
+  );
 }

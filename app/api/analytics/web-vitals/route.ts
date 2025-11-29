@@ -1,120 +1,113 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { WebVitalMetric, createSuccessResponse, createErrorResponse, isWebVitalMetric } from '@/types/api'
+import { NextRequest, NextResponse } from "next/server";
+import {
+  WebVitalMetric,
+  createSuccessResponse,
+  createErrorResponse,
+  isWebVitalMetric,
+} from "@/types/api";
 
 // In-memory storage for demo (use a real database in production)
-const metricsStore: WebVitalMetric[] = []
+const metricsStore: WebVitalMetric[] = [];
 
 // 安全工具函数
 function getCorsOrigin(): string {
-  if (process.env.NODE_ENV === 'production') {
-    return process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'
+  if (process.env.NODE_ENV === "production") {
+    return process.env.NEXT_PUBLIC_APP_URL || "https://your-domain.com";
   }
-  return '*'
+  return "*";
 }
 
 function addSecurityHeaders(response: NextResponse): NextResponse {
-  response.headers.set('Access-Control-Allow-Origin', getCorsOrigin())
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('X-XSS-Protection', '1; mode=block')
-  return response
-}
-
-function validateMetric(metric: any): boolean {
-  const validNames = ['CLS', 'INP', 'FCP', 'LCP', 'TTFB']
-  const validRatings = ['good', 'needs-improvement', 'poor']
-
-  return (
-    typeof metric.id === 'string' &&
-    metric.id.length > 0 &&
-    metric.id.length < 100 &&
-    validNames.includes(metric.name) &&
-    typeof metric.value === 'number' &&
-    metric.value >= 0 &&
-    metric.value < 100000 && // 合理的上限
-    typeof metric.delta === 'number' &&
-    validRatings.includes(metric.rating)
-  )
+  response.headers.set("Access-Control-Allow-Origin", getCorsOrigin());
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+  return response;
 }
 
 // RUM采样率函数 - 根据指标类型和性能情况调整采样率
 function getSamplingRate(metricName: string, value: number): number {
   // 基础采样率
-  let baseRate = 0.1 // 10% 基础采样率
+  let baseRate = 0.1; // 10% 基础采样率
 
   // 根据指标类型调整
   switch (metricName) {
-    case 'LCP':
+    case "LCP":
       // LCP是关键指标，提高采样率
-      baseRate = 0.2
+      baseRate = 0.2;
       // 对于性能差的情况，提高采样率以便调试
-      if (value > 4000) baseRate = 0.5 // 超过4秒的LCP
-      else if (value > 2500) baseRate = 0.3 // 超过2.5秒的LCP
-      break
-    case 'INP':
-      baseRate = 0.15
-      if (value > 500) baseRate = 0.4 // 超过500ms的INP
-      else if (value > 200) baseRate = 0.25 // 超过200ms的INP
-      break
-    case 'CLS':
-      baseRate = 0.1
-      if (value > 0.25) baseRate = 0.4 // 超过0.25的CLS
-      else if (value > 0.1) baseRate = 0.2 // 超过0.1的CLS
-      break
-    case 'FCP':
-      baseRate = 0.1
-      if (value > 3000) baseRate = 0.3 // 超过3秒的FCP
-      break
-    case 'TTFB':
-      baseRate = 0.1
-      if (value > 1800) baseRate = 0.3 // 超过1.8秒的TTFB
-      break
+      if (value > 4000)
+        baseRate = 0.5; // 超过4秒的LCP
+      else if (value > 2500) baseRate = 0.3; // 超过2.5秒的LCP
+      break;
+    case "INP":
+      baseRate = 0.15;
+      if (value > 500)
+        baseRate = 0.4; // 超过500ms的INP
+      else if (value > 200) baseRate = 0.25; // 超过200ms的INP
+      break;
+    case "CLS":
+      baseRate = 0.1;
+      if (value > 0.25)
+        baseRate = 0.4; // 超过0.25的CLS
+      else if (value > 0.1) baseRate = 0.2; // 超过0.1的CLS
+      break;
+    case "FCP":
+      baseRate = 0.1;
+      if (value > 3000) baseRate = 0.3; // 超过3秒的FCP
+      break;
+    case "TTFB":
+      baseRate = 0.1;
+      if (value > 1800) baseRate = 0.3; // 超过1.8秒的TTFB
+      break;
   }
 
-  return Math.min(baseRate, 1.0) // 确保不超过100%
+  return Math.min(baseRate, 1.0); // 确保不超过100%
 }
 
 export async function POST(request: NextRequest) {
   try {
-    let metric: unknown
+    let metric: unknown;
 
     // 解析和验证请求体
     try {
-      metric = await request.json()
-    } catch (error) {
+      metric = await request.json();
+    } catch {
       const response = NextResponse.json(
-        { error: 'Invalid JSON in request body' },
-        { status: 400 }
-      )
-      return addSecurityHeaders(response)
+        { error: "Invalid JSON in request body" },
+        { status: 400 },
+      );
+      return addSecurityHeaders(response);
     }
 
     // 全面验证指标数据
     if (!isWebVitalMetric(metric)) {
       const response = NextResponse.json(
-        createErrorResponse('Invalid metric data. Required fields: id, name, value, delta, rating'),
-        { status: 400 }
-      )
-      return addSecurityHeaders(response)
+        createErrorResponse(
+          "Invalid metric data. Required fields: id, name, value, delta, rating",
+        ),
+        { status: 400 },
+      );
+      return addSecurityHeaders(response);
     }
 
     // 限制存储的指标数量（防止内存泄漏）
     if (metricsStore.length > 10000) {
-      metricsStore.splice(0, 1000) // 移除最旧的1000条记录
+      metricsStore.splice(0, 1000); // 移除最旧的1000条记录
     }
 
     // 安全地获取请求头信息
-    const userAgent = request.headers.get('user-agent')?.slice(0, 500) || ''
-    const referer = request.headers.get('referer')?.slice(0, 500) || ''
+    const userAgent = request.headers.get("user-agent")?.slice(0, 500) || "";
+    const referer = request.headers.get("referer")?.slice(0, 500) || "";
 
     // 获取额外的RUM数据
-    const connectionType = request.headers.get('connection-type') || 'unknown'
-    const deviceMemory = request.headers.get('device-memory') || 'unknown'
-    const effectiveType = request.headers.get('effective-type') || 'unknown'
+    const connectionType = request.headers.get("connection-type") || "unknown";
+    const deviceMemory = request.headers.get("device-memory") || "unknown";
+    const effectiveType = request.headers.get("effective-type") || "unknown";
 
     // 实现采样逻辑 - 只存储一定比例的数据以避免存储过载
-    const samplingRate = getSamplingRate(metric.name, metric.value)
-    const shouldSample = Math.random() < samplingRate
+    const samplingRate = getSamplingRate(metric.name, metric.value);
+    const shouldSample = Math.random() < samplingRate;
 
     // Store the metric (in production, save to database)
     if (shouldSample) {
@@ -128,7 +121,7 @@ export async function POST(request: NextRequest) {
         effectiveType,
         sampled: true,
         samplingRate,
-      } as any)
+      } as any);
     }
 
     // Log performance issues
@@ -138,121 +131,139 @@ export async function POST(request: NextRequest) {
       FCP: { good: 1800, poor: 3000 },
       LCP: { good: 2500, poor: 4000 },
       TTFB: { good: 800, poor: 1800 },
-    }
+    };
 
-    const threshold = thresholds[metric.name as keyof typeof thresholds]
+    const threshold = thresholds[metric.name as keyof typeof thresholds];
     if (threshold) {
       if (metric.value > threshold.poor) {
-        console.warn(`Poor ${metric.name}: ${metric.value}`)
+        console.warn(`Poor ${metric.name}: ${metric.value}`);
       } else if (metric.value > threshold.good) {
-        console.log(`Needs improvement ${metric.name}: ${metric.value}`)
+        console.log(`Needs improvement ${metric.name}: ${metric.value}`);
       }
     }
 
-    const response = NextResponse.json(createSuccessResponse({ success: true }))
-    return addSecurityHeaders(response)
-
-  } catch (error) {
-    console.error('Web Vitals API error:', error)
     const response = NextResponse.json(
-      createErrorResponse('Failed to process metric'),
-      { status: 500 }
-    )
-    return addSecurityHeaders(response)
+      createSuccessResponse({ success: true }),
+    );
+    return addSecurityHeaders(response);
+  } catch (error) {
+    console.error("Web Vitals API error:", error);
+    const response = NextResponse.json(
+      createErrorResponse("Failed to process metric"),
+      { status: 500 },
+    );
+    return addSecurityHeaders(response);
   }
 }
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const metric = searchParams.get('metric')
-    const limitParam = searchParams.get('limit') || '100'
+    const { searchParams } = new URL(request.url);
+    const metric = searchParams.get("metric");
+    const limitParam = searchParams.get("limit") || "100";
 
     // 验证和清理参数
-    const validMetrics = ['CLS', 'INP', 'FCP', 'LCP', 'TTFB']
-    const sanitizedMetric = metric && validMetrics.includes(metric) ? metric : null
+    const validMetrics = ["CLS", "INP", "FCP", "LCP", "TTFB"];
+    const sanitizedMetric =
+      metric && validMetrics.includes(metric) ? metric : null;
 
-    const limit = Math.min(Math.max(parseInt(limitParam) || 100, 1), 1000) // 限制在1-1000之间
+    const limit = Math.min(Math.max(parseInt(limitParam) || 100, 1), 1000); // 限制在1-1000之间
 
-    let results = metricsStore
+    let results = metricsStore;
 
     if (sanitizedMetric) {
-      results = results.filter(m => m.name === sanitizedMetric)
+      results = results.filter((m) => m.name === sanitizedMetric);
     }
 
     // Get recent metrics
     results = results
-      .sort((a: WebVitalMetric & { timestamp?: number }, b: WebVitalMetric & { timestamp?: number }) =>
-        (b.timestamp || 0) - (a.timestamp || 0))
-      .slice(0, limit)
+      .sort(
+        (
+          a: WebVitalMetric & { timestamp?: number },
+          b: WebVitalMetric & { timestamp?: number },
+        ) => (b.timestamp || 0) - (a.timestamp || 0),
+      )
+      .slice(0, limit);
 
     // Calculate averages and sampling statistics
-    const averages = results.reduce((acc, metric) => {
-      if (!acc[metric.name]) {
-        acc[metric.name] = {
-          total: 0,
-          count: 0,
-          average: 0,
-          sampledCount: 0,
-          totalSampled: 0
+    const averages = results.reduce(
+      (acc, metric) => {
+        if (!acc[metric.name]) {
+          acc[metric.name] = {
+            total: 0,
+            count: 0,
+            average: 0,
+            sampledCount: 0,
+            totalSampled: 0,
+          };
         }
-      }
-      const metricData = acc[metric.name]
-      if (metricData) {
-        metricData.total += metric.value
-        metricData.count += 1
-        metricData.average = metricData.total / metricData.count
+        const metricData = acc[metric.name];
+        if (metricData) {
+          metricData.total += metric.value;
+          metricData.count += 1;
+          metricData.average = metricData.total / metricData.count;
 
-        // Track sampling statistics
-        if ((metric as any).sampled) {
-          metricData.sampledCount += 1
-          metricData.totalSampled += metric.value
+          // Track sampling statistics
+          if ((metric as any).sampled) {
+            metricData.sampledCount += 1;
+            metricData.totalSampled += metric.value;
+          }
         }
-      }
-      return acc
-    }, {} as Record<string, {
-      total: number;
-      count: number;
-      average: number;
-      sampledCount: number;
-      totalSampled: number;
-    }>)
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          total: number;
+          count: number;
+          average: number;
+          sampledCount: number;
+          totalSampled: number;
+        }
+      >,
+    );
 
     // Calculate performance outliers (values above 95th percentile)
     const outliers = results
-      .filter(metric => {
+      .filter((metric) => {
         const thresholds = {
           CLS: 0.25,
           INP: 500,
           FCP: 3000,
           LCP: 4000,
           TTFB: 1800,
-        }
-        return metric.value > (thresholds[metric.name as keyof typeof thresholds] || 0)
+        };
+        return (
+          metric.value >
+          (thresholds[metric.name as keyof typeof thresholds] || 0)
+        );
       })
-      .slice(0, 50) // Limit outliers to prevent large responses
+      .slice(0, 50); // Limit outliers to prevent large responses
 
-    const response = NextResponse.json(createSuccessResponse({
-      metrics: results,
-      averages,
-      outliers,
-      total: results.length,
-      samplingInfo: {
-        totalSampled: results.filter((m: any) => m.sampled).length,
-        totalReceived: metricsStore.length,
-        samplingRatio: results.filter((m: any) => m.sampled).length / Math.max(metricsStore.length, 1)
-      }
-    }))
-
-    return addSecurityHeaders(response)
-
-  } catch (error) {
-    console.error('Web Vitals GET error:', error)
     const response = NextResponse.json(
-      { error: 'Failed to fetch metrics' },
-      { status: 500 }
-    )
-    return addSecurityHeaders(response)
+      createSuccessResponse({
+        metrics: results,
+        averages,
+        outliers,
+        total: results.length,
+        samplingInfo: {
+          totalSampled: results.filter((m: any) => m.sampled).length,
+          totalReceived: metricsStore.length,
+          samplingRatio:
+            results.filter((m: any) => m.sampled).length /
+            Math.max(metricsStore.length, 1),
+        },
+      }),
+    );
+
+    return addSecurityHeaders(response);
+  } catch (error) {
+    console.error("Web Vitals GET error:", error);
+    const response = NextResponse.json(
+      { error: "Failed to fetch metrics" },
+      { status: 500 },
+    );
+    return addSecurityHeaders(response);
   }
 }
 
@@ -261,13 +272,14 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': getCorsOrigin(),
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-      'Access-Control-Max-Age': '86400',
-      'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'DENY',
-      'X-XSS-Protection': '1; mode=block',
+      "Access-Control-Allow-Origin": getCorsOrigin(),
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Content-Type, Authorization, X-Requested-With",
+      "Access-Control-Max-Age": "86400",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "X-XSS-Protection": "1; mode=block",
     },
-  })
+  });
 }

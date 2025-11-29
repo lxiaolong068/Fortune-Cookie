@@ -1,70 +1,87 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { BarChart3, Users, Eye, Clock, TrendingUp, Activity, Globe, Smartphone } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { analyticsManager } from '@/lib/analytics-manager'
+import { useState, useEffect } from "react";
+import {
+  BarChart3,
+  Users,
+  Eye,
+  Clock,
+  Activity,
+  Globe,
+  Smartphone,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { analyticsManager } from "@/lib/analytics-manager";
 
 interface AnalyticsDashboardProps {
-  className?: string
-  showRealTime?: boolean
+  className?: string;
+  showRealTime?: boolean;
 }
 
 interface DashboardData {
   summary: {
-    totalEvents: number
-    uniqueUsers: number
-    pageViews: number
-    averageSessionDuration: number
-  }
+    totalEvents: number;
+    uniqueUsers: number;
+    pageViews: number;
+    averageSessionDuration: number;
+  };
   userBehavior: {
-    deviceBreakdown: Record<string, number>
-    browserBreakdown: Record<string, number>
-    topPages: Array<{ page: string; views: number }>
-  }
+    deviceBreakdown: Record<string, number>;
+    browserBreakdown: Record<string, number>;
+    topPages: Array<{ page: string; views: number }>;
+  };
   performance: {
-    averageLoadTime: number
-    averageLCP: number
-    averageFID: number
-    averageCLS: number
-  }
+    averageLoadTime: number;
+    averageLCP: number;
+    averageFID: number;
+    averageCLS: number;
+  };
   realTime: {
-    currentUsers: number
-    eventsLastHour: number
-    topCategories: Array<{ category: string; count: number }>
-  }
+    currentUsers: number;
+    eventsLastHour: number;
+    topCategories: Array<{ category: string; count: number }>;
+  };
 }
 
-export function AnalyticsDashboard({ className, showRealTime = true }: AnalyticsDashboardProps) {
-  const [data, setData] = useState<DashboardData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [realTimeData, setRealTimeData] = useState<any>(null)
+export function AnalyticsDashboard({
+  className,
+  showRealTime = true,
+}: AnalyticsDashboardProps) {
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [realTimeData, setRealTimeData] = useState<any>(null);
 
   useEffect(() => {
-    loadDashboardData()
-    
+    loadDashboardData();
+
     if (showRealTime) {
       // 实时数据更新
       const interval = setInterval(() => {
-        updateRealTimeData()
-      }, 30000) // 每30秒更新一次
+        updateRealTimeData();
+      }, 30000); // 每30秒更新一次
 
-      return () => clearInterval(interval)
+      return () => clearInterval(interval);
     }
-  }, [showRealTime])
+  }, [showRealTime]);
 
   const loadDashboardData = async () => {
     try {
-      setIsLoading(true)
-      
+      setIsLoading(true);
+
       // 获取本地分析数据
-      const userBehavior = analyticsManager.getUserBehaviorData()
-      const performance = analyticsManager.getPerformanceMetrics()
-      
+      const userBehavior = analyticsManager.getUserBehaviorData();
+      const performance = analyticsManager.getPerformanceMetrics();
+
       // 模拟仪表板数据（在实际应用中应该从API获取）
       const dashboardData: DashboardData = {
         summary: {
@@ -86,9 +103,9 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
             Edge: 5,
           },
           topPages: [
-            { page: '/', views: 123 },
-            { page: '/generator', views: 89 },
-            { page: '/messages', views: 67 },
+            { page: "/", views: 123 },
+            { page: "/generator", views: 89 },
+            { page: "/messages", views: 67 },
           ],
         },
         performance: {
@@ -101,62 +118,78 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
           currentUsers: 12,
           eventsLastHour: 45,
           topCategories: [
-            { category: 'inspirational', count: 15 },
-            { category: 'motivational', count: 12 },
-            { category: 'wisdom', count: 8 },
+            { category: "inspirational", count: 15 },
+            { category: "motivational", count: 12 },
+            { category: "wisdom", count: 8 },
           ],
         },
-      }
-      
-      setData(dashboardData)
+      };
+
+      setData(dashboardData);
     } catch (err) {
-      setError('Failed to load dashboard data')
-      console.error('Dashboard data loading error:', err)
+      setError("Failed to load dashboard data");
+      console.error("Dashboard data loading error:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const updateRealTimeData = () => {
     // 更新实时数据
-    const userBehavior = analyticsManager.getUserBehaviorData()
+    const userBehavior = analyticsManager.getUserBehaviorData();
     setRealTimeData({
       currentSession: {
         duration: userBehavior.sessionDuration,
         pageViews: userBehavior.pageViews,
         fortunesGenerated: userBehavior.fortunesGenerated,
       },
-    })
-  }
+    });
+  };
 
   const formatDuration = (ms: number) => {
-    const seconds = Math.floor(ms / 1000)
-    const minutes = Math.floor(seconds / 60)
-    const hours = Math.floor(minutes / 60)
-    
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+
     if (hours > 0) {
-      return `${hours}h ${minutes % 60}m`
+      return `${hours}h ${minutes % 60}m`;
     } else if (minutes > 0) {
-      return `${minutes}m ${seconds % 60}s`
+      return `${minutes}m ${seconds % 60}s`;
     } else {
-      return `${seconds}s`
+      return `${seconds}s`;
     }
-  }
+  };
 
   const getPerformanceColor = (metric: string, value: number) => {
     switch (metric) {
-      case 'loadTime':
-        return value < 1000 ? 'text-green-600' : value < 2000 ? 'text-yellow-600' : 'text-red-600'
-      case 'lcp':
-        return value < 2500 ? 'text-green-600' : value < 4000 ? 'text-yellow-600' : 'text-red-600'
-      case 'fid':
-        return value < 100 ? 'text-green-600' : value < 300 ? 'text-yellow-600' : 'text-red-600'
-      case 'cls':
-        return value < 0.1 ? 'text-green-600' : value < 0.25 ? 'text-yellow-600' : 'text-red-600'
+      case "loadTime":
+        return value < 1000
+          ? "text-green-600"
+          : value < 2000
+            ? "text-yellow-600"
+            : "text-red-600";
+      case "lcp":
+        return value < 2500
+          ? "text-green-600"
+          : value < 4000
+            ? "text-yellow-600"
+            : "text-red-600";
+      case "fid":
+        return value < 100
+          ? "text-green-600"
+          : value < 300
+            ? "text-yellow-600"
+            : "text-red-600";
+      case "cls":
+        return value < 0.1
+          ? "text-green-600"
+          : value < 0.25
+            ? "text-yellow-600"
+            : "text-red-600";
       default:
-        return 'text-gray-600'
+        return "text-gray-600";
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -173,7 +206,7 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (error || !data) {
@@ -187,11 +220,11 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-red-600">
-            {error || 'Unable to load data'}
+            {error || "Unable to load data"}
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -274,12 +307,17 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
               <CardContent>
                 <div className="space-y-3">
                   {data.userBehavior.topPages.map((page, index) => (
-                    <div key={page.page} className="flex items-center justify-between">
+                    <div
+                      key={page.page}
+                      className="flex items-center justify-between"
+                    >
                       <div className="flex items-center gap-2">
                         <Badge variant="outline">{index + 1}</Badge>
                         <span className="font-medium">{page.page}</span>
                       </div>
-                      <span className="text-sm text-gray-600">{page.views} 次浏览</span>
+                      <span className="text-sm text-gray-600">
+                        {page.views} 次浏览
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -292,15 +330,17 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {Object.entries(data.userBehavior.deviceBreakdown).map(([device, percentage]) => (
-                    <div key={device} className="space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span className="capitalize">{device}</span>
-                        <span>{percentage}%</span>
+                  {Object.entries(data.userBehavior.deviceBreakdown).map(
+                    ([device, percentage]) => (
+                      <div key={device} className="space-y-1">
+                        <div className="flex justify-between text-sm">
+                          <span className="capitalize">{device}</span>
+                          <span>{percentage}%</span>
+                        </div>
+                        <Progress value={percentage} className="h-2" />
                       </div>
-                      <Progress value={percentage} className="h-2" />
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -319,15 +359,22 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {Object.entries(data.userBehavior.deviceBreakdown).map(([device, percentage]) => (
-                    <div key={device} className="flex items-center justify-between">
-                      <span className="capitalize font-medium">{device}</span>
-                      <div className="flex items-center gap-2">
-                        <Progress value={percentage} className="w-20 h-2" />
-                        <span className="text-sm text-gray-600 w-10">{percentage}%</span>
+                  {Object.entries(data.userBehavior.deviceBreakdown).map(
+                    ([device, percentage]) => (
+                      <div
+                        key={device}
+                        className="flex items-center justify-between"
+                      >
+                        <span className="capitalize font-medium">{device}</span>
+                        <div className="flex items-center gap-2">
+                          <Progress value={percentage} className="w-20 h-2" />
+                          <span className="text-sm text-gray-600 w-10">
+                            {percentage}%
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -341,15 +388,22 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {Object.entries(data.userBehavior.browserBreakdown).map(([browser, percentage]) => (
-                    <div key={browser} className="flex items-center justify-between">
-                      <span className="font-medium">{browser}</span>
-                      <div className="flex items-center gap-2">
-                        <Progress value={percentage} className="w-20 h-2" />
-                        <span className="text-sm text-gray-600 w-10">{percentage}%</span>
+                  {Object.entries(data.userBehavior.browserBreakdown).map(
+                    ([browser, percentage]) => (
+                      <div
+                        key={browser}
+                        className="flex items-center justify-between"
+                      >
+                        <span className="font-medium">{browser}</span>
+                        <div className="flex items-center gap-2">
+                          <Progress value={percentage} className="w-20 h-2" />
+                          <span className="text-sm text-gray-600 w-10">
+                            {percentage}%
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -362,7 +416,9 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
             <Card>
               <CardContent className="p-4">
                 <div className="text-sm text-gray-600 mb-1">页面加载时间</div>
-                <div className={`text-2xl font-bold ${getPerformanceColor('loadTime', data.performance.averageLoadTime)}`}>
+                <div
+                  className={`text-2xl font-bold ${getPerformanceColor("loadTime", data.performance.averageLoadTime)}`}
+                >
                   {data.performance.averageLoadTime}ms
                 </div>
               </CardContent>
@@ -371,7 +427,9 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
             <Card>
               <CardContent className="p-4">
                 <div className="text-sm text-gray-600 mb-1">LCP</div>
-                <div className={`text-2xl font-bold ${getPerformanceColor('lcp', data.performance.averageLCP)}`}>
+                <div
+                  className={`text-2xl font-bold ${getPerformanceColor("lcp", data.performance.averageLCP)}`}
+                >
                   {data.performance.averageLCP}ms
                 </div>
               </CardContent>
@@ -380,7 +438,9 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
             <Card>
               <CardContent className="p-4">
                 <div className="text-sm text-gray-600 mb-1">FID</div>
-                <div className={`text-2xl font-bold ${getPerformanceColor('fid', data.performance.averageFID)}`}>
+                <div
+                  className={`text-2xl font-bold ${getPerformanceColor("fid", data.performance.averageFID)}`}
+                >
                   {data.performance.averageFID}ms
                 </div>
               </CardContent>
@@ -389,7 +449,9 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
             <Card>
               <CardContent className="p-4">
                 <div className="text-sm text-gray-600 mb-1">CLS</div>
-                <div className={`text-2xl font-bold ${getPerformanceColor('cls', data.performance.averageCLS)}`}>
+                <div
+                  className={`text-2xl font-bold ${getPerformanceColor("cls", data.performance.averageCLS)}`}
+                >
                   {data.performance.averageCLS.toFixed(3)}
                 </div>
               </CardContent>
@@ -464,5 +526,5 @@ export function AnalyticsDashboard({ className, showRealTime = true }: Analytics
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
