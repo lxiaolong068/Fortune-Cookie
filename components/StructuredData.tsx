@@ -1,8 +1,8 @@
-import Script from 'next/script'
-import { getStructuredDataUrls } from '@/lib/site'
+import Script from "next/script";
+import { getStructuredDataUrls, getImageUrl } from "@/lib/site";
 
 interface StructuredDataProps {
-  data: object
+  data: object;
 }
 
 export function StructuredData({ data }: StructuredDataProps) {
@@ -12,119 +12,126 @@ export function StructuredData({ data }: StructuredDataProps) {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
     />
-  )
+  );
 }
 
 // 预定义的结构化数据组件
 export function WebsiteStructuredData() {
-  const urls = getStructuredDataUrls()
+  const urls = getStructuredDataUrls();
 
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Fortune Cookie AI',
-    description: 'Free online AI-powered fortune cookie generator with personalized messages and lucky numbers',
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Fortune Cookie AI",
+    description:
+      "Free online AI-powered fortune cookie generator with personalized messages and lucky numbers",
     url: urls.website,
     potentialAction: {
-      '@type': 'SearchAction',
+      "@type": "SearchAction",
       target: {
-        '@type': 'EntryPoint',
+        "@type": "EntryPoint",
         urlTemplate: urls.searchAction,
       },
-      'query-input': 'required name=search_term_string',
+      "query-input": "required name=search_term_string",
     },
     publisher: {
-      '@type': 'Organization',
-      name: 'Fortune Cookie AI',
+      "@type": "Organization",
+      name: "Fortune Cookie AI",
       logo: {
-        '@type': 'ImageObject',
+        "@type": "ImageObject",
         url: urls.logo,
       },
     },
-  }
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }
 
 export function WebApplicationStructuredData() {
-  const urls = getStructuredDataUrls()
+  const urls = getStructuredDataUrls();
 
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Fortune Cookie AI Generator',
-    description: 'Free online AI-powered fortune cookie generator. Create personalized inspirational messages, funny quotes, and discover lucky numbers.',
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Fortune Cookie AI Generator",
+    description:
+      "Free online AI-powered fortune cookie generator. Create personalized inspirational messages, funny quotes, and discover lucky numbers.",
     url: urls.website,
-    applicationCategory: 'Entertainment',
-    operatingSystem: 'Any',
-    browserRequirements: 'Requires JavaScript. Requires HTML5.',
+    applicationCategory: "Entertainment",
+    operatingSystem: "Any",
+    browserRequirements: "Requires JavaScript. Requires HTML5.",
     offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
     },
     aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '1250',
-      bestRating: '5',
-      worstRating: '1',
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      ratingCount: "1250",
+      bestRating: "5",
+      worstRating: "1",
     },
     author: {
-      '@type': 'Organization',
-      name: 'Fortune Cookie AI Team',
+      "@type": "Organization",
+      name: "Fortune Cookie AI Team",
     },
-    datePublished: '2024-01-01',
-    dateModified: new Date().toISOString().split('T')[0],
-    inLanguage: 'en-US',
+    datePublished: "2024-01-01",
+    dateModified: new Date().toISOString().split("T")[0],
+    inLanguage: "en-US",
     isAccessibleForFree: true,
-    keywords: 'fortune cookie, AI generator, inspirational quotes, lucky numbers, free online tool',
-  }
+    keywords:
+      "fortune cookie, AI generator, inspirational quotes, lucky numbers, free online tool",
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }
 
 export function OrganizationStructuredData() {
-  const urls = getStructuredDataUrls()
+  const urls = getStructuredDataUrls();
 
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Fortune Cookie AI',
-    description: 'Provider of free online AI-powered fortune cookie generator',
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Fortune Cookie AI",
+    description: "Provider of free online AI-powered fortune cookie generator",
     url: urls.organization,
     logo: urls.logo,
     sameAs: [
-      'https://twitter.com/fortunecookieai',
-      'https://github.com/fortune-cookie-ai',
+      "https://twitter.com/fortunecookieai",
+      "https://github.com/fortune-cookie-ai",
     ],
     contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'Customer Service',
-      availableLanguage: ['English'],
+      "@type": "ContactPoint",
+      contactType: "Customer Service",
+      availableLanguage: ["English"],
     },
-  }
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }
 
-export function BreadcrumbStructuredData({ items }: {
-  items: Array<{ name: string; url: string }>
+export function BreadcrumbStructuredData({
+  items,
+}: {
+  items: Array<{ name: string; url: string }>;
 }) {
-  const urls = getStructuredDataUrls()
+  const urls = getStructuredDataUrls();
 
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: item.url.startsWith('http') ? item.url : `${urls.website}${item.url}`,
+      item: item.url.startsWith("http")
+        ? item.url
+        : `${urls.website}${item.url}`,
     })),
-  }
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }
 
 /**
@@ -138,54 +145,56 @@ export function ArticleStructuredData({
   image,
   datePublished,
   dateModified,
-  author = 'Fortune Cookie AI Team',
-  keywords = []
+  author = "Fortune Cookie AI Team",
+  keywords = [],
 }: {
-  headline: string
-  description: string
-  url: string
-  image?: string
-  datePublished?: string
-  dateModified?: string
-  author?: string
-  keywords?: string[]
+  headline: string;
+  description: string;
+  url: string;
+  image?: string;
+  datePublished?: string;
+  dateModified?: string;
+  author?: string;
+  keywords?: string[];
 }) {
-  const urls = getStructuredDataUrls()
-  const fullUrl = url.startsWith('http') ? url : `${urls.website}${url}`
-  const fullImageUrl = image ? (image.startsWith('http') ? image : `${urls.website}${image}`) : `${urls.website}/og-image.png`
+  const urls = getStructuredDataUrls();
+  const fullUrl = url.startsWith("http") ? url : `${urls.website}${url}`;
+  const fullImageUrl = image
+    ? getImageUrl(image)
+    : getImageUrl("/og-image.png");
 
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+    "@context": "https://schema.org",
+    "@type": "Article",
     headline,
     description,
     url: fullUrl,
     mainEntityOfPage: fullUrl,
     image: {
-      '@type': 'ImageObject',
+      "@type": "ImageObject",
       url: fullImageUrl,
       width: 1200,
-      height: 630
+      height: 630,
     },
     author: {
-      '@type': 'Organization',
+      "@type": "Organization",
       name: author,
-      url: urls.organization
+      url: urls.organization,
     },
     publisher: {
-      '@type': 'Organization',
-      name: 'Fortune Cookie AI',
+      "@type": "Organization",
+      name: "Fortune Cookie AI",
       logo: {
-        '@type': 'ImageObject',
-        url: urls.logo
-      }
+        "@type": "ImageObject",
+        url: urls.logo,
+      },
     },
     datePublished: datePublished || new Date().toISOString(),
     dateModified: dateModified || new Date().toISOString(),
-    ...(keywords.length > 0 && { keywords: keywords.join(', ') })
-  }
+    ...(keywords.length > 0 && { keywords: keywords.join(", ") }),
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }
 
 /**
@@ -193,67 +202,67 @@ export function ArticleStructuredData({
  * 用于食谱页面
  */
 export function RecipeStructuredData({
-  recipes
+  recipes,
 }: {
   recipes: Array<{
-    id: string
-    title: string
-    description: string
-    ingredients: string[]
-    instructions: string[]
-    time: string
-    servings: string
-    difficulty: string
-    rating?: number
-  }>
+    id: string;
+    title: string;
+    description: string;
+    ingredients: string[];
+    instructions: string[];
+    time: string;
+    servings: string;
+    difficulty: string;
+    rating?: number;
+  }>;
 }) {
-  const urls = getStructuredDataUrls()
+  const urls = getStructuredDataUrls();
 
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Fortune Cookie Recipes',
-    description: 'Collection of homemade fortune cookie recipes',
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Fortune Cookie Recipes",
+    description: "Collection of homemade fortune cookie recipes",
     url: `${urls.website}/recipes`,
     numberOfItems: recipes.length,
     itemListElement: recipes.map((recipe, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       item: {
-        '@type': 'Recipe',
+        "@type": "Recipe",
         name: recipe.title,
         description: recipe.description,
-        image: `${urls.website}/og-image.png`,
+        image: getImageUrl("/og-image.png"),
         author: {
-          '@type': 'Organization',
-          name: 'Fortune Cookie AI Team'
+          "@type": "Organization",
+          name: "Fortune Cookie AI Team",
         },
         recipeIngredient: recipe.ingredients,
         recipeInstructions: recipe.instructions.map((instruction, idx) => ({
-          '@type': 'HowToStep',
+          "@type": "HowToStep",
           name: `Step ${idx + 1}`,
-          text: instruction
+          text: instruction,
         })),
         totalTime: recipe.time,
         recipeYield: recipe.servings,
         recipeDifficulty: recipe.difficulty,
         ...(recipe.rating && {
           aggregateRating: {
-            '@type': 'AggregateRating',
+            "@type": "AggregateRating",
             ratingValue: recipe.rating,
             ratingCount: 100,
             bestRating: 5,
-            worstRating: 1
-          }
+            worstRating: 1,
+          },
         }),
-        recipeCategory: 'Dessert',
-        recipeCuisine: 'Asian-American',
-        keywords: 'fortune cookies, homemade cookies, dessert recipe, baking'
-      }
-    }))
-  }
+        recipeCategory: "Dessert",
+        recipeCuisine: "Asian-American",
+        keywords: "fortune cookies, homemade cookies, dessert recipe, baking",
+      },
+    })),
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }
 
 /**
@@ -264,60 +273,62 @@ export function ItemListStructuredData({
   name,
   description,
   url,
-  items
+  items,
 }: {
-  name: string
-  description: string
-  url: string
+  name: string;
+  description: string;
+  url: string;
   items: Array<{
-    name: string
-    description?: string
-    url?: string
-    category?: string
-  }>
+    name: string;
+    description?: string;
+    url?: string;
+    category?: string;
+  }>;
 }) {
-  const urls = getStructuredDataUrls()
-  const fullUrl = url.startsWith('http') ? url : `${urls.website}${url}`
+  const urls = getStructuredDataUrls();
+  const fullUrl = url.startsWith("http") ? url : `${urls.website}${url}`;
 
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
+    "@context": "https://schema.org",
+    "@type": "ItemList",
     name,
     description,
     url: fullUrl,
     numberOfItems: items.length,
     itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       name: item.name,
       ...(item.description && { description: item.description }),
       ...(item.url && {
-        url: item.url.startsWith('http') ? item.url : `${urls.website}${item.url}`
+        url: item.url.startsWith("http")
+          ? item.url
+          : `${urls.website}${item.url}`,
       }),
-      ...(item.category && { category: item.category })
-    }))
-  }
+      ...(item.category && { category: item.category }),
+    })),
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }
 
-export function FAQStructuredData({ 
-  faqs 
-}: { 
-  faqs: Array<{ question: string; answer: string }> 
+export function FAQStructuredData({
+  faqs,
+}: {
+  faqs: Array<{ question: string; answer: string }>;
 }) {
   const data = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map(faq => ({
-      '@type': 'Question',
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
       name: faq.question,
       acceptedAnswer: {
-        '@type': 'Answer',
+        "@type": "Answer",
         text: faq.answer,
       },
     })),
-  }
+  };
 
-  return <StructuredData data={data} />
+  return <StructuredData data={data} />;
 }

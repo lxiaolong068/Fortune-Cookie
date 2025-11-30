@@ -98,6 +98,7 @@ npm run vercel-check           # Verify Vercel deployment health
 - `session-manager.ts` - User session tracking
 - `error-monitoring.ts` - Error capture and analytics
 - `utils.ts` - Shared utilities (cn, date formatting, etc.)
+- `blob-urls.ts` - Vercel Blob Storage URL mappings (auto-generated)
 
 **Components** (`components/`):
 - `AIFortuneCookie.tsx` - Main AI-powered fortune cookie component with theme selection
@@ -168,6 +169,9 @@ NODE_ENV="development"
 # Analytics (optional)
 GOOGLE_ANALYTICS_ID="G-..."
 GOOGLE_VERIFICATION_CODE="..."
+
+# Vercel Blob Storage (for CDN-optimized images)
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
 ```
 
 **Environment Priority**:
@@ -195,6 +199,47 @@ GOOGLE_VERIFICATION_CODE="..."
 - SEO infrastructure (sitemap, robots.txt)
 - Static asset availability (favicon, icons)
 - Structured data validation
+
+## Image Management (Vercel Blob Storage)
+
+All static images are hosted on Vercel Blob Storage for CDN optimization and improved performance.
+
+**Image Architecture**:
+- Images stored in Vercel Blob Storage (CDN-distributed globally)
+- `lib/blob-urls.ts` - Auto-generated URL mappings
+- `lib/site.ts` - `getImageUrl()` automatically returns Blob URLs
+- Original images retained in `public/` as backup
+
+**Adding/Updating Images**:
+```bash
+# 1. Add new image to public/ directory
+# 2. Run upload script to sync to Blob Storage
+node scripts/upload-to-blob.js
+
+# Options:
+node scripts/upload-to-blob.js --dry-run     # Preview without uploading
+node scripts/upload-to-blob.js --single favicon.ico  # Upload single file
+node scripts/upload-to-blob.js --list        # List existing blobs
+```
+
+**Using Images in Code**:
+```typescript
+// Use getImageUrl() for automatic Blob URL resolution
+import { getImageUrl } from '@/lib/site'
+const imageUrl = getImageUrl('/og-image.png')
+// Returns: https://oxnbbm6ljoyuzqns.public.blob.vercel-storage.com/og-image.png
+
+// Or use getBlobUrl() directly
+import { getBlobUrl } from '@/lib/blob-urls'
+const blobUrl = getBlobUrl('/images/blog/hero.jpg')
+```
+
+**Image Files** (24 total):
+- Favicons: `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`
+- App Icons: `apple-touch-icon.png`, `android-chrome-*.png`
+- Social: `og-image.png`, `twitter-image.png`, `logo.svg`
+- Blog: `images/blog/*.jpg`
+- UI: `images/fortune-cookie-hero.svg`, `images/fortune-cookie-banner.svg`
 
 ## Common Development Patterns
 

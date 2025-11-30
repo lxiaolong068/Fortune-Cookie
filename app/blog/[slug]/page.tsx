@@ -5,50 +5,55 @@
  * Uses Static Site Generation (SSG) for optimal performance.
  */
 
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { Calendar, Clock, User, ArrowLeft, Tag } from 'lucide-react'
-import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from '@/lib/blog'
-import { mdxComponents } from '@/components/blog/MDXComponents'
-import { BlogCard } from '@/components/blog'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
-import { getSiteUrl } from '@/lib/site'
-import { ArticleStructuredData } from '@/components/StructuredData'
-import dynamic from 'next/dynamic'
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { Calendar, Clock, User, ArrowLeft, Tag } from "lucide-react";
+import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from "@/lib/blog";
+import { mdxComponents } from "@/components/blog/MDXComponents";
+import { BlogCard } from "@/components/blog";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { getSiteUrl, getImageUrl } from "@/lib/site";
+import { ArticleStructuredData } from "@/components/StructuredData";
+import dynamic from "next/dynamic";
 
 const DynamicBackgroundEffects = dynamic(
-  () => import('@/components/BackgroundEffects').then(mod => mod.BackgroundEffects),
-  { ssr: false }
-)
+  () =>
+    import("@/components/BackgroundEffects").then(
+      (mod) => mod.BackgroundEffects,
+    ),
+  { ssr: false },
+);
 
-const baseUrl = getSiteUrl()
+const baseUrl = getSiteUrl();
 
 interface BlogPostPageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }
 
 /**
  * Generate static params for all blog posts (SSG)
  */
 export async function generateStaticParams() {
-  const slugs = getAllPostSlugs()
-  return slugs.map((slug) => ({ slug }))
+  const slugs = getAllPostSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 /**
  * Generate metadata for the blog post
  */
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const post = getPostBySlug(slug)
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
 
   if (!post) {
     return {
-      title: 'Post Not Found',
-    }
+      title: "Post Not Found",
+    };
   }
 
   return {
@@ -58,43 +63,43 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     openGraph: {
       title: post.title,
       description: post.description,
-      type: 'article',
+      type: "article",
       url: `${baseUrl}/blog/${slug}`,
       images: post.image
-        ? [{ url: post.image.startsWith('http') ? post.image : `${baseUrl}${post.image}` }]
-        : [{ url: `${baseUrl}/og-image.png` }],
+        ? [{ url: getImageUrl(post.image) }]
+        : [{ url: getImageUrl("/og-image.png") }],
       publishedTime: post.date,
       authors: [post.author],
       tags: post.tags,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: post.title,
       description: post.description,
     },
     alternates: {
       canonical: `/blog/${slug}`,
     },
-  }
+  };
 }
 
 function formatDate(dateString: string): string {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(dateString))
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(dateString));
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params
-  const post = getPostBySlug(slug)
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
-  const relatedPosts = getRelatedPosts(slug, post.tags, 3)
+  const relatedPosts = getRelatedPosts(slug, post.tags, 3);
 
   return (
     <main className="min-h-screen w-full overflow-x-hidden relative">
@@ -214,6 +219,5 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </div>
     </main>
-  )
+  );
 }
-

@@ -12,7 +12,7 @@ import { getBlogPosts, getAllTags, getFeaturedPosts } from "@/lib/blog";
 import { BlogCard } from "@/components/blog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { getSiteUrl } from "@/lib/site";
+import { getSiteUrl, getImageUrl } from "@/lib/site";
 
 const baseUrl = getSiteUrl();
 
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
       "Explore articles about fortune cookies, luck, wisdom, and the fascinating history behind these iconic treats.",
     type: "website",
     url: `${baseUrl}/blog`,
-    images: [{ url: `${baseUrl}/og-image.png`, width: 1200, height: 630 }],
+    images: [{ url: getImageUrl("/og-image.png"), width: 1200, height: 630 }],
   },
   alternates: {
     canonical: "/blog",

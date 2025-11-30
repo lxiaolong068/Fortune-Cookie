@@ -93,3 +93,6 @@ tmp/
 temp/
 
 /generated/prisma
+
+# Blob Storage mapping (regeneratable)
+blob-urls.json

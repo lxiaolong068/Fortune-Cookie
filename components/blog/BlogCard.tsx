@@ -5,58 +5,72 @@
  * in list views and related posts sections.
  */
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { Calendar, Clock, User, ArrowRight } from 'lucide-react'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
-import type { BlogPostMeta } from '@/lib/blog-types'
+import Link from "next/link";
+import Image from "next/image";
+import { Calendar, Clock, User, ArrowRight } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { getBlobUrl } from "@/lib/blob-urls";
+import type { BlogPostMeta } from "@/lib/blog-types";
 
 interface BlogCardProps {
-  post: BlogPostMeta
-  variant?: 'default' | 'featured' | 'compact'
-  className?: string
+  post: BlogPostMeta;
+  variant?: "default" | "featured" | "compact";
+  className?: string;
 }
 
 function formatDate(dateString: string): string {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date)
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
 }
 
-export function BlogCard({ post, variant = 'default', className }: BlogCardProps) {
-  const isFeatured = variant === 'featured'
-  const isCompact = variant === 'compact'
+export function BlogCard({
+  post,
+  variant = "default",
+  className,
+}: BlogCardProps) {
+  const isFeatured = variant === "featured";
+  const isCompact = variant === "compact";
 
   return (
     <Link href={`/blog/${post.slug}`} className="block group">
       <Card
         className={cn(
-          'overflow-hidden transition-all duration-300 hover:shadow-lg',
-          'bg-white/90 backdrop-blur-sm border-amber-200/50',
-          'hover:border-amber-300 hover:scale-[1.02]',
-          isFeatured && 'md:flex md:flex-row',
-          className
+          "overflow-hidden transition-all duration-300 hover:shadow-lg",
+          "bg-white/90 backdrop-blur-sm border-amber-200/50",
+          "hover:border-amber-300 hover:scale-[1.02]",
+          isFeatured && "md:flex md:flex-row",
+          className,
         )}
       >
         {/* Image Section */}
         {post.image && post.image.length > 0 && !isCompact && (
           <div
             className={cn(
-              'relative overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100',
-              isFeatured ? 'md:w-2/5 h-48 md:h-auto' : 'h-48'
+              "relative overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100",
+              isFeatured ? "md:w-2/5 h-48 md:h-auto" : "h-48",
             )}
           >
             <Image
-              src={post.image}
+              src={getBlobUrl(post.image)}
               alt={post.title}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes={isFeatured ? '(max-width: 768px) 100vw, 40vw' : '(max-width: 768px) 100vw, 33vw'}
+              sizes={
+                isFeatured
+                  ? "(max-width: 768px) 100vw, 40vw"
+                  : "(max-width: 768px) 100vw, 33vw"
+              }
             />
             {post.featured && (
               <Badge className="absolute top-3 left-3 bg-amber-500 text-white">
@@ -70,9 +84,9 @@ export function BlogCard({ post, variant = 'default', className }: BlogCardProps
         {(!post.image || post.image.length === 0) && !isCompact && (
           <div
             className={cn(
-              'relative overflow-hidden bg-gradient-to-br from-amber-200 via-yellow-100 to-orange-200',
-              isFeatured ? 'md:w-2/5 h-48 md:h-auto' : 'h-48',
-              'flex items-center justify-center'
+              "relative overflow-hidden bg-gradient-to-br from-amber-200 via-yellow-100 to-orange-200",
+              isFeatured ? "md:w-2/5 h-48 md:h-auto" : "h-48",
+              "flex items-center justify-center",
             )}
           >
             <span className="text-6xl">🥠</span>
@@ -85,8 +99,8 @@ export function BlogCard({ post, variant = 'default', className }: BlogCardProps
         )}
 
         {/* Content Section */}
-        <div className={cn(isFeatured && 'md:w-3/5')}>
-          <CardHeader className={cn(isCompact && 'pb-2')}>
+        <div className={cn(isFeatured && "md:w-3/5")}>
+          <CardHeader className={cn(isCompact && "pb-2")}>
             {/* Tags */}
             {post.tags.length > 0 && !isCompact && (
               <div className="flex flex-wrap gap-2 mb-2">
@@ -105,22 +119,22 @@ export function BlogCard({ post, variant = 'default', className }: BlogCardProps
             {/* Title */}
             <h3
               className={cn(
-                'font-semibold text-gray-800 group-hover:text-amber-600 transition-colors line-clamp-2',
-                isFeatured ? 'text-xl md:text-2xl' : 'text-lg',
-                isCompact && 'text-base'
+                "font-semibold text-gray-800 group-hover:text-amber-600 transition-colors line-clamp-2",
+                isFeatured ? "text-xl md:text-2xl" : "text-lg",
+                isCompact && "text-base",
               )}
             >
               {post.title}
             </h3>
           </CardHeader>
 
-          <CardContent className={cn(isCompact && 'pt-0 pb-2')}>
+          <CardContent className={cn(isCompact && "pt-0 pb-2")}>
             {/* Description */}
             <p
               className={cn(
-                'text-gray-600 line-clamp-2',
-                isFeatured ? 'text-base' : 'text-sm',
-                isCompact && 'text-xs line-clamp-1'
+                "text-gray-600 line-clamp-2",
+                isFeatured ? "text-base" : "text-sm",
+                isCompact && "text-xs line-clamp-1",
               )}
             >
               {post.description}
@@ -129,8 +143,8 @@ export function BlogCard({ post, variant = 'default', className }: BlogCardProps
 
           <CardFooter
             className={cn(
-              'flex items-center justify-between text-sm text-gray-500',
-              isCompact && 'pt-0'
+              "flex items-center justify-between text-sm text-gray-500",
+              isCompact && "pt-0",
             )}
           >
             {/* Meta Info */}
@@ -153,8 +167,7 @@ export function BlogCard({ post, variant = 'default', className }: BlogCardProps
         </div>
       </Card>
     </Link>
-  )
+  );
 }
 
-export default BlogCard
-
+export default BlogCard;
