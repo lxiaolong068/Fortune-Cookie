@@ -33,5 +33,26 @@
     "photoId": "KBn4-lyqRgQ",
     "photographer": "Alejandro Piñero Amerio",
     "photographerUrl": "https://unsplash.com/@vjgalaxy"
+  },
+  {
+    "slug": "building-fortune-cookie-seo",
+    "filename": "building-seo-hero.jpg",
+    "photoId": "-S2-AKdWQoQ",
+    "photographer": "Van Tay Media",
+    "photographerUrl": "https://unsplash.com/@vantaymedia"
+  },
+  {
+    "slug": "how-ai-writes-fortunes",
+    "filename": "ai-tech-magic.jpg",
+    "photoId": "_jg8xh2SsXQ",
+    "photographer": "Ecliptic Graphic",
+    "photographerUrl": "https://unsplash.com/@eclipticgraphic"
+  },
+  {
+    "slug": "fortune-cookies-pop-culture",
+    "filename": "pop-culture-fortune-cookie.jpg",
+    "photoId": "vIJ23H-oaJA",
+    "photographer": "Christian Lue",
+    "photographerUrl": "https://unsplash.com/@christianlue"
   }
 ]

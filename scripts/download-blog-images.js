@@ -3,40 +3,55 @@
  * Run: node scripts/download-blog-images.js
  */
 
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.join(__dirname, '..');
+const projectRoot = path.join(__dirname, "..");
 
 // Blog posts configuration
 const blogImages = [
   {
-    slug: 'ai-fortune-telling-trends-2025',
-    query: 'AI technology crystal ball futuristic',
-    filename: 'ai-fortune-telling-hero.jpg'
+    slug: "ai-fortune-telling-trends-2025",
+    query: "AI technology crystal ball futuristic",
+    filename: "ai-fortune-telling-hero.jpg",
   },
   {
-    slug: 'fortune-cookies-japanese-origins',
-    query: 'japanese temple traditional kyoto',
-    filename: 'fortune-cookies-origins-hero.jpg'
+    slug: "fortune-cookies-japanese-origins",
+    query: "japanese temple traditional kyoto",
+    filename: "fortune-cookies-origins-hero.jpg",
   },
   {
-    slug: 'psychology-of-luck',
-    query: 'four leaf clover luck nature',
-    filename: 'psychology-luck-hero.jpg'
+    slug: "psychology-of-luck",
+    query: "four leaf clover luck nature",
+    filename: "psychology-luck-hero.jpg",
   },
   {
-    slug: 'history-of-fortune-cookies',
-    query: 'fortune cookie chinese food vintage',
-    filename: 'history-fortune-cookies-hero.jpg'
+    slug: "history-of-fortune-cookies",
+    query: "fortune cookie chinese food vintage",
+    filename: "history-fortune-cookies-hero.jpg",
   },
   {
-    slug: 'psychology-of-fortune-cookies',
-    query: 'meditation mindfulness zen peaceful',
-    filename: 'psychology-fortune-cookies-hero.jpg'
-  }
+    slug: "psychology-of-fortune-cookies",
+    query: "meditation mindfulness zen peaceful",
+    filename: "psychology-fortune-cookies-hero.jpg",
+  },
+  {
+    slug: "building-fortune-cookie-seo",
+    query: "SEO web development coding laptop analytics",
+    filename: "building-seo-hero.jpg",
+  },
+  {
+    slug: "how-ai-writes-fortunes",
+    query: "artificial intelligence neural network technology abstract",
+    filename: "ai-tech-magic.jpg",
+  },
+  {
+    slug: "fortune-cookies-pop-culture",
+    query: "movie theater vintage retro film",
+    filename: "pop-culture-fortune-cookie.jpg",
+  },
 ];
 
 // Simple fetch-based Unsplash client
@@ -45,12 +60,14 @@ async function searchUnsplash(accessKey, query) {
 
   const response = await fetch(url, {
     headers: {
-      'Authorization': `Client-ID ${accessKey}`
-    }
+      Authorization: `Client-ID ${accessKey}`,
+    },
   });
 
   if (!response.ok) {
-    throw new Error(`Unsplash API error: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Unsplash API error: ${response.status} ${response.statusText}`,
+    );
   }
 
   const data = await response.json();
@@ -73,25 +90,29 @@ async function trackDownload(accessKey, downloadLocation) {
   try {
     await fetch(downloadLocation, {
       headers: {
-        'Authorization': `Client-ID ${accessKey}`
-      }
+        Authorization: `Client-ID ${accessKey}`,
+      },
     });
   } catch (e) {
-    console.warn('Failed to track download:', e.message);
+    console.warn("Failed to track download:", e.message);
   }
 }
 
 async function main() {
   // Load config
-  const configPath = path.join(projectRoot, 'unsplash.config.json');
-  const configData = await fs.readFile(configPath, 'utf-8');
+  const configPath = path.join(projectRoot, "unsplash.config.json");
+  const configData = await fs.readFile(configPath, "utf-8");
   const config = JSON.parse(configData);
 
   const accessKey = config.accessKey;
-  const imageDestDir = path.join(projectRoot, config.imageDestination || 'public/images', 'blog');
+  const imageDestDir = path.join(
+    projectRoot,
+    config.imageDestination || "public/images",
+    "blog",
+  );
 
   if (!accessKey) {
-    console.error('Error: No Unsplash access key found in config');
+    console.error("Error: No Unsplash access key found in config");
     process.exit(1);
   }
 
@@ -124,7 +145,7 @@ async function main() {
           filename: blog.filename,
           photoId: photo.id,
           photographer: photo.user.name,
-          photographerUrl: photo.user.links.html
+          photographerUrl: photo.user.links.html,
         });
         continue;
       } catch {
@@ -132,43 +153,46 @@ async function main() {
       }
 
       // Download the regular size image
-      console.log(`  Downloading from: ${photo.urls.regular.substring(0, 50)}...`);
+      console.log(
+        `  Downloading from: ${photo.urls.regular.substring(0, 50)}...`,
+      );
       await downloadImage(photo.urls.regular, destPath);
 
       // Track download for Unsplash compliance
       await trackDownload(accessKey, photo.links.download_location);
 
       console.log(`  ✅ Downloaded: ${blog.filename}`);
-      console.log(`  📷 Photo by: ${photo.user.name} (${photo.user.links.html})`);
+      console.log(
+        `  📷 Photo by: ${photo.user.name} (${photo.user.links.html})`,
+      );
 
       results.push({
         slug: blog.slug,
         filename: blog.filename,
         photoId: photo.id,
         photographer: photo.user.name,
-        photographerUrl: photo.user.links.html
+        photographerUrl: photo.user.links.html,
       });
 
       // Rate limiting delay
-      await new Promise(r => setTimeout(r, 300));
-
+      await new Promise((r) => setTimeout(r, 300));
     } catch (error) {
       console.log(`  ❌ Error: ${error.message}`);
     }
 
-    console.log('');
+    console.log("");
   }
 
   // Save attribution info
-  const attributionPath = path.join(imageDestDir, 'attribution.json');
+  const attributionPath = path.join(imageDestDir, "attribution.json");
   await fs.writeFile(attributionPath, JSON.stringify(results, null, 2));
   console.log(`\nAttribution saved to: ${attributionPath}`);
 
-  console.log('\n=== Summary ===');
+  console.log("\n=== Summary ===");
   console.log(`Downloaded: ${results.length}/${blogImages.length} images`);
 }
 
-main().catch(err => {
-  console.error('Fatal error:', err);
+main().catch((err) => {
+  console.error("Fatal error:", err);
   process.exit(1);
 });
