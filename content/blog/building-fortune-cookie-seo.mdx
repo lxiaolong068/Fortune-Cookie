@@ -1,0 +1,48 @@
+---
+title: "Building Fortune Cookie: SEO Strategies for Niche Content Sites in 2025"
+description: "A behind-the-scenes look at how we built this project, focusing on E-E-A-T, programmatic SEO, and Next.js 15 performance."
+date: "2025-12-18"
+author: "Fortune Cookie Dev Team"
+tags: ["SEO", "web-dev", "Next.js", "building-in-public"]
+image: "/images/blog/building-seo-hero.jpg"
+featured: false
+---
+
+Building a content site in 2025 is different than it was five years ago. The internet is flooded with AI-generated noise, and search engines have raised the bar. When we built **Fortune Cookie**, we didn't just want to make a fun app; we wanted to build a case study in modern SEO and performance.
+
+Here is the blueprint of how we approached growth for this project.
+
+## 1. E-E-A-T in the Age of AI
+
+Google's **E-E-A-T** (Experience, Expertise, Authoritativeness, Trustworthiness) is more critical than ever. For a site about "fortune cookies," this might seem trivial, but it's not.
+
+*   **Expertise:** We researched the *actual* history (Japanese origins vs. Chinese adaptation) rather than repeating myths.
+*   **Experience:** We integrated real user feedback loops to understand what kind of "fortunes" actually resonate with people.
+*   **Trust:** We are transparent about using AI. We don't pretend a mystic is sitting in a server room. This transparency builds trust with users who are increasingly skeptical of "fake" content.
+
+## 2. Optimizing for "Generative Engine Optimization" (GEO)
+
+With AI Overviews (AIOs) dominating search results, we optimized our content to be "machine-readable."
+
+*   **Structured Data:** We use extensive JSON-LD schema for our blog posts and the fortune generator itself. This helps search engines understand *exactly* what our page is.
+*   **Direct Answers:** Our content is structured with clear headings and direct answers to "Who," "What," and "When" questions. This increases the chance of being cited in an AI overview.
+
+## 3. Next.js 15: Speed as a Feature
+
+Performance is a ranking factor. We built this site on **Next.js 15** to leverage the latest speed advantages:
+
+*   **React Server Components (RSC):** Most of our blog content is rendered entirely on the server. This means zero JavaScript is sent to the client for the text content, resulting in lightning-fast First Contentful Paint (FCP).
+*   **`next/image`:** We use the built-in image component to automatically serve WebP formats and prevent Cumulative Layout Shift (CLS)—a killer for user experience scores.
+*   **Partial Prerendering (PPR):** We are experimenting with PPR to keep the "shell" of the site static (cached at the edge) while streaming in the dynamic "fortune" component.
+
+## 4. Engagement is the New Bounce Rate
+
+Search engines track how users interact with your site. If they bounce immediately, you rank lower. To keep users engaged, we added:
+
+*   **Gamification:** The "daily fortune" mechanic encourages return visits.
+*   **Shareability:** One-click sharing of fortunes to social media creates natural backlinks and social signals.
+*   **Internal Linking:** Our blog posts don't just exist in a vacuum; they link back to the generator, and the generator suggests relevant articles (e.g., "Read about the history of your luck").
+
+## Conclusion
+
+SEO in 2025 isn't about keyword stuffing; it's about building a technically superior product that offers genuine value. By combining the raw speed of Next.js 15 with a content strategy rooted in E-E-A-T, we've built a platform that is designed to last.
