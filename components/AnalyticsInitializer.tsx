@@ -222,7 +222,7 @@ export function AnalyticsInitializer() {
     // 跟踪搜索行为
     const handleSearch = (event: Event) => {
       const input = event.target as HTMLInputElement
-      if (input.type === 'search' || input.name === 'search' || input.placeholder?.includes('搜索')) {
+      if (input.type === 'search' || input.name === 'search' || input.placeholder?.toLowerCase().includes('search')) {
         analyticsManager.trackUserBehavior('search_performed', {
           query: input.value,
           queryLength: input.value.length,
@@ -307,24 +307,24 @@ export function AnalyticsConsentBanner() {
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto">
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4">
-        <h3 className="font-semibold text-sm mb-2">数据收集同意</h3>
+        <h3 className="font-semibold text-sm mb-2">Data Collection Consent</h3>
         <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-          我们使用分析工具来改善用户体验。您的数据将被匿名处理，不会用于其他目的。
+          We use analytics tools to improve user experience. Your data will be anonymized and not used for other purposes.
         </p>
         <div className="flex gap-2">
           <button
             onClick={handleAccept}
             className="flex-1 bg-orange-600 text-white text-xs py-2 px-3 rounded hover:bg-orange-700 transition-colors font-medium"
-            aria-label="同意数据收集和分析"
+            aria-label="Accept data collection and analytics"
           >
-            同意
+            Accept
           </button>
           <button
             onClick={handleDecline}
             className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
-            aria-label="拒绝数据收集和分析"
+            aria-label="Decline data collection and analytics"
           >
-            拒绝
+            Decline
           </button>
         </div>
       </div>
