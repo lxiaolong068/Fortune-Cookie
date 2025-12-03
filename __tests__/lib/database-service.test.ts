@@ -2,32 +2,27 @@
  * @jest-environment node
  */
 
-import { FortuneService, SessionService } from '@/lib/database-service'
-import { mockFortune, mockFortuneList } from '../utils/test-utils'
-
-// Mock Prisma client
-const mockPrismaClient = {
-  fortune: {
-    create: jest.fn(),
-    findMany: jest.fn(),
-    findUnique: jest.fn(),
-    findFirst: jest.fn(),
-    count: jest.fn(),
-    update: jest.fn(),
-    groupBy: jest.fn(),
-  },
-  userSession: {
-    create: jest.fn(),
-    findUnique: jest.fn(),
-    update: jest.fn(),
-    deleteMany: jest.fn(),
-  },
-}
-
+// All mocks must be defined inside jest.mock factory to avoid hoisting issues
 jest.mock('@/lib/database', () => ({
-  db: mockPrismaClient,
+  db: {
+    fortune: {
+      create: jest.fn(),
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      findFirst: jest.fn(),
+      count: jest.fn(),
+      update: jest.fn(),
+      groupBy: jest.fn(),
+    },
+    userSession: {
+      create: jest.fn(),
+      findUnique: jest.fn(),
+      update: jest.fn(),
+      deleteMany: jest.fn(),
+    },
+  },
   DatabaseManager: {
-    getInstance: jest.fn(() => mockPrismaClient),
+    getInstance: jest.fn(),
     healthCheck: jest.fn(),
     getStats: jest.fn(),
   },
@@ -36,8 +31,8 @@ jest.mock('@/lib/database', () => ({
       skip: (page - 1) * limit,
       take: limit,
     })),
-    buildFilterQuery: jest.fn((filters) => filters),
-    buildSearchQuery: jest.fn((query) => 
+    buildFilterQuery: jest.fn((filters: any) => filters),
+    buildSearchQuery: jest.fn((query: any) =>
       query ? { message: { contains: query, mode: 'insensitive' } } : {}
     ),
     buildSortQuery: jest.fn((sortBy = 'createdAt', sortOrder = 'desc') => ({
@@ -50,6 +45,14 @@ jest.mock('@/lib/error-monitoring', () => ({
   captureError: jest.fn(),
   captureBusinessEvent: jest.fn(),
 }))
+
+// Import after mocks are set up
+import { FortuneService, SessionService } from '@/lib/database-service'
+import { db } from '@/lib/database'
+import { mockFortune, mockFortuneList } from '../utils/test-utils'
+
+// Get reference to mocked db for assertions
+const mockPrismaClient = db as jest.Mocked<typeof db>
 
 describe('FortuneService', () => {
   beforeEach(() => {

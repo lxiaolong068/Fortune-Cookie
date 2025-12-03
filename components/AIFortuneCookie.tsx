@@ -66,6 +66,8 @@ interface Fortune {
   luckyNumbers: number[];
   theme: string;
   timestamp: string;
+  source?: 'ai' | 'database' | 'fallback';
+  cached?: boolean;
 }
 
 type CookieState = "unopened" | "cracking" | "opened";
@@ -117,12 +119,16 @@ export function AIFortuneCookie() {
   const [customPrompt, setCustomPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [showCustomization, setShowCustomization] = useState(false);
+  const [generationSource, setGenerationSource] = useState<"ai" | "offline" | null>(null);
+  const [generationError, setGenerationError] = useState<string | null>(null);
 
   const generateFortune = async () => {
     if (state !== "unopened" || isGenerating) return;
 
     setIsGenerating(true);
     setState("cracking");
+    setGenerationError(null);
+    setGenerationSource(null);
 
     try {
       const response = await fetch('/api/fortune', {
@@ -147,6 +153,10 @@ export function AIFortuneCookie() {
         ? (json.data as Fortune)
         : (json as Fortune);
       setCurrentFortune(fortune);
+
+      // Determine source from fortune object or API response meta
+      const source = fortune.source || json?.meta?.source || 'ai';
+      setGenerationSource(source === 'fallback' || source === 'database' ? 'offline' : 'ai');
 
       // Add to user history
       try {
@@ -179,6 +189,9 @@ export function AIFortuneCookie() {
 
     } catch (error) {
       console.error('Error generating fortune:', error);
+      setGenerationSource('offline');
+      setGenerationError('AI service unavailable, using offline fortune');
+
       // Fallback to local fortune
       const fallbackFortune: Fortune = {
         message: "The best fortunes come to those who create their own luck.",
@@ -206,8 +219,8 @@ export function AIFortuneCookie() {
           theme: selectedTheme,
           hasCustomPrompt: !!customPrompt.trim(),
         });
-      } catch (error) {
-        console.error('Failed to save fallback to history:', error);
+      } catch (historyError) {
+        console.error('Failed to save fallback to history:', historyError);
       }
 
       setTimeout(() => {
@@ -221,6 +234,8 @@ export function AIFortuneCookie() {
     setState("unopened");
     setCurrentFortune(null);
     setCustomPrompt("");
+    setGenerationSource(null);
+    setGenerationError(null);
   };
 
   const ThemeIcon = themeConfig[selectedTheme].icon;
@@ -478,10 +493,33 @@ export function AIFortuneCookie() {
                   </h2>
                 </div>
                 
-                <Badge className={cn("mb-4", themeConfig[currentFortune.theme as Theme]?.color || "bg-gray-100 text-gray-800")}>
-                  <ThemeIcon className="w-3 h-3 mr-1" />
-                  {themeConfig[currentFortune.theme as Theme]?.label || currentFortune.theme}
-                </Badge>
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <Badge className={cn(themeConfig[currentFortune.theme as Theme]?.color || "bg-gray-100 text-gray-800")}>
+                    <ThemeIcon className="w-3 h-3 mr-1" />
+                    {themeConfig[currentFortune.theme as Theme]?.label || currentFortune.theme}
+                  </Badge>
+
+                  {/* Generation source indicator */}
+                  {generationSource && (
+                    <Badge
+                      className={cn(
+                        "text-xs",
+                        generationSource === 'ai'
+                          ? "bg-green-100 text-green-700 border-green-200"
+                          : "bg-blue-100 text-blue-700 border-blue-200"
+                      )}
+                    >
+                      {generationSource === 'ai' ? '✨ AI Generated' : '📚 Offline'}
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Error message if API failed */}
+                {generationError && (
+                  <p className="text-xs text-amber-600 mb-2">
+                    {generationError}
+                  </p>
+                )}
               </motion.div>
 
               <motion.blockquote

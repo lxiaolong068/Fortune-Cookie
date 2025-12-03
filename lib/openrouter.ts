@@ -121,7 +121,7 @@ class OpenRouterClient {
       const cleanMessage = FortuneGenerator.cleanMessage(message)
       const formattedMessage = FortuneGenerator.formatFortune(cleanMessage)
 
-      return FortuneGenerator.createFortune(formattedMessage, theme)
+      return FortuneGenerator.createFortune(formattedMessage, theme, undefined, 'ai')
       
     } catch (error) {
       console.error('Error generating fortune:', error)
@@ -189,8 +189,8 @@ class OpenRouterClient {
       throw new Error('Failed to select fallback fortune')
     }
 
-    // Use FortuneGenerator to create fortune
-    return FortuneGenerator.createFortune(randomFortune, theme as FortuneTheme)
+    // Use FortuneGenerator to create fortune with fallback source
+    return FortuneGenerator.createFortune(randomFortune, theme as FortuneTheme, undefined, 'fallback')
   }
 
   // Health check method

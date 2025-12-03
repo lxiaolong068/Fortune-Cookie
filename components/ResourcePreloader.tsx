@@ -121,17 +121,11 @@ function preloadFonts() {
 }
 
 // 预加载关键图片
+// Note: og-image.png and fortune-cookie-hero.svg are not preloaded as they are
+// only used for social sharing and homepage respectively, not critical for initial render
 function preloadCriticalImages() {
-  const criticalImages = ["/images/fortune-cookie-hero.svg", "/og-image.png"];
-
-  criticalImages.forEach((src) => {
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "image";
-    // Use Blob Storage URLs for CDN optimization
-    link.href = getBlobUrl(src);
-    document.head.appendChild(link);
-  });
+  // Currently no critical images need preloading
+  // Images are lazy-loaded or handled by Next.js Image component
 }
 
 /**

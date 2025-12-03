@@ -138,6 +138,7 @@ async function uploadFile(file, dryRun = false) {
       access: 'public',
       contentType,
       addRandomSuffix: false, // Keep original filename
+      allowOverwrite: true, // Allow overwriting existing blobs
     });
 
     logSuccess(`Uploaded: ${relativePath} → ${blob.url}`);

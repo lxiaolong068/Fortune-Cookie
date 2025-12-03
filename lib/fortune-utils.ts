@@ -21,6 +21,8 @@ export interface Fortune {
   luckyNumbers: number[]
   theme: string
   timestamp: string
+  source?: 'ai' | 'database' | 'fallback'
+  cached?: boolean
 }
 
 /**
@@ -227,13 +229,15 @@ export class FortuneGenerator {
   static createFortune(
     message: string,
     theme: FortuneTheme,
-    luckyNumbers?: number[]
+    luckyNumbers?: number[],
+    source?: 'ai' | 'database' | 'fallback'
   ): Fortune {
     return {
       message: this.formatFortune(message),
       luckyNumbers: luckyNumbers || this.generateLuckyNumbers(),
       theme,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      source
     }
   }
 }

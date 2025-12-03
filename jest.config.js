@@ -59,6 +59,8 @@ const customJestConfig = {
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
     '<rootDir>/tests/e2e/', // Exclude Playwright tests
+    '<rootDir>/__tests__/utils/', // Exclude test utilities (not actual tests)
+    '<rootDir>/analytics-test\\.spec\\.js', // Exclude Playwright test in root
   ],
 
   // Transform configuration
