@@ -1,119 +1,122 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { X, Download, RefreshCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { swManager, offlineDetector } from '@/lib/service-worker'
-import { captureUserAction, captureBusinessEvent } from '@/lib/error-monitoring'
+import { useEffect, useState } from "react";
+import { X, Download, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { swManager, offlineDetector } from "@/lib/service-worker";
+import {
+  captureUserAction,
+  captureBusinessEvent,
+} from "@/lib/error-monitoring";
 
 export function ServiceWorkerInitializer() {
-  const [updateAvailable, setUpdateAvailable] = useState(false)
-  const [isUpdating, setIsUpdating] = useState(false)
-  const [showOfflineNotice, setShowOfflineNotice] = useState(false)
-  const [dismissed, setDismissed] = useState(false)
+  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [showOfflineNotice, setShowOfflineNotice] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     // 仅在生产环境注册 Service Worker
-    if (process.env.NODE_ENV !== 'production') {
-      return
+    if (process.env.NODE_ENV !== "production") {
+      return;
     }
 
     // 注册 Service Worker
     swManager.register().then((registered) => {
       if (registered) {
-        captureBusinessEvent('sw_registered', {
+        captureBusinessEvent("sw_registered", {
           timestamp: new Date().toISOString(),
           userAgent: navigator.userAgent,
-        })
+        });
       }
-    })
+    });
 
     // 监听更新可用事件
     const handleUpdateAvailable = () => {
-      setUpdateAvailable(true)
-      captureUserAction('sw_update_detected', 'service_worker')
-    }
+      setUpdateAvailable(true);
+      captureUserAction("sw_update_detected", "service_worker");
+    };
 
     // 监听安装完成事件
     const handleInstalled = () => {
-      captureBusinessEvent('sw_installed', {
+      captureBusinessEvent("sw_installed", {
         timestamp: new Date().toISOString(),
-      })
-    }
+      });
+    };
 
-    swManager.on('updateavailable', handleUpdateAvailable)
-    swManager.on('installed', handleInstalled)
+    swManager.on("updateavailable", handleUpdateAvailable);
+    swManager.on("installed", handleInstalled);
 
     // 监听离线状态变化
     const unsubscribeOffline = offlineDetector.subscribe((offline) => {
       if (offline && !showOfflineNotice && !dismissed) {
-        setShowOfflineNotice(true)
-        captureUserAction('offline_detected', 'network_status')
+        setShowOfflineNotice(true);
+        captureUserAction("offline_detected", "network_status");
       } else if (!offline && showOfflineNotice) {
-        setShowOfflineNotice(false)
-        captureUserAction('online_detected', 'network_status')
+        setShowOfflineNotice(false);
+        captureUserAction("online_detected", "network_status");
       }
-    })
+    });
 
     // 预取关键内容
     const prefetchContent = async () => {
       const criticalUrls = [
-        '/generator',
-        '/messages',
-        '/api/fortunes?action=popular&limit=10',
-      ]
-      
+        "/generator",
+        "/messages",
+        "/api/fortunes?action=popular&limit=10",
+      ];
+
       try {
-        await swManager.prefetchContent(criticalUrls)
-        captureBusinessEvent('sw_content_prefetched', {
+        await swManager.prefetchContent(criticalUrls);
+        captureBusinessEvent("sw_content_prefetched", {
           urls: criticalUrls,
           timestamp: new Date().toISOString(),
-        })
+        });
       } catch (error) {
-        console.error('Failed to prefetch content:', error)
+        console.error("Failed to prefetch content:", error);
       }
-    }
+    };
 
     // 延迟预取以避免影响初始加载
-    setTimeout(prefetchContent, 3000)
+    setTimeout(prefetchContent, 3000);
 
     return () => {
-      swManager.off('updateavailable', handleUpdateAvailable)
-      swManager.off('installed', handleInstalled)
-      unsubscribeOffline()
-    }
-  }, [showOfflineNotice, dismissed])
+      swManager.off("updateavailable", handleUpdateAvailable);
+      swManager.off("installed", handleInstalled);
+      unsubscribeOffline();
+    };
+  }, [showOfflineNotice, dismissed]);
 
   const handleUpdate = async () => {
-    setIsUpdating(true)
-    captureUserAction('sw_update_initiated', 'service_worker')
-    
+    setIsUpdating(true);
+    captureUserAction("sw_update_initiated", "service_worker");
+
     try {
-      await swManager.activateUpdate()
-      captureBusinessEvent('sw_updated', {
+      await swManager.activateUpdate();
+      captureBusinessEvent("sw_updated", {
         timestamp: new Date().toISOString(),
-      })
+      });
     } catch (error) {
-      console.error('Failed to update Service Worker:', error)
-      captureUserAction('sw_update_failed', 'service_worker', undefined, {
-        error: error instanceof Error ? error.message : 'Unknown error',
-      })
+      console.error("Failed to update Service Worker:", error);
+      captureUserAction("sw_update_failed", "service_worker", undefined, {
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
     } finally {
-      setIsUpdating(false)
+      setIsUpdating(false);
     }
-  }
+  };
 
   const handleDismissUpdate = () => {
-    setUpdateAvailable(false)
-    captureUserAction('sw_update_dismissed', 'service_worker')
-  }
+    setUpdateAvailable(false);
+    captureUserAction("sw_update_dismissed", "service_worker");
+  };
 
   const handleDismissOffline = () => {
-    setShowOfflineNotice(false)
-    setDismissed(true)
-    captureUserAction('offline_notice_dismissed', 'service_worker')
-  }
+    setShowOfflineNotice(false);
+    setDismissed(true);
+    captureUserAction("offline_notice_dismissed", "service_worker");
+  };
 
   // 更新通知
   if (updateAvailable) {
@@ -127,10 +130,11 @@ export function ServiceWorkerInitializer() {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-medium text-blue-900">
-                  应用更新可用
+                  App Update Available
                 </h3>
                 <p className="text-xs text-blue-700 mt-1">
-                  发现新版本，点击更新以获得最新功能和修复。
+                  A new version is available. Click to update for the latest
+                  features and fixes.
                 </p>
                 <div className="flex gap-2 mt-3">
                   <Button
@@ -142,10 +146,10 @@ export function ServiceWorkerInitializer() {
                     {isUpdating ? (
                       <>
                         <RefreshCw className="w-3 h-3 mr-1 animate-spin" />
-                        更新中
+                        Updating...
                       </>
                     ) : (
-                      '立即更新'
+                      "Update Now"
                     )}
                   </Button>
                   <Button
@@ -154,7 +158,7 @@ export function ServiceWorkerInitializer() {
                     onClick={handleDismissUpdate}
                     className="text-xs h-7"
                   >
-                    稍后
+                    Later
                   </Button>
                 </div>
               </div>
@@ -171,7 +175,7 @@ export function ServiceWorkerInitializer() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   // 离线通知
@@ -213,8 +217,8 @@ export function ServiceWorkerInitializer() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
-  return null
+  return null;
 }

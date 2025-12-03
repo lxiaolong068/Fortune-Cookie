@@ -254,7 +254,7 @@ export function AnalyticsDashboard({
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <Activity className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm text-gray-600">总事件数</span>
+                  <span className="text-sm text-gray-600">Total Events</span>
                 </div>
                 <div className="text-2xl font-bold mt-1">
                   {data.summary.totalEvents.toLocaleString()}
@@ -266,7 +266,7 @@ export function AnalyticsDashboard({
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">独立用户</span>
+                  <span className="text-sm text-gray-600">Unique Users</span>
                 </div>
                 <div className="text-2xl font-bold mt-1">
                   {data.summary.uniqueUsers}
@@ -278,7 +278,7 @@ export function AnalyticsDashboard({
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <Eye className="w-4 h-4 text-purple-600" />
-                  <span className="text-sm text-gray-600">页面浏览</span>
+                  <span className="text-sm text-gray-600">Page Views</span>
                 </div>
                 <div className="text-2xl font-bold mt-1">
                   {data.summary.pageViews}
@@ -290,7 +290,7 @@ export function AnalyticsDashboard({
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-orange-600" />
-                  <span className="text-sm text-gray-600">平均会话</span>
+                  <span className="text-sm text-gray-600">Avg Session</span>
                 </div>
                 <div className="text-2xl font-bold mt-1">
                   {formatDuration(data.summary.averageSessionDuration)}
@@ -302,7 +302,7 @@ export function AnalyticsDashboard({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>热门页面</CardTitle>
+                <CardTitle>Top Pages</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -316,7 +316,7 @@ export function AnalyticsDashboard({
                         <span className="font-medium">{page.page}</span>
                       </div>
                       <span className="text-sm text-gray-600">
-                        {page.views} 次浏览
+                        {page.views} views
                       </span>
                     </div>
                   ))}
@@ -326,7 +326,7 @@ export function AnalyticsDashboard({
 
             <Card>
               <CardHeader>
-                <CardTitle>设备分布</CardTitle>
+                <CardTitle>Device Distribution</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -354,7 +354,7 @@ export function AnalyticsDashboard({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Smartphone className="w-5 h-5" />
-                  设备类型
+                  Device Type
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -383,7 +383,7 @@ export function AnalyticsDashboard({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Globe className="w-5 h-5" />
-                  浏览器分布
+                  Browser Distribution
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -415,7 +415,7 @@ export function AnalyticsDashboard({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardContent className="p-4">
-                <div className="text-sm text-gray-600 mb-1">页面加载时间</div>
+                <div className="text-sm text-gray-600 mb-1">Page Load Time</div>
                 <div
                   className={`text-2xl font-bold ${getPerformanceColor("loadTime", data.performance.averageLoadTime)}`}
                 >
@@ -466,7 +466,9 @@ export function AnalyticsDashboard({
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-gray-600">当前在线用户</span>
+                  <span className="text-sm text-gray-600">
+                    Current Online Users
+                  </span>
                 </div>
                 <div className="text-2xl font-bold mt-1 text-green-600">
                   {data.realTime.currentUsers}
@@ -476,7 +478,9 @@ export function AnalyticsDashboard({
 
             <Card>
               <CardContent className="p-4">
-                <div className="text-sm text-gray-600 mb-1">过去1小时事件</div>
+                <div className="text-sm text-gray-600 mb-1">
+                  Events (Last Hour)
+                </div>
                 <div className="text-2xl font-bold text-blue-600">
                   {data.realTime.eventsLastHour}
                 </div>
@@ -485,7 +489,9 @@ export function AnalyticsDashboard({
 
             <Card>
               <CardContent className="p-4">
-                <div className="text-sm text-gray-600 mb-1">活跃类别</div>
+                <div className="text-sm text-gray-600 mb-1">
+                  Active Categories
+                </div>
                 <div className="text-2xl font-bold text-purple-600">
                   {data.realTime.topCategories.length}
                 </div>
@@ -496,25 +502,29 @@ export function AnalyticsDashboard({
           {realTimeData && (
             <Card>
               <CardHeader>
-                <CardTitle>当前会话</CardTitle>
-                <CardDescription>您的实时使用数据</CardDescription>
+                <CardTitle>Current Session</CardTitle>
+                <CardDescription>Your real-time usage data</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <div className="text-sm text-gray-600">会话时长</div>
+                    <div className="text-sm text-gray-600">
+                      Session Duration
+                    </div>
                     <div className="text-lg font-semibold">
                       {formatDuration(realTimeData.currentSession.duration)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600">页面浏览</div>
+                    <div className="text-sm text-gray-600">Page Views</div>
                     <div className="text-lg font-semibold">
                       {realTimeData.currentSession.pageViews}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600">生成饼干</div>
+                    <div className="text-sm text-gray-600">
+                      Fortunes Generated
+                    </div>
                     <div className="text-lg font-semibold">
                       {realTimeData.currentSession.fortunesGenerated}
                     </div>

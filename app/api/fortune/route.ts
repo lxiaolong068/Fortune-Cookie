@@ -19,6 +19,7 @@ import {
   getMaskedApiKey,
   getRateLimitHeaders,
   getRateLimitErrorResponse,
+  getAIRateLimitErrorResponse,
 } from "@/lib/api-auth";
 
 // 输入cleanup和验证utility/tool
@@ -217,12 +218,49 @@ export async function POST(request: NextRequest) {
         responseTime: Date.now() - startTime,
       });
     } else {
-      // cache未命中，generation/generate新的fortune cookie
+      // Cache miss - will call AI, check hourly rate limit first
       CachePerformanceMonitor.recordMiss();
+
+      // Check AI generation rate limit (1 per hour per IP)
+      if (rateLimiters?.aiGeneration) {
+        const aiLimitResult = await rateLimiters.aiGeneration.limit(clientId);
+
+        if (!aiLimitResult.success) {
+          // Record AI rate limit event
+          captureUserAction("ai_rate_limit_exceeded", "fortune_api", clientId, {
+            reset: aiLimitResult.reset,
+            endpoint: "/api/fortune",
+            authTier,
+            apiKey: maskedKey,
+          });
+
+          return NextResponse.json(
+            getAIRateLimitErrorResponse(aiLimitResult.reset),
+            {
+              status: 429,
+              headers: {
+                "X-RateLimit-Limit": "1",
+                "X-RateLimit-Remaining": "0",
+                "X-RateLimit-Reset": aiLimitResult.reset.toString(),
+                "X-RateLimit-Window": "1h",
+              },
+            },
+          );
+        }
+      } else {
+        // Redis unavailable - block AI generation (strict cost control)
+        return NextResponse.json(
+          createErrorResponse(
+            "AI generation service temporarily unavailable. Please browse our pre-seeded fortunes instead.",
+            { browseUrl: "/browse" },
+          ),
+          { status: 503 },
+        );
+      }
 
       fortune = await openRouterClient.generateFortune(fortuneRequest);
 
-      // cache结果（如果不是custom提示）
+      // Cache result (if not custom prompt)
       if (!fortuneRequest.customPrompt) {
         await cacheManager.cacheFortune(requestHash, fortune);
       }
