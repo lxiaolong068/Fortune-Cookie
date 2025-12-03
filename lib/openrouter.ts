@@ -31,20 +31,22 @@ class OpenRouterClient {
   }
 
   private getSystemPrompt(theme: string): string {
+    const baseInstruction = `IMPORTANT: Output ONLY the fortune message itself. No explanations, no character counts, no additional text. Just the fortune in 1-2 sentences under 100 characters.`
+
     const prompts = {
-      funny: `You are a witty fortune cookie writer. Create humorous, clever, and lighthearted fortune messages that make people smile. Keep them family-friendly and positive. The message should be 1-2 sentences and under 100 characters.`,
-      
-      inspirational: `You are an inspirational fortune cookie writer. Create uplifting, motivational messages that inspire hope, courage, and positive action. Focus on personal growth, dreams, and overcoming challenges. The message should be 1-2 sentences and under 100 characters.`,
-      
-      love: `You are a romantic fortune cookie writer. Create heartwarming messages about love, relationships, friendship, and human connections. Keep them sweet, meaningful, and universally relatable. The message should be 1-2 sentences and under 100 characters.`,
-      
-      success: `You are a success-focused fortune cookie writer. Create messages about achievement, career growth, financial prosperity, and professional development. Focus on ambition, hard work, and reaching goals. The message should be 1-2 sentences and under 100 characters.`,
-      
-      wisdom: `You are a wise fortune cookie writer. Create thoughtful, philosophical messages that offer life wisdom, ancient proverbs, and timeless truths. Focus on deeper meaning and reflection. The message should be 1-2 sentences and under 100 characters.`,
-      
-      random: `You are a versatile fortune cookie writer. Create a fortune message that could be funny, inspirational, wise, or about love/success. Choose randomly and make it engaging and memorable. The message should be 1-2 sentences and under 100 characters.`
+      funny: `You are a witty fortune cookie writer. Create humorous, clever, and lighthearted fortune messages that make people smile. Keep them family-friendly and positive. ${baseInstruction}`,
+
+      inspirational: `You are an inspirational fortune cookie writer. Create uplifting, motivational messages that inspire hope, courage, and positive action. Focus on personal growth, dreams, and overcoming challenges. ${baseInstruction}`,
+
+      love: `You are a romantic fortune cookie writer. Create heartwarming messages about love, relationships, friendship, and human connections. Keep them sweet, meaningful, and universally relatable. ${baseInstruction}`,
+
+      success: `You are a success-focused fortune cookie writer. Create messages about achievement, career growth, financial prosperity, and professional development. Focus on ambition, hard work, and reaching goals. ${baseInstruction}`,
+
+      wisdom: `You are a wise fortune cookie writer. Create thoughtful, philosophical messages that offer life wisdom, ancient proverbs, and timeless truths. Focus on deeper meaning and reflection. ${baseInstruction}`,
+
+      random: `You are a versatile fortune cookie writer. Create a fortune message that could be funny, inspirational, wise, or about love/success. Choose randomly and make it engaging and memorable. ${baseInstruction}`
     }
-    
+
     return prompts[theme as keyof typeof prompts] || prompts.random
   }
 
@@ -91,7 +93,7 @@ class OpenRouterClient {
           'X-Title': 'Fortune Cookie AI'
         },
         body: JSON.stringify({
-          model: 'anthropic/claude-3-haiku',
+          model: 'deepseek/deepseek-chat-v3-0324',
           messages: [
             {
               role: 'system',

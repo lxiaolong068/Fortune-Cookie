@@ -170,11 +170,21 @@ export class FortuneGenerator {
    * ```
    */
   static cleanMessage(message: string): string {
-    return message
-      .replace(/[^\w\s.,!?'-]/g, '')  // Remove special characters except basic punctuation
+    let cleaned = message
+      // Take only the first sentence/fortune if multiple are returned
+      .split(/(?<=[.!?])\s+(?=[A-Z])/)[0] || message
+
+    cleaned = cleaned
+      // Add space before capital letters that follow lowercase (e.g., "gratitudewalk" -> "gratitude walk")
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      // Add space around em-dashes
+      .replace(/—/g, ' — ')
+      .replace(/[^\w\s.,!?'"-]/g, '')  // Remove special characters except basic punctuation
       .replace(/\s+/g, ' ')  // Replace multiple spaces with single space
       .replace(/\n+/g, ' ')  // Replace newlines with space
       .trim()  // Trim after all replacements
+
+    return cleaned
   }
 
   /**
