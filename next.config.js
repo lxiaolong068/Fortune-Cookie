@@ -217,15 +217,15 @@ const nextConfig = {
       "framer-motion",
     ],
     instrumentationHook: true,
-    // 启用 turbo 模式以提升构建性能
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-      },
-    },
+    // 临时禁用 turbo 模式以调试兼容性问题
+    // turbo: {
+    //   rules: {
+    //     "*.svg": {
+    //       loaders: ["@svgr/webpack"],
+    //       as: "*.js",
+    //     },
+    //   },
+    // },
   },
 
   // Bundle analyzer and webpack optimizations
