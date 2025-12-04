@@ -20,6 +20,22 @@ Google's **E-E-A-T** (Experience, Expertise, Authoritativeness, Trustworthiness)
 *   **Experience:** We integrated real user feedback loops to understand what kind of "fortunes" actually resonate with people.
 *   **Trust:** We are transparent about using AI. We don't pretend a mystic is sitting in a server room. This transparency builds trust with users who are increasingly skeptical of "fake" content.
 
+### E-E-A-T Checklist for Entertainment Sites
+Even for a "fun" site, credibility matters. Here's our checklist:
+1.  **Cite Sources:** Link to historical records (like the 1983 mock trial).
+2.  **Author Bios:** clearly state who wrote the content (even if it's an AI team, be honest).
+3.  **Update Frequency:** Refresh content to reflect new trends (like AI astrology).
+
+## 2. Optimizing for "Generative Engine Optimization" (GEO)
+
+### Topic Clustering: The "Luck" Encyclopedia
+Instead of random blog posts, we built a semantic web of content. We treat "Luck" as our core entity and branch out:
+*   **History:** Origins of fortune cookies.
+*   **Psychology:** Why we believe in luck.
+*   **Technology:** How AI generates luck.
+
+This clustering helps search engines understand that we are an authority on the *concept* of luck, not just a cookie recipe site.
+
 ## 2. Optimizing for "Generative Engine Optimization" (GEO)
 
 With AI Overviews (AIOs) dominating search results, we optimized our content to be "machine-readable."
@@ -32,8 +48,8 @@ With AI Overviews (AIOs) dominating search results, we optimized our content to 
 Performance is a ranking factor. We built this site on **Next.js 15** to leverage the latest speed advantages:
 
 *   **React Server Components (RSC):** Most of our blog content is rendered entirely on the server. This means zero JavaScript is sent to the client for the text content, resulting in lightning-fast First Contentful Paint (FCP).
-*   **`next/image`:** We use the built-in image component to automatically serve WebP formats and prevent Cumulative Layout Shift (CLS)—a killer for user experience scores.
-*   **Partial Prerendering (PPR):** We are experimenting with PPR to keep the "shell" of the site static (cached at the edge) while streaming in the dynamic "fortune" component.
+*   **INP (Interaction to Next Paint) Optimization:** The "crack" animation of the cookie is critical. We optimized this interaction to ensure the visual feedback is under 200ms, making the app feel responsive and "alive."
+*   **Island Architecture:** We use a "static shell" for the blog but treat the fortune generator as a dynamic "island." This keeps the heavy JavaScript isolated to where it's needed, preserving the performance of the rest of the site.
 
 ## 4. Engagement is the New Bounce Rate
 
