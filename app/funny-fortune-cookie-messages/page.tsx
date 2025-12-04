@@ -16,10 +16,10 @@ export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
-  description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles. Copy and share your favorites.',
+  description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles. Browse our collection of witty and humorous fortunes.',
   openGraph: {
     title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
-    description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles.',
+    description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles. Share the laughter with friends.',
     type: 'article',
     url: `${baseUrl}/funny-fortune-cookie-messages`,
   },
@@ -130,7 +130,7 @@ export default function FunnyFortuneCookieMessagesPage() {
         { name: 'Messages', url: '/messages' },
         { name: 'Funny Fortune Cookie Messages', url: '/funny-fortune-cookie-messages' }
       ]} />
-      
+
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />
         <div className="relative z-10">
@@ -141,10 +141,10 @@ export default function FunnyFortuneCookieMessagesPage() {
                 Funny Fortune Cookie Messages
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
-                Get ready to laugh with our collection of hilarious fortune cookie messages! 
+                Get ready to laugh with our collection of hilarious fortune cookie messages!
                 Perfect for parties, pranks, or just brightening someone's day with humor.
               </p>
-              
+
               <div className="flex flex-wrap justify-center gap-4">
                 <Badge className="bg-yellow-100 text-yellow-800">
                   <Smile className="w-3 h-3 mr-1" />
@@ -178,7 +178,7 @@ export default function FunnyFortuneCookieMessagesPage() {
                         {category.messages.length} messages
                       </Badge>
                     </div>
-                    
+
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {category.messages.map((message, index) => (
                         <Card key={index} className="p-4 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 group">
@@ -231,28 +231,28 @@ export default function FunnyFortuneCookieMessagesPage() {
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-3">Keep It Short & Sweet</h3>
                     <p className="text-gray-600 mb-4">
-                      The best funny fortunes are concise and punchy. Aim for one or two sentences 
+                      The best funny fortunes are concise and punchy. Aim for one or two sentences
                       that deliver the humor quickly.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-3">Play with Expectations</h3>
                     <p className="text-gray-600 mb-4">
-                      Start with a traditional fortune format, then twist it with unexpected humor 
+                      Start with a traditional fortune format, then twist it with unexpected humor
                       or absurd conclusions.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibent text-gray-800 mb-3">Use Self-Reference</h3>
                     <p className="text-gray-600 mb-4">
-                      Some of the funniest fortunes reference the fact that they're fortune cookies 
+                      Some of the funniest fortunes reference the fact that they're fortune cookies
                       or break the fourth wall.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-3">Stay Family-Friendly</h3>
                     <p className="text-gray-600 mb-4">
-                      The best funny fortunes are clever without being offensive, making them 
+                      The best funny fortunes are clever without being offensive, making them
                       perfect for any audience.
                     </p>
                   </div>

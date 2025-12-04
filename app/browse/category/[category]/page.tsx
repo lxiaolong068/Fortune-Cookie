@@ -13,42 +13,42 @@ const categoryConfig: Record<string, { icon: any, color: string, description: st
     inspirational: {
         icon: Sparkles,
         color: 'bg-blue-100 text-blue-800',
-        description: 'Find motivation and inspiration for your daily life with our collection of inspirational fortune cookie messages.'
+        description: 'Find daily motivation and inspiration with our collection of uplifting fortune cookie messages. Perfect for starting your day with positivity and purpose.'
     },
     funny: {
         icon: Smile,
         color: 'bg-yellow-100 text-yellow-800',
-        description: 'Add some humor to your day with our hilarious and witty fortune cookie sayings.'
+        description: 'Add laughter to your day with our hilarious and witty fortune cookie sayings. Great for parties, pranks, and sharing a smile with friends.'
     },
     love: {
         icon: Heart,
         color: 'bg-pink-100 text-pink-800',
-        description: 'Discover romantic insights and relationship wisdom with our love-themed fortune cookies.'
+        description: 'Discover romantic insights and relationship wisdom with our love-themed fortune cookies. Find the perfect message for your crush or partner.'
     },
     success: {
         icon: TrendingUp,
         color: 'bg-green-100 text-green-800',
-        description: 'Unlock the secrets to success and career growth with these motivational fortune messages.'
+        description: 'Unlock secrets to career growth and personal achievement. Motivational fortune messages to guide your path to success and prosperity.'
     },
     wisdom: {
         icon: Brain,
         color: 'bg-purple-100 text-purple-800',
-        description: 'Ancient wisdom and philosophical thoughts to guide your journey.'
+        description: 'Explore ancient wisdom and philosophical thoughts. Deep, meaningful fortune cookie messages to guide your life journey and decision making.'
     },
     friendship: {
         icon: Users,
         color: 'bg-orange-100 text-orange-800',
-        description: 'Celebrate friendship and connection with these heartwarming messages.'
+        description: 'Celebrate the bond of friendship with heartwarming messages. Share appreciation and joy with your best friends through these special fortunes.'
     },
     health: {
         icon: Activity,
         color: 'bg-red-100 text-red-800',
-        description: 'Positive affirmations and wisdom for a healthy mind and body.'
+        description: 'Positive affirmations and wisdom for a healthy mind and body. Encourage wellness and vitality with our health-focused fortune cookie messages.'
     },
     travel: {
         icon: Plane,
         color: 'bg-indigo-100 text-indigo-800',
-        description: 'Inspiring quotes for adventurers and travelers.'
+        description: 'Inspiring quotes for adventurers and explorers. Fuel your wanderlust and excitement for new journeys with travel-themed fortune cookies.'
     }
 }
 

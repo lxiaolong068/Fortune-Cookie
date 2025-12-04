@@ -10,10 +10,10 @@ const baseUrl = getSiteUrl()
 
 export const metadata: Metadata = {
   title: 'Fortune Cookie Messages - Inspirational Quotes & Sayings',
-  description: 'Browse inspirational fortune cookie messages, funny quotes, and motivational sayings. Find the perfect fortune for any occasion.',
+  description: 'Browse our huge collection of inspirational fortune cookie messages, funny quotes, and motivational sayings. Find the perfect fortune for any occasion, from love to success.',
   openGraph: {
     title: 'Fortune Cookie Messages - Inspirational Quotes & Sayings',
-    description: 'Browse our collection of inspirational fortune cookie messages, funny quotes, and motivational sayings.',
+    description: 'Browse our huge collection of inspirational fortune cookie messages, funny quotes, and motivational sayings. Find the perfect fortune for any occasion.',
     type: 'website',
     url: `${baseUrl}/messages`,
   },
@@ -110,7 +110,7 @@ export default function MessagesPage() {
                 Fortune Cookie Messages
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Discover our curated collection of inspirational quotes, funny sayings, and wisdom-filled messages. 
+                Discover our curated collection of inspirational quotes, funny sayings, and wisdom-filled messages.
                 Perfect for daily motivation or sharing with friends!
               </p>
             </div>
@@ -132,7 +132,7 @@ export default function MessagesPage() {
                         {category.messages.length} messages
                       </Badge>
                     </div>
-                    
+
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {category.messages.map((message, index) => (
                         <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 hover:scale-105">
@@ -157,13 +157,13 @@ export default function MessagesPage() {
                   About Fortune Cookie Messages
                 </h2>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Fortune cookies have been bringing wisdom, humor, and inspiration to people for generations. 
-                  Our collection features carefully curated messages that span various themes and emotions, 
+                  Fortune cookies have been bringing wisdom, humor, and inspiration to people for generations.
+                  Our collection features carefully curated messages that span various themes and emotions,
                   from motivational quotes that inspire action to funny sayings that bring a smile to your face.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  Whether you're looking for daily inspiration, planning a special event, or just want to 
-                  brighten someone's day, our fortune cookie messages offer the perfect blend of wisdom 
+                  Whether you're looking for daily inspiration, planning a special event, or just want to
+                  brighten someone's day, our fortune cookie messages offer the perfect blend of wisdom
                   and entertainment. Each message is designed to be meaningful, memorable, and shareable.
                 </p>
               </section>

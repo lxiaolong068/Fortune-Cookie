@@ -73,10 +73,10 @@ export function getSupportedLocales(): readonly Locale[] {
 export const pathConfig = {
   // Whether to show default locale in URL (false = /page, true = /en/page)
   showDefaultLocale: false,
-  
+
   // URL structure strategy
   strategy: 'subdirectory' as const, // 'subdirectory' | 'subdomain' | 'domain'
-  
+
   // Locale detection methods
   detection: {
     // Detect from URL path
@@ -98,12 +98,12 @@ export const pathConfig = {
 export function getLocalizedPath(path: string, locale: Locale): string {
   // Remove leading slash if present
   const cleanPath = path.startsWith('/') ? path.slice(1) : path
-  
+
   // For default locale, return path as-is if showDefaultLocale is false
   if (locale === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
     return `/${cleanPath}`
   }
-  
+
   // For non-default locales or when showDefaultLocale is true
   return `/${locale}${cleanPath ? `/${cleanPath}` : ''}`
 }
@@ -113,18 +113,18 @@ export function getLocalizedPath(path: string, locale: Locale): string {
  */
 export function getLocaleFromPath(path: string): { locale: Locale; pathname: string } {
   const segments = path.split('/').filter(Boolean)
-  
+
   if (segments.length === 0) {
     return { locale: i18n.defaultLocale, pathname: '/' }
   }
-  
+
   const firstSegment = segments[0]
 
   if (firstSegment && isValidLocale(firstSegment)) {
     const pathname = '/' + segments.slice(1).join('/')
     return { locale: firstSegment, pathname: pathname === '/' ? '/' : pathname }
   }
-  
+
   return { locale: i18n.defaultLocale, pathname: path }
 }
 
@@ -133,7 +133,7 @@ export function getLocaleFromPath(path: string): { locale: Locale; pathname: str
  */
 export function getAlternateLinks(currentPath: string) {
   const { pathname } = getLocaleFromPath(currentPath)
-  
+
   return i18n.locales.map(locale => ({
     hreflang: languages[locale].hreflang,
     href: getLocalizedPath(pathname, locale),
@@ -180,7 +180,7 @@ export const translationNamespaces = {
 export const seoConfig = {
   en: {
     title: 'Fortune Cookie - Free Online AI Generator',
-    description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom fortune cookies with our AI tool.',
+    description: 'Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom fortune cookies with our AI tool. Perfect for daily motivation, parties, and social sharing.',
     keywords: [
       'fortune cookie',
       'free online fortune cookie generator ai',
@@ -192,11 +192,11 @@ export const seoConfig = {
       'personalized fortune cookies'
     ],
     ogTitle: 'Fortune Cookie AI - Free Online Generator',
-    ogDescription: 'Create personalized fortune cookies with AI. Get inspirational messages, funny quotes, and lucky numbers instantly.',
+    ogDescription: 'Create personalized fortune cookies with AI. Get inspirational messages, funny quotes, and lucky numbers instantly. Share wisdom and fun with friends.',
   },
   zh: {
     title: '幸运饼干 - 免费在线AI生成器',
-    description: '免费在线AI驱动的幸运饼干生成器。获取个性化励志消息、搞笑语录和幸运数字。使用我们的AI工具创建定制幸运饼干。',
+    description: '免费在线AI驱动的幸运饼干生成器。获取个性化励志消息、搞笑语录和幸运数字。使用我们的AI工具创建定制幸运饼干。适合日常激励、聚会娱乐和社交分享。',
     keywords: [
       '幸运饼干',
       '免费在线幸运饼干生成器',
@@ -208,7 +208,7 @@ export const seoConfig = {
       '个性化幸运饼干'
     ],
     ogTitle: '幸运饼干AI - 免费在线生成器',
-    ogDescription: '使用AI创建个性化幸运饼干。立即获取励志消息、搞笑语录和幸运数字。',
+    ogDescription: '使用AI创建个性化幸运饼干。立即获取励志消息、搞笑语录和幸运数字。与朋友分享智慧和乐趣。',
   },
 } as const
 

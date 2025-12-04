@@ -19,11 +19,11 @@ export const revalidate = 86400; // 24 hours
 export const metadata: Metadata = {
   title: "History of Fortune Cookies - Origins and Cultural Evolution",
   description:
-    "Explore the history of fortune cookies from Japanese roots to American invention. Learn the cultural evolution and origins of this beloved treat.",
+    "Explore the fascinating history of fortune cookies from Japanese roots in Kyoto to American invention in California. Discover the true story of Makoto Hagiwara and the evolution of this beloved treat.",
   openGraph: {
     title: "History of Fortune Cookies - Origins and Cultural Evolution",
     description:
-      "Discover the fascinating history of fortune cookies, from their Japanese roots to American invention.",
+      "Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about Makoto Hagiwara and the cultural journey of this iconic cookie.",
     type: "article",
     url: `${baseUrl}/history`,
   },

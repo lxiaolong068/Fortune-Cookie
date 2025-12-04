@@ -15,10 +15,10 @@ export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'Fortune Cookie Recipes - How to Make Homemade Fortune Cookies',
-  description: 'Learn to make delicious homemade fortune cookies with easy step-by-step recipes. Perfect for parties and creating custom messages at home.',
+  description: 'Learn to make delicious homemade fortune cookies with easy step-by-step recipes. Perfect for parties, creating custom messages, and authentic Asian-inspired treats at home.',
   openGraph: {
     title: 'Fortune Cookie Recipes - How to Make Homemade Fortune Cookies',
-    description: 'Learn how to make delicious homemade fortune cookies with our easy step-by-step recipes.',
+    description: 'Learn how to make delicious homemade fortune cookies with our easy step-by-step recipes. Create authentic, crispy cookies with custom messages for any occasion.',
     type: 'article',
     url: `${baseUrl}/recipes`,
   },
@@ -158,7 +158,7 @@ export default function RecipesPage() {
                 Fortune Cookie Recipes
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Create your own delicious fortune cookies at home with our tested recipes. 
+                Create your own delicious fortune cookies at home with our tested recipes.
                 Perfect for parties, special occasions, or whenever you want to share some wisdom!
               </p>
             </div>
@@ -180,7 +180,7 @@ export default function RecipesPage() {
                     <p className="text-gray-600 text-sm mb-3">
                       {recipe.description}
                     </p>
-                    
+
                     <div className="flex flex-wrap gap-2 mb-4">
                       <Badge className="bg-blue-100 text-blue-800">
                         <Clock className="w-3 h-3 mr-1" />
@@ -270,14 +270,14 @@ export default function RecipesPage() {
                   Making Fortune Cookies at Home
                 </h2>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Creating homemade fortune cookies is a delightful way to add a personal touch to any gathering. 
-                  These crispy, sweet treats are perfect for parties, special occasions, or simply as a fun 
-                  family activity. The key to success lies in working quickly while the cookies are still warm 
+                  Creating homemade fortune cookies is a delightful way to add a personal touch to any gathering.
+                  These crispy, sweet treats are perfect for parties, special occasions, or simply as a fun
+                  family activity. The key to success lies in working quickly while the cookies are still warm
                   and pliable, allowing you to achieve that characteristic curved shape.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  Our recipes range from the classic vanilla version to exciting variations like chocolate and 
-                  gluten-free options. Each recipe has been tested to ensure consistent results, whether you're 
+                  Our recipes range from the classic vanilla version to exciting variations like chocolate and
+                  gluten-free options. Each recipe has been tested to ensure consistent results, whether you're
                   a beginner baker or an experienced chef looking to try something new.
                 </p>
               </section>
