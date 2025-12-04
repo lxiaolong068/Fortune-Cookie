@@ -54,5 +54,19 @@
     "photoId": "vIJ23H-oaJA",
     "photographer": "Christian Lue",
     "photographerUrl": "https://unsplash.com/@christianlue"
+  },
+  {
+    "slug": "gamifying-destiny",
+    "filename": "gamifying-destiny-hero.jpg",
+    "photoId": "bWYZn--b48I",
+    "photographer": "Senad Palic",
+    "photographerUrl": "https://unsplash.com/@senadpalic"
+  },
+  {
+    "slug": "the-ethics-of-ai-prophecy",
+    "filename": "ethics-ai-prophecy-hero.jpg",
+    "photoId": "d5ubQCUaxOc",
+    "photographer": "Caden Tormey",
+    "photographerUrl": "https://unsplash.com/@cjtormey"
   }
 ]
