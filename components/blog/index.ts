@@ -6,4 +6,5 @@
  * in server components: import { mdxComponents } from '@/components/blog/MDXComponents'
  */
 
-export { BlogCard } from './BlogCard'
+export { BlogCard } from "./BlogCard";
+export { Pagination } from "./Pagination";
