@@ -1,198 +1,227 @@
+#!/usr/bin/env node
+
 /**
- * Script to download blog hero images from Unsplash
- * Run: node scripts/download-blog-images.js
+ * Download Unsplash images for new blog posts
+ * Uses the Unsplash API to search and download relevant hero images
  */
 
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.join(__dirname, "..");
+// Load config
+const configPath = path.join(__dirname, "..", "unsplash.config.json");
+const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+const ACCESS_KEY = config.accessKey;
 
-// Blog posts configuration
-const blogImages = [
+// Blog posts that need images
+const blogPosts = [
   {
-    slug: "ai-fortune-telling-trends-2025",
-    query: "AI technology crystal ball futuristic",
-    filename: "ai-fortune-telling-hero.jpg",
+    slug: "daily-affirmations-micro-habits-2025",
+    filename: "daily-affirmations-micro-habits-2025-hero.jpg",
+    searchQuery: "morning coffee meditation wellness routine",
+    fallbackQuery: "sunrise morning peaceful",
   },
   {
-    slug: "fortune-cookies-japanese-origins",
-    query: "japanese temple traditional kyoto",
-    filename: "fortune-cookies-origins-hero.jpg",
+    slug: "learn-english-idioms-fortune-cookies",
+    filename: "learn-english-idioms-fortune-cookies-hero.jpg",
+    searchQuery: "books learning study english",
+    fallbackQuery: "education reading notebook",
   },
   {
-    slug: "psychology-of-luck",
-    query: "four leaf clover luck nature",
-    filename: "psychology-luck-hero.jpg",
+    slug: "romantic-fortune-cookie-messages",
+    filename: "romantic-fortune-cookie-messages-hero.jpg",
+    searchQuery: "love letter romantic hearts",
+    fallbackQuery: "couple romance date",
   },
   {
-    slug: "history-of-fortune-cookies",
-    query: "fortune cookie chinese food vintage",
-    filename: "history-fortune-cookies-hero.jpg",
+    slug: "virtual-team-ice-breakers-fortune-cookies",
+    filename: "virtual-team-ice-breakers-fortune-cookies-hero.jpg",
+    searchQuery: "remote work video call team meeting",
+    fallbackQuery: "laptop work from home office",
   },
   {
-    slug: "psychology-of-fortune-cookies",
-    query: "meditation mindfulness zen peaceful",
-    filename: "psychology-fortune-cookies-hero.jpg",
+    slug: "instagram-fortune-cookie-captions",
+    filename: "instagram-fortune-cookie-captions-hero.jpg",
+    searchQuery: "social media phone instagram aesthetic",
+    fallbackQuery: "smartphone photography content",
   },
   {
-    slug: "building-fortune-cookie-seo",
-    query: "SEO web development coding laptop analytics",
-    filename: "building-seo-hero.jpg",
+    slug: "ai-fortune-writing-prompts",
+    filename: "ai-fortune-writing-prompts-hero.jpg",
+    searchQuery: "writing creative typewriter notebook",
+    fallbackQuery: "pen paper journal creative",
   },
   {
-    slug: "how-ai-writes-fortunes",
-    query: "artificial intelligence neural network technology abstract",
-    filename: "ai-tech-magic.jpg",
-  },
-  {
-    slug: "fortune-cookies-pop-culture",
-    query: "movie theater vintage retro film",
-    filename: "pop-culture-fortune-cookie.jpg",
+    slug: "virtual-party-fortune-cookies-2025",
+    filename: "virtual-party-fortune-cookies-2025-hero.jpg",
+    searchQuery: "celebration party confetti festive",
+    fallbackQuery: "new year celebration virtual",
   },
 ];
 
-// Simple fetch-based Unsplash client
-async function searchUnsplash(accessKey, query) {
-  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`;
+const outputDir = path.join(__dirname, "..", "public", "images", "blog");
+const attributionPath = path.join(outputDir, "attribution.json");
 
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Client-ID ${accessKey}`,
-    },
+// Ensure output directory exists
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir, { recursive: true });
+}
+
+// Load existing attribution
+let attributions = [];
+if (fs.existsSync(attributionPath)) {
+  attributions = JSON.parse(fs.readFileSync(attributionPath, "utf8"));
+}
+
+function fetchJSON(url) {
+  return new Promise((resolve, reject) => {
+    https
+      .get(
+        url,
+        {
+          headers: {
+            Authorization: `Client-ID ${ACCESS_KEY}`,
+            "Accept-Version": "v1",
+          },
+        },
+        (res) => {
+          let data = "";
+          res.on("data", (chunk) => (data += chunk));
+          res.on("end", () => {
+            try {
+              resolve(JSON.parse(data));
+            } catch (e) {
+              reject(
+                new Error(`Failed to parse JSON: ${data.substring(0, 200)}`),
+              );
+            }
+          });
+        },
+      )
+      .on("error", reject);
   });
-
-  if (!response.ok) {
-    throw new Error(
-      `Unsplash API error: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  const data = await response.json();
-  return data.results;
 }
 
-async function downloadImage(url, destPath) {
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Failed to download image: ${response.status}`);
-  }
-
-  const buffer = Buffer.from(await response.arrayBuffer());
-  await fs.mkdir(path.dirname(destPath), { recursive: true });
-  await fs.writeFile(destPath, buffer);
+function downloadImage(url, filepath) {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(filepath);
+    https
+      .get(url, (response) => {
+        // Handle redirects
+        if (response.statusCode === 301 || response.statusCode === 302) {
+          https
+            .get(response.headers.location, (redirectResponse) => {
+              redirectResponse.pipe(file);
+              file.on("finish", () => {
+                file.close();
+                resolve();
+              });
+            })
+            .on("error", reject);
+        } else {
+          response.pipe(file);
+          file.on("finish", () => {
+            file.close();
+            resolve();
+          });
+        }
+      })
+      .on("error", reject);
+  });
 }
 
-async function trackDownload(accessKey, downloadLocation) {
+async function searchAndDownload(post) {
+  console.log(`\n🔍 Searching for: "${post.searchQuery}" (${post.slug})`);
+
+  const filepath = path.join(outputDir, post.filename);
+
+  // Check if already exists
+  if (fs.existsSync(filepath)) {
+    console.log(`  ⏭️  Already exists: ${post.filename}`);
+    return null;
+  }
+
   try {
-    await fetch(downloadLocation, {
-      headers: {
-        Authorization: `Client-ID ${accessKey}`,
-      },
-    });
-  } catch (e) {
-    console.warn("Failed to track download:", e.message);
+    // Search Unsplash
+    const searchUrl = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(post.searchQuery)}&per_page=5&orientation=landscape`;
+    const searchResult = await fetchJSON(searchUrl);
+
+    if (!searchResult.results || searchResult.results.length === 0) {
+      console.log(`  ⚠️  No results, trying fallback: "${post.fallbackQuery}"`);
+      const fallbackUrl = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(post.fallbackQuery)}&per_page=5&orientation=landscape`;
+      const fallbackResult = await fetchJSON(fallbackUrl);
+
+      if (!fallbackResult.results || fallbackResult.results.length === 0) {
+        console.log(`  ❌ No images found for ${post.slug}`);
+        return null;
+      }
+      searchResult.results = fallbackResult.results;
+    }
+
+    // Pick the first result
+    const photo = searchResult.results[0];
+    console.log(
+      `  📸 Found: "${photo.description || photo.alt_description || "Untitled"}" by ${photo.user.name}`,
+    );
+
+    // Download the image (regular size, ~1080px width)
+    const imageUrl = photo.urls.regular;
+    console.log(`  ⬇️  Downloading...`);
+    await downloadImage(imageUrl, filepath);
+
+    // Track download for Unsplash guidelines
+    const trackUrl = `https://api.unsplash.com/photos/${photo.id}/download`;
+    await fetchJSON(trackUrl).catch(() => {}); // Best effort tracking
+
+    console.log(`  ✅ Saved: ${post.filename}`);
+
+    // Return attribution info
+    return {
+      slug: post.slug,
+      filename: post.filename,
+      photoId: photo.id,
+      photographer: photo.user.name,
+      photographerUrl: photo.user.links.html,
+    };
+  } catch (error) {
+    console.error(`  ❌ Error: ${error.message}`);
+    return null;
   }
 }
 
 async function main() {
-  // Load config
-  const configPath = path.join(projectRoot, "unsplash.config.json");
-  const configData = await fs.readFile(configPath, "utf-8");
-  const config = JSON.parse(configData);
+  console.log("🥠 Fortune Cookie Blog Image Downloader");
+  console.log("========================================");
+  console.log(`Output directory: ${outputDir}`);
 
-  const accessKey = config.accessKey;
-  const imageDestDir = path.join(
-    projectRoot,
-    config.imageDestination || "public/images",
-    "blog",
-  );
+  const newAttributions = [];
 
-  if (!accessKey) {
-    console.error("Error: No Unsplash access key found in config");
-    process.exit(1);
+  for (const post of blogPosts) {
+    const attribution = await searchAndDownload(post);
+    if (attribution) {
+      newAttributions.push(attribution);
+    }
+    // Rate limiting - wait 1 second between requests
+    await new Promise((r) => setTimeout(r, 1000));
   }
 
-  console.log(`Destination directory: ${imageDestDir}`);
-  console.log(`Processing ${blogImages.length} blog posts...\n`);
-
-  const results = [];
-
-  for (const blog of blogImages) {
-    console.log(`[${blog.slug}]`);
-    console.log(`  Searching: "${blog.query}"`);
-
-    try {
-      const photos = await searchUnsplash(accessKey, blog.query);
-
-      if (photos.length === 0) {
-        console.log(`  ⚠️  No photos found`);
-        continue;
+  if (newAttributions.length > 0) {
+    // Merge with existing attributions
+    const existingSlugs = new Set(attributions.map((a) => a.slug));
+    for (const attr of newAttributions) {
+      if (!existingSlugs.has(attr.slug)) {
+        attributions.push(attr);
       }
-
-      const photo = photos[0];
-      const destPath = path.join(imageDestDir, blog.filename);
-
-      // Check if already exists
-      try {
-        await fs.access(destPath);
-        console.log(`  ✅ Already exists: ${blog.filename}`);
-        results.push({
-          slug: blog.slug,
-          filename: blog.filename,
-          photoId: photo.id,
-          photographer: photo.user.name,
-          photographerUrl: photo.user.links.html,
-        });
-        continue;
-      } catch {
-        // File doesn't exist, proceed with download
-      }
-
-      // Download the regular size image
-      console.log(
-        `  Downloading from: ${photo.urls.regular.substring(0, 50)}...`,
-      );
-      await downloadImage(photo.urls.regular, destPath);
-
-      // Track download for Unsplash compliance
-      await trackDownload(accessKey, photo.links.download_location);
-
-      console.log(`  ✅ Downloaded: ${blog.filename}`);
-      console.log(
-        `  📷 Photo by: ${photo.user.name} (${photo.user.links.html})`,
-      );
-
-      results.push({
-        slug: blog.slug,
-        filename: blog.filename,
-        photoId: photo.id,
-        photographer: photo.user.name,
-        photographerUrl: photo.user.links.html,
-      });
-
-      // Rate limiting delay
-      await new Promise((r) => setTimeout(r, 300));
-    } catch (error) {
-      console.log(`  ❌ Error: ${error.message}`);
     }
 
-    console.log("");
+    // Save updated attributions
+    fs.writeFileSync(attributionPath, JSON.stringify(attributions, null, 2));
+    console.log(`\n📝 Updated ${attributionPath}`);
   }
 
-  // Save attribution info
-  const attributionPath = path.join(imageDestDir, "attribution.json");
-  await fs.writeFile(attributionPath, JSON.stringify(results, null, 2));
-  console.log(`\nAttribution saved to: ${attributionPath}`);
-
-  console.log("\n=== Summary ===");
-  console.log(`Downloaded: ${results.length}/${blogImages.length} images`);
+  console.log("\n========================================");
+  console.log(`✅ Done! Downloaded ${newAttributions.length} new images.`);
 }
 
-main().catch((err) => {
-  console.error("Fatal error:", err);
-  process.exit(1);
-});
+main().catch(console.error);
