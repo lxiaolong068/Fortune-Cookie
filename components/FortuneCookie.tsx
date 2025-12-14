@@ -363,7 +363,9 @@ export function FortuneCookie() {
                 ))}
 
                 {/* Optimized title - removed expensive drop-shadow and textShadow for better LCP performance */}
-                <motion.h1
+                <motion.span
+                  role="heading"
+                  aria-level={2}
                   initial={{ scale: 0.95, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{
@@ -371,10 +373,10 @@ export function FortuneCookie() {
                     duration: 0.5,
                     ease: "easeOut",
                   }}
-                  className="text-3xl mb-3 font-semibold bg-gradient-to-r from-amber-700 via-yellow-600 to-orange-700 bg-clip-text text-transparent relative z-10"
+                  className="block text-3xl mb-3 font-semibold bg-gradient-to-r from-amber-700 via-yellow-600 to-orange-700 bg-clip-text text-transparent relative z-10"
                 >
                   Fortune Cookie
-                </motion.h1>
+                </motion.span>
 
                 {/* Optimized subtitle - simplified animation for faster render */}
                 <motion.p
