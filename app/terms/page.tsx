@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { FileText, Users, Shield, AlertTriangle, CheckCircle, XCircle, Scale, Mail } from 'lucide-react'
+import { FileText, Users, Shield, AlertTriangle, CheckCircle, Scale, Mail } from 'lucide-react'
 
 // Static generation configuration
 export const dynamic = 'force-static'
@@ -314,11 +314,11 @@ export default function TermsPage() {
                 <div className="space-y-3 text-sm text-gray-600">
                   <p>
                     <span className="font-medium">Applicable Law: </span>
-                    These Terms of Service are governed by the laws of the People's Republic of China.
+                    These Terms of Service are governed by the laws of the People’s Republic of China.
                   </p>
                   <p>
                     <span className="font-medium">Dispute Resolution: </span>
-                    Any disputes should first be resolved through friendly negotiation. If negotiation fails, litigation may be brought to a competent people's court.
+                    Any disputes should first be resolved through friendly negotiation. If negotiation fails, litigation may be brought to a competent people’s court.
                   </p>
                   <p>
                     <span className="font-medium">Severability: </span>

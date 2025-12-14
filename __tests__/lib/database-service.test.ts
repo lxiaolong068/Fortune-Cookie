@@ -51,8 +51,26 @@ import { FortuneService, SessionService } from '@/lib/database-service'
 import { db } from '@/lib/database'
 import { mockFortune, mockFortuneList } from '../utils/test-utils'
 
+type MockDb = {
+  fortune: {
+    create: jest.Mock
+    findMany: jest.Mock
+    findUnique: jest.Mock
+    findFirst: jest.Mock
+    count: jest.Mock
+    update: jest.Mock
+    groupBy: jest.Mock
+  }
+  userSession: {
+    create: jest.Mock
+    findUnique: jest.Mock
+    update: jest.Mock
+    deleteMany: jest.Mock
+  }
+}
+
 // Get reference to mocked db for assertions
-const mockPrismaClient = db as jest.Mocked<typeof db>
+const mockPrismaClient = db as unknown as MockDb
 
 describe('FortuneService', () => {
   beforeEach(() => {

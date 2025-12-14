@@ -678,7 +678,7 @@ export function FortuneCookie() {
                   transition={{ delay: 0.6 }}
                   className="text-center text-gray-700 mb-6 italic leading-relaxed"
                 >
-                  "{currentFortune.quote}"
+                  &ldquo;{currentFortune.quote}&rdquo;
                 </motion.blockquote>
 
                 <motion.div

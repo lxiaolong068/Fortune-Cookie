@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { preloadHeavyComponents } from "./OptimizedDynamic";
-import { getBlobUrl } from "@/lib/blob-urls";
 
 /**
  * 智能资源预加载器
@@ -32,28 +31,44 @@ export function ResourcePreloader({
 }: {
   config?: Partial<PreloadConfig>;
 }) {
-  const finalConfig = { ...DEFAULT_CONFIG, ...config };
+  const finalConfig = useMemo(
+    () => ({ ...DEFAULT_CONFIG, ...config }),
+    [config],
+  );
 
   useEffect(() => {
     if (!finalConfig.enabled || typeof window === "undefined") return;
 
     // 检查网络条件
+    type NetworkInformation = {
+      effectiveType?: "slow-2g" | "2g" | "3g" | "4g";
+      saveData?: boolean;
+    };
+    type NavigatorWithNetworkInfo = Navigator & {
+      connection?: NetworkInformation;
+      mozConnection?: NetworkInformation;
+      webkitConnection?: NetworkInformation;
+      deviceMemory?: number;
+    };
+    const navigatorWithNetworkInfo = navigator as NavigatorWithNetworkInfo;
     const connection =
-      (navigator as any).connection ||
-      (navigator as any).mozConnection ||
-      (navigator as any).webkitConnection;
-    if (connection) {
-      const effectiveType = connection.effectiveType;
-      const networkTypes = ["slow-2g", "2g", "3g", "4g"];
-      const currentIndex = networkTypes.indexOf(effectiveType);
-      const thresholdIndex = networkTypes.indexOf(finalConfig.networkThreshold);
+      navigatorWithNetworkInfo.connection ||
+      navigatorWithNetworkInfo.mozConnection ||
+      navigatorWithNetworkInfo.webkitConnection;
+	    if (connection) {
+	      const effectiveType = connection.effectiveType;
+	      const networkTypes = ["slow-2g", "2g", "3g", "4g"];
+	      if (effectiveType) {
+	        const currentIndex = networkTypes.indexOf(effectiveType);
+	        const thresholdIndex = networkTypes.indexOf(finalConfig.networkThreshold);
 
-      // 如果网络条件低于阈值，不进行预加载
-      if (currentIndex < thresholdIndex) {
-        console.log("Network too slow for preloading:", effectiveType);
-        return;
-      }
-    }
+	        // 如果网络条件低于阈值，不进行预加载
+	        if (currentIndex < thresholdIndex) {
+	          console.log("Network too slow for preloading:", effectiveType);
+	          return;
+	        }
+	      }
+	    }
 
     // 检查数据保存模式
     if (connection?.saveData) {
@@ -62,7 +77,7 @@ export function ResourcePreloader({
     }
 
     // 检查设备内存（如果可用）
-    const deviceMemory = (navigator as any).deviceMemory;
+    const deviceMemory = navigatorWithNetworkInfo.deviceMemory;
     if (deviceMemory && deviceMemory < 4) {
       console.log("Low memory device, reducing preload");
       // 在低内存设备上减少预加载

@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, Clock, User, ArrowRight } from "lucide-react";
+import { Calendar, Clock, ArrowRight } from "lucide-react";
 import {
   Card,
   CardContent,

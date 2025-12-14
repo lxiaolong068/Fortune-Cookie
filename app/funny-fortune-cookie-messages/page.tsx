@@ -3,7 +3,7 @@ import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Smile, Laugh, Sparkles, Copy, Share2 } from 'lucide-react'
-import { BreadcrumbStructuredData } from '@/components/StructuredData'
+import { BreadcrumbStructuredData, ArticleStructuredData } from '@/components/StructuredData'
 import { FAQStructuredData, funnyFortuneFAQs } from '@/components/FAQStructuredData'
 import { RelatedPages, messageRelatedPages } from '@/components/RelatedPages'
 import { getSiteUrl } from '@/lib/site'
@@ -125,6 +125,19 @@ const usageIdeas = [
 export default function FunnyFortuneCookieMessagesPage() {
   return (
     <>
+      <ArticleStructuredData
+        headline='Funny Fortune Cookie Messages - Hilarious Sayings & Jokes'
+        description='Discover the funniest fortune cookie messages and hilarious sayings. Perfect for parties, pranks, and bringing smiles.'
+        url='/funny-fortune-cookie-messages'
+        datePublished='2024-01-01'
+        dateModified={new Date().toISOString().split('T')[0]}
+        keywords={[
+          'funny fortune cookie messages',
+          'hilarious fortune cookie sayings',
+          'funny fortune cookie jokes',
+          'witty fortune cookie quotes',
+        ]}
+      />
       <BreadcrumbStructuredData items={[
         { name: 'Home', url: '/' },
         { name: 'Messages', url: '/messages' },
@@ -142,7 +155,7 @@ export default function FunnyFortuneCookieMessagesPage() {
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
                 Get ready to laugh with our collection of hilarious fortune cookie messages!
-                Perfect for parties, pranks, or just brightening someone's day with humor.
+                Perfect for parties, pranks, or just brightening someone’s day with humor.
               </p>
 
               <div className="flex flex-wrap justify-center gap-4">
@@ -186,7 +199,7 @@ export default function FunnyFortuneCookieMessagesPage() {
                             <Sparkles className="w-4 h-4 text-amber-500 mt-1 flex-shrink-0" />
                             <div className="flex-1">
                               <blockquote className="text-gray-700 italic leading-relaxed text-sm mb-3">
-                                "{message}"
+                                &ldquo;{message}&rdquo;
                               </blockquote>
                               <div className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                                 Click to copy
@@ -243,9 +256,9 @@ export default function FunnyFortuneCookieMessagesPage() {
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-semibent text-gray-800 mb-3">Use Self-Reference</h3>
+                    <h3 className="font-semibold text-gray-800 mb-3">Use Self-Reference</h3>
                     <p className="text-gray-600 mb-4">
-                      Some of the funniest fortunes reference the fact that they're fortune cookies
+                      Some of the funniest fortunes reference the fact that they’re fortune cookies
                       or break the fourth wall.
                     </p>
                   </div>

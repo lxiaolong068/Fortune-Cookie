@@ -39,7 +39,10 @@ export function OfflineActions({ className }: OfflineActionsProps) {
                 .then((registration) => {
                   // 检查是否支持 Background Sync
                   if ('sync' in registration) {
-                    ;(registration as any).sync.register('background-sync')
+                    const syncRegistration = registration as ServiceWorkerRegistration & {
+                      sync: { register: (tag: string) => Promise<void> }
+                    }
+                    void syncRegistration.sync.register('background-sync')
                   }
                 })
                 .catch(console.error)
@@ -53,4 +56,3 @@ export function OfflineActions({ className }: OfflineActionsProps) {
     </div>
   )
 }
-

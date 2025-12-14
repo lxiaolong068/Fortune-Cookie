@@ -3,7 +3,7 @@ import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Users, ChefHat, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react'
-import { BreadcrumbStructuredData, ArticleStructuredData } from '@/components/StructuredData'
+import { BreadcrumbStructuredData, ArticleStructuredData, HowToStructuredData } from '@/components/StructuredData'
 import { FAQStructuredData, howToMakeFAQs } from '@/components/FAQStructuredData'
 import { getSiteUrl } from '@/lib/site'
 
@@ -105,6 +105,27 @@ const troubleshooting = [
 export default function HowToMakeFortuneCookiesPage() {
   return (
     <>
+      <HowToStructuredData
+        name="How to Make Fortune Cookies at Home"
+        description="A step-by-step guide to making homemade fortune cookies, including preparation, baking, shaping, and storage."
+        url="/how-to-make-fortune-cookies"
+        image="/og-image.png"
+        totalTime="PT45M"
+        supplies={ingredients.map((i) => i.item)}
+        tools={[
+          'Baking sheets',
+          'Parchment paper',
+          'Mixing bowl',
+          'Whisk',
+          'Measuring cups and spoons',
+          'Spoon or small spatula',
+          'Muffin tin (for shaping)',
+        ]}
+        steps={steps.map((s) => ({
+          name: s.title,
+          text: s.description,
+        }))}
+      />
       <ArticleStructuredData
         headline="How to Make Fortune Cookies at Home Easy - Step by Step Guide"
         description="Learn how to make delicious homemade fortune cookies with our easy step-by-step tutorial. Perfect recipe for beginners with tips, tricks, and custom message ideas."
@@ -164,7 +185,7 @@ export default function HowToMakeFortuneCookiesPage() {
               <Card className="p-6 bg-white/90 backdrop-blur-sm border-amber-200">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
                   <ChefHat className="w-6 h-6 text-amber-600" />
-                  Ingredients You'll Need
+                  Ingredients You’ll Need
                 </h2>
                 <div className="grid md:grid-cols-2 gap-4">
                   {ingredients.map((ingredient, index) => (
@@ -254,7 +275,7 @@ export default function HowToMakeFortuneCookiesPage() {
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-3">Timing is Everything</h3>
                     <p className="text-gray-600 mb-4">
-                      The key to successful fortune cookies is working quickly while they're hot. 
+                      The key to successful fortune cookies is working quickly while they’re hot. 
                       Have your fortunes ready and work with only 2-3 cookies at a time.
                     </p>
                   </div>
@@ -262,13 +283,13 @@ export default function HowToMakeFortuneCookiesPage() {
                     <h3 className="font-semibold text-gray-800 mb-3">Temperature Matters</h3>
                     <p className="text-gray-600 mb-4">
                       Keep your oven at exactly 300°F. Too hot and the cookies will brown too quickly; 
-                      too cool and they won't set properly.
+                      too cool and they won’t set properly.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-3">Practice Makes Perfect</h3>
                     <p className="text-gray-600 mb-4">
-                      Don't worry if your first few cookies aren't perfect. The shaping technique 
+                      Don’t worry if your first few cookies aren’t perfect. The shaping technique 
                       takes practice, but even imperfect cookies taste great!
                     </p>
                   </div>

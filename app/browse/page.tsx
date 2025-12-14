@@ -58,7 +58,7 @@ export default function BrowsePage() {
   const stats = getDatabaseStats();
 
   const filteredAndSortedFortunes = useMemo(() => {
-    let results = searchFortunes(
+    const results = searchFortunes(
       searchQuery,
       selectedCategory === "all" ? undefined : selectedCategory,
     );
@@ -169,7 +169,15 @@ export default function BrowsePage() {
 
                 <Select
                   value={sortBy}
-                  onValueChange={(value: any) => setSortBy(value)}
+                  onValueChange={(value) => {
+                    if (
+                      value === "popularity" ||
+                      value === "recent" ||
+                      value === "alphabetical"
+                    ) {
+                      setSortBy(value);
+                    }
+                  }}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -226,7 +234,7 @@ export default function BrowsePage() {
                     </div>
 
                     <blockquote className="text-gray-700 italic leading-relaxed mb-4">
-                      "{fortune.message}"
+                      &ldquo;{fortune.message}&rdquo;
                     </blockquote>
 
                     <div className="space-y-3">

@@ -24,7 +24,11 @@ export function BackgroundEffects() {
 
     const checkDataSaver = () => {
       // Check for data saver mode
-      const connection = (navigator as any).connection;
+      type NetworkInformation = {
+        saveData?: boolean;
+      };
+      type NavigatorWithConnection = Navigator & { connection?: NetworkInformation };
+      const connection = (navigator as NavigatorWithConnection).connection;
       if (connection) {
         setSaveData(connection.saveData || false);
       }

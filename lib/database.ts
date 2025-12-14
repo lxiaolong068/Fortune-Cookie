@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { captureError, capturePerformanceIssue } from './error-monitoring'
 
 // Database connection configuration
@@ -13,20 +14,19 @@ const DATABASE_CONFIG = {
   connectionTimeout: parseInt(process.env.DB_CONNECTION_TIMEOUT || '5000'), // 5seconds
   
   // Log level
-  logLevel: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['warn', 'error'],
+  logLevel: (process.env.NODE_ENV === 'development'
+    ? ['query', 'info', 'warn', 'error']
+    : ['warn', 'error']) as Prisma.LogLevel[],
   
   // Performance monitoring threshold
   slowQueryThreshold: parseInt(process.env.DB_SLOW_QUERY_THRESHOLD || '1000'), // 1seconds
 } as const
 
-// Global Prisma client instance
-declare global {
-  var __prisma: PrismaClient | undefined
-}
+const globalForPrisma = globalThis as unknown as { __prisma?: PrismaClient }
 
 // Database connection manager
 export class DatabaseManager {
-  private static instance: PrismaClient
+  private static instance: PrismaClient | undefined
   private static connectionCount = 0
   private static queryStats = {
     total: 0,
@@ -37,22 +37,28 @@ export class DatabaseManager {
 
   // Get database instance
   static getInstance(): PrismaClient {
-    if (!this.instance) {
-      this.instance = this.createPrismaClient()
-      
-      // Reuse connection in development environment
-      if (process.env.NODE_ENV === 'development') {
-        global.__prisma = this.instance
-      }
+    if (this.instance) return this.instance
+
+    // Reuse connection in development environment
+    if (process.env.NODE_ENV === 'development' && globalForPrisma.__prisma) {
+      this.instance = globalForPrisma.__prisma
+      this.connectionCount = Math.max(1, this.connectionCount)
+      return this.instance
     }
-    
+
+    this.instance = this.createPrismaClient()
+
+    if (process.env.NODE_ENV === 'development') {
+      globalForPrisma.__prisma = this.instance
+    }
+
     return this.instance
   }
 
   // Create Prisma client
   private static createPrismaClient(): PrismaClient {
     const prisma = new PrismaClient({
-      log: DATABASE_CONFIG.logLevel as any,
+      log: DATABASE_CONFIG.logLevel,
       datasources: {
         db: {
           url: process.env.DATABASE_URL,
@@ -68,7 +74,7 @@ export class DatabaseManager {
 
     // Query performance monitoring
     if (process.env.NODE_ENV === 'development') {
-      prisma.$on('query' as any, (e: any) => {
+      prisma.$on('query', (e: Prisma.QueryEvent) => {
         this.queryStats.total++
         this.queryStats.totalTime += e.duration
         
@@ -123,7 +129,18 @@ export class DatabaseManager {
   }
 
   // Get connection statistics
-  static getStats(): any {
+  static getStats(): {
+    connectionCount: number
+    queryStats: {
+      total: number
+      slow: number
+      errors: number
+      totalTime: number
+      averageTime: number
+      slowQueryRate: number
+    }
+    config: typeof DATABASE_CONFIG
+  } {
     return {
       connectionCount: this.connectionCount,
       queryStats: {
@@ -153,7 +170,7 @@ export class DatabaseManager {
   static async disconnect(): Promise<void> {
     if (this.instance) {
       await this.instance.$disconnect()
-      this.instance = null as any
+      this.instance = undefined
       this.connectionCount = 0
       console.log('Database connection closed')
     }
@@ -161,7 +178,7 @@ export class DatabaseManager {
 
   // Execute transaction
   static async transaction<T>(
-    fn: (prisma: PrismaClient) => Promise<T>,
+    fn: (prisma: Prisma.TransactionClient) => Promise<T>,
     options?: {
       maxWait?: number
       timeout?: number
@@ -171,7 +188,7 @@ export class DatabaseManager {
     const startTime = Date.now()
     
     try {
-      const result = await prisma.$transaction(fn as any, {
+      const result = await prisma.$transaction(fn, {
         maxWait: options?.maxWait || 5000,
         timeout: options?.timeout || 10000,
       })
@@ -216,8 +233,11 @@ export const db = new Proxy({} as PrismaClient, {
   get(_target, prop, receiver) {
     const instance = DatabaseManager.getInstance()
     // 将propertyaccessforward到实际的 PrismaClient instance
-    // @ts-ignore
-    return Reflect.get(instance, prop, receiver)
+    return Reflect.get(
+      instance as unknown as Record<PropertyKey, unknown>,
+      prop,
+      receiver,
+    )
   }
 }) as PrismaClient
 
@@ -239,7 +259,7 @@ export class QueryOptimizer {
   }
 
   // Search query optimization
-  static buildSearchQuery(query: string): any {
+  static buildSearchQuery(query: string): Prisma.FortuneWhereInput {
     if (!query || query.trim().length === 0) {
       return {}
     }
@@ -260,7 +280,7 @@ export class QueryOptimizer {
   static buildSortQuery(
     sortBy: string = 'createdAt',
     sortOrder: 'asc' | 'desc' = 'desc'
-  ): any {
+  ): Prisma.FortuneOrderByWithRelationInput {
     const allowedSortFields = [
       'createdAt',
       'updatedAt',
@@ -273,43 +293,51 @@ export class QueryOptimizer {
     
     return {
       [field]: sortOrder,
-    }
+    } as Prisma.FortuneOrderByWithRelationInput
   }
 
   // Filter query optimization
-  static buildFilterQuery(filters: Record<string, any>): any {
-    const where: any = {}
+  static buildFilterQuery(filters: Record<string, unknown>): Prisma.FortuneWhereInput {
+    const where: Prisma.FortuneWhereInput = {}
 
     // Category filter
-    if (filters.category && typeof filters.category === 'string') {
+    if (typeof filters.category === 'string' && filters.category) {
       where.category = filters.category
     }
 
     // Mood filter
-    if (filters.mood && typeof filters.mood === 'string') {
+    if (typeof filters.mood === 'string' && filters.mood) {
       where.mood = filters.mood
     }
 
     // Length filter
-    if (filters.length && typeof filters.length === 'string') {
+    if (typeof filters.length === 'string' && filters.length) {
       where.length = filters.length
     }
 
     // Date range filter
     if (filters.dateFrom || filters.dateTo) {
-      where.createdAt = {}
-      
-      if (filters.dateFrom) {
-        where.createdAt.gte = new Date(filters.dateFrom)
+      const createdAt: Prisma.DateTimeFilter = {}
+
+      if (typeof filters.dateFrom === 'string' && filters.dateFrom) {
+        createdAt.gte = new Date(filters.dateFrom)
+      } else if (filters.dateFrom instanceof Date) {
+        createdAt.gte = filters.dateFrom
       }
-      
-      if (filters.dateTo) {
-        where.createdAt.lte = new Date(filters.dateTo)
+
+      if (typeof filters.dateTo === 'string' && filters.dateTo) {
+        createdAt.lte = new Date(filters.dateTo)
+      } else if (filters.dateTo instanceof Date) {
+        createdAt.lte = filters.dateTo
+      }
+
+      if (Object.keys(createdAt).length > 0) {
+        where.createdAt = createdAt
       }
     }
 
     // Popularity filter
-    if (filters.minPopularity && typeof filters.minPopularity === 'number') {
+    if (typeof filters.minPopularity === 'number') {
       where.popularity = {
         gte: filters.minPopularity,
       }
@@ -326,7 +354,7 @@ export class DatabaseSeeder {
     try {
       const count = await db.fortune.count()
       return count === 0
-    } catch (error) {
+    } catch {
       return true
     }
   }

@@ -6,8 +6,19 @@ import {
   isWebVitalMetric,
 } from "@/types/api";
 
+type StoredWebVitalMetric = WebVitalMetric & {
+  timestamp: number;
+  userAgent: string;
+  url: string;
+  connectionType: string;
+  deviceMemory: string;
+  effectiveType: string;
+  sampled: boolean;
+  samplingRate: number;
+};
+
 // In-memory storage for demo (use a real database in production)
-const metricsStore: WebVitalMetric[] = [];
+const metricsStore: StoredWebVitalMetric[] = [];
 
 // 安全工具函数
 function getCorsOrigin(): string {
@@ -121,7 +132,7 @@ export async function POST(request: NextRequest) {
         effectiveType,
         sampled: true,
         samplingRate,
-      } as any);
+      });
     }
 
     // Log performance issues
@@ -177,12 +188,7 @@ export async function GET(request: NextRequest) {
 
     // Get recent metrics
     results = results
-      .sort(
-        (
-          a: WebVitalMetric & { timestamp?: number },
-          b: WebVitalMetric & { timestamp?: number },
-        ) => (b.timestamp || 0) - (a.timestamp || 0),
-      )
+      .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, limit);
 
     // Calculate averages and sampling statistics
@@ -204,7 +210,7 @@ export async function GET(request: NextRequest) {
           metricData.average = metricData.total / metricData.count;
 
           // Track sampling statistics
-          if ((metric as any).sampled) {
+          if (metric.sampled) {
             metricData.sampledCount += 1;
             metricData.totalSampled += metric.value;
           }
@@ -247,10 +253,10 @@ export async function GET(request: NextRequest) {
         outliers,
         total: results.length,
         samplingInfo: {
-          totalSampled: results.filter((m: any) => m.sampled).length,
+          totalSampled: results.filter((m) => m.sampled).length,
           totalReceived: metricsStore.length,
           samplingRatio:
-            results.filter((m: any) => m.sampled).length /
+            results.filter((m) => m.sampled).length /
             Math.max(metricsStore.length, 1),
         },
       }),

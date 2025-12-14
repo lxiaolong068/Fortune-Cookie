@@ -3,8 +3,8 @@ import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, MapPin, User, Lightbulb } from 'lucide-react'
-import { BreadcrumbStructuredData, FAQStructuredData } from '@/components/StructuredData'
-import { FAQStructuredData as FAQSchema, whoInventedFAQs } from '@/components/FAQStructuredData'
+import { BreadcrumbStructuredData, ArticleStructuredData } from '@/components/StructuredData'
+import { FAQStructuredData, whoInventedFAQs } from '@/components/FAQStructuredData'
 
 import { getSiteUrl } from '@/lib/site'
 
@@ -58,34 +58,30 @@ const inventors = [
   }
 ]
 
-const faqs = [
-  {
-    question: 'Who really invented fortune cookies?',
-    answer: 'While the exact inventor is debated, Makoto Hagiwara is most widely credited with introducing fortune cookies to America around 1914 at the Japanese Tea Garden in San Francisco. However, the concept originated from Japanese "tsujiura senbei" crackers.'
-  },
-  {
-    question: 'Are fortune cookies Chinese or Japanese?',
-    answer: 'Fortune cookies have Japanese origins, inspired by "tsujiura senbei" crackers from Japan. They were adapted and popularized in America, later becoming associated with Chinese restaurants despite not being traditionally Chinese.'
-  },
-  {
-    question: 'When were fortune cookies first made?',
-    answer: 'The earliest fortune cookies in America appeared around 1914, though similar treats existed in Japan much earlier. The modern fortune cookie as we know it developed in California in the early 20th century.'
-  },
-  {
-    question: 'Why are fortune cookies associated with Chinese food?',
-    answer: 'Fortune cookies became associated with Chinese restaurants in America during the mid-20th century when Chinese restaurant owners adopted them as a dessert offering, despite their Japanese-American origins.'
-  }
-]
-
 export default function WhoInventedFortuneCookiesPage() {
   return (
     <>
+      <ArticleStructuredData
+        headline='Who Invented Fortune Cookies? The Surprising History & Origins'
+        description='Discover who really invented fortune cookies and explore the debate between Makoto Hagiwara, David Jung, and other key figures. Learn about Japanese origins and American history.'
+        url='/who-invented-fortune-cookies'
+        datePublished='2024-01-01'
+        dateModified={new Date().toISOString().split('T')[0]}
+        keywords={[
+          'who invented fortune cookies',
+          'fortune cookie inventor',
+          'Makoto Hagiwara fortune cookies',
+          'David Jung fortune cookies',
+          'fortune cookie origins',
+          'Japanese origins of fortune cookies',
+        ]}
+      />
       <BreadcrumbStructuredData items={[
         { name: 'Home', url: '/' },
         { name: 'History', url: '/history' },
         { name: 'Who Invented Fortune Cookies', url: '/who-invented-fortune-cookies' }
       ]} />
-      <FAQStructuredData faqs={faqs} />
+      <FAQStructuredData faqs={whoInventedFAQs} />
 
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />
@@ -143,7 +139,9 @@ export default function WhoInventedFortuneCookiesPage() {
 
                     <div className="mb-4">
                       <h4 className="font-medium text-gray-800 mb-2">Claim to Fame:</h4>
-                      <p className="text-sm text-gray-600 italic">"{inventor.claim}"</p>
+                      <p className="text-sm text-gray-600 italic">
+                        &ldquo;{inventor.claim}&rdquo;
+                      </p>
                     </div>
 
                     <p className="text-sm text-gray-600 leading-relaxed">
@@ -164,11 +162,11 @@ export default function WhoInventedFortuneCookiesPage() {
                   <p className="mb-4">
                     While the exact origins remain debated, <strong>Makoto Hagiwara</strong> is most widely
                     credited as the person who introduced fortune cookies to America. Around 1914, Hagiwara,
-                    who designed the Japanese Tea Garden in San Francisco's Golden Gate Park, began serving
+                    who designed the Japanese Tea Garden in San Francisco’s Golden Gate Park, began serving
                     these treats to visitors.
                   </p>
                   <p className="mb-4">
-                    Hagiwara's fortune cookies were inspired by traditional Japanese "tsujiura senbei" -
+                    Hagiwara’s fortune cookies were inspired by traditional Japanese &ldquo;tsujiura senbei&rdquo; -
                     crackers containing fortunes that were sold near temples and shrines in Japan. He adapted
                     this concept for American audiences, creating the curved shape and sweet flavor we
                     associate with fortune cookies today.
@@ -189,7 +187,7 @@ export default function WhoInventedFortuneCookiesPage() {
                 Frequently Asked Questions
               </h2>
               <div className="space-y-6">
-                {faqs.map((faq, index) => (
+                {whoInventedFAQs.map((faq, index) => (
                   <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm border-amber-200">
                     <h3 className="text-lg font-semibold text-gray-800 mb-3">
                       {faq.question}
@@ -210,7 +208,7 @@ export default function WhoInventedFortuneCookiesPage() {
                 </h2>
                 <p className="text-gray-600 leading-relaxed text-center max-w-3xl mx-auto">
                   Regardless of who exactly invented fortune cookies, their impact on American culture is undeniable.
-                  From Makoto Hagiwara's hospitality gesture at the Japanese Tea Garden to today's AI-powered
+                  From Makoto Hagiwara’s hospitality gesture at the Japanese Tea Garden to today’s AI-powered
                   fortune generators, these simple treats continue to bring joy, wisdom, and a touch of mystery
                   to people around the world. The true invention of fortune cookies was not just creating a cookie,
                   but creating a tradition of sharing hope and inspiration.
@@ -220,8 +218,6 @@ export default function WhoInventedFortuneCookiesPage() {
           </div>
         </div>
       </main>
-
-      <FAQSchema faqs={whoInventedFAQs} />
     </>
   )
 }

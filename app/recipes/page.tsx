@@ -277,7 +277,7 @@ export default function RecipesPage() {
                 </p>
                 <p className="text-gray-600 leading-relaxed">
                   Our recipes range from the classic vanilla version to exciting variations like chocolate and
-                  gluten-free options. Each recipe has been tested to ensure consistent results, whether you're
+                  gluten-free options. Each recipe has been tested to ensure consistent results, whether you’re
                   a beginner baker or an experienced chef looking to try something new.
                 </p>
               </section>

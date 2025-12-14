@@ -18,6 +18,7 @@ import { BlogCard, Pagination } from "@/components/blog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getSiteUrl, getImageUrl } from "@/lib/site";
+import { BreadcrumbStructuredData } from "@/components/StructuredData";
 
 const baseUrl = getSiteUrl();
 
@@ -79,6 +80,27 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const selectedTag = params.tag;
   const currentPage = Math.max(1, parseInt(params.page || "1", 10) || 1);
 
+  const canonicalParams = new URLSearchParams();
+  if (selectedTag) canonicalParams.set("tag", selectedTag);
+  if (currentPage > 1) canonicalParams.set("page", String(currentPage));
+  const canonicalQuery = canonicalParams.toString();
+  const canonicalUrl = canonicalQuery ? `/blog?${canonicalQuery}` : "/blog";
+
+  const breadcrumbItems: Array<{ name: string; url: string }> = [
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+  ];
+  if (selectedTag) {
+    const tagParams = new URLSearchParams({ tag: selectedTag });
+    breadcrumbItems.push({
+      name: `Tag: ${selectedTag}`,
+      url: `/blog?${tagParams.toString()}`,
+    });
+  }
+  if (currentPage > 1) {
+    breadcrumbItems.push({ name: `Page ${currentPage}`, url: canonicalUrl });
+  }
+
   // Get paginated posts (filtered by tag if specified, sorted by date newest first)
   const {
     posts: regularPosts,
@@ -120,6 +142,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       {/* SEO Pagination Links */}
       {prevUrl && <link rel="prev" href={prevUrl} />}
       {nextUrl && <link rel="next" href={nextUrl} />}
+      <BreadcrumbStructuredData items={breadcrumbItems} />
       <main className="min-h-screen w-full overflow-x-hidden relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50">
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">

@@ -2,9 +2,7 @@ import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import {
-  WebsiteStructuredData,
   WebApplicationStructuredData,
-  OrganizationStructuredData
 } from '@/components/StructuredData'
 import { generateSEOMetadata } from '@/components/SEO'
 import { FortuneCookieHero } from '@/components/FortuneCookieHero'
@@ -36,9 +34,7 @@ export default function HomePage() {
   return (
     <>
       {/* Structured Data */}
-      <WebsiteStructuredData />
       <WebApplicationStructuredData />
-      <OrganizationStructuredData />
 
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />

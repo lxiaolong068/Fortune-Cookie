@@ -130,6 +130,7 @@ export class ThemeManager {
 
   // 更新favicon
   private updateFavicon(theme: 'light' | 'dark'): void {
+    void theme
     const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement
     if (favicon) {
       // 如果有深色模式的favicon，可以在这里切换

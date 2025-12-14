@@ -8,7 +8,7 @@ export interface ErrorContext {
   url?: string
   component?: string
   action?: string
-  additionalData?: Record<string, any>
+  additionalData?: Record<string, unknown>
 }
 
 // 错误严重程度
@@ -95,7 +95,7 @@ export class ErrorMonitor {
     action: string,
     component: string,
     userId?: string,
-    additionalData?: Record<string, any>
+    additionalData?: Record<string, unknown>
   ) {
     console.info('[ErrorMonitor][Breadcrumb][User]', { action, component, userId, ...additionalData })
   }
@@ -103,7 +103,7 @@ export class ErrorMonitor {
   // record/log业务event
   public captureBusinessEvent(
     event: string,
-    data?: Record<string, any>
+    data?: Record<string, unknown>
   ) {
     console.info('[ErrorMonitor][Breadcrumb][Business]', { event, ...data })
   }
@@ -118,7 +118,7 @@ export class ErrorMonitor {
   }
 
   // add面bundle屑（控制台输出）
-  public addBreadcrumb(message: string, category: string, data?: Record<string, any>) {
+  public addBreadcrumb(message: string, category: string, data?: Record<string, unknown>) {
     console.info('[ErrorMonitor][Breadcrumb]', { message, category, ...data })
   }
 }
@@ -139,10 +139,10 @@ export const capturePerformanceIssue = (metric: string, value: number, threshold
   errorMonitor.capturePerformanceIssue(metric, value, threshold, context)
 }
 
-export const captureUserAction = (action: string, component: string, userId?: string, additionalData?: Record<string, any>) => {
+export const captureUserAction = (action: string, component: string, userId?: string, additionalData?: Record<string, unknown>) => {
   errorMonitor.captureUserAction(action, component, userId, additionalData)
 }
 
-export const captureBusinessEvent = (event: string, data?: Record<string, any>) => {
+export const captureBusinessEvent = (event: string, data?: Record<string, unknown>) => {
   errorMonitor.captureBusinessEvent(event, data)
 }

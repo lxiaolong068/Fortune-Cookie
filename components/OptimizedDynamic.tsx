@@ -132,7 +132,7 @@ export const DynamicErrorBoundary = dynamic(
 /**
  * 高阶组件：为任何组件添加动态加载
  */
-export function withDynamicLoading<T extends Record<string, any>>(
+export function withDynamicLoading<T extends Record<string, unknown>>(
   importFn: () => Promise<{ default: React.ComponentType<T> }>,
   options?: {
     loading?: () => React.ReactElement | null
@@ -148,7 +148,7 @@ export function withDynamicLoading<T extends Record<string, any>>(
 /**
  * 预加载函数 - 在用户交互前预加载组件
  */
-export const preloadComponent = (importFn: () => Promise<any>) => {
+export const preloadComponent = (importFn: () => Promise<unknown>) => {
   if (typeof window !== 'undefined') {
     // 在空闲时间预加载
     if ('requestIdleCallback' in window) {

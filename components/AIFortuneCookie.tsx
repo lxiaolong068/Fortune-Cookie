@@ -528,7 +528,7 @@ export function AIFortuneCookie() {
                 transition={{ delay: 0.6 }}
                 className="text-center text-gray-700 mb-6 italic leading-relaxed text-lg"
               >
-                "{currentFortune.message}"
+                &ldquo;{currentFortune.message}&rdquo;
               </motion.blockquote>
 
               <motion.div

@@ -16,7 +16,10 @@ import { BlogCard } from "@/components/blog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getSiteUrl, getImageUrl } from "@/lib/site";
-import { ArticleStructuredData } from "@/components/StructuredData";
+import {
+  ArticleStructuredData,
+  BreadcrumbStructuredData,
+} from "@/components/StructuredData";
 import dynamic from "next/dynamic";
 
 const DynamicBackgroundEffects = dynamic(
@@ -115,6 +118,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         dateModified={post.date}
         author={post.author}
         keywords={post.tags}
+      />
+      <BreadcrumbStructuredData
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Blog", url: "/blog" },
+          { name: post.title, url: `/blog/${slug}` },
+        ]}
       />
 
       <div className="relative z-10">

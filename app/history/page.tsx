@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Sparkles } from "lucide-react";
+import { MapPin } from "lucide-react";
 import {
   ArticleStructuredData,
   BreadcrumbStructuredData,

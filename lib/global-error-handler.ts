@@ -1,8 +1,18 @@
 import { captureError, capturePerformanceIssue } from './error-monitoring'
 
+type WindowWithSessionStartTime = Window & { sessionStartTime?: number }
+type PerformanceWithMemory = Performance & {
+  memory?: {
+    usedJSHeapSize: number
+    totalJSHeapSize: number
+    jsHeapSizeLimit: number
+  }
+}
+
 // 全局错误处理器
 export function setupGlobalErrorHandlers() {
   if (typeof window === 'undefined') return
+  const windowWithSession = window as WindowWithSessionStartTime
 
   // 捕获未处理的Promise拒绝
   window.addEventListener('unhandledrejection', (event) => {
@@ -53,7 +63,15 @@ export function setupGlobalErrorHandlers() {
     
     if (target && target instanceof HTMLElement) {
       const tagName = target.tagName?.toLowerCase()
-      const src = (target as any).src || (target as any).href
+      const src = (() => {
+        if (target instanceof HTMLImageElement) return target.currentSrc || target.src
+        if (target instanceof HTMLScriptElement) return target.src
+        if (target instanceof HTMLLinkElement) return target.href
+        if (target instanceof HTMLVideoElement || target instanceof HTMLAudioElement) {
+          return target.currentSrc || target.src
+        }
+        return ''
+      })()
       
       if (src && ['img', 'script', 'link', 'video', 'audio'].includes(tagName)) {
         console.error('Resource loading error:', { tagName, src })
@@ -119,7 +137,7 @@ export function setupGlobalErrorHandlers() {
             action: 'page_visibility_change',
             additionalData: {
               visibilityState: document.visibilityState,
-              sessionDuration: Date.now() - (window as any).sessionStartTime,
+              sessionDuration: Date.now() - (windowWithSession.sessionStartTime || Date.now()),
             }
           },
           'info'
@@ -129,12 +147,14 @@ export function setupGlobalErrorHandlers() {
   }
 
   // 记录会话开始时间
-  ;(window as any).sessionStartTime = Date.now()
+  windowWithSession.sessionStartTime = Date.now()
 
   // 监控内存使用情况（如果支持）
-  if ('memory' in performance) {
+  const perfWithMemory = performance as PerformanceWithMemory
+  if (perfWithMemory.memory) {
     const checkMemoryUsage = () => {
-      const memory = (performance as any).memory
+      const memory = perfWithMemory.memory
+      if (!memory) return
       const memoryUsage = {
         used: memory.usedJSHeapSize,
         total: memory.totalJSHeapSize,

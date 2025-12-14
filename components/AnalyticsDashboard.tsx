@@ -52,6 +52,14 @@ interface DashboardData {
   };
 }
 
+type RealTimeData = {
+  currentSession: {
+    duration: number;
+    pageViews: number;
+    fortunesGenerated: number;
+  };
+};
+
 export function AnalyticsDashboard({
   className,
   showRealTime = true,
@@ -59,7 +67,7 @@ export function AnalyticsDashboard({
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [realTimeData, setRealTimeData] = useState<any>(null);
+  const [realTimeData, setRealTimeData] = useState<RealTimeData | null>(null);
 
   useEffect(() => {
     loadDashboardData();

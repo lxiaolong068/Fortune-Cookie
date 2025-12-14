@@ -14,10 +14,12 @@ export interface CacheStatus {
   [cacheName: string]: number
 }
 
+type ServiceWorkerListener = (...args: unknown[]) => void
+
 export class ServiceWorkerManager {
   private registration: ServiceWorkerRegistration | null = null
   private updateAvailable = false
-  private listeners: Map<string, Function[]> = new Map()
+  private listeners: Map<string, ServiceWorkerListener[]> = new Map()
 
   // 检查 Service Worker 支持
   static isSupported(): boolean {
@@ -219,14 +221,14 @@ export class ServiceWorkerManager {
   }
 
   // 事件监听器管理
-  on(event: string, callback: Function): void {
+  on(event: string, callback: ServiceWorkerListener): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, [])
     }
     this.listeners.get(event)!.push(callback)
   }
 
-  off(event: string, callback: Function): void {
+  off(event: string, callback: ServiceWorkerListener): void {
     const callbacks = this.listeners.get(event)
     if (callbacks) {
       const index = callbacks.indexOf(callback)
@@ -236,7 +238,7 @@ export class ServiceWorkerManager {
     }
   }
 
-  private emit(event: string, ...args: any[]): void {
+  private emit(event: string, ...args: unknown[]): void {
     const callbacks = this.listeners.get(event)
     if (callbacks) {
       callbacks.forEach(callback => callback(...args))

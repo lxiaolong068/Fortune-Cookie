@@ -169,7 +169,7 @@ export class CacheManager {
    * Set a value in cache with optional TTL
    *
    * @param {string} key - Cache key
-   * @param {any} value - Value to cache (will be JSON stringified)
+   * @param {unknown} value - Value to cache (will be JSON stringified)
    * @param {number} [ttl] - Time to live in seconds (optional)
    * @returns {Promise<boolean>} True if successful, false otherwise
    *
@@ -182,7 +182,7 @@ export class CacheManager {
    * await cache.set('config', { theme: 'dark' })
    * ```
    */
-  async set(key: string, value: any, ttl?: number): Promise<boolean> {
+  async set<T>(key: string, value: T, ttl?: number): Promise<boolean> {
     try {
       if (!this.redis) return false;
       if (ttl) {
@@ -276,7 +276,7 @@ export class CacheManager {
    * Cache a fortune cookie result
    *
    * @param {string} requestHash - Hash of the fortune request parameters
-   * @param {any} fortune - Fortune object to cache
+   * @param {unknown} fortune - Fortune object to cache
    * @returns {Promise<boolean>} True if successful, false otherwise
    *
    * @example
@@ -288,7 +288,7 @@ export class CacheManager {
    * })
    * ```
    */
-  async cacheFortune(requestHash: string, fortune: any): Promise<boolean> {
+  async cacheFortune<T>(requestHash: string, fortune: T): Promise<boolean> {
     const key = `${CACHE_PREFIXES.FORTUNE}${requestHash}`;
     return this.set(key, fortune, CACHE_TTL.FORTUNE);
   }
@@ -297,7 +297,7 @@ export class CacheManager {
    * Get a cached fortune cookie
    *
    * @param {string} requestHash - Hash of the fortune request parameters
-   * @returns {Promise<any | null>} Cached fortune or null if not found
+   * @returns {Promise<unknown | null>} Cached fortune or null if not found
    *
    * @example
    * ```typescript
@@ -305,16 +305,16 @@ export class CacheManager {
    * const fortune = await cache.getCachedFortune(hash)
    * ```
    */
-  async getCachedFortune(requestHash: string): Promise<any | null> {
+  async getCachedFortune<T>(requestHash: string): Promise<T | null> {
     const key = `${CACHE_PREFIXES.FORTUNE}${requestHash}`;
-    return this.get(key);
+    return this.get<T>(key);
   }
 
   /**
    * Cache a list of fortune cookies
    *
    * @param {string} listKey - Key for the fortune list
-   * @param {any[]} fortunes - Array of fortune objects
+   * @param {unknown[]} fortunes - Array of fortune objects
    * @returns {Promise<boolean>} True if successful, false otherwise
    *
    * @example
@@ -322,7 +322,7 @@ export class CacheManager {
    * await cache.cacheFortuneList('category:inspirational', fortunes)
    * ```
    */
-  async cacheFortuneList(listKey: string, fortunes: any[]): Promise<boolean> {
+  async cacheFortuneList<T>(listKey: string, fortunes: T[]): Promise<boolean> {
     const key = `${CACHE_PREFIXES.FORTUNE_LIST}${listKey}`;
     return this.set(key, fortunes, CACHE_TTL.FORTUNE_LIST);
   }
@@ -331,26 +331,26 @@ export class CacheManager {
    * Get a cached fortune list
    *
    * @param {string} listKey - Key for the fortune list
-   * @returns {Promise<any[] | null>} Cached fortune list or null if not found
+   * @returns {Promise<unknown[] | null>} Cached fortune list or null if not found
    *
    * @example
    * ```typescript
    * const fortunes = await cache.getCachedFortuneList('category:inspirational')
    * ```
    */
-  async getCachedFortuneList(listKey: string): Promise<any[] | null> {
+  async getCachedFortuneList<T>(listKey: string): Promise<T[] | null> {
     const key = `${CACHE_PREFIXES.FORTUNE_LIST}${listKey}`;
-    return this.get(key);
+    return this.get<T[]>(key);
   }
 
   /**
    * Cache analytics data
    *
    * @param {string} analyticsKey - Key for analytics data
-   * @param {any} data - Analytics data to cache
+   * @param {unknown} data - Analytics data to cache
    * @returns {Promise<boolean>} True if successful
    */
-  async cacheAnalytics(analyticsKey: string, data: any): Promise<boolean> {
+  async cacheAnalytics<T>(analyticsKey: string, data: T): Promise<boolean> {
     const key = `${CACHE_PREFIXES.ANALYTICS}${analyticsKey}`;
     return this.set(key, data, CACHE_TTL.ANALYTICS);
   }
@@ -359,11 +359,11 @@ export class CacheManager {
    * Get cached analytics data
    *
    * @param {string} analyticsKey - Key for analytics data
-   * @returns {Promise<any | null>} Cached analytics or null
+   * @returns {Promise<unknown | null>} Cached analytics or null
    */
-  async getCachedAnalytics(analyticsKey: string): Promise<any | null> {
+  async getCachedAnalytics<T>(analyticsKey: string): Promise<T | null> {
     const key = `${CACHE_PREFIXES.ANALYTICS}${analyticsKey}`;
-    return this.get(key);
+    return this.get<T>(key);
   }
 
   /**
@@ -371,13 +371,13 @@ export class CacheManager {
    *
    * @param {string} endpoint - API endpoint
    * @param {string} params - Request parameters
-   * @param {any} response - Response data to cache
+   * @param {unknown} response - Response data to cache
    * @returns {Promise<boolean>} True if successful
    */
   async cacheApiResponse(
     endpoint: string,
     params: string,
-    response: any,
+    response: unknown,
   ): Promise<boolean> {
     const key = `${CACHE_PREFIXES.API_RESPONSE}${endpoint}:${params}`;
     return this.set(key, response, CACHE_TTL.API_RESPONSE);
@@ -388,12 +388,12 @@ export class CacheManager {
    *
    * @param {string} endpoint - API endpoint
    * @param {string} params - Request parameters
-   * @returns {Promise<any | null>} Cached response or null
+   * @returns {Promise<unknown | null>} Cached response or null
    */
   async getCachedApiResponse(
     endpoint: string,
     params: string,
-  ): Promise<any | null> {
+  ): Promise<unknown | null> {
     const key = `${CACHE_PREFIXES.API_RESPONSE}${endpoint}:${params}`;
     return this.get(key);
   }
@@ -402,10 +402,10 @@ export class CacheManager {
    * Set user session data
    *
    * @param {string} sessionId - Session identifier
-   * @param {any} sessionData - Session data to store
+   * @param {unknown} sessionData - Session data to store
    * @returns {Promise<boolean>} True if successful
    */
-  async setUserSession(sessionId: string, sessionData: any): Promise<boolean> {
+  async setUserSession<T>(sessionId: string, sessionData: T): Promise<boolean> {
     const key = `${CACHE_PREFIXES.USER_SESSION}${sessionId}`;
     return this.set(key, sessionData, CACHE_TTL.USER_SESSION);
   }
@@ -414,11 +414,11 @@ export class CacheManager {
    * Get user session data
    *
    * @param {string} sessionId - Session identifier
-   * @returns {Promise<any | null>} Session data or null
+   * @returns {Promise<unknown | null>} Session data or null
    */
-  async getUserSession(sessionId: string): Promise<any | null> {
+  async getUserSession<T>(sessionId: string): Promise<T | null> {
     const key = `${CACHE_PREFIXES.USER_SESSION}${sessionId}`;
-    return this.get(key);
+    return this.get<T>(key);
   }
 
   /**
@@ -451,7 +451,7 @@ export class CacheManager {
   /**
    * Get cache statistics
    *
-   * @returns {Promise<any>} Cache statistics object with connection status
+   * @returns {Promise<CacheStats>} Cache statistics object with connection status
    *
    * @example
    * ```typescript
@@ -459,7 +459,7 @@ export class CacheManager {
    * console.log(`Connected: ${stats.connected}`)
    * ```
    */
-  async getCacheStats(): Promise<any> {
+  async getCacheStats(): Promise<CacheStats> {
     try {
       if (!this.redis) {
         return {
@@ -534,7 +534,7 @@ export function generateCacheKey(prefix: string, ...parts: string[]): string {
  * Generate a SHA-256 hash for request caching
  * Uses cryptographic hashing to avoid collision risks
  *
- * @param {any} data - Data to hash (will be JSON stringified)
+ * @param {unknown} data - Data to hash (will be JSON stringified)
  * @returns {string} 32-character hex hash
  *
  * @example
@@ -543,7 +543,7 @@ export function generateCacheKey(prefix: string, ...parts: string[]): string {
  * // Returns: '3f2a1b4c...' (32 chars)
  * ```
  */
-export function generateRequestHash(data: any): string {
+export function generateRequestHash(data: unknown): string {
   // Use dynamic import for Node.js crypto module
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const crypto = require("crypto");
@@ -553,3 +553,7 @@ export function generateRequestHash(data: any): string {
     .digest("hex")
     .slice(0, 32); // 32-char hash for cache key
 }
+
+export type CacheStats =
+  | { connected: true; timestamp: string }
+  | { connected: false; error: string; timestamp: string }

@@ -86,7 +86,7 @@ export default function OfflinePage() {
           </CardHeader>
           <CardContent>
             <blockquote className="text-lg font-medium italic mb-4">
-              "{randomFortune.message}"
+              &ldquo;{randomFortune.message}&rdquo;
             </blockquote>
             <div className="flex items-center justify-between text-sm text-orange-100">
               <span>Category: {getCategoryName(randomFortune.category)}</span>

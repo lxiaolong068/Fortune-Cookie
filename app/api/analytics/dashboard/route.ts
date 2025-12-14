@@ -16,7 +16,7 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
   return response
 }
 
-function sanitizeString(input: string, maxLength: number = 100): string {
+function sanitizeString(input: unknown, maxLength: number = 100): string {
   if (typeof input !== 'string') return ''
 
   return input
@@ -123,25 +123,25 @@ export async function GET(request: NextRequest) {
     const sanitizedTimeframe = validTimeframes.includes(timeframe) ? timeframe : '30d'
 
     // In production, fetch real data from Google Analytics, Search Console, etc.
-    let data = mockAnalyticsData
+    let data: unknown = mockAnalyticsData
 
     // Filter by specific metric if requested
     if (sanitizedMetric && validMetrics.includes(sanitizedMetric)) {
       switch (sanitizedMetric) {
         case 'pageviews':
-          data = { pageViews: mockAnalyticsData.pageViews } as any
+          data = { pageViews: mockAnalyticsData.pageViews }
           break
         case 'search':
-          data = { searchQueries: mockAnalyticsData.searchQueries } as any
+          data = { searchQueries: mockAnalyticsData.searchQueries }
           break
         case 'vitals':
-          data = { webVitals: mockAnalyticsData.webVitals } as any
+          data = { webVitals: mockAnalyticsData.webVitals }
           break
         case 'users':
-          data = { userMetrics: mockAnalyticsData.userMetrics } as any
+          data = { userMetrics: mockAnalyticsData.userMetrics }
           break
         case 'fortunes':
-          data = { fortuneGeneration: mockAnalyticsData.fortuneGeneration } as any
+          data = { fortuneGeneration: mockAnalyticsData.fortuneGeneration }
           break
       }
     }
@@ -168,12 +168,12 @@ export async function GET(request: NextRequest) {
 // POST endpoint for custom events
 export async function POST(request: NextRequest) {
   try {
-    let event: any
+    let event: Record<string, unknown>
 
     // 解析和验证请求体
     try {
-      event = await request.json()
-    } catch (error) {
+      event = (await request.json()) as Record<string, unknown>
+    } catch {
       const response = NextResponse.json(
         { error: 'Invalid JSON in request body' },
         { status: 400 }
@@ -182,7 +182,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 验证和清理事件数据
-    if (!event.name || !event.category) {
+    if (typeof event.name !== 'string' || typeof event.category !== 'string') {
       const response = NextResponse.json(
         { error: 'Event name and category are required' },
         { status: 400 }
@@ -190,15 +190,20 @@ export async function POST(request: NextRequest) {
       return addSecurityHeaders(response)
     }
 
+    const customData =
+      event.customData && typeof event.customData === 'object' && !Array.isArray(event.customData)
+        ? (event.customData as Record<string, unknown>)
+        : undefined
+
     // 清理和验证事件字段
     const sanitizedEvent = {
       name: sanitizeString(event.name, 100),
       category: sanitizeString(event.category, 50),
       label: event.label ? sanitizeString(event.label, 100) : undefined,
       value: typeof event.value === 'number' && event.value >= 0 && event.value <= 999999 ? event.value : undefined,
-      customData: event.customData ? {
-        param1: event.customData.param1 ? sanitizeString(event.customData.param1, 100) : undefined,
-        param2: event.customData.param2 ? sanitizeString(event.customData.param2, 100) : undefined,
+      customData: customData ? {
+        param1: customData.param1 ? sanitizeString(customData.param1, 100) : undefined,
+        param2: customData.param2 ? sanitizeString(customData.param2, 100) : undefined,
       } : undefined
     }
 

@@ -61,7 +61,7 @@ export default function GeneratorPage() {
               </h2>
               <p className="text-gray-600 leading-relaxed">
                 Our AI-powered fortune cookie generator uses advanced algorithms to create unique, 
-                personalized messages tailored to your preferences. Whether you're looking for 
+                personalized messages tailored to your preferences. Whether you’re looking for 
                 inspiration, humor, or wisdom, our tool generates authentic fortune cookie messages 
                 that feel genuine and meaningful.
               </p>

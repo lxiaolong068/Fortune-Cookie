@@ -5,12 +5,21 @@ import Script from 'next/script'
 import { capturePerformanceIssue, captureBusinessEvent } from '@/lib/error-monitoring'
 import { performanceUtils, CORE_WEB_VITALS_THRESHOLDS, performanceAlertManager } from '@/lib/performance-budget'
 
+type WebVitalsMetric = {
+  id: string
+  name: keyof typeof CORE_WEB_VITALS_THRESHOLDS
+  value: number
+  rating?: string
+  delta?: number
+  navigationType?: string
+}
+
 // Core Web Vitals monitoring
 export function PerformanceMonitor() {
   useEffect(() => {
     // Web Vitals monitoring (web-vitals v5 API)
     import('web-vitals').then(({ onCLS, onFCP, onLCP, onTTFB, onINP }) => {
-      function sendToAnalytics(metric: any) {
+      function sendToAnalytics(metric: WebVitalsMetric) {
         // Send to console in development
         if (process.env.NODE_ENV === 'development') {
           console.log('Web Vital:', metric)
@@ -151,21 +160,22 @@ export function PerformanceMonitor() {
 
       try {
         longTaskObserver.observe({ entryTypes: ['longtask'] })
-      } catch (e) {
+      } catch {
         // Longtask observer not supported
       }
 
       // Monitor layout shifts
       const layoutShiftObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if ((entry as any).hadRecentInput) continue
+          const layoutShift = entry as PerformanceEntry & { hadRecentInput?: boolean }
+          if (layoutShift.hadRecentInput) continue
           console.log('Layout shift:', entry)
         }
       })
 
       try {
         layoutShiftObserver.observe({ entryTypes: ['layout-shift'] })
-      } catch (e) {
+      } catch {
         // Layout shift observer not supported
       }
 
@@ -204,7 +214,7 @@ export function PerformanceMonitor() {
 
       try {
         resourceObserver.observe({ entryTypes: ['resource'] })
-      } catch (e) {
+      } catch {
         // Resource observer not supported
       }
 
@@ -250,7 +260,7 @@ export function PerformanceMonitor() {
 
       try {
         navigationObserver.observe({ entryTypes: ['navigation'] })
-      } catch (e) {
+      } catch {
         // Navigation observer not supported
       }
     }

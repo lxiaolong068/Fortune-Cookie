@@ -201,7 +201,12 @@ export function NetworkAwareAdSenseFacade(props: AdSenseFacadeProps) {
   useEffect(() => {
     // Check network conditions using Network Information API
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection
+      type NetworkInformation = {
+        effectiveType?: string
+        saveData?: boolean
+      }
+      type NavigatorWithConnection = Navigator & { connection?: NetworkInformation }
+      const connection = (navigator as NavigatorWithConnection).connection
       const effectiveType = connection?.effectiveType
 
       // Only load on 4G or better
@@ -221,7 +226,7 @@ export function NetworkAwareAdSenseFacade(props: AdSenseFacadeProps) {
 
     // Check device memory (if available)
     if ('deviceMemory' in navigator) {
-      const memory = (navigator as any).deviceMemory
+      const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory
       // Skip on low-memory devices (< 4GB)
       if (memory && memory < 4) {
         console.log(`[AdSense Facade] Skipping load on low-memory device: ${memory}GB`)
@@ -251,4 +256,3 @@ export default function OptimizedAdSense({ clientId }: { clientId: string }) {
     />
   )
 }
-

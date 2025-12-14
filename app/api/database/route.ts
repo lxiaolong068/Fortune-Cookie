@@ -160,7 +160,7 @@ const postHandler = async (request: NextRequest) => {
     }
     
     const body = await request.json()
-    const { action, data } = body
+    const { action } = body
     
     switch (action) {
       case 'cleanup': {
@@ -198,7 +198,7 @@ const postHandler = async (request: NextRequest) => {
             message: 'Database optimization completed',
             timestamp: new Date().toISOString(),
           })
-        } catch (error) {
+        } catch {
           return NextResponse.json(
             { error: 'Database optimization failed' },
             { status: 500 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { openRouterClient, FortuneRequest } from "@/lib/openrouter";
+import { openRouterClient, FortuneRequest, type FortuneResponse } from "@/lib/openrouter";
 import {
   captureApiError,
   captureUserAction,
@@ -23,7 +23,7 @@ import {
 } from "@/lib/api-auth";
 
 // 输入cleanup和验证utility/tool
-function sanitizeString(input: string, maxLength: number = 500): string {
+function sanitizeString(input: unknown, maxLength: number = 500): string {
   if (typeof input !== "string") return "";
 
   // 移除潜在的恶意字符和脚本
@@ -129,10 +129,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse and validate request body
-    let body: any;
+    let body: Record<string, unknown>;
     try {
-      body = await request.json();
-    } catch (error) {
+      body = (await request.json()) as Record<string, unknown>;
+    } catch {
       return NextResponse.json(
         createErrorResponse("Invalid JSON in request body"),
         { status: 400 },
@@ -206,7 +206,7 @@ export async function POST(request: NextRequest) {
     const requestHash = generateRequestHash(fortuneRequest);
 
     // checkcache
-    let fortune = await cacheManager.getCachedFortune(requestHash);
+    let fortune = await cacheManager.getCachedFortune<FortuneResponse>(requestHash);
 
     if (fortune) {
       // cache命中
@@ -352,8 +352,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   // Health check endpoint with caching
   try {
-    const clientId = getClientIdentifier(request);
-
+    void request;
     // checkcache的健康状态
     const cachedHealth = await cacheManager.getCachedApiResponse(
       "health",

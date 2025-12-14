@@ -15,7 +15,7 @@ interface AnalyticsEvent {
   userId?: string
   sessionId?: string
   timestamp: string
-  metadata: Record<string, any>
+  metadata: Record<string, unknown>
 }
 
 interface AnalyticsRequest {
@@ -116,7 +116,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    let data: any = {}
+    let data: unknown = {}
 
     switch (action) {
       case 'summary':
@@ -197,16 +197,28 @@ function isValidEvent(event: AnalyticsEvent): boolean {
 
 // cleanupeventdata
 function cleanEvent(event: AnalyticsEvent): AnalyticsEvent {
+  const userAgent =
+    typeof event.metadata.userAgent === 'string'
+      ? event.metadata.userAgent.substring(0, 200)
+      : undefined
+
+  const url = (() => {
+    if (typeof event.metadata.url !== 'string' || !event.metadata.url) return undefined
+    try {
+      return new URL(event.metadata.url).pathname
+    } catch {
+      return undefined
+    }
+  })()
+
   return {
     ...event,
     // cleanup敏感information
     metadata: {
       ...event.metadata,
       // 移除可能的敏感data
-      userAgent: event.metadata.userAgent ? 
-        event.metadata.userAgent.substring(0, 200) : undefined,
-      url: event.metadata.url ? 
-        new URL(event.metadata.url).pathname : undefined,
+      userAgent,
+      url,
     },
     // 确保时间戳格式正确
     timestamp: new Date(event.timestamp).toISOString(),
@@ -246,6 +258,8 @@ async function validateAdminAccess(request: NextRequest): Promise<boolean> {
 
 // get/retrieveanalytics摘要
 async function getAnalyticsSummary(startDate?: string | null, endDate?: string | null) {
+  void startDate
+  void endDate
   // 这里应该from实际的data存储中get/retrievedata
   // 暂时返回模拟data
   return {
@@ -268,6 +282,8 @@ async function getAnalyticsSummary(startDate?: string | null, endDate?: string |
 
 // get/retrieveuser behavioranalytics
 async function getUserBehaviorAnalytics(startDate?: string | null, endDate?: string | null) {
+  void startDate
+  void endDate
   return {
     userJourney: [
       { step: 'landing', users: 100, dropoff: 0 },
@@ -291,6 +307,8 @@ async function getUserBehaviorAnalytics(startDate?: string | null, endDate?: str
 
 // get/retrieveperformanceanalytics
 async function getPerformanceAnalytics(startDate?: string | null, endDate?: string | null) {
+  void startDate
+  void endDate
   return {
     averageLoadTime: 1200,
     averageLCP: 2100,
@@ -309,6 +327,8 @@ async function getPerformanceAnalytics(startDate?: string | null, endDate?: stri
 
 // get/retrievebusiness metrics
 async function getBusinessMetrics(startDate?: string | null, endDate?: string | null) {
+  void startDate
+  void endDate
   return {
     conversionRate: 0.23, // 23%
     retentionRate: 0.45, // 45%

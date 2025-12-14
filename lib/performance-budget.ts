@@ -263,6 +263,16 @@ export const performanceUtils = {
 }
 
 // 性能告警管理器
+type PerformanceAlertData = {
+  metric: string
+  value: number
+  threshold: number
+  violationCount: number
+  timestamp: string
+  url: string
+  userAgent: string
+}
+
 class PerformanceAlertManager {
   private violationCounts: Map<string, number> = new Map()
   private lastAlertTime: Map<string, number> = new Map()
@@ -318,7 +328,7 @@ class PerformanceAlertManager {
   }
 
   // 发送告警到 API
-  private async sendAlertToApi(alertData: any) {
+  private async sendAlertToApi(alertData: PerformanceAlertData) {
     try {
       const response = await fetch('/api/analytics/performance-alert', {
         method: 'POST',

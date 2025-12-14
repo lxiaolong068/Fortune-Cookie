@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Shield, Eye, Database, Cookie, Lock, UserCheck, AlertTriangle, Mail } from 'lucide-react'
+import { Shield, Eye, Database, Cookie, Lock, UserCheck, Mail } from 'lucide-react'
 
 // Static generation configuration
 export const dynamic = 'force-static'

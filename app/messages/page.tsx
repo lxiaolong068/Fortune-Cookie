@@ -139,7 +139,7 @@ export default function MessagesPage() {
                           <div className="flex items-start gap-3">
                             <Sparkles className="w-5 h-5 text-amber-500 mt-1 flex-shrink-0" />
                             <blockquote className="text-gray-700 italic leading-relaxed">
-                              "{message}"
+                              &ldquo;{message}&rdquo;
                             </blockquote>
                           </div>
                         </Card>
@@ -162,8 +162,8 @@ export default function MessagesPage() {
                   from motivational quotes that inspire action to funny sayings that bring a smile to your face.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  Whether you're looking for daily inspiration, planning a special event, or just want to
-                  brighten someone's day, our fortune cookie messages offer the perfect blend of wisdom
+                  Whether you’re looking for daily inspiration, planning a special event, or just want to
+                  brighten someone’s day, our fortune cookie messages offer the perfect blend of wisdom
                   and entertainment. Each message is designed to be meaningful, memorable, and shareable.
                 </p>
               </section>

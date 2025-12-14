@@ -4,12 +4,12 @@ import { getFortunesByCategory, getDatabaseStats } from '@/lib/fortune-database'
 import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Smile, Heart, TrendingUp, Brain, Users, Activity, Plane } from 'lucide-react'
+import { Sparkles, Smile, Heart, TrendingUp, Brain, Users, Activity, Plane, type LucideIcon } from 'lucide-react'
 import { BreadcrumbStructuredData, ItemListStructuredData } from '@/components/StructuredData'
 import Link from 'next/link'
 
 // Category configuration
-const categoryConfig: Record<string, { icon: any, color: string, description: string }> = {
+const categoryConfig: Record<string, { icon: LucideIcon, color: string, description: string }> = {
     inspirational: {
         icon: Sparkles,
         color: 'bg-blue-100 text-blue-800',
@@ -160,7 +160,7 @@ export default async function CategoryPage({ params }: Props) {
                                     </div>
 
                                     <blockquote className="text-gray-700 italic leading-relaxed mb-4">
-                                        "{fortune.message}"
+                                        &ldquo;{fortune.message}&rdquo;
                                     </blockquote>
 
                                     <div className="space-y-3">

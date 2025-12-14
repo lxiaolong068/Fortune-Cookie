@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { getSiteUrl, getFullUrl, getImageUrl, getSiteMetadata } from '@/lib/site'
+import { getFullUrl, getImageUrl, getSiteMetadata } from '@/lib/site'
 
 interface SEOProps {
   title?: string
@@ -220,8 +220,8 @@ export type SEOPropsComponent = {
   description?: string
   canonical?: string
   noIndex?: boolean
-  openGraph?: any
-  jsonLd?: Record<string, any> | Record<string, any>[]
+  openGraph?: Record<string, unknown>
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
 
 export function SEO({ jsonLd }: SEOPropsComponent) {

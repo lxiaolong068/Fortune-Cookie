@@ -29,9 +29,10 @@ export function ErrorMonitorInitializer() {
 
     // 监控页面卸载
     const handleBeforeUnload = () => {
+      const sessionStartTime = (window as Window & { sessionStartTime?: number }).sessionStartTime
       errorMonitor.captureBusinessEvent('app_unload', {
         timestamp: new Date().toISOString(),
-        sessionDuration: Date.now() - (window as any).sessionStartTime,
+        sessionDuration: Date.now() - (sessionStartTime ?? Date.now()),
       })
     }
 

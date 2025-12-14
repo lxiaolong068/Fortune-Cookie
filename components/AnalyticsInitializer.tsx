@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { analyticsManager } from '@/lib/analytics-manager'
 import { sessionManager } from '@/lib/session-manager'
@@ -10,22 +10,7 @@ export function AnalyticsInitializer() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  useEffect(() => {
-    // 初始化分析系统
-    initializeAnalytics()
-    
-    // 跟踪页面浏览
-    trackPageView()
-    
-    // 设置用户偏好监听
-    setupPreferencesTracking()
-    
-    // 设置性能监控
-    setupPerformanceTracking()
-    
-  }, [pathname, searchParams])
-
-  const initializeAnalytics = async () => {
+  const initializeAnalytics = useCallback(async () => {
     try {
       // 初始化会话管理器
       await sessionManager.initializeSession()
@@ -56,9 +41,9 @@ export function AnalyticsInitializer() {
     } catch (error) {
       console.error('Failed to initialize analytics:', error)
     }
-  }
+  }, [pathname])
 
-  const trackPageView = () => {
+  const trackPageView = useCallback(() => {
     const fullUrl = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
     
     analyticsManager.trackPageView(fullUrl, document.title)
@@ -95,26 +80,17 @@ export function AnalyticsInitializer() {
         page: pathname,
       })
     }
-  }
+  }, [pathname, searchParams])
 
-  const setupPreferencesTracking = () => {
-    // 监听用户偏好变化
-    const handlePreferencesChange = () => {
-      const preferences = sessionManager.getPreferences()
-      
-      analyticsManager.trackUserBehavior('preferences_updated', {
-        theme: preferences.theme,
-        language: preferences.language,
-        favoriteCategories: preferences.favoriteCategories,
-        displayMode: preferences.displayMode,
-      })
-    }
+  const setupPreferencesTracking = useCallback(() => {
+    // Optional: register a preferences change listener when implemented.
+    // Example:
+    // const preferences = sessionManager.getPreferences()
+    // analyticsManager.trackUserBehavior('preferences_updated', { ... })
+    // sessionManager.onPreferencesChange(...)
+  }, [])
 
-    // 这里可以添加偏好变化的监听器
-    // sessionManager.onPreferencesChange(handlePreferencesChange)
-  }
-
-  const setupPerformanceTracking = () => {
+  const setupPerformanceTracking = useCallback(() => {
     // 跟踪页面性能
     if ('performance' in window && 'PerformanceObserver' in window) {
       // 跟踪资源加载时间
@@ -156,8 +132,14 @@ export function AnalyticsInitializer() {
     }
 
     // 跟踪内存使用情况
-    if ('memory' in performance) {
-      const memoryInfo = (performance as any).memory
+    type PerformanceMemoryInfo = {
+      usedJSHeapSize: number
+      totalJSHeapSize: number
+      jsHeapSizeLimit: number
+    }
+    type PerformanceWithMemory = Performance & { memory?: PerformanceMemoryInfo }
+    const memoryInfo = (performance as PerformanceWithMemory).memory
+    if (memoryInfo) {
       analyticsManager.trackPerformance('memory_usage', memoryInfo.usedJSHeapSize, {
         totalJSHeapSize: memoryInfo.totalJSHeapSize,
         jsHeapSizeLimit: memoryInfo.jsHeapSizeLimit,
@@ -165,8 +147,15 @@ export function AnalyticsInitializer() {
     }
 
     // 跟踪网络连接信息
-    if ('connection' in navigator) {
-      const connection = (navigator as any).connection
+    type NetworkInformation = {
+      effectiveType?: string
+      downlink?: number
+      rtt?: number
+      saveData?: boolean
+    }
+    type NavigatorWithConnection = Navigator & { connection?: NetworkInformation }
+    const connection = (navigator as NavigatorWithConnection).connection
+    if (connection) {
       analyticsManager.trackUserBehavior('network_info', {
         effectiveType: connection.effectiveType,
         downlink: connection.downlink,
@@ -174,7 +163,18 @@ export function AnalyticsInitializer() {
         saveData: connection.saveData,
       })
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    // 初始化分析系统
+    initializeAnalytics()
+    // 跟踪页面浏览
+    trackPageView()
+    // 设置用户偏好监听
+    setupPreferencesTracking()
+    // 设置性能监控
+    setupPerformanceTracking()
+  }, [initializeAnalytics, setupPerformanceTracking, setupPreferencesTracking, trackPageView])
 
   // 设置错误跟踪
   useEffect(() => {

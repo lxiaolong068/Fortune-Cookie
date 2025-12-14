@@ -391,9 +391,10 @@ export class FortuneStatsUtils {
 }
 
 // Export all utilities
-export default {
+const fortuneUtils = {
   FortuneGenerator,
   FortuneThemeUtils,
-  FortuneStatsUtils
-}
+  FortuneStatsUtils,
+} as const
 
+export default fortuneUtils

@@ -324,7 +324,7 @@ export async function GET(request: NextRequest) {
           ? sortBy
           : "popularity";
 
-        let results = category
+        const results = category
           ? getFortunesByCategory(category)
           : [...fortuneDatabase];
 

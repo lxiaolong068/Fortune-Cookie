@@ -1,6 +1,6 @@
-import { db, QueryOptimizer, DatabaseManager } from './database'
+import { db, QueryOptimizer } from './database'
 import { captureError, captureBusinessEvent } from './error-monitoring'
-import type { Fortune, UserSession, ApiUsage, WebVital, ErrorLog, UserFeedback } from '@prisma/client'
+import type { Fortune, Prisma, UserFeedback, UserSession } from '@prisma/client'
 
 // 幸运饼干服务
 export class FortuneService {
@@ -203,7 +203,12 @@ export class FortuneService {
   }
 
   // 获取统计信息
-  static async getStats(): Promise<any> {
+  static async getStats(): Promise<{
+    total: number
+    byCategory: Record<string, number>
+    byMood: Record<string, number>
+    recent: number
+  }> {
     try {
       const [total, byCategory, byMood, recent] = await Promise.all([
         db.fortune.count(),
@@ -254,7 +259,7 @@ export class SessionService {
     userId?: string
     ipAddress?: string
     userAgent?: string
-    data?: any
+    data?: unknown
     expiresAt: Date
   }): Promise<UserSession> {
     try {
@@ -290,7 +295,7 @@ export class SessionService {
 
   // 更新会话
   static async update(sessionId: string, data: {
-    data?: any
+    data?: unknown
     expiresAt?: Date
   }): Promise<UserSession | null> {
     try {
@@ -362,14 +367,20 @@ export class ApiUsageService {
     startDate?: Date
     endDate?: Date
     endpoint?: string
-  } = {}): Promise<any> {
+  } = {}): Promise<{
+    total: number
+    byEndpoint: Array<{ endpoint: string; count: number; avgResponseTime: number }>
+    byStatus: Record<number, number>
+    avgResponseTime: number
+  }> {
     try {
-      const where: any = {}
+      const where: Prisma.ApiUsageWhereInput = {}
 
       if (options.startDate || options.endDate) {
-        where.timestamp = {}
-        if (options.startDate) where.timestamp.gte = options.startDate
-        if (options.endDate) where.timestamp.lte = options.endDate
+        where.timestamp = {
+          ...(options.startDate ? { gte: options.startDate } : {}),
+          ...(options.endDate ? { lte: options.endDate } : {}),
+        }
       }
 
       if (options.endpoint) {
@@ -447,9 +458,12 @@ export class WebVitalService {
     startDate?: Date
     endDate?: Date
     metric?: string
-  } = {}): Promise<any> {
+  } = {}): Promise<{
+    byMetric: Record<string, { average: number; count: number }>
+    byRating: Record<string, number>
+  }> {
     try {
-      const where: any = {}
+      const where: { timestamp?: { gte?: Date; lte?: Date }; name?: string } = {}
 
       if (options.startDate || options.endDate) {
         where.timestamp = {}
@@ -544,7 +558,7 @@ export class FeedbackService {
         options.limit
       )
 
-      const where: any = {}
+      const where: { type?: string; status?: string } = {}
       if (options.type) where.type = options.type
       if (options.status) where.status = options.status
 

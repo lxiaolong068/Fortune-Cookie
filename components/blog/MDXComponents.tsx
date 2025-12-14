@@ -85,6 +85,7 @@ function CustomImage({
 
   // Fallback for other image sources
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt={alt || 'Blog image'}
@@ -213,4 +214,3 @@ export const mdxComponents = {
 }
 
 export default mdxComponents
-

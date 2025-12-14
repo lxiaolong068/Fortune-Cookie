@@ -10,15 +10,6 @@ export interface FortuneMessage {
   dateAdded: string
 }
 
-// Helper function to generate lucky numbers
-function generateLuckyNumbers(): number[] {
-  const numbers = new Set<number>()
-  while (numbers.size < 6) {
-    numbers.add(Math.floor(Math.random() * 69) + 1)
-  }
-  return Array.from(numbers).sort((a, b) => a - b)
-}
-
 // Inspirational Messages (100+)
 const inspirationalMessages: Omit<FortuneMessage, 'id' | 'dateAdded'>[] = [
   {

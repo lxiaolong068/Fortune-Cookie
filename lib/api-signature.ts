@@ -332,7 +332,7 @@ export async function validateApiSignature(
     if (upper === 'POST' || upper === 'PUT' || upper === 'PATCH') {
       try {
         bodyText = await request.clone().text()
-      } catch (_e) {
+      } catch {
         bodyText = ''
       }
     }

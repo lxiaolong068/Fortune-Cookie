@@ -1,14 +1,12 @@
 import Link from 'next/link'
 import { Sparkles, Heart, Github, Twitter, Mail } from 'lucide-react'
 import { FooterLinks } from './InternalLinks'
-import { OrganizationStructuredData } from './StructuredData'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
     <>
-      <OrganizationStructuredData />
       <footer className="bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-200 mt-16">
         <div className="container mx-auto px-4 py-12">
           {/* Main footer content */}

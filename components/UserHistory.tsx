@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Clock, Heart, Share2, Trash2, Download, Filter, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -25,15 +25,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
   const [sourceFilter, setSourceFilter] = useState<string>('all')
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    loadHistory()
-  }, [limit])
-
-  useEffect(() => {
-    filterHistory()
-  }, [history, searchQuery, categoryFilter, sourceFilter])
-
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
     try {
       setIsLoading(true)
       await sessionManager.initializeSession()
@@ -44,12 +36,16 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [limit])
 
-  const filterHistory = () => {
+  useEffect(() => {
+    void loadHistory()
+  }, [loadHistory])
+
+  useEffect(() => {
     let filtered = [...history]
 
-// Search filter
+    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(item =>
@@ -59,18 +55,18 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
       )
     }
 
-// Category filter
+    // Category filter
     if (categoryFilter !== 'all') {
       filtered = filtered.filter(item => item.category === categoryFilter)
     }
 
-// Source filter
+    // Source filter
     if (sourceFilter !== 'all') {
       filtered = filtered.filter(item => item.source === sourceFilter)
     }
 
     setFilteredHistory(filtered)
-  }
+  }, [history, searchQuery, categoryFilter, sourceFilter])
 
   const handleLike = (fortuneId: string) => {
     sessionManager.likeFortuneInHistory(fortuneId)
@@ -291,10 +287,10 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
             {filteredHistory.map((item) => (
               <Card key={item.id} className="border-l-4 border-l-orange-500">
                 <CardContent className="p-4">
-                  <div className="space-y-2">
-                    <blockquote className="text-sm font-medium italic">
-                      "{item.message}"
-                    </blockquote>
+                    <div className="space-y-2">
+                      <blockquote className="text-sm font-medium italic">
+                      &ldquo;{item.message}&rdquo;
+                      </blockquote>
                     
                     <div className="flex items-center gap-2 text-xs text-gray-500">
                       <Badge variant="outline" className="text-xs">

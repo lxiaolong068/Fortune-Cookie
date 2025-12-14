@@ -31,7 +31,7 @@ A comprehensive, SEO-optimized AI-driven fortune cookie generator built with Nex
 ### 🔧 SEO & Performance
 - **Next.js 14 App Router**: Modern React framework with optimal performance
 - **Core Web Vitals Optimized**: LCP < 2.5s, INP < 200ms, CLS < 0.1
-- **Structured Data**: JSON-LD schema markup for rich snippets
+- **Structured Data (Rich Results)**: JSON-LD schema markup (`WebSite`, `Organization`, `BreadcrumbList`, `Article`, `FAQPage`, `HowTo`, `Recipe`, `ItemList`) — see `docs/rich-results.md`
 - **Dynamic Meta Tags**: Optimized for search engines and social sharing
 - **Sitemap & Robots**: Automated SEO infrastructure
 - **Performance Monitoring**: Real-time Core Web Vitals tracking with Web Vitals v5

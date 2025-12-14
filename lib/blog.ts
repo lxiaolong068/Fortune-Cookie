@@ -31,7 +31,7 @@ export interface PaginatedBlogPosts {
 export const POSTS_PER_PAGE = 9;
 
 // Import types for internal use
-import type { BlogPostFrontmatter, BlogPost, BlogPostMeta } from "./blog-types";
+import type { BlogPost, BlogPostMeta } from "./blog-types";
 
 // Blog posts directory
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/blog");

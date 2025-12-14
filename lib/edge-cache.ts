@@ -91,7 +91,7 @@ export class EdgeCacheManager {
 
   // 为API响应添加缓存优化
   static optimizeApiResponse(
-    data: any,
+    data: unknown,
     cacheKey: string,
     maxAge: number = 300
   ): Response {
@@ -236,6 +236,7 @@ export class CacheInvalidationManager {
 
   // 生成失效模式
   private static generateInvalidationPatterns(contentType: string, contentId: string): string[] {
+    void contentId
     const patterns: string[] = []
     
     switch (contentType) {
@@ -283,7 +284,14 @@ export class CachePerformanceMonitor {
   }
 
   // 获取缓存统计
-  static getStats(): any {
+  static getStats(): {
+    hits: number
+    misses: number
+    errors: number
+    totalRequests: number
+    hitRate: number
+    timestamp: string
+  } {
     const hitRate = this.metrics.totalRequests > 0 
       ? (this.metrics.hits / this.metrics.totalRequests) * 100 
       : 0

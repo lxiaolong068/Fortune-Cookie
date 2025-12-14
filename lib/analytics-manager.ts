@@ -13,7 +13,7 @@ export interface AnalyticsEvent {
   userId?: string
   sessionId?: string
   timestamp: Date
-  metadata: Record<string, any>
+  metadata: Record<string, unknown>
 }
 
 export interface UserBehaviorData {
@@ -110,7 +110,7 @@ export class AnalyticsManager {
     action: string,
     label?: string,
     value?: number,
-    metadata: Record<string, any> = {}
+    metadata: Record<string, unknown> = {}
   ): void {
     if (!this.isTrackingEnabled) return
 
@@ -159,17 +159,17 @@ export class AnalyticsManager {
   }
 
   // Track user behavior
-  trackUserBehavior(action: string, data: Record<string, any> = {}): void {
+  trackUserBehavior(action: string, data: Record<string, unknown> = {}): void {
     this.trackEvent('user_action', 'behavior', action, undefined, undefined, data)
   }
 
   // Track business event
-  trackBusinessEvent(event: string, data: Record<string, any> = {}): void {
+  trackBusinessEvent(event: string, data: Record<string, unknown> = {}): void {
     this.trackEvent('business_event', 'business', event, undefined, undefined, data)
   }
 
   // Track performance metrics
-  trackPerformance(metric: string, value: number, metadata: Record<string, any> = {}): void {
+  trackPerformance(metric: string, value: number, metadata: Record<string, unknown> = {}): void {
     this.trackEvent('performance', 'performance', metric, undefined, value, metadata)
   }
 
@@ -209,8 +209,10 @@ export class AnalyticsManager {
       // FID (First Input Delay)
       new PerformanceObserver((list) => {
         const entries = list.getEntries()
-        entries.forEach((entry: any) => {
-          this.trackPerformance('fid', entry.processingStart - entry.startTime)
+        type FirstInputEntry = PerformanceEntry & { processingStart: number; startTime: number }
+        entries.forEach((entry) => {
+          const inputEntry = entry as FirstInputEntry
+          this.trackPerformance('fid', inputEntry.processingStart - inputEntry.startTime)
         })
       }).observe({ entryTypes: ['first-input'] })
 
@@ -218,9 +220,11 @@ export class AnalyticsManager {
       let clsValue = 0
       new PerformanceObserver((list) => {
         const entries = list.getEntries()
-        entries.forEach((entry: any) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value
+        type LayoutShiftEntry = PerformanceEntry & { hadRecentInput: boolean; value: number }
+        entries.forEach((entry) => {
+          const layoutShift = entry as LayoutShiftEntry
+          if (!layoutShift.hadRecentInput) {
+            clsValue += layoutShift.value
           }
         })
         this.trackPerformance('cls', clsValue)
@@ -291,8 +295,8 @@ export class AnalyticsManager {
       fortunesLiked: userEvents.filter(e => e.action === 'fortune_liked').length,
       fortunesShared: userEvents.filter(e => e.action === 'fortune_shared').length,
       categoriesUsed: Array.from(new Set(userEvents
-        .filter(e => e.metadata.category)
-        .map(e => e.metadata.category))),
+        .map(e => (typeof e.metadata.category === 'string' ? e.metadata.category : null))
+        .filter((category): category is string => Boolean(category)))),
       deviceType: this.getDeviceType(),
       browserType: this.getBrowserType(),
       referrer: document.referrer,

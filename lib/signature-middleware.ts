@@ -43,7 +43,7 @@ export class SignatureMiddleware {
         try {
           const clonedRequest = request.clone()
           body = await clonedRequest.text()
-        } catch (error) {
+        } catch {
           // 如果无法读取请求体，使用空字符串
           body = ''
         }
@@ -145,10 +145,10 @@ export class SignatureMiddleware {
 }
 
 // 签名验证装饰器函数
-export function withSignatureValidation(
-  handler: (request: NextRequest, context?: any) => Promise<NextResponse>
+export function withSignatureValidation<C = unknown>(
+  handler: (request: NextRequest, context?: C) => Promise<NextResponse>
 ) {
-  return async (request: NextRequest, context?: any): Promise<NextResponse> => {
+  return async (request: NextRequest, context?: C): Promise<NextResponse> => {
     // 检查是否需要签名验证
     if (!SignatureMiddleware.requiresSignature(request.nextUrl.pathname)) {
       return handler(request, context)
@@ -213,10 +213,10 @@ export class ApiSignatureHelper {
 
 // 权限检查装饰器
 export function requirePermission(permission: string) {
-  return function (
-    handler: (request: NextRequest, context?: any) => Promise<NextResponse>
+  return function <C = unknown>(
+    handler: (request: NextRequest, context?: C) => Promise<NextResponse>
   ) {
-    return async (request: NextRequest, context?: any): Promise<NextResponse> => {
+    return async (request: NextRequest, context?: C): Promise<NextResponse> => {
       if (!ApiSignatureHelper.hasPermission(request, permission)) {
         return ApiSignatureHelper.createPermissionDeniedResponse(permission)
       }
