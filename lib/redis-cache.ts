@@ -311,6 +311,17 @@ export class CacheManager {
   }
 
   /**
+   * Delete a cached fortune cookie
+   *
+   * @param {string} requestHash - Hash of the fortune request parameters
+   * @returns {Promise<boolean>} True if successful, false otherwise
+   */
+  async deleteCachedFortune(requestHash: string): Promise<boolean> {
+    const key = `${CACHE_PREFIXES.FORTUNE}${requestHash}`;
+    return this.del(key);
+  }
+
+  /**
    * Cache a list of fortune cookies
    *
    * @param {string} listKey - Key for the fortune list

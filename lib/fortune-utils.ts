@@ -23,6 +23,12 @@ export interface Fortune {
   timestamp: string
   source?: 'ai' | 'database' | 'fallback'
   cached?: boolean
+  aiError?: {
+    provider: 'openrouter' | string
+    status?: number
+    code?: string
+    message: string
+  }
 }
 
 /**

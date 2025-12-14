@@ -17,13 +17,22 @@ export interface FortuneRequest {
 
 export type FortuneResponse = Fortune
 
+type OpenRouterApiError = {
+  provider: 'openrouter'
+  status?: number
+  code?: string
+  message: string
+}
+
 class OpenRouterClient {
   private apiKey: string
   private baseUrl: string
+  private model: string
 
   constructor() {
-    this.apiKey = process.env.OPENROUTER_API_KEY || ''
-    this.baseUrl = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
+    this.apiKey = (process.env.OPENROUTER_API_KEY || '').trim()
+    this.baseUrl = (process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1').replace(/\/+$/, '')
+    this.model = (process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini').trim()
     
     if (!this.apiKey) {
       console.warn('OpenRouter API key not found. AI features will be disabled.')
@@ -50,6 +59,54 @@ class OpenRouterClient {
     return prompts[theme as keyof typeof prompts] || prompts.random
   }
 
+  private attachAiError(fortune: FortuneResponse, aiError: OpenRouterApiError): FortuneResponse {
+    return {
+      ...fortune,
+      aiError
+    }
+  }
+
+  private async parseOpenRouterError(response: Response): Promise<OpenRouterApiError> {
+    const status = response.status
+
+    try {
+      const isProd = process.env.NODE_ENV === 'production'
+      const json = (await response.json().catch(() => null)) as unknown
+      const errorObj =
+        json && typeof json === 'object' && 'error' in json ? (json as { error?: unknown }).error : undefined
+      const rawMessage =
+        errorObj && typeof errorObj === 'object' && 'message' in errorObj && typeof (errorObj as { message?: unknown }).message === 'string'
+          ? (errorObj as { message: string }).message
+          : undefined
+      const code =
+        errorObj && typeof errorObj === 'object' && 'code' in errorObj && typeof (errorObj as { code?: unknown }).code === 'string'
+          ? (errorObj as { code: string }).code
+          : undefined
+
+      const message =
+        status === 401
+          ? 'OpenRouter authentication failed. Verify OPENROUTER_API_KEY.'
+          : status === 403
+            ? 'OpenRouter access denied. Check your account permissions/quota.'
+            : status === 429
+              ? 'OpenRouter rate limited. Please try again later.'
+              : (!isProd && rawMessage) || `OpenRouter API error (${status})`
+
+      return { provider: 'openrouter', status, code, message }
+    } catch {
+      return { provider: 'openrouter', status, message: `OpenRouter API error (${status})` }
+    }
+  }
+
+  private buildHeaders(): Record<string, string> {
+    return {
+      'Authorization': `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+      'X-Title': 'Fortune Cookie AI'
+    }
+  }
+
   // Use FortuneGenerator for lucky numbers
   private generateLuckyNumbers(): number[] {
     return FortuneGenerator.generateLuckyNumbers()
@@ -58,7 +115,12 @@ class OpenRouterClient {
   async generateFortune(request: FortuneRequest): Promise<FortuneResponse> {
     // If no API key, return a fallback fortune
     if (!this.apiKey) {
-      return this.getFallbackFortune(request.theme || 'random')
+      const theme = request.theme || 'random'
+      const fortune = this.getFallbackFortune(theme)
+      return this.attachAiError(fortune, {
+        provider: 'openrouter',
+        message: 'OpenRouter API key is missing'
+      })
     }
 
     try {
@@ -86,14 +148,9 @@ class OpenRouterClient {
 
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-          'X-Title': 'Fortune Cookie AI'
-        },
+        headers: this.buildHeaders(),
         body: JSON.stringify({
-          model: 'deepseek/deepseek-chat-v3-0324',
+          model: this.model,
           messages: [
             {
               role: 'system',
@@ -111,7 +168,14 @@ class OpenRouterClient {
       })
 
       if (!response.ok) {
-        throw new Error(`OpenRouter API error: ${response.status}`)
+        const aiError = await this.parseOpenRouterError(response)
+        console.error('OpenRouter request failed:', {
+          status: aiError.status,
+          code: aiError.code,
+          message: aiError.message
+        })
+        const fallbackFortune = this.getFallbackFortune(theme)
+        return this.attachAiError(fallbackFortune, aiError)
       }
 
       const data = await response.json()
@@ -124,9 +188,15 @@ class OpenRouterClient {
       return FortuneGenerator.createFortune(formattedMessage, theme, undefined, 'ai')
       
     } catch (error) {
-      console.error('Error generating fortune:', error)
+      const message = error instanceof Error ? error.message : String(error)
+      console.error('Error generating fortune:', message)
       // Return fallback fortune on error
-      return this.getFallbackFortune(request.theme || 'random')
+      const theme = request.theme || 'random'
+      const fallbackFortune = this.getFallbackFortune(theme)
+      return this.attachAiError(fallbackFortune, {
+        provider: 'openrouter',
+        message
+      })
     }
   }
 
@@ -198,12 +268,25 @@ class OpenRouterClient {
     if (!this.apiKey) return false
     
     try {
-      const response = await fetch(`${this.baseUrl}/models`, {
+      const response = await fetch(`${this.baseUrl}/auth/key`, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`
+          'Authorization': `Bearer ${this.apiKey}`,
+          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+          'X-Title': 'Fortune Cookie AI'
         }
       })
-      return response.ok
+      if (!response.ok) {
+        if (process.env.NODE_ENV !== 'production') {
+          const aiError = await this.parseOpenRouterError(response)
+          console.warn('OpenRouter health check failed:', {
+            status: aiError.status,
+            code: aiError.code,
+            message: aiError.message
+          })
+        }
+        return false
+      }
+      return true
     } catch {
       return false
     }

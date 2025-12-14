@@ -68,6 +68,12 @@ interface Fortune {
   timestamp: string;
   source?: 'ai' | 'database' | 'fallback';
   cached?: boolean;
+  aiError?: {
+    provider: string;
+    status?: number;
+    code?: string;
+    message: string;
+  };
 }
 
 type CookieState = "unopened" | "cracking" | "opened";
@@ -144,11 +150,18 @@ export function AIFortuneCookie() {
         }),
       });
 
+      const json = await response.json().catch(() => null);
+
       if (!response.ok) {
-        throw new Error('Failed to generate fortune');
+        const apiMessage =
+          json && typeof json === 'object' && 'message' in json && typeof json.message === 'string'
+            ? json.message
+            : json && typeof json === 'object' && 'error' in json && typeof json.error === 'string'
+              ? json.error
+              : `Request failed (${response.status})`;
+        throw new Error(apiMessage);
       }
 
-      const json = await response.json();
       const fortune: Fortune = (json && typeof json === 'object' && 'data' in json && json.data)
         ? (json.data as Fortune)
         : (json as Fortune);
@@ -156,7 +169,14 @@ export function AIFortuneCookie() {
 
       // Determine source from fortune object or API response meta
       const source = fortune.source || json?.meta?.source || 'ai';
-      setGenerationSource(source === 'fallback' || source === 'database' ? 'offline' : 'ai');
+      const generationSourceValue =
+        source === 'fallback' || source === 'database' ? 'offline' : 'ai';
+      setGenerationSource(generationSourceValue);
+
+      if (generationSourceValue === 'offline' && fortune.aiError?.message) {
+        const statusPrefix = fortune.aiError.status ? `(${fortune.aiError.status}) ` : '';
+        setGenerationError(`AI unavailable ${statusPrefix}${fortune.aiError.message}`);
+      }
 
       // Add to user history
       try {
@@ -166,7 +186,7 @@ export function AIFortuneCookie() {
           message: fortune.message,
           category: selectedTheme === 'random' ? 'inspirational' : selectedTheme,
           mood: 'positive',
-          source: 'ai',
+          source: generationSourceValue === 'ai' ? 'ai' : 'offline',
           liked: false,
           shared: false,
           tags: fortune.luckyNumbers ? [`lucky-${fortune.luckyNumbers[0]}`] : undefined,
@@ -190,14 +210,16 @@ export function AIFortuneCookie() {
     } catch (error) {
       console.error('Error generating fortune:', error);
       setGenerationSource('offline');
-      setGenerationError('AI service unavailable, using offline fortune');
+      const message = error instanceof Error ? error.message : 'AI service unavailable, using offline fortune';
+      setGenerationError(message);
 
       // Fallback to local fortune
       const fallbackFortune: Fortune = {
         message: "The best fortunes come to those who create their own luck.",
         luckyNumbers: [7, 14, 21, 28, 35, 42],
         theme: selectedTheme,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        source: 'fallback'
       };
       setCurrentFortune(fallbackFortune);
 

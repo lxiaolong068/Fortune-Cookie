@@ -208,6 +208,12 @@ export async function POST(request: NextRequest) {
     // checkcache
     let fortune = await cacheManager.getCachedFortune<FortuneResponse>(requestHash);
 
+    // Never serve cached fallback/database fortunes; they can get stuck after a transient AI failure.
+    if (fortune && fortune.source !== "ai") {
+      await cacheManager.deleteCachedFortune(requestHash);
+      fortune = null;
+    }
+
     if (fortune) {
       // cache命中
       CachePerformanceMonitor.recordHit();
@@ -248,13 +254,10 @@ export async function POST(request: NextRequest) {
           );
         }
       } else {
-        // Redis unavailable - block AI generation (strict cost control)
-        return NextResponse.json(
-          createErrorResponse(
-            "AI generation service temporarily unavailable. Please browse our pre-seeded fortunes instead.",
-            { browseUrl: "/browse" },
-          ),
-          { status: 503 },
+        // Redis unavailable - allow AI generation in development, but log warning
+        console.warn(
+          "⚠️ Redis unavailable: AI generation proceeding without rate limiting. " +
+          "This is acceptable for development but should be configured for production."
         );
       }
 
@@ -262,7 +265,10 @@ export async function POST(request: NextRequest) {
 
       // Cache result (if not custom prompt)
       if (!fortuneRequest.customPrompt) {
-        await cacheManager.cacheFortune(requestHash, fortune);
+        // Only cache real AI results; never cache fallback/database responses
+        if (fortune?.source === "ai") {
+          await cacheManager.cacheFortune(requestHash, fortune);
+        }
       }
     }
 
@@ -290,12 +296,14 @@ export async function POST(request: NextRequest) {
       cached: !!fortune.cached,
       cacheKey: requestHash,
       responseTime,
+      source: fortune.source || "unknown",
+      aiError: fortune.aiError,
     });
 
     const response = EdgeCacheManager.optimizeApiResponse(
       responseData,
       requestHash,
-      fortuneRequest.customPrompt ? 0 : 300, // Custom prompts are not cached
+      fortuneRequest.customPrompt || fortune?.source !== "ai" ? 0 : 300, // Only edge-cache real AI results
     );
 
     // CORS headers
