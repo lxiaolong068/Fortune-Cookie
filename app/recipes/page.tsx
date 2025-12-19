@@ -26,14 +26,13 @@ export const dynamic = "force-static";
 export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free | Homemade",
+  title: "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free",
   description:
-    "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions, baking tips, and AI-generated messages for your cookies. Perfect for parties and special occasions.",
+    "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions and baking tips. Perfect for parties and special occasions.",
   openGraph: {
-    title:
-      "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free | Homemade",
+    title: "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free",
     description:
-      "Learn how to make delicious homemade fortune cookies with our easy step-by-step recipes. Create authentic, crispy cookies with custom AI-generated messages for any occasion.",
+      "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions and baking tips. Perfect for parties and special occasions.",
     type: "article",
     url: `${baseUrl}/recipes`,
   },

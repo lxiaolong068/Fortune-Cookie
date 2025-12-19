@@ -1,38 +1,46 @@
-import { Metadata } from 'next'
-import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Smile, Laugh, Sparkles, Copy, Share2 } from 'lucide-react'
-import { BreadcrumbStructuredData, ArticleStructuredData } from '@/components/StructuredData'
-import { FAQStructuredData, funnyFortuneFAQs } from '@/components/FAQStructuredData'
-import { RelatedPages, messageRelatedPages } from '@/components/RelatedPages'
-import { getSiteUrl } from '@/lib/site'
+import { Metadata } from "next";
+import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Smile, Laugh, Sparkles, Copy, Share2 } from "lucide-react";
+import {
+  BreadcrumbStructuredData,
+  ArticleStructuredData,
+} from "@/components/StructuredData";
+import {
+  FAQStructuredData,
+  funnyFortuneFAQs,
+} from "@/components/FAQStructuredData";
+import { RelatedPages, messageRelatedPages } from "@/components/RelatedPages";
+import { getSiteUrl } from "@/lib/site";
 
-const baseUrl = getSiteUrl()
+const baseUrl = getSiteUrl();
 
 // Static generation configuration
-export const dynamic = 'force-static'
-export const revalidate = 86400 // 24 hours
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
-  description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles. Browse our collection of witty and humorous fortunes.',
+  title: "Funny Fortune Cookie Messages - Hilarious Sayings & Jokes",
+  description:
+    "Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties and pranks. Browse our collection of witty, humorous fortunes.",
   openGraph: {
-    title: 'Funny Fortune Cookie Messages - Hilarious Sayings & Jokes',
-    description: 'Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties, pranks, and bringing smiles. Share the laughter with friends.',
-    type: 'article',
+    title: "Funny Fortune Cookie Messages - Hilarious Sayings & Jokes",
+    description:
+      "Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties and pranks. Browse our collection of witty, humorous fortunes.",
+    type: "article",
     url: `${baseUrl}/funny-fortune-cookie-messages`,
   },
   alternates: {
-    canonical: '/funny-fortune-cookie-messages',
+    canonical: "/funny-fortune-cookie-messages",
   },
-}
+};
 
 const funnyCategories = [
   {
-    title: 'Classic Funny Messages',
+    title: "Classic Funny Messages",
     icon: Smile,
-    color: 'bg-yellow-100 text-yellow-800',
+    color: "bg-yellow-100 text-yellow-800",
     messages: [
       "You will find happiness with a new love... probably your cat.",
       "A closed mouth gathers no foot.",
@@ -43,13 +51,13 @@ const funnyCategories = [
       "Ignore previous fortune.",
       "You will receive a fortune cookie.",
       "Beware of cookies bearing fortunes.",
-      "You are reading a fortune cookie."
-    ]
+      "You are reading a fortune cookie.",
+    ],
   },
   {
-    title: 'Witty & Clever',
+    title: "Witty & Clever",
     icon: Laugh,
-    color: 'bg-blue-100 text-blue-800',
+    color: "bg-blue-100 text-blue-800",
     messages: [
       "Your future is as bright as your past is dark... which isn't saying much.",
       "You will soon be hungry again. Order more Chinese food.",
@@ -60,13 +68,13 @@ const funnyCategories = [
       "A journey of a thousand miles begins with a single step... and comfortable shoes.",
       "You will live long enough to open many fortune cookies.",
       "Your future contains many fortune cookies.",
-      "The answer you seek is in another cookie."
-    ]
+      "The answer you seek is in another cookie.",
+    ],
   },
   {
-    title: 'Absurd & Random',
+    title: "Absurd & Random",
     icon: Sparkles,
-    color: 'bg-purple-100 text-purple-800',
+    color: "bg-purple-100 text-purple-800",
     messages: [
       "Your socks will bring you great fortune... if you wear them.",
       "Beware of falling coconuts on Tuesday.",
@@ -77,13 +85,13 @@ const funnyCategories = [
       "A duck will change your life. Probably not today.",
       "Your future involves at least three more meals.",
       "You will soon realize this fortune makes no sense.",
-      "Congratulations! You can read."
-    ]
+      "Congratulations! You can read.",
+    ],
   },
   {
-    title: 'Self-Referential Humor',
+    title: "Self-Referential Humor",
     icon: Copy,
-    color: 'bg-green-100 text-green-800',
+    color: "bg-green-100 text-green-800",
     messages: [
       "This fortune is worth exactly what you paid for it.",
       "You have just wasted time reading this fortune.",
@@ -94,55 +102,63 @@ const funnyCategories = [
       "Error 404: Fortune not found.",
       "Your fortune is loading... please wait.",
       "This fortune has been recalled by the manufacturer.",
-      "You are holding a fortune cookie. Congratulations on your observation skills."
-    ]
-  }
-]
+      "You are holding a fortune cookie. Congratulations on your observation skills.",
+    ],
+  },
+];
 
 const usageIdeas = [
   {
-    title: 'Party Entertainment',
-    description: 'Use funny fortune cookies as party favors or ice breakers at gatherings.',
-    icon: '🎉'
+    title: "Party Entertainment",
+    description:
+      "Use funny fortune cookies as party favors or ice breakers at gatherings.",
+    icon: "🎉",
   },
   {
-    title: 'Office Pranks',
-    description: 'Brighten up the workplace with humorous fortunes in the break room.',
-    icon: '💼'
+    title: "Office Pranks",
+    description:
+      "Brighten up the workplace with humorous fortunes in the break room.",
+    icon: "💼",
   },
   {
-    title: 'Gift Additions',
-    description: 'Add a funny fortune cookie to gift bags for an extra smile.',
-    icon: '🎁'
+    title: "Gift Additions",
+    description: "Add a funny fortune cookie to gift bags for an extra smile.",
+    icon: "🎁",
   },
   {
-    title: 'Social Media',
-    description: 'Share funny fortune messages on social media for laughs and engagement.',
-    icon: '📱'
-  }
-]
+    title: "Social Media",
+    description:
+      "Share funny fortune messages on social media for laughs and engagement.",
+    icon: "📱",
+  },
+];
 
 export default function FunnyFortuneCookieMessagesPage() {
   return (
     <>
       <ArticleStructuredData
-        headline='Funny Fortune Cookie Messages - Hilarious Sayings & Jokes'
-        description='Discover the funniest fortune cookie messages and hilarious sayings. Perfect for parties, pranks, and bringing smiles.'
-        url='/funny-fortune-cookie-messages'
-        datePublished='2024-01-01'
-        dateModified={new Date().toISOString().split('T')[0]}
+        headline="Funny Fortune Cookie Messages - Hilarious Sayings & Jokes"
+        description="Discover the funniest fortune cookie messages and hilarious sayings. Perfect for parties, pranks, and bringing smiles."
+        url="/funny-fortune-cookie-messages"
+        datePublished="2024-01-01"
+        dateModified={new Date().toISOString().split("T")[0]}
         keywords={[
-          'funny fortune cookie messages',
-          'hilarious fortune cookie sayings',
-          'funny fortune cookie jokes',
-          'witty fortune cookie quotes',
+          "funny fortune cookie messages",
+          "hilarious fortune cookie sayings",
+          "funny fortune cookie jokes",
+          "witty fortune cookie quotes",
         ]}
       />
-      <BreadcrumbStructuredData items={[
-        { name: 'Home', url: '/' },
-        { name: 'Messages', url: '/messages' },
-        { name: 'Funny Fortune Cookie Messages', url: '/funny-fortune-cookie-messages' }
-      ]} />
+      <BreadcrumbStructuredData
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Messages", url: "/messages" },
+          {
+            name: "Funny Fortune Cookie Messages",
+            url: "/funny-fortune-cookie-messages",
+          },
+        ]}
+      />
 
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />
@@ -154,8 +170,9 @@ export default function FunnyFortuneCookieMessagesPage() {
                 Funny Fortune Cookie Messages
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
-                Get ready to laugh with our collection of hilarious fortune cookie messages!
-                Perfect for parties, pranks, or just brightening someone’s day with humor.
+                Get ready to laugh with our collection of hilarious fortune
+                cookie messages! Perfect for parties, pranks, or just
+                brightening someone’s day with humor.
               </p>
 
               <div className="flex flex-wrap justify-center gap-4">
@@ -177,7 +194,7 @@ export default function FunnyFortuneCookieMessagesPage() {
             {/* 搞笑消息分类 */}
             <div className="space-y-12 mb-16">
               {funnyCategories.map((category, categoryIndex) => {
-                const Icon = category.icon
+                const Icon = category.icon;
                 return (
                   <section key={categoryIndex}>
                     <div className="flex items-center gap-3 mb-6">
@@ -194,7 +211,10 @@ export default function FunnyFortuneCookieMessagesPage() {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {category.messages.map((message, index) => (
-                        <Card key={index} className="p-4 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 group">
+                        <Card
+                          key={index}
+                          className="p-4 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 group"
+                        >
                           <div className="flex items-start gap-3">
                             <Sparkles className="w-4 h-4 text-amber-500 mt-1 flex-shrink-0" />
                             <div className="flex-1">
@@ -210,7 +230,7 @@ export default function FunnyFortuneCookieMessagesPage() {
                       ))}
                     </div>
                   </section>
-                )
+                );
               })}
             </div>
 
@@ -221,7 +241,10 @@ export default function FunnyFortuneCookieMessagesPage() {
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {usageIdeas.map((idea, index) => (
-                  <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 text-center hover:shadow-lg transition-all duration-200">
+                  <Card
+                    key={index}
+                    className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 text-center hover:shadow-lg transition-all duration-200"
+                  >
                     <div className="text-4xl mb-4">{idea.icon}</div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">
                       {idea.title}
@@ -242,31 +265,39 @@ export default function FunnyFortuneCookieMessagesPage() {
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-3">Keep It Short & Sweet</h3>
+                    <h3 className="font-semibold text-gray-800 mb-3">
+                      Keep It Short & Sweet
+                    </h3>
                     <p className="text-gray-600 mb-4">
-                      The best funny fortunes are concise and punchy. Aim for one or two sentences
-                      that deliver the humor quickly.
+                      The best funny fortunes are concise and punchy. Aim for
+                      one or two sentences that deliver the humor quickly.
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-3">Play with Expectations</h3>
+                    <h3 className="font-semibold text-gray-800 mb-3">
+                      Play with Expectations
+                    </h3>
                     <p className="text-gray-600 mb-4">
-                      Start with a traditional fortune format, then twist it with unexpected humor
-                      or absurd conclusions.
+                      Start with a traditional fortune format, then twist it
+                      with unexpected humor or absurd conclusions.
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-3">Use Self-Reference</h3>
+                    <h3 className="font-semibold text-gray-800 mb-3">
+                      Use Self-Reference
+                    </h3>
                     <p className="text-gray-600 mb-4">
-                      Some of the funniest fortunes reference the fact that they’re fortune cookies
-                      or break the fourth wall.
+                      Some of the funniest fortunes reference the fact that
+                      they’re fortune cookies or break the fourth wall.
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-3">Stay Family-Friendly</h3>
+                    <h3 className="font-semibold text-gray-800 mb-3">
+                      Stay Family-Friendly
+                    </h3>
                     <p className="text-gray-600 mb-4">
-                      The best funny fortunes are clever without being offensive, making them
-                      perfect for any audience.
+                      The best funny fortunes are clever without being
+                      offensive, making them perfect for any audience.
                     </p>
                   </div>
                 </div>
@@ -281,13 +312,14 @@ export default function FunnyFortuneCookieMessagesPage() {
               <Card className="max-w-4xl mx-auto">
                 <div className="p-6 space-y-6">
                   {funnyFortuneFAQs.map((faq, index) => (
-                    <div key={index} className="border-b border-gray-200 last:border-b-0 pb-4 last:pb-0">
+                    <div
+                      key={index}
+                      className="border-b border-gray-200 last:border-b-0 pb-4 last:pb-0"
+                    >
                       <h3 className="font-semibold text-lg text-gray-900 mb-2">
                         {faq.question}
                       </h3>
-                      <p className="text-gray-600">
-                        {faq.answer}
-                      </p>
+                      <p className="text-gray-600">{faq.answer}</p>
                     </div>
                   ))}
                 </div>
@@ -306,5 +338,5 @@ export default function FunnyFortuneCookieMessagesPage() {
 
       <FAQStructuredData faqs={funnyFortuneFAQs} />
     </>
-  )
+  );
 }

@@ -12,11 +12,11 @@ import { getSiteUrl } from "@/lib/site";
 const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "Fortune Cookie Quotes & Sayings Collection | Curated Messages",
+  title: "Fortune Cookie Quotes & Sayings | Curated Collection",
   description:
-    "Discover our hand-picked collection of fortune cookie quotes organized by theme. Inspirational wisdom, funny sayings, love messages, and success quotes all in one place.",
+    "Discover our hand-picked collection of fortune cookie quotes organized by theme. Inspirational wisdom, funny sayings, love messages, and success quotes.",
   openGraph: {
-    title: "Fortune Cookie Quotes & Sayings Collection | Curated Messages",
+    title: "Fortune Cookie Quotes & Sayings | Curated Collection",
     description:
       "Discover our hand-picked collection of fortune cookie quotes organized by theme. Inspirational wisdom, funny sayings, love messages, and success quotes.",
     type: "website",
