@@ -1,13 +1,13 @@
 /**
  * Critical CSS for above-the-fold content
  * Inlined in <head> to eliminate render-blocking CSS and improve LCP
- * 
+ *
  * This includes only the essential styles needed for the initial viewport:
  * - Layout structure (flexbox, grid)
  * - Typography (font-family, sizes)
  * - Colors (background, text)
  * - Critical animations (fade-in)
- * 
+ *
  * Non-critical styles (hover effects, complex animations) are loaded separately
  */
 export function CriticalCSS() {
@@ -19,10 +19,10 @@ export function CriticalCSS() {
           *,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}
           html{line-height:1.5;-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif}
           body{margin:0;line-height:inherit}
-          
+
           /* Critical typography */
           h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}
-          
+
           /* Critical utility classes for above-the-fold content */
           .min-h-screen{min-height:100vh}
           .flex{display:flex}
@@ -33,7 +33,7 @@ export function CriticalCSS() {
           .relative{position:relative}
           .absolute{position:absolute}
           .z-10{z-index:10}
-          
+
           /* Critical spacing */
           .p-6{padding:1.5rem}
           .mb-3{margin-bottom:0.75rem}
@@ -42,7 +42,7 @@ export function CriticalCSS() {
           .space-y-3>:not([hidden])~:not([hidden]){margin-top:0.75rem}
           .space-y-6>:not([hidden])~:not([hidden]){margin-top:1.5rem}
           .gap-3{gap:0.75rem}
-          
+
           /* Critical sizing */
           .w-full{width:100%}
           .w-32{width:8rem}
@@ -50,7 +50,7 @@ export function CriticalCSS() {
           .h-2{height:0.5rem}
           .max-w-2xl{max-width:42rem}
           .min-h-\\[600px\\]{min-height:600px}
-          
+
           /* Critical colors - Fortune Cookie theme */
           .bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}
           .from-orange-50\\/80{--tw-gradient-from:rgb(255 247 237 / 0.8);--tw-gradient-to:rgb(255 247 237 / 0);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}
@@ -71,12 +71,12 @@ export function CriticalCSS() {
           .border-amber-300{border-color:#fcd34d}
           .border-amber-400\\/50{border-color:rgb(251 191 36 / 0.5)}
           .border-amber-400\\/30{border-color:rgb(251 191 36 / 0.3)}
-          
+
           /* Critical typography sizes */
           .text-3xl{font-size:1.875rem;line-height:2.25rem}
           .text-sm{font-size:0.875rem;line-height:1.25rem}
           .font-semibold{font-weight:600}
-          
+
           /* Critical visual effects */
           .rounded-full{border-radius:9999px}
           .shadow-lg{box-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1),0 4px 6px -4px rgb(0 0 0 / 0.1)}
@@ -84,23 +84,92 @@ export function CriticalCSS() {
           .overflow-hidden{overflow:hidden}
           .overflow-x-hidden{overflow-x:hidden}
           .backdrop-blur-sm{backdrop-filter:blur(4px)}
-          
+
           /* Critical animation - simple fade-in */
           @keyframes fadeIn{from{opacity:0}to{opacity:1}}
           .animate-fade-in{animation:fadeIn 0.3s ease-out}
-          
+
           /* Critical animation - pulse for loading */
           @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
           .animate-pulse{animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite}
-          
+
+          /* CSS-only Fortune Cookie animations - replaces framer-motion for LCP */
+          @keyframes cookieFloat {
+            0%, 100% { transform: translateY(0) rotate(12deg); }
+            50% { transform: translateY(-10px) rotate(14deg); }
+          }
+
+          @keyframes sparkleRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+
+          @keyframes sparkleRotateReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+          }
+
+          @keyframes magicPulse {
+            0%, 100% {
+              transform: scale(1);
+              box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.2);
+            }
+            50% {
+              transform: scale(1.02);
+              box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.4);
+            }
+          }
+
+          /* Cookie float animation - applied to static LCP cookie */
+          .cookie-float {
+            animation: cookieFloat 3s ease-in-out infinite;
+          }
+
+          /* Sparkle rotation animations */
+          .cookie-sparkle {
+            animation: sparkleRotate 8s linear infinite;
+          }
+
+          .cookie-sparkle-reverse {
+            animation: sparkleRotateReverse 6s linear infinite;
+          }
+
+          /* Magic badge pulse effect */
+          .magic-pulse {
+            animation: magicPulse 2s ease-in-out infinite;
+          }
+
+          /* Hover effect for cookie (CSS-only, no JS) */
+          .cookie-float:hover {
+            transform: scale(1.05) translateY(-5px) rotate(12deg);
+            transition: transform 0.2s ease-out;
+          }
+
+          .cookie-float:active {
+            transform: scale(0.95) translateY(0) rotate(12deg);
+            transition: transform 0.1s ease-out;
+          }
+
+          /* Respect reduced motion preference */
+          @media (prefers-reduced-motion: reduce) {
+            .cookie-float,
+            .cookie-sparkle,
+            .cookie-sparkle-reverse,
+            .magic-pulse {
+              animation: none;
+            }
+            .cookie-float:hover {
+              transform: none;
+            }
+          }
+
           /* Screen reader only utility */
           .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
-          
+
           /* Prevent layout shift during font loading */
           body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
         `,
       }}
     />
-  )
+  );
 }
-

@@ -179,6 +179,21 @@ export default function RootLayout({
         <WebsiteStructuredData nonce={nonce} />
         <OrganizationStructuredData nonce={nonce} />
 
+        {/* Preload critical LCP resources - highest priority for performance */}
+        <link
+          rel="preload"
+          as="image"
+          href={getBlobUrl("/images/fortune-cookie-hero.svg")}
+          fetchPriority="high"
+        />
+
+        {/* Preconnect to critical origins for faster resource loading */}
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
         {/* DNS Prefetch for third-party domains - improves connection time */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
