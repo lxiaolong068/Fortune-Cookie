@@ -144,3 +144,103 @@ model UserFeedback {
   @@index([createdAt])
   @@map("user_feedback")
 }
+
+// NextAuth 用户表
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  fortuneQuota  FortuneQuota[]
+  fortuneUsage  FortuneUsage[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("auth_users")
+}
+
+// NextAuth 账户表
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("auth_accounts")
+}
+
+// NextAuth 会话表
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("auth_sessions")
+}
+
+// NextAuth 验证令牌表
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("auth_verification_tokens")
+}
+
+// 每日配额记录
+model FortuneQuota {
+  id         String   @id @default(cuid())
+  userId     String?
+  guestId    String?
+  dateKey    String
+  usedCount  Int      @default(0)
+  dailyLimit Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([dateKey])
+  @@index([userId])
+  @@index([guestId])
+  @@unique([userId, dateKey])
+  @@unique([guestId, dateKey])
+  @@map("fortune_quota")
+}
+
+// 使用历史记录
+model FortuneUsage {
+  id              String   @id @default(cuid())
+  userId          String?
+  guestId         String?
+  dateKey         String
+  theme           String
+  mood            String
+  length          String
+  hasCustomPrompt Boolean  @default(false)
+  source          String?
+  createdAt       DateTime @default(now())
+  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([dateKey])
+  @@index([userId])
+  @@index([guestId])
+  @@map("fortune_usage")
+}

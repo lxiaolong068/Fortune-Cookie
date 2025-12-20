@@ -12,6 +12,14 @@ import {
 } from "@/lib/redis-cache";
 import { EdgeCacheManager, CachePerformanceMonitor } from "@/lib/edge-cache";
 import { createSuccessResponse, createErrorResponse } from "@/types/api";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import {
+  consumeDailyQuota,
+  recordFortuneUsage,
+  resolveGuestId,
+  type QuotaIdentity,
+} from "@/lib/quota";
 import {
   validateApiKey,
   getEnhancedRateLimit,
@@ -84,6 +92,8 @@ export async function POST(request: NextRequest) {
         { status: 401 },
       );
     }
+
+    const session = await getServerSession(authOptions);
 
     // Get authentication tier and enhanced rate limit
     const authTier = getAuthTier(request);
@@ -195,6 +205,37 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const quotaIdentity: QuotaIdentity = session?.user?.id
+      ? { isAuthenticated: true, userId: session.user.id }
+      : { isAuthenticated: false, guestId: resolveGuestId(request) };
+
+    const quotaResult = await consumeDailyQuota(quotaIdentity);
+    if (!quotaResult.allowed) {
+      captureUserAction("daily_quota_exceeded", "fortune_api", clientId, {
+        authTier,
+        apiKey: maskedKey,
+        limit: quotaResult.quota.limit,
+        used: quotaResult.quota.used,
+        resetAtUtc: quotaResult.quota.resetsAtUtc,
+        userId: quotaIdentity.userId,
+        guestId: quotaIdentity.guestId,
+      });
+
+      const message = quotaResult.quota.isAuthenticated
+        ? "You have reached your daily fortune limit. Please try again tomorrow (UTC)."
+        : "You have reached the guest daily limit. Sign in to get more fortunes today.";
+
+      return NextResponse.json(
+        createErrorResponse(message, {
+          quota: quotaResult.quota,
+          suggestion: quotaResult.quota.isAuthenticated
+            ? "Daily quota resets at 00:00 UTC."
+            : "Sign in with Google to get a higher daily limit.",
+        }),
+        { status: 429 },
+      );
+    }
+
     const fortuneRequest: FortuneRequest = {
       theme: theme as FortuneRequest["theme"],
       mood: mood as FortuneRequest["mood"],
@@ -291,6 +332,19 @@ export async function POST(request: NextRequest) {
       cached: !!fortune.cached,
     });
 
+    try {
+      await recordFortuneUsage({
+        identity: quotaIdentity,
+        theme,
+        mood,
+        length,
+        hasCustomPrompt: !!customPrompt,
+        source: fortune.source || "unknown",
+      });
+    } catch (usageError) {
+      console.warn("Failed to record fortune usage:", usageError);
+    }
+
     // Create optimized response with consistent envelope
     const responseData = createSuccessResponse(fortune, {
       cached: !!fortune.cached,
@@ -298,6 +352,7 @@ export async function POST(request: NextRequest) {
       responseTime,
       source: fortune.source || "unknown",
       aiError: fortune.aiError,
+      quota: quotaResult.quota,
     });
 
     const response = EdgeCacheManager.optimizeApiResponse(
@@ -306,12 +361,20 @@ export async function POST(request: NextRequest) {
       fortuneRequest.customPrompt || fortune?.source !== "ai" ? 0 : 300, // Only edge-cache real AI results
     );
 
+    // Disable edge caching when quota metadata is included (user-specific response).
+    response.headers.set("Cache-Control", "no-store, private");
+    response.headers.set("CDN-Cache-Control", "no-store");
+    response.headers.set(
+      "Vary",
+      "Accept-Encoding, Authorization, X-Client-Id",
+    );
+
     // CORS headers
     response.headers.set("Access-Control-Allow-Origin", getCorsOrigin());
     response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
     response.headers.set(
       "Access-Control-Allow-Headers",
-      "Content-Type, Authorization, X-Requested-With",
+      "Content-Type, Authorization, X-Requested-With, X-Client-Id",
     );
     response.headers.set("Access-Control-Max-Age", "86400");
 
@@ -432,7 +495,7 @@ export async function OPTIONS() {
       "Access-Control-Allow-Origin": getCorsOrigin(),
       "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
       "Access-Control-Allow-Headers":
-        "Content-Type, Authorization, X-Requested-With",
+        "Content-Type, Authorization, X-Requested-With, X-Client-Id",
       "Access-Control-Max-Age": "86400",
       "X-Content-Type-Options": "nosniff",
       "X-Frame-Options": "DENY",

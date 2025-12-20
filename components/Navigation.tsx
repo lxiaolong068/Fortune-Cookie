@@ -15,11 +15,14 @@ import {
   Search,
   User,
   BookOpen,
+  LogIn,
+  LogOut,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { ThemeToggle } from "./ThemeToggle";
+import { startGoogleSignIn, startSignOut, useAuthSession } from "@/lib/auth-client";
 
 const navigationItems = [
   {
@@ -75,6 +78,8 @@ const navigationItems = [
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { status } = useAuthSession();
+  const isAuthenticated = status === "authenticated";
 
   return (
     <>
@@ -119,6 +124,29 @@ export function Navigation() {
 
             {/* Theme toggle and offline status indicator */}
             <div className="flex items-center gap-2 ml-3 pl-3 border-l border-amber-200">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() =>
+                  isAuthenticated ? startSignOut() : startGoogleSignIn()
+                }
+                className="text-gray-600 hover:text-amber-600"
+                aria-label={
+                  isAuthenticated ? "Sign out of your account" : "Sign in with Google"
+                }
+              >
+                {isAuthenticated ? (
+                  <>
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Sign out
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="w-4 h-4 mr-1" />
+                    Sign in
+                  </>
+                )}
+              </Button>
               <ThemeToggle />
               <OfflineIndicator />
             </div>
@@ -217,6 +245,32 @@ export function Navigation() {
 
                 {/* Mobile bottom decoration */}
                 <div className="absolute bottom-6 left-6 right-6">
+                  <div className="mb-6">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-center border-amber-200 text-amber-700 hover:bg-amber-50"
+                      onClick={() =>
+                        isAuthenticated ? startSignOut() : startGoogleSignIn()
+                      }
+                      aria-label={
+                        isAuthenticated
+                          ? "Sign out of your account"
+                          : "Sign in with Google"
+                      }
+                    >
+                      {isAuthenticated ? (
+                        <>
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign out
+                        </>
+                      ) : (
+                        <>
+                          <LogIn className="w-4 h-4 mr-2" />
+                          Sign in with Google
+                        </>
+                      )}
+                    </Button>
+                  </div>
                   <div className="text-center">
                     <motion.div
                       animate={{ rotate: 360 }}

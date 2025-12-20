@@ -97,6 +97,7 @@ function handleApiCaching(
   nonce: string,
 ): NextResponse {
   const { pathname, searchParams } = request.nextUrl;
+  const isAuthRoute = pathname.startsWith("/api/auth");
 
   // 检查是否是可缓存的API路径
   const isCacheable = CACHEABLE_PATHS.some((path) => pathname.startsWith(path));
@@ -104,7 +105,9 @@ function handleApiCaching(
   if (!isCacheable) {
     const response = NextResponse.next();
     addServerTiming(response, startTime, "api-uncacheable");
-    addSecurityHeaders(response, nonce);
+    addSecurityHeaders(response, nonce, {
+      includeFormAction: !isAuthRoute,
+    });
     return response;
   }
 
@@ -127,7 +130,9 @@ function handleApiCaching(
       },
     });
     addServerTiming(response, startTime, "api-304");
-    addSecurityHeaders(response, nonce);
+    addSecurityHeaders(response, nonce, {
+      includeFormAction: !isAuthRoute,
+    });
     return response;
   }
 
@@ -166,12 +171,19 @@ function handleApiCaching(
   response.headers.set("Vary", "Accept-Encoding, Accept");
 
   addServerTiming(response, startTime, "api-cacheable");
-  addSecurityHeaders(response, nonce);
+  addSecurityHeaders(response, nonce, {
+    includeFormAction: !isAuthRoute,
+  });
   return response;
 }
 
 // 添加安全标头（包括 CSP Nonce）
-function addSecurityHeaders(response: NextResponse, nonce: string): void {
+function addSecurityHeaders(
+  response: NextResponse,
+  nonce: string,
+  options?: { includeFormAction?: boolean },
+): void {
+  const includeFormAction = options?.includeFormAction ?? true;
   // 将 nonce 添加到响应头，供页面使用
   response.headers.set("x-nonce", nonce);
 
@@ -196,7 +208,7 @@ function addSecurityHeaders(response: NextResponse, nonce: string): void {
     "media-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
+    includeFormAction ? "form-action 'self'" : "",
     isDev ? "" : "frame-ancestors 'none'",
     isDev ? "" : "upgrade-insecure-requests",
   ]

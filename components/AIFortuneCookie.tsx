@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
@@ -17,6 +17,7 @@ import { Textarea } from "./ui/textarea";
 import { cn } from "@/lib/utils";
 import { sessionManager } from "@/lib/session-manager";
 import { captureUserAction } from "@/lib/error-monitoring";
+import { startGoogleSignIn, useAuthSession } from "@/lib/auth-client";
 
 // Dynamic imports for Lucide icons (~10KB saved)
 // Icons are lazy loaded with emoji fallbacks for better initial load performance
@@ -86,6 +87,14 @@ interface Fortune {
   };
 }
 
+interface QuotaStatus {
+  limit: number;
+  used: number;
+  remaining: number;
+  resetsAtUtc: string;
+  isAuthenticated: boolean;
+}
+
 type CookieState = "unopened" | "cracking" | "opened";
 type Theme =
   | "funny"
@@ -145,9 +154,47 @@ export function AIFortuneCookie() {
     "ai" | "offline" | null
   >(null);
   const [generationError, setGenerationError] = useState<string | null>(null);
+  const [quotaStatus, setQuotaStatus] = useState<QuotaStatus | null>(null);
+  const [isQuotaLoading, setIsQuotaLoading] = useState(false);
+  const { status: authStatus } = useAuthSession();
+
+  useEffect(() => {
+    const loadQuota = async () => {
+      setIsQuotaLoading(true);
+      try {
+        const localSession = await sessionManager.initializeSession();
+        const response = await fetch("/api/fortune/quota", {
+          method: "GET",
+          headers: {
+            "X-Client-Id": localSession.userId,
+          },
+        });
+        const json = await response.json().catch(() => null);
+        const data =
+          json && typeof json === "object" && "data" in json ? json.data : json;
+        if (response.ok && data) {
+          setQuotaStatus(data as QuotaStatus);
+        }
+      } catch (error) {
+        console.error("Failed to load quota status:", error);
+      } finally {
+        setIsQuotaLoading(false);
+      }
+    };
+
+    void loadQuota();
+  }, [authStatus]);
 
   const generateFortune = async () => {
     if (state !== "unopened" || isGenerating) return;
+
+    if (quotaStatus && quotaStatus.remaining <= 0) {
+      const message = quotaStatus.isAuthenticated
+        ? "Daily limit reached. Please try again tomorrow (UTC)."
+        : "Guest limit reached. Sign in to generate more fortunes today.";
+      setGenerationError(message);
+      return;
+    }
 
     setIsGenerating(true);
     setState("cracking");
@@ -155,10 +202,12 @@ export function AIFortuneCookie() {
     setGenerationSource(null);
 
     try {
+      const localSession = await sessionManager.initializeSession();
       const response = await fetch("/api/fortune", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Client-Id": localSession.userId,
         },
         body: JSON.stringify({
           theme: selectedTheme,
@@ -169,6 +218,10 @@ export function AIFortuneCookie() {
       });
 
       const json = await response.json().catch(() => null);
+
+      if (json?.meta?.quota) {
+        setQuotaStatus(json.meta.quota as QuotaStatus);
+      }
 
       if (!response.ok) {
         const apiMessage =
@@ -183,6 +236,14 @@ export function AIFortuneCookie() {
                 typeof json.error === "string"
               ? json.error
               : `Request failed (${response.status})`;
+        const isQuotaError =
+          response.status === 429 && !!(json && json.meta && json.meta.quota);
+        if (isQuotaError) {
+          setGenerationError(apiMessage);
+          setIsGenerating(false);
+          setState("unopened");
+          return;
+        }
         throw new Error(apiMessage);
       }
 
@@ -209,7 +270,6 @@ export function AIFortuneCookie() {
 
       // Add to user history
       try {
-        await sessionManager.initializeSession();
         sessionManager.addFortuneToHistory({
           fortuneId: undefined,
           message: fortune.message,
@@ -259,7 +319,6 @@ export function AIFortuneCookie() {
 
       // Add fallback fortune to history
       try {
-        await sessionManager.initializeSession();
         sessionManager.addFortuneToHistory({
           fortuneId: undefined,
           message: fallbackFortune.message,
@@ -301,6 +360,12 @@ export function AIFortuneCookie() {
   };
 
   const ThemeIcon = themeConfig[selectedTheme].icon;
+  const hasQuota = !quotaStatus || quotaStatus.remaining > 0;
+  const isAuthenticated =
+    quotaStatus?.isAuthenticated ?? authStatus === "authenticated";
+  const quotaResetLabel = quotaStatus
+    ? new Date(quotaStatus.resetsAtUtc).toUTCString()
+    : "";
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-orange-50/80 to-amber-100/80 backdrop-blur-sm">
@@ -321,6 +386,48 @@ export function AIFortuneCookie() {
               }}
               className="flex flex-col items-center max-w-md w-full"
             >
+              <Card className="w-full mb-4 bg-white/90 backdrop-blur-sm border-amber-200">
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700">
+                        Daily quota
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {isQuotaLoading || !quotaStatus
+                          ? "Loading quota..."
+                          : `${quotaStatus.remaining} of ${quotaStatus.limit} remaining`}
+                      </p>
+                    </div>
+                    {isAuthenticated ? (
+                      <Badge className="bg-green-100 text-green-700">
+                        Signed in
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-amber-100 text-amber-700">
+                        Guest
+                      </Badge>
+                    )}
+                  </div>
+                  {quotaStatus && (
+                    <div className="text-xs text-gray-500">
+                      Resets at {quotaResetLabel}
+                    </div>
+                  )}
+                  {!isAuthenticated && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-amber-200 text-amber-700 hover:bg-amber-50"
+                      onClick={startGoogleSignIn}
+                      aria-label="Sign in with Google"
+                    >
+                      Sign in for 10/day
+                    </Button>
+                  )}
+                </div>
+              </Card>
+
               {/* Theme Selection */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -338,6 +445,7 @@ export function AIFortuneCookie() {
                       size="sm"
                       onClick={() => setShowCustomization(!showCustomization)}
                       className="text-amber-600 hover:text-amber-700"
+                      aria-label="Customize fortune request"
                     >
                       <Wand2 className="w-4 h-4 mr-1" />
                       Customize
@@ -421,7 +529,12 @@ export function AIFortuneCookie() {
                   },
                 }}
                 onClick={generateFortune}
-                className="cursor-pointer mb-8 relative"
+                className={cn(
+                  "cursor-pointer mb-8 relative",
+                  !hasQuota && "opacity-60 cursor-not-allowed",
+                )}
+                role="button"
+                aria-label="Generate fortune cookie"
               >
                 <div className="relative">
                   {/* Cookie Shadow */}
@@ -479,6 +592,11 @@ export function AIFortuneCookie() {
                 <p className="text-amber-700 mb-4">
                   Tap the cookie to generate your personalized fortune!
                 </p>
+                {generationError && (
+                  <p className="text-xs text-amber-600 mb-3">
+                    {generationError}
+                  </p>
+                )}
                 <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-50/80 to-yellow-50/80 backdrop-blur-sm border border-amber-200/50">
                   <Sparkles className="w-4 h-4 text-amber-500" />
                   <span className="text-sm text-amber-700 font-medium">
@@ -661,6 +779,7 @@ export function AIFortuneCookie() {
                   <Button
                     onClick={getNewCookie}
                     className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-6 py-2 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105"
+                    aria-label="Generate another fortune"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Generate Another Fortune
