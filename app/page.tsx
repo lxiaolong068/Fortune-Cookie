@@ -5,6 +5,7 @@ import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects"
 import { WebApplicationStructuredData } from "@/components/StructuredData";
 import { generateSEOMetadata } from "@/components/SEO";
 import { FortuneCookieStatic } from "@/components/FortuneCookieStatic";
+import { DeferredMount } from "@/components/DeferredMount";
 
 // Optimize for Edge Runtime - faster TTFB
 export const runtime = "edge";
@@ -60,7 +61,9 @@ export default function HomePage() {
 
       <main className="min-h-screen w-full overflow-x-hidden relative">
         {/* Background effects - deferred loading */}
-        <DynamicBackgroundEffects />
+        <DeferredMount delay={2500}>
+          <DynamicBackgroundEffects />
+        </DeferredMount>
 
         {/*
           Progressive Enhancement Container
@@ -72,7 +75,9 @@ export default function HomePage() {
 
           {/* Phase 2: Interactive Layer - Client-Side Hydration */}
           <Suspense fallback={null}>
-            <FortuneCookieInteractive />
+            <DeferredMount delay={2000}>
+              <FortuneCookieInteractive />
+            </DeferredMount>
           </Suspense>
         </div>
 

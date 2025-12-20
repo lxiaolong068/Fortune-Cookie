@@ -13,7 +13,7 @@ import {
 } from "@/lib/site";
 import { getBlobUrl } from "@/lib/blob-urls";
 import { CriticalCSS } from "@/components/CriticalCSS";
-import { Navigation } from "@/components/Navigation";
+import { NavigationFallback } from "@/components/NavigationFallback";
 import {
   OrganizationStructuredData,
   WebsiteStructuredData,
@@ -24,6 +24,13 @@ import { Toaster } from "@/components/ui/sonner";
 const Footer = dynamic(
   () => import("@/components/Footer").then((mod) => ({ default: mod.Footer })),
   { ssr: true },
+);
+const Navigation = dynamic(
+  () =>
+    import("@/components/Navigation").then((mod) => ({
+      default: mod.Navigation,
+    })),
+  { ssr: false, loading: () => <NavigationFallback /> },
 );
 const PerformanceMonitor = dynamic(
   () =>
@@ -178,14 +185,6 @@ export default function RootLayout({
         {/* Global structured data for Google Rich Results */}
         <WebsiteStructuredData nonce={nonce} />
         <OrganizationStructuredData nonce={nonce} />
-
-        {/* Preload critical LCP resources - highest priority for performance */}
-        <link
-          rel="preload"
-          as="image"
-          href={getBlobUrl("/images/fortune-cookie-hero.svg")}
-          fetchPriority="high"
-        />
 
         {/* Preconnect to critical origins for faster resource loading */}
         <link

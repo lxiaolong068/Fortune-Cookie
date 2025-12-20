@@ -17,6 +17,29 @@ type WebVitalsMetric = {
 // Core Web Vitals monitoring
 export function PerformanceMonitor() {
   useEffect(() => {
+    let latestLcpEntry: PerformanceEntry | null = null
+    let lcpReported = false
+
+    const getLcpElementData = (entry: PerformanceEntry) => {
+      const lcpEntry = entry as PerformanceEntry & {
+        element?: Element
+        url?: string
+        size?: number
+      }
+      const element = lcpEntry.element
+      if (!element || !(element instanceof HTMLElement)) {
+        return null
+      }
+
+      return {
+        tagName: element.tagName.toLowerCase(),
+        id: element.id || undefined,
+        className: element.className ? String(element.className).slice(0, 200) : undefined,
+        url: lcpEntry.url,
+        size: lcpEntry.size,
+      }
+    }
+
     // Web Vitals monitoring (web-vitals v5 API)
     import('web-vitals').then(({ onCLS, onFCP, onLCP, onTTFB, onINP }) => {
       function sendToAnalytics(metric: WebVitalsMetric) {
@@ -64,6 +87,18 @@ export function PerformanceMonitor() {
           rating: metric.rating,
           id: metric.id,
         })
+
+        if (metric.name === 'LCP' && latestLcpEntry && !lcpReported) {
+          const elementData = getLcpElementData(latestLcpEntry)
+          if (elementData) {
+            captureBusinessEvent('lcp_element_detected', {
+              ...elementData,
+              value: metric.value,
+              rating: metric.rating,
+            })
+          }
+          lcpReported = true
+        }
 
         // Only send to external services in production
         if (process.env.NODE_ENV === 'production') {
@@ -134,6 +169,17 @@ export function PerformanceMonitor() {
 
     // Performance observer for additional metrics
     if ('PerformanceObserver' in window) {
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries()
+        latestLcpEntry = entries[entries.length - 1] ?? null
+      })
+
+      try {
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true })
+      } catch {
+        // LCP observer not supported
+      }
+
       // Monitor long tasks
       const longTaskObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
