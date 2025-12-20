@@ -60,10 +60,8 @@ export default function HomePage() {
       <WebApplicationStructuredData />
 
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        {/* Background effects - deferred loading */}
-        <DeferredMount delay={2500}>
-          <DynamicBackgroundEffects />
-        </DeferredMount>
+        {/* Background effects - static first, animated after idle */}
+        <DynamicBackgroundEffects />
 
         {/*
           Progressive Enhancement Container
@@ -75,7 +73,7 @@ export default function HomePage() {
 
           {/* Phase 2: Interactive Layer - Client-Side Hydration */}
           <Suspense fallback={null}>
-            <DeferredMount delay={2000}>
+            <DeferredMount delay={3000} useIdle={false}>
               <FortuneCookieInteractive />
             </DeferredMount>
           </Suspense>

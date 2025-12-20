@@ -19,6 +19,11 @@ export function PerformanceMonitor() {
   useEffect(() => {
     let latestLcpEntry: PerformanceEntry | null = null
     let lcpReported = false
+    let lcpObserver: PerformanceObserver | null = null
+    let longTaskObserver: PerformanceObserver | null = null
+    let layoutShiftObserver: PerformanceObserver | null = null
+    let resourceObserver: PerformanceObserver | null = null
+    let navigationObserver: PerformanceObserver | null = null
 
     const getLcpElementData = (entry: PerformanceEntry) => {
       const lcpEntry = entry as PerformanceEntry & {
@@ -169,7 +174,7 @@ export function PerformanceMonitor() {
 
     // Performance observer for additional metrics
     if ('PerformanceObserver' in window) {
-      const lcpObserver = new PerformanceObserver((list) => {
+      lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries()
         latestLcpEntry = entries[entries.length - 1] ?? null
       })
@@ -181,7 +186,7 @@ export function PerformanceMonitor() {
       }
 
       // Monitor long tasks
-      const longTaskObserver = new PerformanceObserver((list) => {
+      longTaskObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (entry.duration > 50) {
             console.warn('Long task detected:', entry)
@@ -211,7 +216,7 @@ export function PerformanceMonitor() {
       }
 
       // Monitor layout shifts
-      const layoutShiftObserver = new PerformanceObserver((list) => {
+      layoutShiftObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const layoutShift = entry as PerformanceEntry & { hadRecentInput?: boolean }
           if (layoutShift.hadRecentInput) continue
@@ -226,7 +231,7 @@ export function PerformanceMonitor() {
       }
 
       // Monitor resource timing
-      const resourceObserver = new PerformanceObserver((list) => {
+      resourceObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const resource = entry as PerformanceResourceTiming
 
@@ -265,7 +270,7 @@ export function PerformanceMonitor() {
       }
 
       // Monitor navigation timing
-      const navigationObserver = new PerformanceObserver((list) => {
+      navigationObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const nav = entry as PerformanceNavigationTiming
 
@@ -309,6 +314,14 @@ export function PerformanceMonitor() {
       } catch {
         // Navigation observer not supported
       }
+    }
+
+    return () => {
+      lcpObserver?.disconnect()
+      longTaskObserver?.disconnect()
+      layoutShiftObserver?.disconnect()
+      resourceObserver?.disconnect()
+      navigationObserver?.disconnect()
     }
   }, [])
 

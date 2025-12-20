@@ -112,11 +112,11 @@ export function CriticalCSS() {
           @keyframes magicPulse {
             0%, 100% {
               transform: scale(1);
-              box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.2);
+              opacity: 0.9;
             }
             50% {
-              transform: scale(1.02);
-              box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.4);
+              transform: scale(1.03);
+              opacity: 1;
             }
           }
 

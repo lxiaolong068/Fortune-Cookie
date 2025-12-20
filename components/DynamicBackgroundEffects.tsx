@@ -1,19 +1,79 @@
 "use client";
 
-import dynamic from 'next/dynamic';
-import { StaticBackground } from './StaticBackground';
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { StaticBackground } from "./StaticBackground";
 
 /**
  * Dynamic Background Effects Component
- * Lazy-loads the heavy BackgroundEffects component to improve LCP and reduce above-the-fold JS
- * Falls back to StaticBackground while loading
+ * - Renders a static background immediately.
+ * - Only loads animated effects on capable devices after idle time.
  */
 const BackgroundEffects = dynamic(
-  () => import('./BackgroundEffects').then(mod => ({ default: mod.BackgroundEffects })),
+  () =>
+    import("./BackgroundEffects").then((mod) => ({
+      default: mod.BackgroundEffects,
+    })),
   {
-    ssr: false, // Disable SSR to avoid hydration issues and improve initial load
-    loading: () => <StaticBackground />, // Show static background while loading
-  }
+    ssr: false,
+    loading: () => <StaticBackground />,
+  },
 );
 
-export { BackgroundEffects as DynamicBackgroundEffects };
+type DynamicBackgroundEffectsProps = {
+  idleDelay?: number;
+};
+
+export function DynamicBackgroundEffects({
+  idleDelay = 2500,
+}: DynamicBackgroundEffectsProps) {
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const isMobile = window.innerWidth < 768;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    type NavigatorWithConnection = Navigator & {
+      connection?: { saveData?: boolean };
+    };
+    const connection = (navigator as NavigatorWithConnection).connection;
+    const saveData = Boolean(connection?.saveData);
+
+    if (isMobile || prefersReducedMotion || saveData) {
+      return;
+    }
+
+    const requestIdle = (window as typeof window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    }).requestIdleCallback;
+
+    if (typeof requestIdle === "function") {
+      const handle = requestIdle(() => setShouldAnimate(true), {
+        timeout: idleDelay,
+      });
+      return () => {
+        if (typeof window.cancelIdleCallback === "function") {
+          window.cancelIdleCallback(handle);
+        }
+      };
+    }
+
+    const timeoutHandle = window.setTimeout(() => {
+      setShouldAnimate(true);
+    }, idleDelay);
+
+    return () => {
+      window.clearTimeout(timeoutHandle);
+    };
+  }, [idleDelay]);
+
+  if (!shouldAnimate) {
+    return <StaticBackground />;
+  }
+
+  return <BackgroundEffects />;
+}

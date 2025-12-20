@@ -5,6 +5,7 @@ import { PropsWithChildren, useEffect, useState } from "react";
 type DeferredMountProps = PropsWithChildren<{
   delay?: number;
   triggerOnInteraction?: boolean;
+  useIdle?: boolean;
 }>;
 
 type RequestIdleCallback = (
@@ -17,6 +18,7 @@ export function DeferredMount({
   children,
   delay = 2000,
   triggerOnInteraction = true,
+  useIdle = true,
 }: DeferredMountProps) {
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -33,21 +35,25 @@ export function DeferredMount({
 
     const reveal = () => setShouldRender(true);
 
-    const requestIdle = (window as typeof window & {
-      requestIdleCallback?: RequestIdleCallback;
-    }).requestIdleCallback;
+    if (useIdle) {
+      const requestIdle = (window as typeof window & {
+        requestIdleCallback?: RequestIdleCallback;
+      }).requestIdleCallback;
 
-    if (typeof requestIdle === "function") {
-      idleHandle = requestIdle(reveal, { timeout: delay });
-      handleType = "idle";
-    } else {
-      idleHandle = setTimeout(reveal, delay);
-      handleType = "timeout";
+      if (typeof requestIdle === "function") {
+        idleHandle = requestIdle(reveal, { timeout: delay });
+        handleType = "idle";
+      } else {
+        idleHandle = setTimeout(reveal, delay);
+        handleType = "timeout";
+      }
     }
 
-    events.forEach((event) => {
-      window.addEventListener(event, reveal, { once: true, passive: true });
-    });
+    if (triggerOnInteraction) {
+      events.forEach((event) => {
+        window.addEventListener(event, reveal, { once: true, passive: true });
+      });
+    }
 
     return () => {
       if (idleHandle !== null) {
@@ -63,11 +69,13 @@ export function DeferredMount({
         }
       }
 
-      events.forEach((event) => {
-        window.removeEventListener(event, reveal);
-      });
+      if (triggerOnInteraction) {
+        events.forEach((event) => {
+          window.removeEventListener(event, reveal);
+        });
+      }
     };
-  }, [delay, shouldRender, triggerOnInteraction]);
+  }, [delay, shouldRender, triggerOnInteraction, useIdle]);
 
   if (!shouldRender) {
     return null;
