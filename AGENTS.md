@@ -5,10 +5,12 @@ This Next.js app powers Fortune Cookie AI; use these guardrails to ship confiden
 ## Project Structure & Module Organization
 - `app/` hosts App Router routes, metadata, and server actions.
 - `app/browse/category/[category]/` contains dynamic category pages for browsing fortunes by category.
+- `app/api/auth/[...nextauth]/` implements NextAuth routes; `app/api/fortune/quota/` exposes quota status.
 - `components/` houses shared Tailwind UI, while `lib/` centralizes utilities such as SEO helpers and rate limiting.
 - `components/blog/` contains MDX blog components (`BlogCard.tsx`, `MDXComponents.tsx`).
 - `content/blog/` stores MDX blog posts with frontmatter metadata.
 - `prisma/` stores the schema and migrations; database seeding lives in `scripts/seed-database.ts`.
+- `lib/auth.ts` and `lib/auth-client.ts` manage server/client auth helpers; `lib/quota.ts` tracks daily usage.
 - Unit specs sit in `__tests__/`, Playwright journeys in `tests/e2e/`, and public assets in `public/`.
 
 ## Build, Test, and Development Commands
@@ -35,6 +37,8 @@ This Next.js app powers Fortune Cookie AI; use these guardrails to ship confiden
 
 ## Configuration & Environment
 - Copy `.env.example` to `.env.local` and supply Upstash, Prisma, and analytics keys before running seeds.
+- Auth requires `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `GOOGLE_CLIENT_ID`, and `GOOGLE_CLIENT_SECRET`.
+- Quota settings use `AUTH_DAILY_LIMIT` and `GUEST_DAILY_LIMIT` (UTC reset).
 - Use `npm run db:migrate` for schema work, followed by `npm run db:seed` (or `db:seed:clean`) to refresh fixtures.
 
 ## Blog Feature
@@ -46,6 +50,7 @@ This Next.js app powers Fortune Cookie AI; use these guardrails to ship confiden
 
 ## Security & Accessibility
 - **CSP Headers**: Dynamic nonce generated in `middleware.ts` for inline scripts; COOP, COEP, CORP headers configured for production security.
+- **Auth CSP Exception**: `/api/auth/*` skips the `form-action` directive to allow OAuth POSTs.
 - **Trusted Types**: Temporarily disabled due to Next.js 14 + Framer Motion incompatibility; see `middleware.ts` comments.
 - **Accessibility**: All interactive buttons must include `aria-label` attributes; navigation toggle uses `aria-expanded` for screen reader support.
 - **AdSense Optimization**: Use `OptimizedAdSense` component (Facade pattern) to defer AdSense loading and improve LCP.

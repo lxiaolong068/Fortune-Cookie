@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import {
   Sparkles,
   Search,
@@ -23,6 +24,9 @@ import {
   Users,
   Plane,
   Activity,
+  Clock,
+  Flame,
+  SortAsc,
 } from "lucide-react";
 import { searchFortunes, getDatabaseStats } from "@/lib/fortune-database";
 
@@ -129,7 +133,7 @@ export default function BrowsePage() {
 
             {/* 搜索和筛选 */}
             <Card className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 mb-8">
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
@@ -137,6 +141,7 @@ export default function BrowsePage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
+                    aria-label="Search fortune messages"
                   />
                 </div>
 
@@ -144,7 +149,7 @@ export default function BrowsePage() {
                   value={selectedCategory}
                   onValueChange={setSelectedCategory}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger aria-label="Filter by category">
                     <SelectValue placeholder="All Categories" />
                   </SelectTrigger>
                   <SelectContent>
@@ -166,37 +171,79 @@ export default function BrowsePage() {
                     )}
                   </SelectContent>
                 </Select>
-
-                <Select
-                  value={sortBy}
-                  onValueChange={(value) => {
-                    if (
-                      value === "popularity" ||
-                      value === "recent" ||
-                      value === "alphabetical"
-                    ) {
-                      setSortBy(value);
-                    }
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="popularity">Most Popular</SelectItem>
-                    <SelectItem value="recent">Most Recent</SelectItem>
-                    <SelectItem value="alphabetical">A-Z</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             </Card>
 
-            {/* 结果 */}
-            <div className="mb-6">
-              <p className="text-gray-600">
+            {/* Filter Tabs and Results Count */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              {/* Quick Filter Tabs */}
+              <div
+                className="flex gap-2"
+                role="tablist"
+                aria-label="Sort fortunes"
+              >
+                <Button
+                  variant={sortBy === "popularity" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSortBy("popularity")}
+                  className={
+                    sortBy === "popularity"
+                      ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                      : ""
+                  }
+                  role="tab"
+                  aria-selected={sortBy === "popularity"}
+                  aria-label="Sort by most popular"
+                >
+                  <Flame className="w-4 h-4 mr-1.5" aria-hidden="true" />
+                  Popular
+                </Button>
+                <Button
+                  variant={sortBy === "recent" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSortBy("recent")}
+                  className={
+                    sortBy === "recent"
+                      ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                      : ""
+                  }
+                  role="tab"
+                  aria-selected={sortBy === "recent"}
+                  aria-label="Sort by most recent"
+                >
+                  <Clock className="w-4 h-4 mr-1.5" aria-hidden="true" />
+                  Recent
+                </Button>
+                <Button
+                  variant={sortBy === "alphabetical" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSortBy("alphabetical")}
+                  className={
+                    sortBy === "alphabetical"
+                      ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                      : ""
+                  }
+                  role="tab"
+                  aria-selected={sortBy === "alphabetical"}
+                  aria-label="Sort alphabetically"
+                >
+                  <SortAsc className="w-4 h-4 mr-1.5" aria-hidden="true" />
+                  A-Z
+                </Button>
+              </div>
+
+              {/* Results Count */}
+              <p className="text-gray-600 text-sm">
                 Showing {filteredAndSortedFortunes.length} results
-                {searchQuery && ` for "${searchQuery}"`}
-                {selectedCategory !== "all" && ` in ${selectedCategory}`}
+                {searchQuery && (
+                  <span className="font-medium">
+                    {" "}
+                    for &ldquo;{searchQuery}&rdquo;
+                  </span>
+                )}
+                {selectedCategory !== "all" && (
+                  <span className="font-medium"> in {selectedCategory}</span>
+                )}
               </p>
             </div>
 

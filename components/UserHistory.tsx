@@ -1,166 +1,204 @@
-'use client'
+"use client";
 
-import { useState, useEffect, useCallback } from 'react'
-import { Clock, Heart, Share2, Trash2, Download, Filter, Search } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
-import { sessionManager, type FortuneHistory } from '@/lib/session-manager'
-import { captureUserAction } from '@/lib/error-monitoring'
+import { useState, useEffect, useCallback } from "react";
+import {
+  Clock,
+  Heart,
+  Share2,
+  Trash2,
+  Download,
+  Filter,
+  Search,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "@/components/ui/sonner";
+import { sessionManager, type FortuneHistory } from "@/lib/session-manager";
+import { captureUserAction } from "@/lib/error-monitoring";
 
 interface UserHistoryProps {
-  className?: string
-  limit?: number
-  showControls?: boolean
+  className?: string;
+  limit?: number;
+  showControls?: boolean;
 }
 
-export function UserHistory({ className, limit, showControls = true }: UserHistoryProps) {
-  const [history, setHistory] = useState<FortuneHistory[]>([])
-  const [filteredHistory, setFilteredHistory] = useState<FortuneHistory[]>([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [categoryFilter, setCategoryFilter] = useState<string>('all')
-  const [sourceFilter, setSourceFilter] = useState<string>('all')
-  const [isLoading, setIsLoading] = useState(true)
+export function UserHistory({
+  className,
+  limit,
+  showControls = true,
+}: UserHistoryProps) {
+  const [history, setHistory] = useState<FortuneHistory[]>([]);
+  const [filteredHistory, setFilteredHistory] = useState<FortuneHistory[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadHistory = useCallback(async () => {
     try {
-      setIsLoading(true)
-      await sessionManager.initializeSession()
-      const userHistory = sessionManager.getHistory(limit)
-      setHistory(userHistory)
+      setIsLoading(true);
+      await sessionManager.initializeSession();
+      const userHistory = sessionManager.getHistory(limit);
+      setHistory(userHistory);
     } catch (error) {
-      console.error('Failed to load history:', error)
+      console.error("Failed to load history:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [limit])
+  }, [limit]);
 
   useEffect(() => {
-    void loadHistory()
-  }, [loadHistory])
+    void loadHistory();
+  }, [loadHistory]);
 
   useEffect(() => {
-    let filtered = [...history]
+    let filtered = [...history];
 
     // Search filter
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(item =>
-        item.message.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query) ||
-        item.tags?.some(tag => tag.toLowerCase().includes(query))
-      )
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (item) =>
+          item.message.toLowerCase().includes(query) ||
+          item.category.toLowerCase().includes(query) ||
+          item.tags?.some((tag) => tag.toLowerCase().includes(query)),
+      );
     }
 
     // Category filter
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter(item => item.category === categoryFilter)
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter((item) => item.category === categoryFilter);
     }
 
     // Source filter
-    if (sourceFilter !== 'all') {
-      filtered = filtered.filter(item => item.source === sourceFilter)
+    if (sourceFilter !== "all") {
+      filtered = filtered.filter((item) => item.source === sourceFilter);
     }
 
-    setFilteredHistory(filtered)
-  }, [history, searchQuery, categoryFilter, sourceFilter])
+    setFilteredHistory(filtered);
+  }, [history, searchQuery, categoryFilter, sourceFilter]);
 
   const handleLike = (fortuneId: string) => {
-    sessionManager.likeFortuneInHistory(fortuneId)
-    loadHistory()
-    captureUserAction('fortune_liked_from_history', 'user_history')
-  }
+    sessionManager.likeFortuneInHistory(fortuneId);
+    loadHistory();
+    captureUserAction("fortune_liked_from_history", "user_history");
+  };
 
   const handleShare = async (fortune: FortuneHistory) => {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: 'Fortune Cookie AI - Fortune Cookie',
+          title: "Fortune Cookie AI - Fortune Cookie",
           text: fortune.message,
           url: window.location.origin,
-        })
+        });
+        toast.success("Fortune shared successfully!");
       } else {
         await navigator.clipboard.writeText(
-          `${fortune.message}\n\nFrom Fortune Cookie AI - ${window.location.origin}`
-        )
+          `${fortune.message}\n\nFrom Fortune Cookie AI - ${window.location.origin}`,
+        );
+        toast.success("Fortune copied to clipboard!");
       }
-      
-      sessionManager.shareFortuneInHistory(fortune.id)
-      loadHistory()
-      captureUserAction('fortune_shared_from_history', 'user_history')
+
+      sessionManager.shareFortuneInHistory(fortune.id);
+      loadHistory();
+      captureUserAction("fortune_shared_from_history", "user_history");
     } catch (error) {
-      console.error('Failed to share fortune:', error)
+      if (error instanceof Error && error.name === "AbortError") {
+        return;
+      }
+      console.error("Failed to share fortune:", error);
+      toast.error("Failed to share fortune");
     }
-  }
+  };
 
   const handleClearHistory = () => {
-    if (confirm('Are you sure you want to clear all history? This action cannot be undone.')) {
-      sessionManager.clearHistory()
-      setHistory([])
-      captureUserAction('history_cleared_by_user', 'user_history')
+    if (
+      confirm(
+        "Are you sure you want to clear all history? This action cannot be undone.",
+      )
+    ) {
+      sessionManager.clearHistory();
+      setHistory([]);
+      captureUserAction("history_cleared_by_user", "user_history");
     }
-  }
+  };
 
   const handleExportHistory = () => {
-    const exportData = sessionManager.exportUserData()
-    const blob = new Blob([exportData], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `fortune-history-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-    
-    captureUserAction('history_exported', 'user_history')
-  }
+    const exportData = sessionManager.exportUserData();
+    const blob = new Blob([exportData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `fortune-history-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    captureUserAction("history_exported", "user_history");
+  };
 
   const getUniqueCategories = () => {
-    const categories = Array.from(new Set(history.map(item => item.category)))
-    return categories.sort()
-  }
+    const categories = Array.from(
+      new Set(history.map((item) => item.category)),
+    );
+    return categories.sort();
+  };
 
   const getCategoryName = (category: string) => {
     const categoryMap: Record<string, string> = {
-      inspirational: 'Inspirational',
-      motivational: 'Motivational',
-      wisdom: 'Wisdom',
-      love: 'Love',
-      success: 'Success',
-      happiness: 'Happiness',
-      peace: 'Peace',
-      courage: 'Courage',
-    }
-    return categoryMap[category] || category
-  }
+      inspirational: "Inspirational",
+      motivational: "Motivational",
+      wisdom: "Wisdom",
+      love: "Love",
+      success: "Success",
+      happiness: "Happiness",
+      peace: "Peace",
+      courage: "Courage",
+    };
+    return categoryMap[category] || category;
+  };
 
   const getSourceName = (source: string) => {
     const sourceMap: Record<string, string> = {
-      ai: 'AI',
-      database: 'Database',
-      offline: 'Offline',
-    }
-    return sourceMap[source] || source
-  }
+      ai: "AI",
+      database: "Database",
+      offline: "Offline",
+    };
+    return sourceMap[source] || source;
+  };
 
   const formatDate = (date: Date) => {
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-    const diffHours = Math.floor(diffMs / 3600000)
-    const diffDays = Math.floor(diffMs / 86400000)
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'just now'
-    if (diffMins < 60) return `${diffMins} minutes ago`
-    if (diffHours < 24) return `${diffHours} hours ago`
-    if (diffDays < 7) return `${diffDays} days ago`
-    
-    return date.toLocaleDateString('en-US')
-  }
+    if (diffMins < 1) return "just now";
+    if (diffMins < 60) return `${diffMins} minutes ago`;
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    if (diffDays < 7) return `${diffDays} days ago`;
+
+    return date.toLocaleDateString("en-US");
+  };
 
   if (isLoading) {
     return (
@@ -177,7 +215,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -208,7 +246,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
                 <Search className="w-4 h-4" />
               </Button>
             </div>
-            
+
             <div className="flex gap-2">
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="w-32">
@@ -216,14 +254,14 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All categories</SelectItem>
-                  {getUniqueCategories().map(category => (
+                  {getUniqueCategories().map((category) => (
                     <SelectItem key={category} value={category}>
                       {getCategoryName(category)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              
+
               <Select value={sourceFilter} onValueChange={setSourceFilter}>
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Source" />
@@ -287,11 +325,11 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
             {filteredHistory.map((item) => (
               <Card key={item.id} className="border-l-4 border-l-orange-500">
                 <CardContent className="p-4">
-                    <div className="space-y-2">
-                      <blockquote className="text-sm font-medium italic">
+                  <div className="space-y-2">
+                    <blockquote className="text-sm font-medium italic">
                       &ldquo;{item.message}&rdquo;
-                      </blockquote>
-                    
+                    </blockquote>
+
                     <div className="flex items-center gap-2 text-xs text-gray-500">
                       <Badge variant="outline" className="text-xs">
                         {getCategoryName(item.category)}
@@ -305,8 +343,12 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
 
                     {item.tags && item.tags.length > 0 && (
                       <div className="flex gap-1 flex-wrap">
-                        {item.tags.map(tag => (
-                          <Badge key={tag} variant="outline" className="text-xs">
+                        {item.tags.map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="outline"
+                            className="text-xs"
+                          >
                             #{tag}
                           </Badge>
                         ))}
@@ -319,10 +361,12 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
                           variant="ghost"
                           size="sm"
                           onClick={() => handleLike(item.id)}
-                          className={`h-7 px-2 ${item.liked ? 'text-red-500' : 'text-gray-500'}`}
+                          className={`h-7 px-2 ${item.liked ? "text-red-500" : "text-gray-500"}`}
                         >
-                          <Heart className={`w-3 h-3 mr-1 ${item.liked ? 'fill-current' : ''}`} />
-                          {item.liked ? 'Liked' : 'Like'}
+                          <Heart
+                            className={`w-3 h-3 mr-1 ${item.liked ? "fill-current" : ""}`}
+                          />
+                          {item.liked ? "Liked" : "Like"}
                         </Button>
                         <Button
                           variant="ghost"
@@ -334,7 +378,7 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
                           Share
                         </Button>
                       </div>
-                      
+
                       {item.customPrompt && (
                         <Badge variant="outline" className="text-xs">
                           Custom
@@ -349,5 +393,5 @@ export function UserHistory({ className, limit, showControls = true }: UserHisto
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

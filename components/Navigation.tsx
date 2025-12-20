@@ -22,7 +22,11 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { ThemeToggle } from "./ThemeToggle";
-import { startGoogleSignIn, startSignOut, useAuthSession } from "@/lib/auth-client";
+import {
+  startGoogleSignIn,
+  startSignOut,
+  useAuthSession,
+} from "@/lib/auth-client";
 
 const navigationItems = [
   {
@@ -84,7 +88,10 @@ export function Navigation() {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+      <nav
+        className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50"
+        aria-label="Main navigation"
+      >
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -92,14 +99,21 @@ export function Navigation() {
           className="bg-white/90 backdrop-blur-md rounded-full border border-amber-200 shadow-lg px-4 py-3"
         >
           <div className="flex items-center">
-            <div className="flex items-center space-x-0.5">
+            <ul
+              className="flex items-center space-x-0.5 list-none m-0 p-0"
+              role="menubar"
+            >
               {navigationItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
 
                 return (
-                  <Link key={item.href} href={item.href}>
-                    <div
+                  <li key={item.href} role="none">
+                    <Link
+                      href={item.href}
+                      role="menuitem"
+                      aria-current={isActive ? "page" : undefined}
+                      aria-label={`${item.name}: ${item.description}`}
                       className={cn(
                         "relative px-3 py-2 rounded-full transition-all duration-200 flex items-center gap-1.5 hover:scale-105 active:scale-95",
                         isActive
@@ -107,7 +121,7 @@ export function Navigation() {
                           : "text-gray-600 hover:text-amber-600 hover:bg-amber-50",
                       )}
                     >
-                      <Icon className="w-4 h-4" />
+                      <Icon className="w-4 h-4" aria-hidden="true" />
                       <span className="text-sm font-medium">{item.name}</span>
                       {isActive && (
                         <motion.div
@@ -116,11 +130,11 @@ export function Navigation() {
                           transition={{ type: "spring", duration: 0.3 }}
                         />
                       )}
-                    </div>
-                  </Link>
+                    </Link>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
 
             {/* Theme toggle and offline status indicator */}
             <div className="flex items-center gap-2 ml-3 pl-3 border-l border-amber-200">
@@ -132,7 +146,9 @@ export function Navigation() {
                 }
                 className="text-gray-600 hover:text-amber-600"
                 aria-label={
-                  isAuthenticated ? "Sign out of your account" : "Sign in with Google"
+                  isAuthenticated
+                    ? "Sign out of your account"
+                    : "Sign in with Google"
                 }
               >
                 {isAuthenticated ? (
@@ -156,14 +172,15 @@ export function Navigation() {
 
       {/* Mobile Navigation */}
       <div className="md:hidden">
-        {/* Hamburger menu button */}
+        {/* Hamburger menu button - 44x44px minimum touch target */}
         <Button
           variant="outline"
           size="icon"
           onClick={() => setIsOpen(!isOpen)}
-          className="fixed top-4 right-4 z-50 bg-white/90 backdrop-blur-md border-amber-200 hover:bg-amber-50"
+          className="fixed top-4 right-4 z-50 bg-white/90 backdrop-blur-md border-amber-200 hover:bg-amber-50 w-11 h-11 min-w-[44px] min-h-[44px]"
           aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
+          aria-controls="mobile-navigation-menu"
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
@@ -208,40 +225,47 @@ export function Navigation() {
                 exit={{ x: "100%" }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="fixed top-0 right-0 h-full w-80 bg-white/95 backdrop-blur-md border-l border-amber-200 shadow-xl z-50 p-6"
+                id="mobile-navigation-menu"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Navigation menu"
               >
-                <div className="mt-16 space-y-4">
-                  {navigationItems.map((item, index) => {
-                    const Icon = item.icon;
-                    const isActive = pathname === item.href;
+                <nav aria-label="Mobile navigation">
+                  <ul className="mt-16 space-y-4 list-none m-0 p-0">
+                    {navigationItems.map((item, index) => {
+                      const Icon = item.icon;
+                      const isActive = pathname === item.href;
 
-                    return (
-                      <div
-                        key={item.href}
-                        className="animate-in slide-in-from-right-4 duration-300"
-                        style={{ animationDelay: `${index * 50}ms` }}
-                      >
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsOpen(false)}
-                          className={cn(
-                            "flex items-center gap-4 p-4 rounded-lg transition-all duration-200",
-                            isActive
-                              ? "bg-amber-100 text-amber-700 border border-amber-200"
-                              : "text-gray-600 hover:text-amber-600 hover:bg-amber-50",
-                          )}
+                      return (
+                        <li
+                          key={item.href}
+                          className="animate-in slide-in-from-right-4 duration-300"
+                          style={{ animationDelay: `${index * 50}ms` }}
                         >
-                          <Icon className="w-5 h-5" />
-                          <div>
-                            <div className="font-medium">{item.name}</div>
-                            <div className="text-sm opacity-70">
-                              {item.description}
+                          <Link
+                            href={item.href}
+                            onClick={() => setIsOpen(false)}
+                            aria-current={isActive ? "page" : undefined}
+                            className={cn(
+                              "flex items-center gap-4 p-4 rounded-lg transition-all duration-200 min-h-[56px]",
+                              isActive
+                                ? "bg-amber-100 text-amber-700 border border-amber-200"
+                                : "text-gray-600 hover:text-amber-600 hover:bg-amber-50",
+                            )}
+                          >
+                            <Icon className="w-5 h-5" aria-hidden="true" />
+                            <div>
+                              <div className="font-medium">{item.name}</div>
+                              <div className="text-sm opacity-70">
+                                {item.description}
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      </div>
-                    );
-                  })}
-                </div>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </nav>
 
                 {/* Mobile bottom decoration */}
                 <div className="absolute bottom-6 left-6 right-6">

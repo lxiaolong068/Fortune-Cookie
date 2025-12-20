@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Fortune Cookie AI** is an SEO-optimized, AI-powered fortune cookie generator built with Next.js 14 App Router, TypeScript, and Prisma. It features 500+ pre-categorized fortune messages, AI generation via OpenRouter API, comprehensive caching with Redis/Upstash, and full performance monitoring.
 
-**Tech Stack**: Next.js 14, TypeScript, React 18, Prisma ORM, PostgreSQL, Redis (Upstash), OpenRouter API (AI generation), shadcn/ui, Radix UI, Framer Motion, Tailwind CSS
+**Tech Stack**: Next.js 14, TypeScript, React 18, Prisma ORM, PostgreSQL, Redis (Upstash), OpenRouter API (AI generation), NextAuth.js (Google OAuth), shadcn/ui, Radix UI, Framer Motion, Tailwind CSS
 
 ## Development Commands
 
@@ -85,7 +85,9 @@ npm run vercel-check           # Verify Vercel deployment health
 
 **API Routes** (`app/api/`):
 - `fortune/route.ts` - AI fortune generation with rate limiting, caching, input sanitization
+- `fortune/quota/route.ts` - User quota status endpoint (daily limits for guests/authenticated users)
 - `fortunes/route.ts` - Database fortune browsing and search
+- `auth/[...nextauth]/route.ts` - NextAuth.js authentication routes (Google OAuth)
 - `analytics/route.ts` - Performance metrics collection
 - `database/route.ts` - Database health checks
 - `cache/route.ts` - Cache management endpoints
@@ -95,6 +97,9 @@ npm run vercel-check           # Verify Vercel deployment health
 - `fortune-database.ts` - 500+ categorized fortune messages with search
 - `redis-cache.ts` - Redis/Upstash integration with rate limiting
 - `edge-cache.ts` - Edge caching utilities and performance monitoring
+- `auth.ts` - NextAuth.js configuration with Google OAuth provider
+- `auth-client.ts` - Client-side authentication hooks (`useAuthSession`, `startGoogleSignIn`, `startSignOut`)
+- `quota.ts` - Daily fortune quota system (guest: 1/day, authenticated: 10/day)
 - `session-manager.ts` - User session tracking
 - `error-monitoring.ts` - Error capture and analytics
 - `utils.ts` - Shared utilities (cn, date formatting, etc.)
@@ -108,14 +113,19 @@ npm run vercel-check           # Verify Vercel deployment health
 - `StructuredData.tsx` - JSON-LD schema generation
 - `PerformanceMonitor.tsx` - Web Vitals monitoring with retry mechanism (exponential backoff, up to 3 retries)
 - `AdSenseFacade.tsx` - OptimizedAdSense component using Facade pattern for delayed AdSense script loading (improves LCP)
+- `ExpandableRecipeCard.tsx` - Expandable recipe card with collapsible ingredients/instructions sections
+- `Navigation.tsx` - Main navigation component with authentication state integration
 - `ui/` - shadcn/ui component library
 
 **Dynamic Pages** (`app/browse/`):
 - `category/[category]/page.tsx` - Dynamic category pages for browsing fortunes by category with SEO optimization
 
 **Database** (`prisma/`):
-- `schema.prisma` - PostgreSQL schema with 7 models (Fortune, UserSession, ApiUsage, WebVital, ErrorLog, CacheStats, UserFeedback)
-- Indexed for performance on category, mood, timestamp, popularity
+- `schema.prisma` - PostgreSQL schema with 13 models:
+  - Core: Fortune, UserSession, ApiUsage, WebVital, ErrorLog, CacheStats, UserFeedback
+  - Auth (NextAuth): User, Account, Session, VerificationToken
+  - Quota: FortuneQuota, FortuneUsage
+- Indexed for performance on category, mood, timestamp, popularity, userId, dateKey
 
 ### Critical Implementation Details
 
@@ -147,9 +157,31 @@ npm run vercel-check           # Verify Vercel deployment health
 - Open Graph and Twitter Card metadata
 - Internal linking strategy across 8+ content pages
 
+### Authentication & Quota System
+
+**Google OAuth Authentication** (NextAuth.js):
+- Provider: Google OAuth 2.0 via `next-auth/providers/google`
+- Adapter: Prisma Adapter for database session storage
+- Session Strategy: Database sessions (not JWT)
+- Client hooks: `useAuthSession()`, `startGoogleSignIn()`, `startSignOut()`
+
+**Fortune Quota System** (`lib/quota.ts`):
+- **Guest Users**: 1 AI fortune per day (configurable via `GUEST_DAILY_LIMIT`)
+- **Authenticated Users**: 10 AI fortunes per day (configurable via `AUTH_DAILY_LIMIT`)
+- Quota resets at UTC midnight
+- Guest identification via `X-Client-Id` header or IP-based fallback
+- Quota status endpoint: `GET /api/fortune/quota`
+
+**Quota Flow**:
+1. Request arrives at `/api/fortune`
+2. Resolve identity (authenticated user ID or guest ID)
+3. Check daily quota via `getDailyQuotaStatus()`
+4. If quota exceeded, return 429 with reset time
+5. On successful generation, increment usage via `recordFortuneUsage()`
+
 ## Environment Variables
 
-Required in `.env.local`:
+Required in `.env.local` (see `.env.example` for full template):
 ```bash
 # Database (PostgreSQL)
 DATABASE_URL="postgresql://..."
@@ -161,14 +193,27 @@ UPSTASH_REDIS_REST_TOKEN="..."
 # OpenRouter API (optional, enables AI generation)
 OPENROUTER_API_KEY="sk-or-..."
 OPENROUTER_BASE_URL="https://openrouter.ai/api/v1"
+OPENROUTER_MODEL="openai/gpt-4o-mini"  # Optional: specify model
+
+# Google OAuth (NextAuth.js - enables user authentication)
+GOOGLE_CLIENT_ID="..."
+GOOGLE_CLIENT_SECRET="..."
+NEXTAUTH_SECRET="..."  # Generate with: openssl rand -base64 32
+NEXTAUTH_URL="http://localhost:3000"  # Set to production URL in deployment
+
+# Fortune Quota (optional, defaults shown)
+GUEST_DAILY_LIMIT="1"   # Daily AI fortune limit for guests
+AUTH_DAILY_LIMIT="10"   # Daily AI fortune limit for authenticated users
 
 # Application
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_NAME="Fortune Cookie AI"
 NODE_ENV="development"
 
 # Analytics (optional)
 GOOGLE_ANALYTICS_ID="G-..."
 GOOGLE_VERIFICATION_CODE="..."
+GOOGLE_ADSENSE_CLIENT_ID="ca-pub-..."
 
 # Vercel Blob Storage (for CDN-optimized images)
 BLOB_READ_WRITE_TOKEN="vercel_blob_rw_..."
@@ -278,6 +323,51 @@ Follow the pattern in `app/api/fortune/route.ts`:
 5. Capture analytics events (user actions, business events)
 6. Return consistent API response envelope (createSuccessResponse/createErrorResponse)
 7. Add security headers (CORS, CSP, X-Frame-Options)
+
+### Working with Authentication
+
+**Server-Side Session Access**:
+```typescript
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+
+// In API routes or Server Components
+const session = await getServerSession(authOptions);
+if (session?.user?.id) {
+  // User is authenticated
+  const userId = session.user.id;
+}
+```
+
+**Client-Side Session Access**:
+```typescript
+import { useAuthSession, startGoogleSignIn, startSignOut } from "@/lib/auth-client";
+
+function MyComponent() {
+  const { data: session, status } = useAuthSession();
+  
+  if (status === "loading") return <Loading />;
+  if (status === "authenticated") {
+    return <button onClick={startSignOut}>Sign Out</button>;
+  }
+  return <button onClick={startGoogleSignIn}>Sign In with Google</button>;
+}
+```
+
+**Checking Quota in API Routes**:
+```typescript
+import { getDailyQuotaStatus, resolveGuestId, type QuotaIdentity } from "@/lib/quota";
+
+const session = await getServerSession(authOptions);
+const quotaIdentity: QuotaIdentity = session?.user?.id
+  ? { isAuthenticated: true, userId: session.user.id }
+  : { isAuthenticated: false, guestId: resolveGuestId(request) };
+
+const quota = await getDailyQuotaStatus(quotaIdentity);
+if (quota.remaining <= 0) {
+  return NextResponse.json({ error: "Quota exceeded" }, { status: 429 });
+}
+```
 
 ### Working with Prisma
 
@@ -389,6 +479,21 @@ const response = EdgeCacheManager.optimizeApiResponse(
 - Check `OPENROUTER_API_KEY` validity
 - Test health endpoint: GET `/api/fortune`
 - Review OpenRouter dashboard for quota/errors
+
+**Authentication Issues** (NextAuth.js):
+- Check `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set correctly
+- Verify `NEXTAUTH_SECRET` is set (generate with `openssl rand -base64 32`)
+- Ensure `NEXTAUTH_URL` matches your application URL
+- Check Google Cloud Console for OAuth consent screen configuration
+- Verify authorized redirect URIs include `/api/auth/callback/google`
+- Run `npm run db:push` to ensure auth tables exist (User, Account, Session, VerificationToken)
+
+**Quota System Issues**:
+- Check quota status: GET `/api/fortune/quota`
+- Guest ID resolved from `X-Client-Id` header or IP address
+- Quota resets at UTC midnight (not local time)
+- Adjust limits via `GUEST_DAILY_LIMIT` and `AUTH_DAILY_LIMIT` env vars
+- Debug with `npm run db:studio` to inspect FortuneQuota/FortuneUsage tables
 
 **Turbopack/HMR Issues**:
 - Next.js Turbopack (experimental) may have aggressive caching

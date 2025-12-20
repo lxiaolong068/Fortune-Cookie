@@ -3,245 +3,371 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+        --radius: 0.5rem;
+    }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+    .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 210 40% 98%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 212.7 26.8% 83.9%;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 
 /* 深色模式特定样式 */
 .dark {
-  /* 渐变背景调整 */
-  .bg-gradient-to-br {
-    @apply from-gray-900 via-gray-800 to-gray-900;
-  }
+    /* 渐变背景调整 */
+    .bg-gradient-to-br {
+        @apply from-gray-900 via-gray-800 to-gray-900;
+    }
 
-  /* 卡片样式调整 */
-  .bg-white\/80 {
-    @apply bg-gray-800/80;
-  }
+    /* 卡片样式调整 */
+    .bg-white\/80 {
+        @apply bg-gray-800/80;
+    }
 
-  .bg-white\/90 {
-    @apply bg-gray-800/90;
-  }
+    .bg-white\/90 {
+        @apply bg-gray-800/90;
+    }
 
-  /* 文本颜色调整 */
-  .text-gray-900 {
-    @apply text-gray-100;
-  }
+    /* 文本颜色调整 */
+    .text-gray-900 {
+        @apply text-gray-100;
+    }
 
-  .text-gray-800 {
-    @apply text-gray-200;
-  }
+    .text-gray-800 {
+        @apply text-gray-200;
+    }
 
-  .text-gray-700 {
-    @apply text-gray-300;
-  }
+    .text-gray-700 {
+        @apply text-gray-300;
+    }
 
-  .text-gray-600 {
-    @apply text-gray-400;
-  }
+    .text-gray-600 {
+        @apply text-gray-400;
+    }
 
+    /* 边框颜色调整 */
+    .border-gray-200 {
+        @apply border-gray-700;
+    }
 
-  /* 边框颜色调整 */
-  .border-gray-200 {
-    @apply border-gray-700;
-  }
+    .border-gray-300 {
+        @apply border-gray-600;
+    }
 
-  .border-gray-300 {
-    @apply border-gray-600;
-  }
+    /* 背景颜色调整 */
+    .bg-gray-50 {
+        @apply bg-gray-800;
+    }
 
-  /* 背景颜色调整 */
-  .bg-gray-50 {
-    @apply bg-gray-800;
-  }
+    .bg-gray-100 {
+        @apply bg-gray-700;
+    }
 
-  .bg-gray-100 {
-    @apply bg-gray-700;
-  }
+    .bg-gray-200 {
+        @apply bg-gray-600;
+    }
 
-  .bg-gray-200 {
-    @apply bg-gray-600;
-  }
+    /* 特殊组件样式 */
+    .fortune-card {
+        @apply bg-gray-800 border-gray-700;
+    }
 
-  /* 特殊组件样式 */
-  .fortune-card {
-    @apply bg-gray-800 border-gray-700;
-  }
-
-  .fortune-card:hover {
-    @apply bg-gray-700 border-gray-600;
-  }
+    .fortune-card:hover {
+        @apply bg-gray-700 border-gray-600;
+    }
 }
 
 /* 主题过渡动画 */
 * {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease;
 }
 
 /* 防止主题切换时的闪烁 */
 html {
-  color-scheme: light;
+    color-scheme: light;
 }
 
 html.dark {
-  color-scheme: dark;
+    color-scheme: dark;
 }
 
 /* 滚动条样式 */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+    width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-800;
+    @apply bg-gray-100 dark:bg-gray-800;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-gray-500;
+    @apply bg-gray-400 dark:bg-gray-500;
 }
 
 /* 自定义动画和效果 */
 @layer utilities {
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite alternate;
-  }
-  
-  .animate-sparkle {
-    animation: sparkle 1.5s ease-in-out infinite;
-  }
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-glow {
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .animate-sparkle {
+        animation: sparkle 1.5s ease-in-out infinite;
+    }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 @keyframes glow {
-  from {
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-  }
-  to {
-    box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
-  }
+    from {
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+    }
+    to {
+        box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
+    }
 }
 
 @keyframes sparkle {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.2);
-  }
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
 }
 
 /* 响应式优化 */
 @media (max-width: 640px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
 /* 性能优化 */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 /* 防止动画导致布局重排 (CLS) */
 .animate-element {
-  will-change: transform, opacity;
-  transform: translateZ(0); /* 强制硬件加速 */
+    will-change: transform, opacity;
+    transform: translateZ(0); /* 强制硬件加速 */
 }
 
 /* 确保动画容器有稳定尺寸 */
 .stable-container {
-  contain: layout style paint;
+    contain: layout style paint;
 }
 
 /* 无障碍优化 */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== WCAG AA Color Contrast Improvements ===== */
+
+/* Improve muted text contrast (4.5:1 minimum for WCAG AA) */
+.text-gray-500 {
+    @apply text-gray-600; /* Darker for better contrast */
+}
+
+.dark .text-gray-500 {
+    @apply text-gray-400; /* Lighter in dark mode for better contrast */
+}
+
+/* Placeholder text improvements */
+input::placeholder,
+textarea::placeholder {
+    @apply text-gray-500 dark:text-gray-400;
+    opacity: 1; /* Firefox fix */
+}
+
+/* Link contrast improvements */
+a:not([class]) {
+    @apply text-blue-700 dark:text-blue-400 underline;
+}
+
+a:not([class]):hover {
+    @apply text-blue-900 dark:text-blue-300;
+}
+
+/* ===== Keyboard Focus Indicators (WCAG 2.4.7) ===== */
+
+/* Custom focus ring for all interactive elements */
+:focus-visible {
+    @apply outline-none ring-2 ring-amber-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
+}
+
+/* Remove default outline when using :focus-visible */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Enhanced focus for buttons */
+button:focus-visible,
+[role="button"]:focus-visible {
+    @apply ring-2 ring-amber-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
+}
+
+/* Enhanced focus for form inputs */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[contenteditable]:focus-visible {
+    @apply ring-2 ring-amber-500 ring-offset-0 border-amber-500;
+}
+
+/* Enhanced focus for links */
+a:focus-visible {
+    @apply ring-2 ring-amber-500 ring-offset-2 rounded-sm;
+}
+
+/* Enhanced focus for cards and interactive containers */
+[tabindex]:focus-visible {
+    @apply ring-2 ring-amber-500 ring-offset-2;
+}
+
+/* Skip link styling (Phase 1.2 enhancement) */
+.skip-link:focus {
+    @apply absolute top-4 left-4 z-[9999] px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg shadow-lg;
+    clip: auto;
+    clip-path: none;
+}
+
+/* ===== Enhanced Touch Targets (WCAG 2.5.5 - 44x44px minimum) ===== */
+
+/* Ensure minimum touch target size for interactive elements */
+@layer utilities {
+    .touch-target {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .touch-target-sm {
+        min-width: 36px;
+        min-height: 36px;
+    }
+}
+
+/* Apply touch target sizing to common interactive elements on mobile */
+@media (pointer: coarse) {
+    button,
+    [role="button"],
+    a,
+    input[type="checkbox"],
+    input[type="radio"],
+    select {
+        min-height: 44px;
+    }
+
+    /* Ensure adequate spacing for touch */
+    .touch-spacing > * + * {
+        margin-top: 8px;
+    }
+}
+
+/* ===== High Contrast Mode Support ===== */
+@media (prefers-contrast: high) {
+    :root {
+        --foreground: 0 0% 0%;
+        --background: 0 0% 100%;
+        --border: 0 0% 0%;
+    }
+
+    .dark {
+        --foreground: 0 0% 100%;
+        --background: 0 0% 0%;
+        --border: 0 0% 100%;
+    }
+
+    /* Ensure borders are visible */
+    * {
+        border-color: currentColor !important;
+    }
 }
 
 /* 打印样式 */
 @media print {
-  .no-print {
-    display: none !important;
-  }
+    .no-print {
+        display: none !important;
+    }
 }

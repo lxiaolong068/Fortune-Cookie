@@ -1,8 +1,8 @@
-import { MetadataRoute } from 'next'
-import { getSiteUrl } from '@/lib/site'
-import { i18n, getLocalizedPath, getAlternateLinks } from '@/lib/i18n-config'
-import { getDatabaseStats } from '@/lib/fortune-database'
-import { getBlogPosts } from '@/lib/blog'
+import { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/site";
+import { i18n, getLocalizedPath, getAlternateLinks } from "@/lib/i18n-config";
+import { getDatabaseStats } from "@/lib/fortune-database";
+import { getBlogPosts } from "@/lib/blog";
 
 /**
  * Generate XML Sitemap for SEO
@@ -22,19 +22,19 @@ import { getBlogPosts } from '@/lib/blog'
  * - LastModified: Based on actual content changes, not build time
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = getSiteUrl()
+  const baseUrl = getSiteUrl();
 
   // Define last modification dates for different page types
   // Static content pages: Use fixed dates based on last actual update
-  const staticContentDate = new Date('2025-01-15') // Last major content update
-  const legalPagesDate = new Date('2025-01-01') // Privacy/Terms last updated
+  const staticContentDate = new Date("2025-01-15"); // Last major content update
+  const legalPagesDate = new Date("2025-01-01"); // Privacy/Terms last updated
 
   // Dynamic content pages: Use recent date to indicate freshness
-  const dynamicContentDate = new Date('2025-10-01') // Monthly update for dynamic content
-  const weeklyContentDate = new Date('2025-10-01') // Weekly update for frequently changing content
+  const dynamicContentDate = new Date("2025-10-01"); // Monthly update for dynamic content
+  const weeklyContentDate = new Date("2025-10-01"); // Weekly update for frequently changing content
 
   // Pages that should be excluded from sitemap (noindex pages)
-  const excludedPages = new Set(['/analytics'])
+  const excludedPages = new Set(["/analytics"]);
 
   /**
    * Page configuration with SEO metadata
@@ -57,120 +57,175 @@ export default function sitemap(): MetadataRoute.Sitemap {
    */
   const pages = [
     {
-      path: '/',
+      path: "/",
       priority: 1.0,
-      changeFrequency: 'daily' as const,
-      lastModified: weeklyContentDate // Homepage updated frequently
+      changeFrequency: "daily" as const,
+      lastModified: weeklyContentDate, // Homepage updated frequently
     },
     {
-      path: '/generator',
+      path: "/generator",
       priority: 0.9,
-      changeFrequency: 'daily' as const,
-      lastModified: weeklyContentDate // AI generator, frequently enhanced
+      changeFrequency: "daily" as const,
+      lastModified: weeklyContentDate, // AI generator, frequently enhanced
     },
     {
-      path: '/messages',
+      path: "/messages",
       priority: 0.8,
-      changeFrequency: 'weekly' as const,
-      lastModified: weeklyContentDate // Message collection grows weekly
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate, // Message collection grows weekly
     },
     {
-      path: '/browse',
+      path: "/browse",
       priority: 0.8,
-      changeFrequency: 'weekly' as const,
-      lastModified: weeklyContentDate // Browse page updated with new messages
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate, // Browse page updated with new messages
     },
     {
-      path: '/history',
+      path: "/history",
       priority: 0.7,
-      changeFrequency: 'monthly' as const,
-      lastModified: staticContentDate // Historical content, stable
+      changeFrequency: "monthly" as const,
+      lastModified: staticContentDate, // Historical content, stable
     },
     {
-      path: '/recipes',
+      path: "/recipes",
       priority: 0.7,
-      changeFrequency: 'monthly' as const,
-      lastModified: staticContentDate // Recipe content, occasionally updated
+      changeFrequency: "monthly" as const,
+      lastModified: staticContentDate, // Recipe content, occasionally updated
     },
     {
-      path: '/who-invented-fortune-cookies',
+      path: "/who-invented-fortune-cookies",
       priority: 0.6,
-      changeFrequency: 'monthly' as const,
-      lastModified: staticContentDate // Educational content, stable
+      changeFrequency: "monthly" as const,
+      lastModified: staticContentDate, // Educational content, stable
     },
     {
-      path: '/how-to-make-fortune-cookies',
+      path: "/how-to-make-fortune-cookies",
       priority: 0.6,
-      changeFrequency: 'monthly' as const,
-      lastModified: staticContentDate // Tutorial content, stable
+      changeFrequency: "monthly" as const,
+      lastModified: staticContentDate, // Tutorial content, stable
     },
     {
-      path: '/funny-fortune-cookie-messages',
+      path: "/funny-fortune-cookie-messages",
       priority: 0.6,
-      changeFrequency: 'weekly' as const,
-      lastModified: weeklyContentDate // Funny messages updated regularly
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate, // Funny messages updated regularly
     },
     {
-      path: '/profile',
+      path: "/profile",
       priority: 0.5,
-      changeFrequency: 'weekly' as const,
-      lastModified: dynamicContentDate // User profile features
+      changeFrequency: "weekly" as const,
+      lastModified: dynamicContentDate, // User profile features
     },
     {
-      path: '/cookies',
+      path: "/faq",
+      priority: 0.7,
+      changeFrequency: "monthly" as const,
+      lastModified: staticContentDate, // FAQ page
+    },
+    {
+      path: "/cookies",
       priority: 0.4,
-      changeFrequency: 'monthly' as const,
-      lastModified: legalPagesDate // Cookie policy
+      changeFrequency: "monthly" as const,
+      lastModified: legalPagesDate, // Cookie policy
     },
     {
-      path: '/offline',
+      path: "/offline",
       priority: 0.2,
-      changeFrequency: 'yearly' as const,
-      lastModified: staticContentDate // Offline fallback page
+      changeFrequency: "yearly" as const,
+      lastModified: staticContentDate, // Offline fallback page
     },
     {
-      path: '/privacy',
+      path: "/privacy",
       priority: 0.3,
-      changeFrequency: 'yearly' as const,
-      lastModified: legalPagesDate // Privacy policy
+      changeFrequency: "yearly" as const,
+      lastModified: legalPagesDate, // Privacy policy
     },
     {
-      path: '/terms',
+      path: "/terms",
       priority: 0.3,
-      changeFrequency: 'yearly' as const,
-      lastModified: legalPagesDate // Terms of service
+      changeFrequency: "yearly" as const,
+      lastModified: legalPagesDate, // Terms of service
     },
-  ].filter(page => !excludedPages.has(page.path))
+  ].filter((page) => !excludedPages.has(page.path));
 
   // Add category pages dynamically
-  const stats = getDatabaseStats()
-  Object.keys(stats.categories).forEach(category => {
+  const stats = getDatabaseStats();
+  Object.keys(stats.categories).forEach((category) => {
     pages.push({
       path: `/browse/category/${category}`,
       priority: 0.7,
-      changeFrequency: 'weekly' as const,
-      lastModified: weeklyContentDate
-    })
-  })
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate,
+    });
+  });
+
+  // Add message category sub-pages
+  const messageCategories = [
+    "inspirational",
+    "funny",
+    "love",
+    "success",
+    "wisdom",
+  ];
+  messageCategories.forEach((category) => {
+    pages.push({
+      path: `/messages/${category}`,
+      priority: 0.8,
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate,
+    });
+  });
+
+  // Add tag pages dynamically
+  const allTags = [
+    "motivation",
+    "action",
+    "future",
+    "success",
+    "love",
+    "humor",
+    "wisdom",
+    "self-improvement",
+    "relationships",
+    "happiness",
+    "career",
+    "health",
+    "money",
+    "friendship",
+    "family",
+    "gratitude",
+    "patience",
+    "courage",
+    "creativity",
+    "learning",
+  ];
+  allTags.forEach((tag) => {
+    pages.push({
+      path: `/tag/${encodeURIComponent(tag)}`,
+      priority: 0.6,
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate,
+    });
+  });
 
   // Add blog pages dynamically
   pages.push({
-    path: '/blog',
+    path: "/blog",
     priority: 0.8,
-    changeFrequency: 'weekly' as const,
-    lastModified: weeklyContentDate
-  })
+    changeFrequency: "weekly" as const,
+    lastModified: weeklyContentDate,
+  });
 
   // Add individual blog posts
-  const blogPosts = getBlogPosts()
-  blogPosts.forEach(post => {
+  const blogPosts = getBlogPosts();
+  blogPosts.forEach((post) => {
     pages.push({
       path: `/blog/${post.slug}`,
       priority: 0.7,
-      changeFrequency: 'monthly' as const,
-      lastModified: new Date(post.date)
-    })
-  })
+      changeFrequency: "monthly" as const,
+      lastModified: new Date(post.date),
+    });
+  });
 
   /**
    * Generate sitemap entries for all locales
@@ -188,20 +243,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
    *   <priority>0.8</priority>
    * </url>
    */
-  const sitemapEntries: MetadataRoute.Sitemap = []
+  const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  pages.forEach(page => {
+  pages.forEach((page) => {
     // For each page, create entries for all supported locales
-    i18n.locales.forEach(locale => {
-      const localizedPath = getLocalizedPath(page.path, locale)
-      const fullUrl = `${baseUrl}${localizedPath}`
+    i18n.locales.forEach((locale) => {
+      const localizedPath = getLocalizedPath(page.path, locale);
+      const fullUrl = `${baseUrl}${localizedPath}`;
 
       // Generate alternate language links for hreflang tags
       // This helps search engines understand the relationship between language versions
-      const alternates = getAlternateLinks(page.path).reduce((acc, alt) => {
-        acc[alt.hreflang] = `${baseUrl}${alt.href}`
-        return acc
-      }, {} as Record<string, string>)
+      const alternates = getAlternateLinks(page.path).reduce(
+        (acc, alt) => {
+          acc[alt.hreflang] = `${baseUrl}${alt.href}`;
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
 
       sitemapEntries.push({
         url: fullUrl, // Absolute URL (required)
@@ -211,11 +269,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
         alternates: {
           languages: alternates, // Hreflang alternate links (optional, for i18n)
         },
-      })
-    })
-  })
+      });
+    });
+  });
 
-  return sitemapEntries
+  return sitemapEntries;
 }
 
 /**

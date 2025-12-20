@@ -156,6 +156,7 @@ model User {
   sessions      Session[]
   fortuneQuota  FortuneQuota[]
   fortuneUsage  FortuneUsage[]
+  favorites     Favorite[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -243,4 +244,22 @@ model FortuneUsage {
   @@index([userId])
   @@index([guestId])
   @@map("fortune_usage")
+}
+
+// 收藏记录 (已登录用户)
+model Favorite {
+  id           String   @id @default(cuid())
+  userId       String
+  message      String
+  luckyNumbers String?  // JSON 数组存储
+  theme        String?
+  category     String?
+  source       String?
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@unique([userId, message])
+  @@map("favorites")
 }
