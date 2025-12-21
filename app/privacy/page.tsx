@@ -3,6 +3,7 @@ import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Shield, Eye, Database, Cookie, Lock, UserCheck, Mail } from 'lucide-react'
+import { getImageUrl } from '@/lib/site'
 
 // Static generation configuration
 export const dynamic = 'force-static'
@@ -16,6 +17,21 @@ export const metadata: Metadata = {
     description: 'Learn how Fortune Cookie AI protects your privacy and personal data.',
     type: 'article',
     url: 'https://www.fortune-cookie.cc/privacy',
+    images: [
+      {
+        url: getImageUrl('/og-image.png'),
+        width: 1200,
+        height: 630,
+        alt: 'Privacy Policy - Fortune Cookie AI',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy - Fortune Cookie AI',
+    description: 'Learn how Fortune Cookie AI protects your privacy and personal data.',
+    images: [getImageUrl('/twitter-image.png')],
+    creator: '@fortunecookieai',
   },
   alternates: {
     canonical: '/privacy',

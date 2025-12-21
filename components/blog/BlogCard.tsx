@@ -66,6 +66,7 @@ export function BlogCard({
               alt={post.title}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              priority={isFeatured}
               sizes={
                 isFeatured
                   ? "(max-width: 768px) 100vw, 40vw"

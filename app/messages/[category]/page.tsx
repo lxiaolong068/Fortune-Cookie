@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/InternalLinks";
 import { fortuneDatabase, type FortuneMessage } from "@/lib/fortune-database";
+import { getImageUrl } from "@/lib/site";
 
 // Define valid categories
 const VALID_CATEGORIES = [
@@ -125,11 +126,21 @@ export async function generateMetadata({
       description: config.metaDescription,
       type: "website",
       url: `/messages/${category}`,
+      images: [
+        {
+          url: getImageUrl("/og-image.png"),
+          width: 1200,
+          height: 630,
+          alt: config.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: config.title,
       description: config.metaDescription,
+      images: [getImageUrl("/twitter-image.png")],
+      creator: "@fortunecookieai",
     },
     alternates: {
       canonical: `/messages/${category}`,

@@ -8,7 +8,7 @@ import {
   BreadcrumbStructuredData,
 } from "@/components/StructuredData";
 import { FAQStructuredData, historyFAQs } from "@/components/FAQStructuredData";
-import { getSiteUrl } from "@/lib/site";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
 
 const baseUrl = getSiteUrl();
 
@@ -26,6 +26,22 @@ export const metadata: Metadata = {
       "Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about Makoto Hagiwara and the cultural journey of this iconic cookie.",
     type: "article",
     url: `${baseUrl}/history`,
+    images: [
+      {
+        url: getImageUrl("/og-image.png"),
+        width: 1200,
+        height: 630,
+        alt: "History of Fortune Cookies",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "History of Fortune Cookies - Origins and Cultural Evolution",
+    description:
+      "Explore the fascinating history of fortune cookies from Japanese roots in Kyoto to American invention in California.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
     canonical: "/history",

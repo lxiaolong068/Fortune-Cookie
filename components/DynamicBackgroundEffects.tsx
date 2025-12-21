@@ -36,13 +36,31 @@ export function DynamicBackgroundEffects({
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    type NavigatorWithConnection = Navigator & {
-      connection?: { saveData?: boolean };
+    type NetworkInformation = {
+      saveData?: boolean;
+      effectiveType?: "slow-2g" | "2g" | "3g" | "4g";
     };
-    const connection = (navigator as NavigatorWithConnection).connection;
+    type NavigatorWithConnection = Navigator & {
+      connection?: NetworkInformation;
+      deviceMemory?: number;
+    };
+    const navigatorWithConnection = navigator as NavigatorWithConnection;
+    const connection = navigatorWithConnection.connection;
     const saveData = Boolean(connection?.saveData);
+    const effectiveType = connection?.effectiveType;
+    const isSlowNetwork =
+      effectiveType === "slow-2g" || effectiveType === "2g";
+    const deviceMemory = navigatorWithConnection.deviceMemory;
+    const isLowMemory =
+      typeof deviceMemory === "number" && deviceMemory < 4;
 
-    if (isMobile || prefersReducedMotion || saveData) {
+    if (
+      isMobile ||
+      prefersReducedMotion ||
+      saveData ||
+      isSlowNetwork ||
+      isLowMemory
+    ) {
       return;
     }
 

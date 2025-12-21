@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { getSiteUrl } from "@/lib/site";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
 import { searchSite } from "@/lib/siteSearch";
 
 const baseUrl = getSiteUrl();
@@ -24,6 +24,22 @@ export const metadata: Metadata = {
       "Search Fortune Cookie AI for fortune messages, blog posts, and guides.",
     type: "website",
     url: `${baseUrl}/search`,
+    images: [
+      {
+        url: getImageUrl("/og-image.png"),
+        width: 1200,
+        height: 630,
+        alt: "Search Fortune Cookie AI",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Search - Fortune Cookie AI",
+    description:
+      "Search Fortune Cookie AI for fortune messages, blog posts, and guides.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   robots: {
     index: false,
@@ -235,4 +251,3 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     </>
   );
 }
-

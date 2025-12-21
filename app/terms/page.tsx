@@ -3,6 +3,7 @@ import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { FileText, Users, Shield, AlertTriangle, CheckCircle, Scale, Mail } from 'lucide-react'
+import { getImageUrl } from '@/lib/site'
 
 // Static generation configuration
 export const dynamic = 'force-static'
@@ -16,6 +17,21 @@ export const metadata: Metadata = {
     description: 'Learn about the terms and conditions for using Fortune Cookie AI service.',
     type: 'article',
     url: 'https://www.fortune-cookie.cc/terms',
+    images: [
+      {
+        url: getImageUrl('/og-image.png'),
+        width: 1200,
+        height: 630,
+        alt: 'Terms of Service - Fortune Cookie AI',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms of Service - Fortune Cookie AI',
+    description: 'Learn about the terms and conditions for using Fortune Cookie AI service.',
+    images: [getImageUrl('/twitter-image.png')],
+    creator: '@fortunecookieai',
   },
   alternates: {
     canonical: '/terms',

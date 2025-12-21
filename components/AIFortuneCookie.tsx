@@ -688,11 +688,27 @@ export function AIFortuneCookie() {
                   transition={{ delay: 0.4 }}
                   className="text-center mb-6"
                 >
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <Sparkles className="w-8 h-8 text-amber-500" />
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">
-                      Your AI Fortune
-                    </h2>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1 flex items-center justify-center gap-2">
+                      <Sparkles className="w-8 h-8 text-amber-500" />
+                      <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                        Your AI Fortune
+                      </h2>
+                    </div>
+                    <FavoriteButton
+                      message={currentFortune.message}
+                      luckyNumbers={currentFortune.luckyNumbers}
+                      theme={currentFortune.theme}
+                      category={
+                        selectedTheme === "random"
+                          ? "inspirational"
+                          : selectedTheme
+                      }
+                      source={generationSource || "ai"}
+                      variant="icon"
+                      size="sm"
+                      className="mt-1 h-11 w-11 min-h-[44px] min-w-[44px]"
+                    />
                   </div>
 
                   <div className="flex items-center justify-center gap-2 mb-4">
@@ -772,28 +788,13 @@ export function AIFortuneCookie() {
                   </div>
                 </motion.div>
 
-                {/* Share and Save Actions */}
+                {/* Share Actions */}
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 1.2 }}
                   className="flex flex-col items-center gap-4 mb-6"
                 >
-                  <div className="flex items-center justify-center gap-3">
-                    <FavoriteButton
-                      message={currentFortune.message}
-                      luckyNumbers={currentFortune.luckyNumbers}
-                      theme={currentFortune.theme}
-                      category={
-                        selectedTheme === "random"
-                          ? "inspirational"
-                          : selectedTheme
-                      }
-                      source={generationSource || "ai"}
-                      variant="default"
-                      size="sm"
-                    />
-                  </div>
                   <SocialShare
                     message={currentFortune.message}
                     luckyNumbers={currentFortune.luckyNumbers}

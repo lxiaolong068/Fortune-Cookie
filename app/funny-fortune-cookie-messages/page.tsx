@@ -12,7 +12,7 @@ import {
   funnyFortuneFAQs,
 } from "@/components/FAQStructuredData";
 import { RelatedPages, messageRelatedPages } from "@/components/RelatedPages";
-import { getSiteUrl } from "@/lib/site";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
 
 const baseUrl = getSiteUrl();
 
@@ -30,6 +30,22 @@ export const metadata: Metadata = {
       "Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties and pranks. Browse our collection of witty, humorous fortunes.",
     type: "article",
     url: `${baseUrl}/funny-fortune-cookie-messages`,
+    images: [
+      {
+        url: getImageUrl("/og-image.png"),
+        width: 1200,
+        height: 630,
+        alt: "Funny Fortune Cookie Messages",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Funny Fortune Cookie Messages - Hilarious Sayings & Jokes",
+    description:
+      "Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties and pranks.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
     canonical: "/funny-fortune-cookie-messages",

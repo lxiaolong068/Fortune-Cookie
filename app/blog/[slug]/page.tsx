@@ -20,15 +20,7 @@ import {
   ArticleStructuredData,
   BreadcrumbStructuredData,
 } from "@/components/StructuredData";
-import dynamic from "next/dynamic";
-
-const DynamicBackgroundEffects = dynamic(
-  () =>
-    import("@/components/BackgroundEffects").then(
-      (mod) => mod.BackgroundEffects,
-    ),
-  { ssr: false },
-);
+import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 
 const baseUrl = getSiteUrl();
 
@@ -79,6 +71,10 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: post.image
+        ? [getImageUrl(post.image)]
+        : [getImageUrl("/twitter-image.png")],
+      creator: "@fortunecookieai",
     },
     alternates: {
       canonical: `/blog/${slug}`,

@@ -6,7 +6,7 @@ import { SEO } from '@/components/SEO'
 import { UserHistory } from '@/components/UserHistory'
 import { UserPreferences } from '@/components/UserPreferences'
 import { UserStats } from '@/components/UserStats'
-import { getSiteUrl } from '@/lib/site'
+import { getImageUrl, getSiteUrl } from '@/lib/site'
 
 const baseUrl = getSiteUrl()
 
@@ -18,6 +18,21 @@ export const metadata: Metadata = {
     description: 'Manage your fortune cookie history, preferences, and usage stats.',
     type: 'website',
     url: `${baseUrl}/profile`,
+    images: [
+      {
+        url: getImageUrl('/og-image.png'),
+        width: 1200,
+        height: 630,
+        alt: 'Profile - Fortune Cookie AI',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Profile - Fortune Cookie AI',
+    description: 'Manage your fortune cookie history, preferences, and usage stats.',
+    images: [getImageUrl('/twitter-image.png')],
+    creator: '@fortunecookieai',
   },
   alternates: {
     canonical: '/profile',

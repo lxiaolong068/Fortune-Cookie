@@ -64,6 +64,13 @@ export async function generateMetadata({
       url: `${baseUrl}${canonicalUrl}`,
       images: [{ url: getImageUrl("/og-image.png"), width: 1200, height: 630 }],
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [getImageUrl("/twitter-image.png")],
+      creator: "@fortunecookieai",
+    },
     alternates: {
       canonical: canonicalUrl,
     },

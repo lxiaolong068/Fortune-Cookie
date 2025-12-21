@@ -9,7 +9,7 @@ import {
 import { FAQStructuredData, recipeFAQs } from "@/components/FAQStructuredData";
 import { InternalLink } from "@/components/InternalLinks";
 import { ExpandableRecipeCard } from "@/components/ExpandableRecipeCard";
-import { getSiteUrl } from "@/lib/site";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
 import {
   ChefHat,
   Sparkles,
@@ -35,6 +35,22 @@ export const metadata: Metadata = {
       "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions and baking tips. Perfect for parties and special occasions.",
     type: "article",
     url: `${baseUrl}/recipes`,
+    images: [
+      {
+        url: getImageUrl("/og-image.png"),
+        width: 1200,
+        height: 630,
+        alt: "Fortune Cookie Recipes",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free",
+    description:
+      "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions and baking tips.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
     canonical: "/recipes",

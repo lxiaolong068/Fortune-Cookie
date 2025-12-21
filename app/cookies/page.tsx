@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
-import { BackgroundEffects } from '@/components/BackgroundEffects'
+import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Cookie, Settings, BarChart3, Shield, Eye, Trash2, RefreshCw, Mail } from 'lucide-react'
+import { getImageUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Cookie Policy - Fortune Cookie AI',
@@ -12,6 +13,21 @@ export const metadata: Metadata = {
     description: 'Learn how Fortune Cookie AI uses cookies and local storage technologies.',
     type: 'article',
     url: 'https://www.fortune-cookie.cc/cookies',
+    images: [
+      {
+        url: getImageUrl('/og-image.png'),
+        width: 1200,
+        height: 630,
+        alt: 'Cookie Policy - Fortune Cookie AI',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cookie Policy - Fortune Cookie AI',
+    description: 'Learn how Fortune Cookie AI uses cookies and local storage technologies.',
+    images: [getImageUrl('/twitter-image.png')],
+    creator: '@fortunecookieai',
   },
   alternates: {
     canonical: '/cookies',
@@ -161,7 +177,7 @@ export default function CookiesPage() {
   return (
     <>
       <main className="min-h-screen w-full overflow-x-hidden relative">
-        <BackgroundEffects />
+        <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* Page title */}

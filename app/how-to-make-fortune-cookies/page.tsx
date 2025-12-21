@@ -19,7 +19,7 @@ import {
   FAQStructuredData,
   howToMakeFAQs,
 } from "@/components/FAQStructuredData";
-import { getSiteUrl } from "@/lib/site";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
 
 const baseUrl = getSiteUrl();
 
@@ -37,6 +37,22 @@ export const metadata: Metadata = {
       "Easy step-by-step guide to make homemade fortune cookies. Perfect for beginners with tips, tricks, and custom message ideas.",
     type: "article",
     url: `${baseUrl}/how-to-make-fortune-cookies`,
+    images: [
+      {
+        url: getImageUrl("/og-image.png"),
+        width: 1200,
+        height: 630,
+        alt: "How to Make Fortune Cookies",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "How to Make Fortune Cookies at Home - Easy Step by Step",
+    description:
+      "Easy step-by-step guide to make homemade fortune cookies. Perfect for beginners with tips, tricks, and custom message ideas.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
     canonical: "/how-to-make-fortune-cookies",

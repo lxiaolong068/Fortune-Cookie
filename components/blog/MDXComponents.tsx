@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { getImageUrl } from '@/lib/site'
 
 /**
  * Custom Link Component for internal/external links
@@ -54,24 +55,30 @@ function CustomImage({
   alt,
   width,
   height,
+  loading,
   ...props
 }: React.ImgHTMLAttributes<HTMLImageElement> & {
   width?: number | string
   height?: number | string
 }) {
   if (!src) return null
+  const resolvedSrc = src.startsWith('/') ? getImageUrl(src) : src
 
   // Use Next.js Image for optimized images
   if (src.startsWith('/') || src.startsWith('http')) {
+    const imageWidth = Number(width) || 800
+    const imageHeight = Number(height) || 450
     return (
       <figure className="my-10">
         <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-gray-100 dark:border-gray-800">
           <Image
-            src={src}
+            src={resolvedSrc}
             alt={alt || 'Blog image'}
-            width={Number(width) || 800}
-            height={Number(height) || 450}
+            width={imageWidth}
+            height={imageHeight}
             className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
+            sizes="(max-width: 768px) 100vw, 800px"
+            loading={loading}
           />
         </div>
         {alt && (
@@ -87,9 +94,13 @@ function CustomImage({
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
+      src={resolvedSrc}
       alt={alt || 'Blog image'}
       className="w-full h-auto rounded-lg my-8"
+      loading={loading || 'lazy'}
+      decoding="async"
+      width={typeof width === 'number' ? width : undefined}
+      height={typeof height === 'number' ? height : undefined}
       {...props}
     />
   )

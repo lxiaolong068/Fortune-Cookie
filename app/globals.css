@@ -307,8 +307,18 @@ a:focus-visible {
 }
 
 /* Skip link styling (Phase 1.2 enhancement) */
-.skip-link:focus {
-    @apply absolute top-4 left-4 z-[9999] px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg shadow-lg;
+.skip-link {
+    @apply sr-only;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    @apply absolute top-4 left-4 z-[9999] px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg shadow-lg outline-none ring-2 ring-amber-400 ring-offset-2 ring-offset-white dark:ring-offset-zinc-900;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    white-space: normal;
     clip: auto;
     clip-path: none;
 }

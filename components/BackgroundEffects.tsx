@@ -10,6 +10,7 @@ export function BackgroundEffects() {
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [saveData, setSaveData] = useState(false);
+  const [isLowPower, setIsLowPower] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [canAnimate, setCanAnimate] = useState(false);
 
@@ -23,14 +24,28 @@ export function BackgroundEffects() {
     };
 
     const checkDataSaver = () => {
-      // Check for data saver mode
+      // Check for data saver mode and connection quality
       type NetworkInformation = {
         saveData?: boolean;
+        effectiveType?: "slow-2g" | "2g" | "3g" | "4g";
       };
-      type NavigatorWithConnection = Navigator & { connection?: NetworkInformation };
+      type NavigatorWithConnection = Navigator & {
+        connection?: NetworkInformation;
+        deviceMemory?: number;
+      };
       const connection = (navigator as NavigatorWithConnection).connection;
       if (connection) {
         setSaveData(connection.saveData || false);
+        const effectiveType = connection.effectiveType;
+        if (effectiveType) {
+          setIsLowPower(
+            effectiveType === "slow-2g" || effectiveType === "2g",
+          );
+        }
+      }
+      const deviceMemory = (navigator as NavigatorWithConnection).deviceMemory;
+      if (typeof deviceMemory === "number" && deviceMemory < 4) {
+        setIsLowPower(true);
       }
     };
 
@@ -81,14 +96,32 @@ export function BackgroundEffects() {
   }, []);
 
   // Return static background if animations should be disabled
-  if (prefersReducedMotion || saveData || !isVisible || !canAnimate) {
+  if (
+    prefersReducedMotion ||
+    saveData ||
+    isLowPower ||
+    !isVisible ||
+    !canAnimate
+  ) {
     return <StaticBackground />;
   }
 
   // Reduce animation count on mobile for better performance
   // Further reduce for data saver mode
-  const sparkleCount = isMobile ? (saveData ? 3 : 6) : (saveData ? 6 : 12);
-  const particleCount = isMobile ? (saveData ? 4 : 8) : (saveData ? 10 : 20);
+  const sparkleCount = isMobile
+    ? saveData
+      ? 2
+      : 4
+    : saveData
+      ? 4
+      : 8;
+  const particleCount = isMobile
+    ? saveData
+      ? 2
+      : 4
+    : saveData
+      ? 6
+      : 12;
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">

@@ -9,7 +9,7 @@ import {
   ItemListStructuredData,
   BreadcrumbStructuredData,
 } from "@/components/StructuredData";
-import { getSiteUrl } from "@/lib/site";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
 
 const baseUrl = getSiteUrl();
 
@@ -23,6 +23,22 @@ export const metadata: Metadata = {
       "Explore the fascinating history of fortune cookies, the psychology behind why we love them, and a curated collection of inspirational, funny, and love-themed messages.",
     type: "website",
     url: `${baseUrl}/messages`,
+    images: [
+      {
+        url: getImageUrl("/og-image.png"),
+        width: 1200,
+        height: 630,
+        alt: "Fortune Cookie Messages",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fortune Cookie Messages: History, Psychology & Daily Inspiration",
+    description:
+      "Explore the fascinating history of fortune cookies, the psychology behind why we love them, and a curated collection of inspirational, funny, and love-themed messages.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
     canonical: "/messages",

@@ -1,4 +1,9 @@
 import { getStructuredDataUrls, getImageUrl } from "@/lib/site";
+import {
+  getAverageRating,
+  getTestimonialCount,
+  getTestimonials,
+} from "@/lib/testimonials";
 export { FAQStructuredData } from "./FAQStructuredData";
 
 interface StructuredDataProps {
@@ -54,6 +59,9 @@ export function WebsiteStructuredData({ nonce }: { nonce?: string | null } = {})
 
 export function WebApplicationStructuredData() {
   const urls = getStructuredDataUrls();
+  const reviews = getTestimonials(6);
+  const averageRating = getAverageRating();
+  const reviewCount = getTestimonialCount();
 
   const data = {
     "@context": "https://schema.org",
@@ -71,6 +79,29 @@ export function WebApplicationStructuredData() {
       price: "0",
       priceCurrency: "USD",
     },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: averageRating,
+      reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    ...(reviews.length > 0 && {
+      review: reviews.map((review) => ({
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: review.name,
+        },
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: review.rating,
+          bestRating: 5,
+          worstRating: 1,
+        },
+        reviewBody: review.quote,
+      })),
+    }),
     author: {
       "@type": "Organization",
       name: "Fortune Cookie AI Team",

@@ -182,6 +182,7 @@ export function FavoriteButton({
         size={buttonSize}
         onClick={handleToggleFavorite}
         disabled={isLoading}
+        aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
         className={cn(
           "gap-1.5 transition-colors",
           isFavorited && "text-red-500 hover:text-red-600",
@@ -207,6 +208,7 @@ export function FavoriteButton({
       size={buttonSize}
       onClick={handleToggleFavorite}
       disabled={isLoading}
+      aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
       className={cn(
         "gap-2 transition-all",
         isFavorited && "bg-red-500 hover:bg-red-600 text-white border-red-500",

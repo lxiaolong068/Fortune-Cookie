@@ -12,7 +12,7 @@ import {
   whoInventedFAQs,
 } from "@/components/FAQStructuredData";
 
-import { getSiteUrl } from "@/lib/site";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
 
 const baseUrl = getSiteUrl();
 
@@ -30,6 +30,22 @@ export const metadata: Metadata = {
       "Discover who invented fortune cookies! Explore the debate between Makoto Hagiwara and David Jung. Uncover the Japanese origins and American history.",
     type: "article",
     url: `${baseUrl}/who-invented-fortune-cookies`,
+    images: [
+      {
+        url: getImageUrl("/og-image.png"),
+        width: 1200,
+        height: 630,
+        alt: "Who Invented Fortune Cookies",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Who Invented Fortune Cookies? History & Origins Guide",
+    description:
+      "Discover who invented fortune cookies! Explore the debate between Makoto Hagiwara and David Jung.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
     canonical: "/who-invented-fortune-cookies",
