@@ -55,7 +55,8 @@ export function SocialShare({
     let currentLine = words[0] || "";
 
     for (let i = 1; i < words.length; i += 1) {
-      const word = words[i];
+      const word = words[i] || "";
+      if (!word) continue;
       const testLine = `${currentLine} ${word}`;
       if (ctx.measureText(testLine).width > maxWidth) {
         lines.push(currentLine);
