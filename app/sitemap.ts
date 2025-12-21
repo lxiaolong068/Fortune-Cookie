@@ -117,6 +117,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: dynamicContentDate, // User profile features
     },
     {
+      path: "/favorites",
+      priority: 0.6,
+      changeFrequency: "weekly" as const,
+      lastModified: dynamicContentDate, // User favorites page
+    },
+    {
       path: "/faq",
       priority: 0.7,
       changeFrequency: "monthly" as const,

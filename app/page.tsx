@@ -6,6 +6,8 @@ import { WebApplicationStructuredData } from "@/components/StructuredData";
 import { generateSEOMetadata } from "@/components/SEO";
 import { FortuneCookieStatic } from "@/components/FortuneCookieStatic";
 import { DeferredMount } from "@/components/DeferredMount";
+import { SocialProof } from "@/components/SocialProof";
+import { Testimonials } from "@/components/Testimonials";
 
 // Optimize for Edge Runtime - faster TTFB
 export const runtime = "edge";
@@ -149,7 +151,17 @@ export default function HomePage() {
                 </div>
               </section>
             </div>
+
+            {/* Social Proof Section */}
+            <div className="mt-16">
+              <SocialProof variant="hero" />
+            </div>
           </div>
+        </div>
+
+        {/* Testimonials Section */}
+        <div className="relative z-10 bg-gradient-to-b from-white/80 to-amber-50/30 backdrop-blur-sm pb-16">
+          <Testimonials limit={6} />
         </div>
       </main>
     </>

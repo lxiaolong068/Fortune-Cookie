@@ -15,6 +15,7 @@ import {
   Search,
   User,
   BookOpen,
+  Heart,
   LogIn,
   LogOut,
 } from "lucide-react";
@@ -52,6 +53,12 @@ const navigationItems = [
     href: "/browse",
     icon: Search,
     description: "Search & filter fortunes",
+  },
+  {
+    name: "Favorites",
+    href: "/favorites",
+    icon: Heart,
+    description: "Your saved fortunes",
   },
   {
     name: "History",
