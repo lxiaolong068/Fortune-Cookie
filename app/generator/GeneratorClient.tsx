@@ -45,7 +45,8 @@ interface FortuneApiResponse {
 }
 
 export function GeneratorClient() {
-  const { status } = useSession();
+  const session = useSession();
+  const status = session?.status ?? "loading";
   const isAuthenticated = status === "authenticated";
 
   // Core state
