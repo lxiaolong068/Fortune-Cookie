@@ -1,21 +1,24 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, Home, Sparkles, ArrowRight } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Sparkles, ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/InternalLinks";
-import { fortuneDatabase, type FortuneMessage } from "@/lib/fortune-database";
+import { fortuneDatabase } from "@/lib/fortune-database";
 import { getImageUrl } from "@/lib/site";
 
-// Define valid categories
+// Define valid categories (expanded with new categories)
 const VALID_CATEGORIES = [
   "inspirational",
   "funny",
   "love",
   "success",
   "wisdom",
+  "friendship",
+  "birthday",
+  "study",
 ] as const;
 
 type CategoryType = (typeof VALID_CATEGORIES)[number];
@@ -81,6 +84,36 @@ const categoryConfig: Record<
     emoji: "🧠",
     color: "text-purple-600",
     bgColor: "bg-purple-50",
+  },
+  friendship: {
+    title: "Friendship Fortune Cookie Messages",
+    description:
+      "Heartwarming fortune cookie messages celebrating the bonds of friendship and companionship.",
+    metaDescription:
+      "Browse 100+ friendship fortune cookie messages. Heartfelt sayings to celebrate your friends and the bonds you share.",
+    emoji: "👫",
+    color: "text-teal-600",
+    bgColor: "bg-teal-50",
+  },
+  birthday: {
+    title: "Birthday Fortune Cookie Messages",
+    description:
+      "Celebratory fortune cookie messages perfect for birthday wishes, party favors, and special occasions.",
+    metaDescription:
+      "Discover 50+ birthday fortune cookie messages. Perfect sayings for birthday cards, party favors, and celebrating special days.",
+    emoji: "🎂",
+    color: "text-orange-600",
+    bgColor: "bg-orange-50",
+  },
+  study: {
+    title: "Study & Motivation Fortune Cookie Messages",
+    description:
+      "Inspiring fortune cookie messages for students, exam preparation, and academic motivation.",
+    metaDescription:
+      "Find 50+ study and motivation fortune cookie messages. Perfect for students, exam prep, and academic encouragement.",
+    emoji: "📚",
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-50",
   },
 };
 
@@ -166,11 +199,30 @@ export default async function CategoryPage({ params }: PageProps) {
   const breadcrumbItems = [
     { name: "Home", href: "/" },
     { name: "Messages", href: "/messages" },
-    { name: config.title.replace(" Fortune Cookie Messages", "") },
+    {
+      name: config.title
+        .replace(" Fortune Cookie Messages", "")
+        .replace(" Messages", ""),
+    },
   ];
 
   // Related categories (exclude current)
   const relatedCategories = VALID_CATEGORIES.filter((c) => c !== category);
+
+  // Get border color based on category
+  const getBorderColor = (cat: string) => {
+    const colors: Record<string, string> = {
+      inspirational: "#2563eb",
+      funny: "#ca8a04",
+      love: "#db2777",
+      success: "#16a34a",
+      wisdom: "#9333ea",
+      friendship: "#0d9488",
+      birthday: "#ea580c",
+      study: "#4f46e5",
+    };
+    return colors[cat] || "#f59e0b";
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
@@ -202,21 +254,12 @@ export default async function CategoryPage({ params }: PageProps) {
       {/* Fortune Messages Grid */}
       <section className="container mx-auto px-4 py-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {categoryFortunes.slice(0, 30).map((fortune, index) => (
+          {categoryFortunes.slice(0, 30).map((fortune) => (
             <Card
               key={fortune.id}
               className="hover:shadow-lg transition-shadow duration-200 border-l-4"
               style={{
-                borderLeftColor:
-                  category === "inspirational"
-                    ? "#2563eb"
-                    : category === "funny"
-                      ? "#ca8a04"
-                      : category === "love"
-                        ? "#db2777"
-                        : category === "success"
-                          ? "#16a34a"
-                          : "#9333ea",
+                borderLeftColor: getBorderColor(category),
               }}
             >
               <CardContent className="p-5">
@@ -274,7 +317,7 @@ export default async function CategoryPage({ params }: PageProps) {
               size="lg"
               className="bg-white text-amber-600 hover:bg-amber-50"
             >
-              <Link href="/ai-generator">
+              <Link href={`/generator?category=${category}`}>
                 Generate AI Fortune <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -288,7 +331,7 @@ export default async function CategoryPage({ params }: PageProps) {
           Explore Other Categories
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {relatedCategories.map((cat) => {
+          {relatedCategories.slice(0, 4).map((cat) => {
             const catConfig = categoryConfig[cat];
             return (
               <Link key={cat} href={`/messages/${cat}`}>
@@ -300,7 +343,9 @@ export default async function CategoryPage({ params }: PageProps) {
                       <span className="text-2xl">{catConfig.emoji}</span>
                     </div>
                     <h3 className={`font-semibold ${catConfig.color}`}>
-                      {catConfig.title.replace(" Fortune Cookie Messages", "")}
+                      {catConfig.title
+                        .replace(" Fortune Cookie Messages", "")
+                        .replace(" Messages", "")}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
                       {
@@ -360,7 +405,9 @@ export default async function CategoryPage({ params }: PageProps) {
                 {
                   "@type": "ListItem",
                   position: 3,
-                  name: config.title.replace(" Fortune Cookie Messages", ""),
+                  name: config.title
+                    .replace(" Fortune Cookie Messages", "")
+                    .replace(" Messages", ""),
                   item: `https://fortunecookieai.app/messages/${category}`,
                 },
               ],
