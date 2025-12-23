@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { openRouterClient, FortuneRequest, type FortuneResponse } from "@/lib/openrouter";
+import {
+  openRouterClient,
+  FortuneRequest,
+  type FortuneResponse,
+} from "@/lib/openrouter";
 import {
   captureApiError,
   captureUserAction,
@@ -64,6 +68,21 @@ function validateMood(mood: string): boolean {
 function validateLength(length: string): boolean {
   const validLengths = ["short", "medium", "long"];
   return validLengths.includes(length);
+}
+
+function validateScenario(scenario: string): boolean {
+  const validScenarios = ["work", "love", "study", "health", "other", ""];
+  return validScenarios.includes(scenario);
+}
+
+function validateTone(tone: string): boolean {
+  const validTones = ["soft", "direct", "playful", ""];
+  return validTones.includes(tone);
+}
+
+function validateLanguage(language: string): boolean {
+  const validLanguages = ["en", "zh"];
+  return validLanguages.includes(language);
 }
 
 // CORSconfiguration
@@ -157,6 +176,11 @@ export async function POST(request: NextRequest) {
       ? sanitizeString(body.customPrompt, 500)
       : undefined;
 
+    // Personalization parameters
+    const scenario = body.scenario ? sanitizeString(body.scenario, 50) : "";
+    const tone = body.tone ? sanitizeString(body.tone, 50) : "";
+    const language = body.language ? sanitizeString(body.language, 10) : "en";
+
     // Validate parameters
     if (!validateTheme(theme)) {
       return NextResponse.json(
@@ -181,6 +205,32 @@ export async function POST(request: NextRequest) {
         createErrorResponse(
           "Invalid length. Must be one of: short, medium, long",
         ),
+        { status: 400 },
+      );
+    }
+
+    // Validate personalization parameters
+    if (!validateScenario(scenario)) {
+      return NextResponse.json(
+        createErrorResponse(
+          "Invalid scenario. Must be one of: work, love, study, health, other, or empty",
+        ),
+        { status: 400 },
+      );
+    }
+
+    if (!validateTone(tone)) {
+      return NextResponse.json(
+        createErrorResponse(
+          "Invalid tone. Must be one of: soft, direct, playful, or empty",
+        ),
+        { status: 400 },
+      );
+    }
+
+    if (!validateLanguage(language)) {
+      return NextResponse.json(
+        createErrorResponse("Invalid language. Must be one of: en, zh"),
         { status: 400 },
       );
     }
@@ -241,13 +291,18 @@ export async function POST(request: NextRequest) {
       mood: mood as FortuneRequest["mood"],
       length: length as FortuneRequest["length"],
       customPrompt,
+      // Personalization parameters
+      scenario: scenario as FortuneRequest["scenario"],
+      tone: tone as FortuneRequest["tone"],
+      language: language as FortuneRequest["language"],
     };
 
     // generation/generaterequesthashused forcache
     const requestHash = generateRequestHash(fortuneRequest);
 
     // checkcache
-    let fortune = await cacheManager.getCachedFortune<FortuneResponse>(requestHash);
+    let fortune =
+      await cacheManager.getCachedFortune<FortuneResponse>(requestHash);
 
     // Never serve cached fallback/database fortunes; they can get stuck after a transient AI failure.
     if (fortune && fortune.source !== "ai") {
@@ -298,7 +353,7 @@ export async function POST(request: NextRequest) {
         // Redis unavailable - allow AI generation in development, but log warning
         console.warn(
           "⚠️ Redis unavailable: AI generation proceeding without rate limiting. " +
-          "This is acceptable for development but should be configured for production."
+            "This is acceptable for development but should be configured for production.",
         );
       }
 
@@ -320,6 +375,9 @@ export async function POST(request: NextRequest) {
       mood: fortuneRequest.mood,
       length: fortuneRequest.length,
       hasCustomPrompt: !!fortuneRequest.customPrompt,
+      scenario: fortuneRequest.scenario || "none",
+      tone: fortuneRequest.tone || "none",
+      language: fortuneRequest.language || "en",
       responseTime,
       source: fortune.source || "unknown",
       cached: !!fortune.cached,
@@ -364,10 +422,7 @@ export async function POST(request: NextRequest) {
     // Disable edge caching when quota metadata is included (user-specific response).
     response.headers.set("Cache-Control", "no-store, private");
     response.headers.set("CDN-Cache-Control", "no-store");
-    response.headers.set(
-      "Vary",
-      "Accept-Encoding, Authorization, X-Client-Id",
-    );
+    response.headers.set("Vary", "Accept-Encoding, Authorization, X-Client-Id");
 
     // CORS headers
     response.headers.set("Access-Control-Allow-Origin", getCorsOrigin());
