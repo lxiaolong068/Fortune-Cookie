@@ -165,6 +165,10 @@ self.addEventListener('fetch', (event) => {
 // 处理API请求 - Stale-While-Revalidate 策略
 async function handleApiRequest(request) {
   const url = new URL(request.url)
+  if (!isCacheableApi(url.pathname)) {
+    return fetch(request)
+  }
+
   const cache = await caches.open(API_CACHE_NAME)
 
   // 立即从缓存获取（如果有）

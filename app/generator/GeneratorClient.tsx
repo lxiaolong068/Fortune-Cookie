@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
+import { useAuthSession } from "@/lib/auth-client";
 
 // Types
 import type {
@@ -45,9 +45,9 @@ interface FortuneApiResponse {
 }
 
 export function GeneratorClient() {
-  const session = useSession();
-  const status = session?.status ?? "loading";
+  const { status } = useAuthSession();
   const isAuthenticated = status === "authenticated";
+  const isAuthLoading = status === "loading";
 
   // Core state
   const [cookieState, setCookieState] = useState<CookieState>("unopened");
@@ -183,6 +183,7 @@ export function GeneratorClient() {
         quotaStatus={quotaStatus}
         isQuotaLoading={isQuotaLoading}
         isAuthenticated={isAuthenticated}
+        isAuthLoading={isAuthLoading}
       />
 
       {/* Main Generator Area */}

@@ -23,7 +23,10 @@ export function useAuthSession() {
 
     const loadSession = async () => {
       try {
-        const response = await fetch("/api/auth/session");
+        const response = await fetch("/api/auth/session", {
+          cache: "no-store",
+          credentials: "include",
+        });
         const data = await response.json().catch(() => null);
 
         if (!active) return;

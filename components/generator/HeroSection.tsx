@@ -12,12 +12,14 @@ interface HeroSectionProps {
   quotaStatus: QuotaStatus | null;
   isQuotaLoading: boolean;
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
 }
 
 export function HeroSection({
   quotaStatus,
   isQuotaLoading,
   isAuthenticated,
+  isAuthLoading,
 }: HeroSectionProps) {
   const quotaPercentage = quotaStatus
     ? ((quotaStatus.limit - quotaStatus.remaining) / quotaStatus.limit) * 100
@@ -93,6 +95,10 @@ export function HeroSection({
                 <Badge className="bg-green-100 text-green-700 border-green-200">
                   Signed in
                 </Badge>
+              ) : isAuthLoading ? (
+                <Badge className="bg-slate-100 text-slate-700 border-slate-200">
+                  Checking
+                </Badge>
               ) : (
                 <Badge className="bg-amber-100 text-amber-700 border-amber-200">
                   Guest
@@ -118,7 +124,7 @@ export function HeroSection({
             )}
 
             {/* Sign In CTA for Guests */}
-            {!isAuthenticated && (
+            {!isAuthenticated && !isAuthLoading && (
               <Button
                 variant="outline"
                 size="sm"
