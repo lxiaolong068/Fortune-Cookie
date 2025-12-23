@@ -11,6 +11,7 @@ import type { QuotaStatus } from "@/lib/types/generator";
 interface HeroSectionProps {
   quotaStatus: QuotaStatus | null;
   isQuotaLoading: boolean;
+  quotaError: string | null;
   isAuthenticated: boolean;
   isAuthLoading: boolean;
 }
@@ -18,6 +19,7 @@ interface HeroSectionProps {
 export function HeroSection({
   quotaStatus,
   isQuotaLoading,
+  quotaError,
   isAuthenticated,
   isAuthLoading,
 }: HeroSectionProps) {
@@ -86,9 +88,11 @@ export function HeroSection({
                   Today&apos;s fortune quota
                 </p>
                 <p className="text-xs text-gray-500">
-                  {isQuotaLoading || !quotaStatus
+                  {isQuotaLoading
                     ? "Loading quota..."
-                    : `${quotaStatus.remaining} of ${quotaStatus.limit} remaining`}
+                    : quotaStatus
+                      ? `${quotaStatus.remaining} of ${quotaStatus.limit} remaining`
+                      : quotaError || "Quota unavailable"}
                 </p>
               </div>
               {isAuthenticated ? (

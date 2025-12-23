@@ -64,6 +64,7 @@ export function GeneratorClient() {
   // UI state
   const [quotaStatus, setQuotaStatus] = useState<QuotaStatus | null>(null);
   const [isQuotaLoading, setIsQuotaLoading] = useState(true);
+  const [quotaError, setQuotaError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<HistoryTab>("recent");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
@@ -78,16 +79,32 @@ export function GeneratorClient() {
 
   const fetchQuotaStatus = async () => {
     setIsQuotaLoading(true);
+    setQuotaError(null);
     try {
-      const response = await fetch("/api/fortune/quota");
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data) {
-          setQuotaStatus(data.data);
-        }
+      const response = await fetch("/api/fortune/quota", {
+        cache: "no-store",
+        credentials: "include",
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(
+          typeof data?.error === "string"
+            ? data.error
+            : "Failed to load quota status.",
+        );
       }
+
+      if (data?.data) {
+        setQuotaStatus(data.data);
+        return;
+      }
+
+      throw new Error("Unexpected quota response.");
     } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to load quota status.";
       console.error("Failed to fetch quota:", err);
+      setQuotaError(message);
     } finally {
       setIsQuotaLoading(false);
     }
@@ -182,6 +199,7 @@ export function GeneratorClient() {
       <HeroSection
         quotaStatus={quotaStatus}
         isQuotaLoading={isQuotaLoading}
+        quotaError={quotaError}
         isAuthenticated={isAuthenticated}
         isAuthLoading={isAuthLoading}
       />

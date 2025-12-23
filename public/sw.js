@@ -405,7 +405,7 @@ function isStaticAsset(pathname) {
 
 // 工具函数：检查API是否可缓存
 function isCacheableApi(pathname) {
-  return CACHEABLE_APIS.some(api => pathname.startsWith(api))
+  return CACHEABLE_APIS.some(api => pathname === api)
 }
 
 // 消息处理 - 与主线程通信
