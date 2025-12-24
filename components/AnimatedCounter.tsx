@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface AnimatedCounterProps {
   /** The target number to count to */
@@ -15,14 +16,16 @@ interface AnimatedCounterProps {
   prefix?: string;
   /** Additional className for styling */
   className?: string;
+  /** Show visual highlight effect when counting */
+  showHighlight?: boolean;
 }
 
 /**
- * Easing function for smooth animation (easeOutQuart)
- * Starts fast, ends slow for a natural counting feel
+ * Easing function for smooth animation (easeOutExpo)
+ * More dramatic start, smoother end for visual impact
  */
-function easeOutQuart(t: number): number {
-  return 1 - Math.pow(1 - t, 4);
+function easeOutExpo(t: number): number {
+  return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 }
 
 /**
@@ -41,20 +44,24 @@ export function AnimatedCounter({
   suffix = "",
   prefix = "",
   className,
+  showHighlight = true,
 }: AnimatedCounterProps) {
   const [displayValue, setDisplayValue] = useState(value);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const elementRef = useRef<HTMLSpanElement>(null);
   const animationRef = useRef<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const startAnimation = useCallback(() => {
     const startTime = performance.now();
     setDisplayValue(0);
+    setIsAnimating(true);
 
     function animate(currentTime: number) {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const easedProgress = easeOutQuart(progress);
+      const easedProgress = easeOutExpo(progress);
       const currentValue = Math.floor(easedProgress * value);
 
       setDisplayValue(currentValue);
@@ -63,6 +70,7 @@ export function AnimatedCounter({
         animationRef.current = requestAnimationFrame(animate);
       } else {
         setDisplayValue(value);
+        setIsAnimating(false);
       }
     }
 
@@ -70,11 +78,6 @@ export function AnimatedCounter({
   }, [duration, value]);
 
   useEffect(() => {
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
     if (prefersReducedMotion) {
       setDisplayValue(value);
       setHasAnimated(true);
@@ -94,8 +97,8 @@ export function AnimatedCounter({
         }
       },
       {
-        threshold: 0.5,
-        rootMargin: "0px",
+        threshold: 0.3,
+        rootMargin: "0px 0px -50px 0px",
       },
     );
 
@@ -107,17 +110,50 @@ export function AnimatedCounter({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [value, hasAnimated, startAnimation]);
+  }, [value, hasAnimated, startAnimation, prefersReducedMotion]);
 
   const formattedValue = formatNumber
     ? displayValue.toLocaleString()
     : displayValue.toString();
 
+  // If reduced motion, render simple span
+  if (prefersReducedMotion) {
+    return (
+      <span ref={elementRef} className={className}>
+        {prefix}
+        {formattedValue}
+        {suffix}
+      </span>
+    );
+  }
+
   return (
-    <span ref={elementRef} className={className}>
+    <motion.span
+      ref={elementRef}
+      className={`relative inline-block ${className || ""}`}
+      animate={
+        isAnimating && showHighlight
+          ? {
+              scale: [1, 1.05, 1],
+            }
+          : {}
+      }
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      {/* Highlight glow effect during animation */}
+      {isAnimating && showHighlight && (
+        <motion.span
+          className="absolute inset-0 -z-10 rounded-lg bg-amber-400/20 blur-md"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: [0, 0.5, 0], scale: [0.8, 1.2, 1] }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        />
+      )}
       {prefix}
-      {formattedValue}
+      <span className={isAnimating ? "tabular-nums" : ""}>
+        {formattedValue}
+      </span>
       {suffix}
-    </span>
+    </motion.span>
   );
 }

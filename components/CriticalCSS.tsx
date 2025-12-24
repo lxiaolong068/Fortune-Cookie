@@ -169,13 +169,76 @@ export function CriticalCSS() {
             transition: transform 0.1s ease-out;
           }
 
+          /* Hero decoration animations */
+          @keyframes heroFloatSlow {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+          }
+
+          @keyframes heroFloatMedium {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.03); }
+          }
+
+          @keyframes heroFloatFast {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+          }
+
+          @keyframes heroSparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.7; transform: scale(1.2) rotate(180deg); }
+          }
+
+          @keyframes heroPulse {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(1.1); }
+          }
+
+          .hero-float-slow {
+            animation: heroFloatSlow 8s ease-in-out infinite;
+          }
+
+          .hero-float-medium {
+            animation: heroFloatMedium 6s ease-in-out infinite;
+          }
+
+          .hero-float-fast {
+            animation: heroFloatFast 4s ease-in-out infinite;
+          }
+
+          .hero-sparkle {
+            animation: heroSparkle 4s ease-in-out infinite;
+          }
+
+          .hero-sparkle-delay {
+            animation: heroSparkle 4s ease-in-out infinite;
+            animation-delay: 2s;
+          }
+
+          .hero-pulse {
+            animation: heroPulse 6s ease-in-out infinite;
+          }
+
+          .hero-pulse-delay {
+            animation: heroPulse 6s ease-in-out infinite;
+            animation-delay: 3s;
+          }
+
           /* Respect reduced motion preference */
           @media (prefers-reduced-motion: reduce) {
             .cookie-float,
             .cookie-sparkle,
             .cookie-sparkle-reverse,
             .magic-pulse,
-            .cookie-glow {
+            .cookie-glow,
+            .hero-float-slow,
+            .hero-float-medium,
+            .hero-float-fast,
+            .hero-sparkle,
+            .hero-sparkle-delay,
+            .hero-pulse,
+            .hero-pulse-delay {
               animation: none;
             }
             .cookie-float:hover {

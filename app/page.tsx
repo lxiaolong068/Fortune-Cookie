@@ -7,9 +7,9 @@ import {
   Smile,
   Dice1,
   Wand2,
-  Clapperboard,
+  Zap,
   Smartphone,
-  UserCheck,
+  ShieldCheck,
 } from "lucide-react";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import { WebApplicationStructuredData } from "@/components/StructuredData";
@@ -82,47 +82,79 @@ const UseCaseScenes = dynamic(
   { ssr: false, loading: () => null },
 );
 
-// Feature list with colorful icons
+// Scroll reveal component - loaded dynamically for non-critical sections
+const ScrollReveal = dynamic(
+  () => import("@/components/ScrollReveal").then((mod) => mod.ScrollReveal),
+  { ssr: false, loading: () => null },
+);
+
+const StaggerContainer = dynamic(
+  () => import("@/components/ScrollReveal").then((mod) => mod.StaggerContainer),
+  { ssr: false, loading: () => null },
+);
+
+const StaggerItem = dynamic(
+  () => import("@/components/ScrollReveal").then((mod) => mod.StaggerItem),
+  { ssr: false, loading: () => null },
+);
+
+// Feature list with colorful icons and gradient backgrounds
 const features = [
   {
     icon: Sparkles,
     text: "Free online fortune cookie generator with AI",
-    color: "text-amber-500",
+    color: "text-amber-600",
+    bgColor: "bg-amber-100",
+    borderColor: "border-amber-200",
   },
   {
     icon: Heart,
     text: "Inspirational and motivational quotes",
-    color: "text-pink-500",
+    color: "text-pink-600",
+    bgColor: "bg-pink-100",
+    borderColor: "border-pink-200",
   },
   {
     icon: Smile,
     text: "Funny fortune cookie messages",
-    color: "text-yellow-500",
+    color: "text-yellow-600",
+    bgColor: "bg-yellow-100",
+    borderColor: "border-yellow-200",
   },
   {
     icon: Dice1,
     text: "Lucky numbers for each fortune",
-    color: "text-green-500",
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+    borderColor: "border-green-200",
   },
   {
     icon: Wand2,
     text: "Custom message creation",
-    color: "text-purple-500",
+    color: "text-purple-600",
+    bgColor: "bg-purple-100",
+    borderColor: "border-purple-200",
   },
   {
-    icon: Clapperboard,
+    icon: Zap,
     text: "Beautiful animations and effects",
-    color: "text-blue-500",
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+    borderColor: "border-blue-200",
   },
   {
     icon: Smartphone,
     text: "Mobile-friendly responsive design",
-    color: "text-cyan-500",
+    color: "text-cyan-600",
+    bgColor: "bg-cyan-100",
+    borderColor: "border-cyan-200",
   },
   {
-    icon: UserCheck,
+    icon: ShieldCheck,
     text: "No registration required",
-    color: "text-emerald-500",
+    color: "text-emerald-600",
+    bgColor: "bg-emerald-100",
+    borderColor: "border-emerald-200",
   },
 ];
 
@@ -187,75 +219,117 @@ export default function HomePage() {
         {/* SEO-optimized visible content */}
         <div className="relative z-10 bg-gradient-to-b from-white to-orange-50/30 backdrop-blur-sm border-t border-amber-200/50 pt-12 pb-16">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center mb-16">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
-                Fortune Cookie - Free Online AI Generator
-              </h1>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Welcome to the best free online AI-powered fortune cookie
-                generator! Create personalized inspirational messages, funny
-                quotes, and discover your lucky numbers. Our AI tool generates
-                unique fortune cookies for entertainment, motivation, and fun.
-              </p>
-            </div>
+            <Suspense fallback={null}>
+              <ScrollReveal direction="up" delay={0.1}>
+                <div className="max-w-4xl mx-auto text-center mb-16">
+                  <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+                    Fortune Cookie - Free Online AI Generator
+                  </h1>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    Welcome to the best free online AI-powered fortune cookie
+                    generator! Create personalized inspirational messages, funny
+                    quotes, and discover your lucky numbers. Our AI tool
+                    generates unique fortune cookies for entertainment,
+                    motivation, and fun.
+                  </p>
+                </div>
+              </ScrollReveal>
+            </Suspense>
 
             <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
               <section>
-                <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
-                  <span className="text-3xl">✨</span> Why Use Our Generator?
-                </h2>
-                <ul className="space-y-4">
-                  {features.map((feature, index) => {
-                    const Icon = feature.icon;
-                    return (
-                      <li
-                        key={index}
-                        className="flex items-start gap-3 text-gray-700"
-                      >
-                        <Icon
-                          className={`h-5 w-5 mt-0.5 flex-shrink-0 ${feature.color}`}
-                          aria-hidden="true"
-                        />
-                        <span>{feature.text}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
+                <Suspense fallback={null}>
+                  <ScrollReveal direction="left" delay={0.2}>
+                    <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
+                      <span className="text-3xl">✨</span> Why Use Our
+                      Generator?
+                    </h2>
+                  </ScrollReveal>
+                  <StaggerContainer staggerDelay={0.08} className="space-y-3">
+                    {features.map((feature, index) => {
+                      const Icon = feature.icon;
+                      return (
+                        <StaggerItem key={index} direction="left">
+                          <div
+                            className={`flex items-center gap-3 p-3 rounded-lg ${feature.bgColor} border ${feature.borderColor} transition-all duration-200 hover:scale-[1.02] hover:shadow-md`}
+                          >
+                            <div
+                              className={`p-2 rounded-full bg-white/80 shadow-sm`}
+                            >
+                              <Icon
+                                className={`h-5 w-5 ${feature.color}`}
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <span className="text-gray-700 font-medium">
+                              {feature.text}
+                            </span>
+                          </div>
+                        </StaggerItem>
+                      );
+                    })}
+                  </StaggerContainer>
+                </Suspense>
               </section>
 
               <section>
-                <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
-                  <span className="text-3xl">🥠</span> How to Use
-                </h2>
-                <div className="prose prose-amber text-gray-600">
-                  <p className="mb-4">
-                    Simply click on the fortune cookie above to crack it open
-                    and reveal your personalized message. Each fortune comes
-                    with:
-                  </p>
-                  <ul className="list-disc pl-5 space-y-2 mb-6">
-                    <li>A unique wisdom or prediction</li>
-                    <li>Your daily lucky numbers</li>
-                    <li>Shareable wisdom to brighten your day</li>
-                  </ul>
-                  <p>
-                    Want more specific fortunes? Try our{" "}
-                    <a
-                      href="/generator"
-                      className="text-amber-600 hover:underline font-medium"
-                    >
-                      AI Generator
-                    </a>{" "}
-                    to create custom messages for friends and family!
-                  </p>
-                </div>
+                <Suspense fallback={null}>
+                  <ScrollReveal direction="right" delay={0.2}>
+                    <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
+                      <span className="text-3xl">🥠</span> How to Use
+                    </h2>
+                  </ScrollReveal>
+                  <ScrollReveal direction="right" delay={0.3}>
+                    <div className="prose prose-amber text-gray-600 bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-amber-200">
+                      <p className="mb-4">
+                        Simply click on the fortune cookie above to crack it
+                        open and reveal your personalized message. Each fortune
+                        comes with:
+                      </p>
+                      <ul className="list-none pl-0 space-y-3 mb-6">
+                        <li className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 text-sm font-bold">
+                            1
+                          </span>
+                          A unique wisdom or prediction
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 text-sm font-bold">
+                            2
+                          </span>
+                          Your daily lucky numbers
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 text-sm font-bold">
+                            3
+                          </span>
+                          Shareable wisdom to brighten your day
+                        </li>
+                      </ul>
+                      <p>
+                        Want more specific fortunes? Try our{" "}
+                        <a
+                          href="/generator"
+                          className="text-amber-600 hover:underline font-medium"
+                        >
+                          AI Generator
+                        </a>{" "}
+                        to create custom messages for friends and family!
+                      </p>
+                    </div>
+                  </ScrollReveal>
+                </Suspense>
               </section>
             </div>
 
             {/* Social Proof Section */}
-            <div className="mt-16">
-              <SocialProof variant="hero" />
-            </div>
+            <Suspense fallback={null}>
+              <ScrollReveal direction="up" delay={0.2}>
+                <div className="mt-16">
+                  <SocialProof variant="hero" />
+                </div>
+              </ScrollReveal>
+            </Suspense>
           </div>
         </div>
 

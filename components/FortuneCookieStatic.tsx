@@ -1,6 +1,7 @@
 // Note: Image and getImageUrl are available for future use with optimized hero images
 // import Image from "next/image";
 // import { getImageUrl } from "@/lib/site";
+import { HeroDecorations } from "./HeroDecorations";
 
 /**
  * Static LCP Component - Server-Side Rendered
@@ -20,11 +21,14 @@
 export function FortuneCookieStatic() {
   return (
     <section
-      className="fortune-cookie-lcp flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-orange-50/80 to-amber-100/80 backdrop-blur-sm"
+      className="fortune-cookie-lcp relative flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-orange-50/80 to-amber-100/80 backdrop-blur-sm"
       style={{ contentVisibility: "auto" }}
       aria-label="Fortune Cookie Experience"
     >
-      <div className="w-full max-w-2xl min-h-[600px] flex flex-col items-center justify-center">
+      {/* Hero Background Decorations */}
+      <HeroDecorations />
+
+      <div className="w-full max-w-2xl min-h-[600px] flex flex-col items-center justify-center relative z-10">
         {/* LCP Element: Cookie Visual */}
         <div className="fortune-cookie-static w-32 h-32 flex items-center justify-center mb-8">
           <div className="cookie-float cursor-pointer">
