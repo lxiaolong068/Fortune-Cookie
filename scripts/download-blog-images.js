@@ -58,6 +58,25 @@ const blogPosts = [
     searchQuery: "celebration party confetti festive",
     fallbackQuery: "new year celebration virtual",
   },
+  // New articles - December 2024
+  {
+    slug: "overcoming-decision-fatigue-ai-fortune-cookies",
+    filename: "decision-fatigue-hero.jpg",
+    searchQuery: "decision making overwhelmed choices productivity",
+    fallbackQuery: "mental clarity focus thinking",
+  },
+  {
+    slug: "wedding-fortune-cookie-messages-guide-2025",
+    filename: "wedding-fortune-cookies-hero.jpg",
+    searchQuery: "wedding favors table setting elegant celebration",
+    fallbackQuery: "wedding reception romantic dinner",
+  },
+  {
+    slug: "american-cultural-values-fortune-cookie-phrases",
+    filename: "american-cultural-values-hero.jpg",
+    searchQuery: "american culture diversity statue liberty",
+    fallbackQuery: "usa patriotic culture melting pot",
+  },
 ];
 
 const outputDir = path.join(__dirname, "..", "public", "images", "blog");
