@@ -8,6 +8,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Calendar, Clock, User, ArrowLeft, Tag } from "lucide-react";
 import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from "@/lib/blog";
@@ -16,6 +17,7 @@ import { BlogCard } from "@/components/blog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getSiteUrl, getImageUrl } from "@/lib/site";
+import { getBlobUrl } from "@/lib/blob-urls";
 import {
   ArticleStructuredData,
   BreadcrumbStructuredData,
@@ -181,7 +183,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           </header>
 
-          {/* Article Content */}
+          {/* Cover Image */}
+          <div className="mb-12 max-w-3xl mx-auto">
+            {post.image && post.image.length > 0 ? (
+              <div className="relative aspect-[16/9] overflow-hidden rounded-2xl shadow-lg bg-gradient-to-br from-amber-100 to-orange-100">
+                <Image
+                  src={getBlobUrl(post.image)}
+                  alt={`Cover image for ${post.title}`}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 896px"
+                />
+              </div>
+            ) : (
+              <div className="relative aspect-[16/9] overflow-hidden rounded-2xl shadow-lg bg-gradient-to-br from-amber-200 via-yellow-100 to-orange-200 flex items-center justify-center">
+                <span className="text-8xl" role="img" aria-label="Fortune cookie">
+                  🥠
+                </span>
+              </div>
+            )}
+          </div>
+
           {/* Article Content */}
           <article className="prose prose-lg prose-amber dark:prose-invert max-w-3xl mx-auto mb-16 prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-img:rounded-xl prose-img:shadow-lg prose-a:text-amber-600 hover:prose-a:text-amber-700 prose-blockquote:border-l-amber-500 prose-blockquote:bg-amber-50/50 dark:prose-blockquote:bg-amber-900/10 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic">
             <MDXRemote source={post.content} components={mdxComponents} />
