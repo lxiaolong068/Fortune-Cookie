@@ -24,7 +24,7 @@ function getAllTags(): string[] {
 // Get fortunes by tag
 function getFortunesByTag(tag: string): FortuneMessage[] {
   return fortuneDatabase.filter((fortune) =>
-    fortune.tags.some((t) => t.toLowerCase() === tag.toLowerCase())
+    fortune.tags.some((t) => t.toLowerCase() === tag.toLowerCase()),
   );
 }
 
@@ -59,17 +59,17 @@ export async function generateMetadata({
   const formattedTag = formatTagName(decodedTag);
 
   return {
-    title: `${formattedTag} Fortune Cookie Messages | Fortune Cookie AI`,
+    title: `${formattedTag} Fortune Messages | Fortune Cookie AI`,
     description: `Discover ${fortunes.length}+ fortune cookie messages about ${decodedTag}. Find inspiring quotes and wisdom related to ${decodedTag}.`,
     openGraph: {
-      title: `${formattedTag} Fortune Cookie Messages`,
+      title: `${formattedTag} Fortune Messages`,
       description: `Explore ${fortunes.length}+ fortune cookie messages about ${decodedTag}.`,
       type: "website",
       url: `/tag/${tag}`,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${formattedTag} Fortune Cookie Messages`,
+      title: `${formattedTag} Fortune Messages`,
       description: `Explore ${fortunes.length}+ fortune cookie messages about ${decodedTag}.`,
     },
     alternates: {
@@ -147,9 +147,16 @@ export default async function TagPage({ params }: PageProps) {
                 </blockquote>
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {fortune.tags.map((t) => (
-                    <Link key={t} href={`/tag/${encodeURIComponent(t.toLowerCase())}`}>
+                    <Link
+                      key={t}
+                      href={`/tag/${encodeURIComponent(t.toLowerCase())}`}
+                    >
                       <Badge
-                        variant={t.toLowerCase() === decodedTag.toLowerCase() ? "default" : "outline"}
+                        variant={
+                          t.toLowerCase() === decodedTag.toLowerCase()
+                            ? "default"
+                            : "outline"
+                        }
                         className={`text-xs cursor-pointer hover:bg-amber-100 ${
                           t.toLowerCase() === decodedTag.toLowerCase()
                             ? "bg-amber-500 text-white"
@@ -215,7 +222,9 @@ export default async function TagPage({ params }: PageProps) {
             return (
               <Link key={t} href={`/tag/${encodeURIComponent(t)}`}>
                 <Badge
-                  variant={t === decodedTag.toLowerCase() ? "default" : "secondary"}
+                  variant={
+                    t === decodedTag.toLowerCase() ? "default" : "secondary"
+                  }
                   className={`text-xs px-2 py-1 cursor-pointer hover:bg-amber-100 ${
                     t === decodedTag.toLowerCase() ? "bg-amber-500" : ""
                   }`}
@@ -237,7 +246,8 @@ export default async function TagPage({ params }: PageProps) {
               Get Your AI Fortune
             </h2>
             <p className="text-white/90 mb-6 max-w-xl mx-auto">
-              Want a personalized fortune about {decodedTag}? Let our AI create one just for you.
+              Want a personalized fortune about {decodedTag}? Let our AI create
+              one just for you.
             </p>
             <Button
               asChild

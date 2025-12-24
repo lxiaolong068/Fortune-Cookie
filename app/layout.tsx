@@ -99,6 +99,13 @@ const DeferredScripts = dynamic(
     })),
   { ssr: false },
 );
+const RouteProgress = dynamic(
+  () =>
+    import("@/components/RouteProgress").then((mod) => ({
+      default: mod.RouteProgress,
+    })),
+  { ssr: false },
+);
 
 const inter = Inter({
   subsets: ["latin"],
@@ -245,6 +252,7 @@ export default function RootLayout({
         </DeferredScripts>
         <ErrorBoundary>
           <Suspense fallback={null}>
+            <RouteProgress />
             <AnalyticsInitializer />
           </Suspense>
           <Navigation />

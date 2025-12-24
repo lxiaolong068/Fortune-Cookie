@@ -28,13 +28,11 @@ import { MessagesClientWrapper, CategoryConfig } from "@/components/messages";
 const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title:
-    "Fortune Cookie Messages – Funny, Inspirational, Love & Success Quotes",
+  title: "Fortune Cookie Messages – Inspirational & Funny Quotes",
   description:
     "Browse 200+ fortune cookie messages for daily inspiration, parties, gift cards, and social media. Funny, inspirational, love, success, wisdom, and friendship sayings with lucky numbers.",
   openGraph: {
-    title:
-      "Fortune Cookie Messages – Funny, Inspirational, Love & Success Quotes",
+    title: "Fortune Cookie Messages – Inspirational & Funny Quotes",
     description:
       "Browse 200+ fortune cookie messages for daily inspiration, parties, gift cards, and social media. Funny, inspirational, love, success, wisdom, and friendship sayings.",
     type: "website",
@@ -50,8 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "Fortune Cookie Messages – Funny, Inspirational, Love & Success Quotes",
+    title: "Fortune Cookie Messages – Inspirational & Funny Quotes",
     description:
       "Browse 200+ fortune cookie messages for daily inspiration, parties, gift cards, and social media. Funny, inspirational, love, success, wisdom, and friendship sayings.",
     images: [getImageUrl("/twitter-image.png")],
