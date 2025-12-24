@@ -16,45 +16,15 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/Pagination";
-import {
-  Sparkles,
-  Search,
-  Heart,
-  Smile,
-  TrendingUp,
-  Brain,
-  Users,
-  Plane,
-  Activity,
-  Clock,
-  Flame,
-  SortAsc,
-} from "lucide-react";
+import { Sparkles, Search, Clock, Flame, SortAsc } from "lucide-react";
 import { searchFortunes, getDatabaseStats } from "@/lib/fortune-database";
+import {
+  categoryConfig,
+  categoryBadgeColors,
+  type FortuneCategory,
+} from "@/lib/category-config";
 
 const ITEMS_PER_PAGE = 24;
-
-const categoryIcons = {
-  inspirational: Sparkles,
-  funny: Smile,
-  love: Heart,
-  success: TrendingUp,
-  wisdom: Brain,
-  friendship: Users,
-  health: Activity,
-  travel: Plane,
-};
-
-const categoryColors = {
-  inspirational: "bg-blue-100 text-blue-800",
-  funny: "bg-yellow-100 text-yellow-800",
-  love: "bg-pink-100 text-pink-800",
-  success: "bg-green-100 text-green-800",
-  wisdom: "bg-purple-100 text-purple-800",
-  friendship: "bg-orange-100 text-orange-800",
-  health: "bg-red-100 text-red-800",
-  travel: "bg-indigo-100 text-indigo-800",
-};
 
 export function BrowsePageContent() {
   const searchParams = useSearchParams();
@@ -71,7 +41,7 @@ export function BrowsePageContent() {
   const filteredAndSortedFortunes = useMemo(() => {
     const results = searchFortunes(
       searchQuery,
-      selectedCategory === "all" ? undefined : selectedCategory
+      selectedCategory === "all" ? undefined : selectedCategory,
     );
 
     // Sort results
@@ -82,7 +52,7 @@ export function BrowsePageContent() {
       case "recent":
         results.sort(
           (a, b) =>
-            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
+            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
         );
         break;
       case "alphabetical":
@@ -94,7 +64,9 @@ export function BrowsePageContent() {
   }, [searchQuery, selectedCategory, sortBy]);
 
   // Paginate results
-  const totalPages = Math.ceil(filteredAndSortedFortunes.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(
+    filteredAndSortedFortunes.length / ITEMS_PER_PAGE,
+  );
   const paginatedFortunes = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredAndSortedFortunes.slice(start, start + ITEMS_PER_PAGE);
@@ -118,8 +90,8 @@ export function BrowsePageContent() {
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
               Explore our collection of {stats.total}+ fortune cookie messages
-              across {Object.keys(stats.categories).length} categories. Find
-              the perfect message for any occasion!
+              across {Object.keys(stats.categories).length} categories. Find the
+              perfect message for any occasion!
             </p>
 
             {/* Statistics */}
@@ -176,21 +148,19 @@ export function BrowsePageContent() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  {Object.entries(stats.categories).map(
-                    ([category, count]) => {
-                      const Icon =
-                        categoryIcons[category as keyof typeof categoryIcons];
-                      return (
-                        <SelectItem key={category} value={category}>
-                          <div className="flex items-center gap-2">
-                            {Icon && <Icon className="w-4 h-4" />}
-                            <span className="capitalize">{category}</span>
-                            <span className="text-gray-500">({count})</span>
-                          </div>
-                        </SelectItem>
-                      );
-                    }
-                  )}
+                  {Object.entries(stats.categories).map(([category, count]) => {
+                    const config = categoryConfig[category as FortuneCategory];
+                    const Icon = config?.icon;
+                    return (
+                      <SelectItem key={category} value={category}>
+                        <div className="flex items-center gap-2">
+                          {Icon && <Icon className="w-4 h-4" />}
+                          <span className="capitalize">{category}</span>
+                          <span className="text-gray-500">({count})</span>
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>
@@ -270,12 +240,12 @@ export function BrowsePageContent() {
           {/* Fortune List */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {paginatedFortunes.map((fortune) => {
-              const Icon =
-                categoryIcons[fortune.category as keyof typeof categoryIcons];
+              const config =
+                categoryConfig[fortune.category as FortuneCategory];
+              const Icon = config?.icon;
               const colorClass =
-                categoryColors[
-                  fortune.category as keyof typeof categoryColors
-                ];
+                categoryBadgeColors[fortune.category] ||
+                "bg-gray-100 text-gray-800";
 
               return (
                 <Card

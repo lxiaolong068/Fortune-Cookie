@@ -36,7 +36,7 @@ export function FortuneCookieStatic() {
               />
 
               {/* Fortune Cookie Visual */}
-              <div className="relative w-32 h-20 bg-gradient-to-br from-yellow-200 to-amber-300 rounded-full transform rotate-12 shadow-lg border-2 border-amber-400">
+              <div className="relative w-32 h-20 bg-gradient-to-br from-yellow-200 to-amber-300 rounded-full transform rotate-12 shadow-lg border-2 border-amber-400 cookie-glow">
                 {/* Cookie texture lines */}
                 <div className="absolute inset-2 border border-amber-500/30 rounded-full" />
                 <div className="absolute inset-4 border border-amber-500/20 rounded-full" />

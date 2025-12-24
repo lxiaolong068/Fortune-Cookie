@@ -1,6 +1,16 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import {
+  Sparkles,
+  Heart,
+  Smile,
+  Dice1,
+  Wand2,
+  Clapperboard,
+  Smartphone,
+  UserCheck,
+} from "lucide-react";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import { WebApplicationStructuredData } from "@/components/StructuredData";
 import { generateSEOMetadata } from "@/components/SEO";
@@ -8,6 +18,7 @@ import { FortuneCookieStatic } from "@/components/FortuneCookieStatic";
 import { DeferredMount } from "@/components/DeferredMount";
 import { SocialProof } from "@/components/SocialProof";
 import { Testimonials } from "@/components/Testimonials";
+import { WaveDivider } from "@/components/homepage/SectionDivider";
 
 // Optimize for Edge Runtime - faster TTFB
 export const runtime = "edge";
@@ -46,6 +57,75 @@ const FortuneCookieInteractive = dynamic(
   },
 );
 
+// Deferred homepage components - load after LCP
+const CategoryQuickLinks = dynamic(
+  () =>
+    import("@/components/homepage/CategoryQuickLinks").then(
+      (mod) => mod.CategoryQuickLinks,
+    ),
+  { ssr: false, loading: () => null },
+);
+
+const HotFortuneCarousel = dynamic(
+  () =>
+    import("@/components/homepage/HotFortuneCarousel").then(
+      (mod) => mod.HotFortuneCarousel,
+    ),
+  { ssr: false, loading: () => null },
+);
+
+const UseCaseScenes = dynamic(
+  () =>
+    import("@/components/homepage/UseCaseScenes").then(
+      (mod) => mod.UseCaseScenes,
+    ),
+  { ssr: false, loading: () => null },
+);
+
+// Feature list with colorful icons
+const features = [
+  {
+    icon: Sparkles,
+    text: "Free online fortune cookie generator with AI",
+    color: "text-amber-500",
+  },
+  {
+    icon: Heart,
+    text: "Inspirational and motivational quotes",
+    color: "text-pink-500",
+  },
+  {
+    icon: Smile,
+    text: "Funny fortune cookie messages",
+    color: "text-yellow-500",
+  },
+  {
+    icon: Dice1,
+    text: "Lucky numbers for each fortune",
+    color: "text-green-500",
+  },
+  {
+    icon: Wand2,
+    text: "Custom message creation",
+    color: "text-purple-500",
+  },
+  {
+    icon: Clapperboard,
+    text: "Beautiful animations and effects",
+    color: "text-blue-500",
+  },
+  {
+    icon: Smartphone,
+    text: "Mobile-friendly responsive design",
+    color: "text-cyan-500",
+  },
+  {
+    icon: UserCheck,
+    text: "No registration required",
+    color: "text-emerald-500",
+  },
+];
+
 export const metadata: Metadata = generateSEOMetadata({
   title: "Fortune Cookie - Free Online AI Generator",
   description:
@@ -81,8 +161,31 @@ export default function HomePage() {
           </Suspense>
         </div>
 
+        {/* Category Quick Links Section */}
+        <div className="relative z-10 bg-gradient-to-b from-amber-100/80 to-white">
+          <WaveDivider
+            fillColor="fill-amber-100/80"
+            position="top"
+            height={40}
+          />
+          <Suspense fallback={null}>
+            <DeferredMount delay={1500} useIdle={false}>
+              <CategoryQuickLinks />
+            </DeferredMount>
+          </Suspense>
+        </div>
+
+        {/* Hot Fortune Carousel Section */}
+        <div className="relative z-10 bg-white">
+          <Suspense fallback={null}>
+            <DeferredMount delay={2000} useIdle={false}>
+              <HotFortuneCarousel />
+            </DeferredMount>
+          </Suspense>
+        </div>
+
         {/* SEO-optimized visible content */}
-        <div className="relative z-10 bg-white/80 backdrop-blur-sm border-t border-amber-200 mt-[-50px] pt-20 pb-16">
+        <div className="relative z-10 bg-gradient-to-b from-white to-orange-50/30 backdrop-blur-sm border-t border-amber-200/50 pt-12 pb-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center mb-16">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
@@ -102,24 +205,21 @@ export default function HomePage() {
                   <span className="text-3xl">✨</span> Why Use Our Generator?
                 </h2>
                 <ul className="space-y-4">
-                  {[
-                    "Free online fortune cookie generator with AI",
-                    "Inspirational and motivational quotes",
-                    "Funny fortune cookie messages",
-                    "Lucky numbers for each fortune",
-                    "Custom message creation",
-                    "Beautiful animations and effects",
-                    "Mobile-friendly responsive design",
-                    "No registration required",
-                  ].map((item, index) => (
-                    <li
-                      key={index}
-                      className="flex items-start gap-3 text-gray-700"
-                    >
-                      <span className="text-amber-500 mt-1">✓</span>
-                      {item}
-                    </li>
-                  ))}
+                  {features.map((feature, index) => {
+                    const Icon = feature.icon;
+                    return (
+                      <li
+                        key={index}
+                        className="flex items-start gap-3 text-gray-700"
+                      >
+                        <Icon
+                          className={`h-5 w-5 mt-0.5 flex-shrink-0 ${feature.color}`}
+                          aria-hidden="true"
+                        />
+                        <span>{feature.text}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </section>
 
@@ -159,9 +259,26 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Use Case Scenes Section */}
+        <div className="relative z-10 bg-gradient-to-b from-orange-50/30 to-pink-50/20">
+          <Suspense fallback={null}>
+            <DeferredMount delay={2500} useIdle={false}>
+              <UseCaseScenes />
+            </DeferredMount>
+          </Suspense>
+        </div>
+
+        {/* Section Divider */}
+        <WaveDivider
+          fillColor="fill-white/80"
+          position="top"
+          height={50}
+          className="relative z-10 bg-gradient-to-b from-pink-50/20 to-transparent"
+        />
+
         {/* Testimonials Section */}
         <div className="relative z-10 bg-gradient-to-b from-white/80 to-amber-50/30 backdrop-blur-sm pb-16">
-          <Testimonials limit={6} />
+          <Testimonials limit={6} enableCarousel={true} />
         </div>
       </main>
     </>

@@ -139,6 +139,25 @@ export function CriticalCSS() {
             animation: magicPulse 2s ease-in-out infinite;
           }
 
+          /* Cookie glow effect - subtle pulsing amber glow */
+          @keyframes cookieGlow {
+            0%, 100% {
+              box-shadow: 0 0 20px rgba(251, 191, 36, 0.3),
+                          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                          0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            }
+            50% {
+              box-shadow: 0 0 40px rgba(251, 191, 36, 0.5),
+                          0 0 60px rgba(251, 191, 36, 0.2),
+                          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                          0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            }
+          }
+
+          .cookie-glow {
+            animation: cookieGlow 3s ease-in-out infinite;
+          }
+
           /* Hover effect for cookie (CSS-only, no JS) */
           .cookie-float:hover {
             transform: scale(1.05) translateY(-5px) rotate(12deg);
@@ -155,11 +174,16 @@ export function CriticalCSS() {
             .cookie-float,
             .cookie-sparkle,
             .cookie-sparkle-reverse,
-            .magic-pulse {
+            .magic-pulse,
+            .cookie-glow {
               animation: none;
             }
             .cookie-float:hover {
               transform: none;
+            }
+            .cookie-glow {
+              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                          0 4px 6px -4px rgba(0, 0, 0, 0.1);
             }
           }
 
