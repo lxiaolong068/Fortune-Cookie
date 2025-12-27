@@ -241,7 +241,7 @@ export default function RootLayout({
         <DeferredScripts>
           <PerformanceMonitor />
           <GoogleAnalytics
-            measurementId={process.env.GOOGLE_ANALYTICS_ID || ""}
+            measurementId={process.env.GOOGLE_ANALYTICS_ID || "G-7QBCKNQ980"}
           />
           {/* Use optimized AdSense Facade for better LCP performance */}
           <OptimizedAdSense
