@@ -48,6 +48,14 @@ This Next.js app powers Fortune Cookie AI; use these guardrails to ship confiden
 - Pages: `app/blog/page.tsx` (list), `app/blog/[slug]/page.tsx` (detail with SSG via `generateStaticParams`).
 - SEO: Article JSON-LD structured data, Open Graph metadata, sitemap integration.
 
+## IndexNow Integration
+- **Purpose**: Instant notification to search engines when content is published, modified, or deleted.
+- **API Key File**: `public/4f58cae8b6004a7a88e13474e58418e1.txt` - must exist for key verification.
+- **Core Library**: `lib/indexnow.ts` - provides `submitUrl()`, `submitUrls()`, `submitUrlsToAllEngines()`, `notifyBlogPostUpdate()`, `notifyCategoryUpdate()`.
+- **API Route**: `POST /api/indexnow` - requires authentication (admin token or signed-in user).
+- **Actions**: `single` (one URL), `batch` (multiple URLs), `all_engines` (submit to Bing, Yandex, IndexNow API), `sitemap` (core pages).
+- **Environment**: Set `INDEXNOW_HOST` and `INDEXNOW_ADMIN_TOKEN` in `.env.local`.
+
 ## Security & Accessibility
 - **CSP Headers**: Dynamic nonce generated in `middleware.ts` for inline scripts; COOP, COEP, CORP headers configured for production security.
 - **Auth CSP Exception**: `/api/auth/*` skips the `form-action` directive to allow OAuth POSTs.

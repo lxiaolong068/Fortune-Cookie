@@ -156,6 +156,11 @@ npm run vercel-check           # Verify Vercel deployment health
 - JSON-LD structured data (Recipe, Article, FAQ schemas)
 - Open Graph and Twitter Card metadata
 - Internal linking strategy across 8+ content pages
+- **IndexNow Integration** (`lib/indexnow.ts`, `app/api/indexnow/route.ts`):
+  - Instant URL submission to search engines (Bing, Yandex, IndexNow API)
+  - API key verification file at `/4f58cae8b6004a7a88e13474e58418e1.txt`
+  - Supports single URL, batch submission, and sitemap URL notifications
+  - Admin token or authenticated user required for API access
 
 ### Authentication & Quota System
 
