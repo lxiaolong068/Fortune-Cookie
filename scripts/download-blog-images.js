@@ -77,6 +77,25 @@ const blogPosts = [
     searchQuery: "american culture diversity statue liberty",
     fallbackQuery: "usa patriotic culture melting pot",
   },
+  // New articles - January 2026
+  {
+    slug: "manifestation-ai-fortune-cookies-2026-goals",
+    filename: "manifestation-ai-fortunes-hero.jpg",
+    searchQuery: "manifestation vision board goals meditation spiritual",
+    fallbackQuery: "meditation mindfulness goal setting journal",
+  },
+  {
+    slug: "british-vs-american-fortune-cookie-culture",
+    filename: "british-american-fortune-cookies-hero.jpg",
+    searchQuery: "british american flags culture comparison",
+    fallbackQuery: "london new york culture travel",
+  },
+  {
+    slug: "future-of-fortune-cookies-ar-vr-tech",
+    filename: "ar-fortune-cookies-future-hero.jpg",
+    searchQuery: "augmented reality vr headset futuristic technology",
+    fallbackQuery: "virtual reality future tech innovation",
+  },
 ];
 
 const outputDir = path.join(__dirname, "..", "public", "images", "blog");
