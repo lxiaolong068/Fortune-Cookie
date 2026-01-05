@@ -34,25 +34,25 @@ const funFacts = [
 export function HistorySection() {
   return (
     <section className="mt-24 max-w-5xl mx-auto">
-      <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-amber-100 shadow-lg">
+      <div className="rounded-3xl border border-[#FFE4D6] bg-white p-8 shadow-lg md:p-12">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 bg-amber-100 rounded-full">
-            <Scroll className="w-8 h-8 text-amber-700" />
+          <div className="rounded-full bg-[#FFE4D6] p-3">
+            <Scroll className="h-8 w-8 text-[#E55328]" />
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#222222]">
             History & Psychology Behind Fortune Cookie Messages
           </h2>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* History */}
-          <div className="prose prose-lg text-gray-700">
+          <div className="prose prose-lg text-[#555555]">
             <p>
               While often associated with Chinese cuisine in Western
               culture, the{" "}
               <Link
                 href="/history"
-                className="text-amber-600 hover:text-amber-700 font-medium"
+                className="font-medium text-[#FF6B3D] hover:text-[#E55328] hover:underline"
               >
                 fortune cookie history
               </Link>{" "}
@@ -64,7 +64,7 @@ export function HistorySection() {
               the early 20th century. Learn more about{" "}
               <Link
                 href="/who-invented-fortune-cookies"
-                className="text-amber-600 hover:text-amber-700 font-medium"
+                className="font-medium text-[#FF6B3D] hover:text-[#E55328] hover:underline"
               >
                 who invented fortune cookies
               </Link>
@@ -73,7 +73,7 @@ export function HistorySection() {
           </div>
 
           {/* Psychology */}
-          <div className="prose prose-lg text-gray-700">
+          <div className="prose prose-lg text-[#555555]">
             <p>
               The appeal of fortune cookies is linked to the{" "}
               <strong>Barnum Effect</strong>—a psychological phenomenon
@@ -87,19 +87,19 @@ export function HistorySection() {
         </div>
 
         {/* Did You Know */}
-        <div className="bg-gradient-to-br from-purple-50 to-amber-50 p-6 rounded-2xl border border-purple-100">
-          <h3 className="text-lg font-bold text-purple-900 mb-4">
+        <div className="rounded-2xl border border-[#FFE4D6] bg-[#FAFAFA] p-6">
+          <h3 className="text-lg font-bold text-[#222222] mb-4">
             Did You Know?
           </h3>
           <ul className="space-y-3">
             {funFacts.map((fact, idx) => (
               <li key={idx} className="flex gap-3 items-start">
-                <fact.icon className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                <fact.icon className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#FF6B3D]" />
                 <div>
-                  <strong className="text-gray-900">
+                  <strong className="text-[#222222]">
                     {fact.title}:
                   </strong>{" "}
-                  <span className="text-gray-600">{fact.content}</span>
+                  <span className="text-[#555555]">{fact.content}</span>
                 </div>
               </li>
             ))}

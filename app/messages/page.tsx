@@ -78,8 +78,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "inspirational",
     seoTitle: "Inspirational Fortune Cookie Messages",
     iconName: "star",
-    color: "bg-blue-100 text-blue-800",
-    borderColor: "border-l-blue-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Discover uplifting fortune cookie sayings that inspire positivity, motivation, and personal growth. These inspirational quotes are perfect for daily encouragement, graduation cards, sharing words of wisdom with friends, or printing on custom fortune cookies for special occasions. Each message carries timeless wisdom to brighten your day.",
     viewAllPath: "/messages/inspirational",
@@ -89,8 +89,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "funny",
     seoTitle: "Funny Fortune Cookie Messages",
     iconName: "smile",
-    color: "bg-yellow-100 text-yellow-800",
-    borderColor: "border-l-yellow-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Get ready to laugh with our collection of hilarious fortune cookie sayings and witty jokes. These funny fortune messages are perfect for parties, pranks, brightening someone's day with humor, or adding levity to office events. From clever wordplay to absurd predictions, these messages will bring smiles.",
     viewAllPath: "/funny-fortune-cookie-messages",
@@ -100,8 +100,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "love",
     seoTitle: "Love Fortune Cookie Messages",
     iconName: "heart",
-    color: "bg-pink-100 text-pink-800",
-    borderColor: "border-l-pink-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Explore romantic fortune cookie messages about love, relationships, and matters of the heart. These sweet and heartfelt sayings are ideal for Valentine's Day, wedding favors, anniversary celebrations, or expressing affection to someone special. Let these love fortunes kindle romance and connection.",
     viewAllPath: "/messages/love",
@@ -111,8 +111,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "success",
     seoTitle: "Success & Career Fortune Cookie Messages",
     iconName: "trending-up",
-    color: "bg-green-100 text-green-800",
-    borderColor: "border-l-green-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Motivating fortune cookie messages about achievement, career success, and reaching your goals. These success-themed sayings are perfect for corporate events, graduation parties, job promotions, or anyone needing a boost of professional motivation. Let these fortunes fuel your ambition.",
     viewAllPath: "/messages/success",
@@ -122,8 +122,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "wisdom",
     seoTitle: "Wisdom Fortune Cookie Messages",
     iconName: "brain",
-    color: "bg-purple-100 text-purple-800",
-    borderColor: "border-l-purple-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Thoughtful and philosophical fortune cookie messages offering timeless wisdom and life insights. These profound sayings draw from ancient philosophy and modern understanding, perfect for reflection, meditation, or sharing deep thoughts with friends seeking guidance and perspective.",
     viewAllPath: "/messages/wisdom",
@@ -133,8 +133,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "friendship",
     seoTitle: "Friendship Fortune Cookie Messages",
     iconName: "users",
-    color: "bg-teal-100 text-teal-800",
-    borderColor: "border-l-teal-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Celebrate the bonds of friendship with these heartwarming fortune cookie messages. Perfect for friend reunions, bestie gifts, friendship day celebrations, or simply reminding your friends how much they mean to you. These messages honor the beautiful connections that enrich our lives.",
     viewAllPath: "/messages/friendship",
@@ -144,8 +144,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "birthday",
     seoTitle: "Birthday Fortune Cookie Messages",
     iconName: "cake",
-    color: "bg-orange-100 text-orange-800",
-    borderColor: "border-l-orange-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Make birthdays extra special with these celebratory fortune cookie messages. Ideal for birthday party favors, greeting cards, or adding a unique touch to birthday celebrations. These messages bring hope, joy, and positive predictions for the year ahead.",
     viewAllPath: "/messages/birthday",
@@ -155,8 +155,8 @@ const categoryConfig: CategoryConfig[] = [
     id: "study",
     seoTitle: "Study & Exam Motivation Messages",
     iconName: "book-open",
-    color: "bg-indigo-100 text-indigo-800",
-    borderColor: "border-l-indigo-500",
+    color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
+    borderColor: "border-l-[#FFE4D6]",
     intro:
       "Inspiring fortune cookie messages for students, test-takers, and lifelong learners. These motivational sayings are perfect for exam preparation, back-to-school encouragement, study groups, or anyone pursuing academic excellence. Let these fortunes boost your focus and confidence.",
     viewAllPath: "/messages/study",
@@ -200,16 +200,16 @@ export default function MessagesPage() {
           { name: "Fortune Cookie Messages", url: "/messages" },
         ]}
       />
-      <main className="min-h-screen w-full overflow-x-hidden relative">
+      <main className="min-h-screen w-full overflow-x-hidden relative bg-[#FAFAFA]">
         <DynamicBackgroundEffects />
         <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* Hero Section - SSR for SEO */}
             <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent mb-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#222222] mb-6">
                 Fortune Cookie Messages
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
+              <p className="text-lg md:text-xl text-[#555555] max-w-4xl mx-auto leading-relaxed mb-8">
                 Browse hundreds of fortune cookie messages perfect for daily
                 inspiration, parties, gift cards, printing, and social media
                 captions. Discover funny, inspirational, love, success, wisdom,
@@ -217,16 +217,16 @@ export default function MessagesPage() {
                 day.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <Badge className="bg-amber-100 text-amber-800 px-4 py-2">
-                  <Sparkles className="w-4 h-4 mr-2" />
+                <Badge className="px-4 py-2 border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]">
+                  <Sparkles className="mr-2 h-4 w-4" />
                   {stats.total}+ Messages
                 </Badge>
-                <Badge className="bg-blue-100 text-blue-800 px-4 py-2">
-                  <Star className="w-4 h-4 mr-2" />
+                <Badge className="px-4 py-2 border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]">
+                  <Star className="mr-2 h-4 w-4" />
                   {Object.keys(stats.categories).length} Categories
                 </Badge>
-                <Badge className="bg-green-100 text-green-800 px-4 py-2">
-                  <TrendingUp className="w-4 h-4 mr-2" />
+                <Badge className="px-4 py-2 border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]">
+                  <TrendingUp className="mr-2 h-4 w-4" />
                   AI Generator Available
                 </Badge>
               </div>
@@ -234,7 +234,7 @@ export default function MessagesPage() {
 
             {/* Quick Navigation - SSR for SEO */}
             <section className="mb-16">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
+              <h2 className="text-xl font-semibold text-[#222222] mb-6 text-center">
                 Jump to Category
               </h2>
               <div className="flex flex-wrap justify-center gap-3">
@@ -244,9 +244,9 @@ export default function MessagesPage() {
                     <Link
                       key={category.id}
                       href={`#${category.id}`}
-                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${category.color} hover:opacity-80 transition-opacity`}
+                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 transition-colors ${category.color} hover:bg-[#FFD6C5] hover:underline`}
                     >
-                      <IconComponent className="w-4 h-4" />
+                      <IconComponent className="h-4 w-4" />
                       <span className="text-sm font-medium">
                         {category.seoTitle
                           .replace(" Fortune Cookie Messages", "")

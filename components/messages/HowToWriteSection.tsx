@@ -34,17 +34,17 @@ const templateExamples = [
 export function HowToWriteSection() {
   return (
     <section className="mt-16 max-w-5xl mx-auto">
-      <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-amber-100 shadow-lg">
+      <div className="rounded-3xl border border-[#FFE4D6] bg-white p-8 shadow-lg md:p-12">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 bg-green-100 rounded-full">
-            <Pen className="w-8 h-8 text-green-700" />
+          <div className="rounded-full bg-[#FFE4D6] p-3">
+            <Pen className="h-8 w-8 text-[#E55328]" />
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#222222]">
             How to Write Your Own Fortune Cookie Messages
           </h2>
         </div>
 
-        <p className="text-gray-600 leading-relaxed mb-8">
+        <p className="text-[#555555] leading-relaxed mb-8">
           Creating your own fortune cookie messages is an art that
           combines brevity, positivity, and just the right amount of
           mystery. The best fortunes are short, uplifting, and
@@ -52,7 +52,7 @@ export function HowToWriteSection() {
           Whether you&apos;re making{" "}
           <Link
             href="/how-to-make-fortune-cookies"
-            className="text-amber-600 hover:text-amber-700 font-medium"
+            className="font-medium text-[#FF6B3D] hover:text-[#E55328] hover:underline"
           >
             homemade fortune cookies
           </Link>{" "}
@@ -63,16 +63,16 @@ export function HowToWriteSection() {
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* Writing Principles */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <h3 className="text-lg font-semibold text-[#222222] mb-4">
               Writing Principles
             </h3>
             <ul className="space-y-3">
               {writingPrinciples.map((principle, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-medium flex-shrink-0">
+                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#FFE4D6] text-sm font-medium text-[#E55328]">
                     {idx + 1}
                   </span>
-                  <span className="text-gray-600">{principle}</span>
+                  <span className="text-[#555555]">{principle}</span>
                 </li>
               ))}
             </ul>
@@ -80,14 +80,14 @@ export function HowToWriteSection() {
 
           {/* Template Examples */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <h3 className="text-lg font-semibold text-[#222222] mb-4">
               Template Examples
             </h3>
             <ul className="space-y-2">
               {templateExamples.map((template, idx) => (
                 <li
                   key={idx}
-                  className="text-gray-600 italic border-l-2 border-amber-300 pl-3 py-1"
+                  className="border-l-2 border-[#FFE4D6] py-1 pl-3 text-[#555555] italic"
                 >
                   &ldquo;{template}&rdquo;
                 </li>
@@ -97,15 +97,15 @@ export function HowToWriteSection() {
         </div>
 
         {/* Writing CTA */}
-        <div className="bg-gradient-to-r from-green-50 to-amber-50 p-6 rounded-xl border border-green-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-700">
+        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[#FFE4D6] bg-[#FAFAFA] p-6 sm:flex-row">
+          <p className="text-[#555555]">
             <strong>Don&apos;t want to write from scratch?</strong> Let
             our AI create personalized fortune cookie messages for you.
           </p>
           <Link href="/generator">
-            <Button className="bg-green-600 hover:bg-green-700 text-white whitespace-nowrap">
+            <Button className="whitespace-nowrap bg-[#FF6B3D] text-white hover:bg-[#E55328]">
               Try AI Generator
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
         </div>
