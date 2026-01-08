@@ -99,6 +99,7 @@ npm run vercel-check           # Verify Vercel deployment health
 - `edge-cache.ts` - Edge caching utilities and performance monitoring
 - `auth.ts` - NextAuth.js configuration with Google OAuth provider
 - `auth-client.ts` - Client-side authentication hooks (`useAuthSession`, `startGoogleSignIn`, `startSignOut`)
+- `mobile-auth.ts` - iOS mobile authentication (Apple/Google token verification, session management)
 - `quota.ts` - Daily fortune quota system (guest: 1/day, authenticated: 10/day)
 - `session-manager.ts` - User session tracking
 - `error-monitoring.ts` - Error capture and analytics
@@ -121,9 +122,10 @@ npm run vercel-check           # Verify Vercel deployment health
 - `category/[category]/page.tsx` - Dynamic category pages for browsing fortunes by category with SEO optimization
 
 **Database** (`prisma/`):
-- `schema.prisma` - PostgreSQL schema with 13 models:
+- `schema.prisma` - PostgreSQL schema with 14 models:
   - Core: Fortune, UserSession, ApiUsage, WebVital, ErrorLog, CacheStats, UserFeedback
   - Auth (NextAuth): User, Account, Session, VerificationToken
+  - Mobile Auth: MobileSession (iOS app sessions with 30-day expiry)
   - Quota: FortuneQuota, FortuneUsage
 - Indexed for performance on category, mood, timestamp, popularity, userId, dateKey
 
@@ -164,11 +166,22 @@ npm run vercel-check           # Verify Vercel deployment health
 
 ### Authentication & Quota System
 
-**Google OAuth Authentication** (NextAuth.js):
+**Web Authentication** (NextAuth.js):
 - Provider: Google OAuth 2.0 via `next-auth/providers/google`
 - Adapter: Prisma Adapter for database session storage
 - Session Strategy: Database sessions (not JWT)
 - Client hooks: `useAuthSession()`, `startGoogleSignIn()`, `startSignOut()`
+
+**Mobile Authentication** (iOS App):
+- Supports Sign In with Apple and Google Sign In
+- Token verification via `lib/mobile-auth.ts`
+- Separate `MobileSession` model for mobile app sessions (30-day expiry)
+- Mobile users share the same `User` model (quota/favorites work across platforms)
+
+**Mobile Auth Endpoints**:
+- `POST /api/auth/mobile/apple` - Apple Sign In (validates identity token via JWKS)
+- `POST /api/auth/mobile/google` - Google Sign In (validates ID token)
+- `GET /api/auth/mobile/session` - Session validation (`Authorization: Bearer {token}`)
 
 **Fortune Quota System** (`lib/quota.ts`):
 - **Guest Users**: 1 AI fortune per day (configurable via `GUEST_DAILY_LIMIT`)
@@ -205,6 +218,10 @@ GOOGLE_CLIENT_ID="..."
 GOOGLE_CLIENT_SECRET="..."
 NEXTAUTH_SECRET="..."  # Generate with: openssl rand -base64 32
 NEXTAUTH_URL="http://localhost:3000"  # Set to production URL in deployment
+
+# Mobile Authentication (iOS App)
+APPLE_BUNDLE_ID="com.brucelee.FortuneCookieAI"  # Apple Sign In Bundle ID
+GOOGLE_IOS_CLIENT_ID="..."  # Google Sign In iOS Client ID
 
 # Fortune Quota (optional, defaults shown)
 GUEST_DAILY_LIMIT="1"   # Daily AI fortune limit for guests
