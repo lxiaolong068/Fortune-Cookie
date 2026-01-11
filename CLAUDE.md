@@ -88,6 +88,9 @@ npm run vercel-check           # Verify Vercel deployment health
 - `fortune/quota/route.ts` - User quota status endpoint (daily limits for guests/authenticated users)
 - `fortunes/route.ts` - Database fortune browsing and search
 - `auth/[...nextauth]/route.ts` - NextAuth.js authentication routes (Google OAuth)
+- `auth/session/route.ts` - Unified session validation (supports Bearer token for mobile + cookie for web)
+- `auth/mobile/` - Mobile authentication endpoints (Apple Sign In, Google Sign In, session validation)
+- `indexnow/route.ts` - IndexNow URL submission for instant search engine notifications
 - `analytics/route.ts` - Performance metrics collection
 - `database/route.ts` - Database health checks
 - `cache/route.ts` - Cache management endpoints
@@ -103,8 +106,10 @@ npm run vercel-check           # Verify Vercel deployment health
 - `quota.ts` - Daily fortune quota system (guest: 1/day, authenticated: 10/day)
 - `session-manager.ts` - User session tracking
 - `error-monitoring.ts` - Error capture and analytics
-- `utils.ts` - Shared utilities (cn, date formatting, etc.)
+- `utils.ts` - Shared utilities (cn, date formatting, SeededRandom PRNG class)
 - `blob-urls.ts` - Vercel Blob Storage URL mappings (auto-generated)
+- `category-config.ts` - Fortune category configuration (icons, colors, labels, descriptions)
+- `indexnow.ts` - IndexNow API client for search engine URL notifications
 
 **Components** (`components/`):
 - `AIFortuneCookie.tsx` - Main AI-powered fortune cookie component with theme selection
@@ -116,9 +121,21 @@ npm run vercel-check           # Verify Vercel deployment health
 - `AdSenseFacade.tsx` - OptimizedAdSense component using Facade pattern for delayed AdSense script loading (improves LCP)
 - `ExpandableRecipeCard.tsx` - Expandable recipe card with collapsible ingredients/instructions sections
 - `Navigation.tsx` - Main navigation component with authentication state integration
+- `RouteProgress.tsx` - Route transition progress indicator with animated loading bar
+- `Pagination.tsx` - Reusable pagination component with page navigation
+- `AnimatedCounter.tsx` - Animated number counters with scroll-triggered animations
+- `ScrollReveal.tsx` - Scroll-triggered reveal animations with reduced motion support
+- `Testimonials.tsx` - Testimonial carousel with user reviews
+- `homepage/` - Homepage section components:
+  - `CategoryQuickLinks.tsx` - Quick category navigation links
+  - `HotFortuneCarousel.tsx` - Popular fortune carousel
+  - `SectionDivider.tsx` - Decorative section dividers
+  - `UseCaseScenes.tsx` - Use case demonstration scenes
 - `ui/` - shadcn/ui component library
 
 **Dynamic Pages** (`app/browse/`):
+- `page.tsx` - Fortune browse page with search, filter, sort, and pagination
+- `BrowsePageContent.tsx` - Client-side browse page content component
 - `category/[category]/page.tsx` - Dynamic category pages for browsing fortunes by category with SEO optimization
 
 **Database** (`prisma/`):
@@ -181,7 +198,14 @@ npm run vercel-check           # Verify Vercel deployment health
 **Mobile Auth Endpoints**:
 - `POST /api/auth/mobile/apple` - Apple Sign In (validates identity token via JWKS)
 - `POST /api/auth/mobile/google` - Google Sign In (validates ID token)
-- `GET /api/auth/mobile/session` - Session validation (`Authorization: Bearer {token}`)
+- `GET /api/auth/mobile/session` - Mobile-only session validation (`Authorization: Bearer {token}`)
+
+**Unified Session Endpoint** (NEW):
+- `GET /api/auth/session` - Validates both web and mobile sessions
+  - Web: Uses NextAuth cookie session automatically
+  - Mobile: Pass `Authorization: Bearer {mobile_session_token}` header
+  - Returns user info with `source: "web" | "mobile"` indicator
+  - CORS-enabled for mobile app access
 
 **Fortune Quota System** (`lib/quota.ts`):
 - **Guest Users**: 1 AI fortune per day (configurable via `GUEST_DAILY_LIMIT`)

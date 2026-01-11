@@ -1478,3 +1478,237 @@ export function getDatabaseStats() {
     tags: Array.from(new Set(fortuneDatabase.flatMap((f) => f.tags))).length,
   };
 }
+
+// ============================================================================
+// Advanced Search & Filter Utilities
+// ============================================================================
+
+/**
+ * Mood types for filtering fortunes by emotional tone
+ */
+export type MoodType = "positive" | "humor" | "romance" | "wisdom" | "all";
+
+/**
+ * Length types for filtering fortunes by message length
+ */
+export type LengthType = "short" | "medium" | "long" | "all";
+
+/**
+ * Mood to category mapping
+ */
+const moodCategoryMapping: Record<Exclude<MoodType, "all">, string[]> = {
+  positive: ["inspirational", "success", "birthday"],
+  humor: ["funny"],
+  romance: ["love", "friendship"],
+  wisdom: ["wisdom", "study"],
+};
+
+/**
+ * Length thresholds (character count)
+ */
+const lengthThresholds = {
+  short: 50, // <= 50 characters
+  long: 100, // >= 100 characters
+  // medium: between 50 and 100 characters
+};
+
+/**
+ * Search and filter options interface
+ */
+export interface SearchFilterOptions {
+  query?: string;
+  mood?: MoodType;
+  length?: LengthType;
+  hasLuckyNumbers?: boolean;
+  category?: string;
+  sortBy?: "popularity" | "recent" | "alphabetical";
+  limit?: number;
+}
+
+/**
+ * Get message length type based on character count
+ */
+export function getMessageLengthType(message: string): LengthType {
+  const length = message.length;
+  if (length <= lengthThresholds.short) return "short";
+  if (length >= lengthThresholds.long) return "long";
+  return "medium";
+}
+
+/**
+ * Get mood type for a given category
+ */
+export function getCategoryMood(category: string): MoodType {
+  for (const [mood, categories] of Object.entries(moodCategoryMapping)) {
+    if (categories.includes(category)) {
+      return mood as MoodType;
+    }
+  }
+  return "positive"; // Default fallback
+}
+
+/**
+ * Advanced search and filter function for fortune messages
+ *
+ * Supports:
+ * - Keyword search (message text and tags)
+ * - Mood filtering (positive, humor, romance, wisdom)
+ * - Length filtering (short, medium, long)
+ * - Lucky numbers presence filter
+ * - Category filtering
+ * - Sorting (popularity, recent, alphabetical)
+ */
+export function searchMessagesWithFilters(
+  options: SearchFilterOptions = {},
+): FortuneMessage[] {
+  const {
+    query,
+    mood = "all",
+    length = "all",
+    hasLuckyNumbers,
+    category,
+    sortBy = "popularity",
+    limit,
+  } = options;
+
+  const searchTerm = query?.toLowerCase().trim() || "";
+
+  let results = fortuneDatabase.filter((fortune) => {
+    // Category filter
+    if (category && fortune.category !== category) {
+      return false;
+    }
+
+    // Mood filter
+    if (mood !== "all") {
+      const moodCategories = moodCategoryMapping[mood];
+      if (!moodCategories.includes(fortune.category)) {
+        return false;
+      }
+    }
+
+    // Length filter
+    if (length !== "all") {
+      const messageLength = getMessageLengthType(fortune.message);
+      if (messageLength !== length) {
+        return false;
+      }
+    }
+
+    // Lucky numbers filter
+    if (hasLuckyNumbers !== undefined) {
+      const hasNumbers =
+        fortune.luckyNumbers && fortune.luckyNumbers.length > 0;
+      if (hasLuckyNumbers && !hasNumbers) {
+        return false;
+      }
+      if (!hasLuckyNumbers && hasNumbers) {
+        return false;
+      }
+    }
+
+    // Keyword search (message text and tags)
+    if (searchTerm) {
+      const matchesMessage = fortune.message.toLowerCase().includes(searchTerm);
+      const matchesTags = fortune.tags.some((tag) =>
+        tag.toLowerCase().includes(searchTerm),
+      );
+      if (!matchesMessage && !matchesTags) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Sorting
+  switch (sortBy) {
+    case "popularity":
+      results = results.sort((a, b) => b.popularity - a.popularity);
+      break;
+    case "recent":
+      results = results.sort(
+        (a, b) =>
+          new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
+      );
+      break;
+    case "alphabetical":
+      results = results.sort((a, b) => a.message.localeCompare(b.message));
+      break;
+  }
+
+  // Limit results
+  if (limit && limit > 0) {
+    results = results.slice(0, limit);
+  }
+
+  return results;
+}
+
+/**
+ * Get filter counts for UI display
+ * Returns the count of messages matching each filter option
+ */
+export function getFilterCounts(baseCategory?: string): {
+  moods: Record<MoodType, number>;
+  lengths: Record<LengthType, number>;
+  total: number;
+} {
+  const fortunes = baseCategory
+    ? fortuneDatabase.filter((f) => f.category === baseCategory)
+    : fortuneDatabase;
+
+  const moods: Record<MoodType, number> = {
+    all: fortunes.length,
+    positive: 0,
+    humor: 0,
+    romance: 0,
+    wisdom: 0,
+  };
+
+  const lengths: Record<LengthType, number> = {
+    all: fortunes.length,
+    short: 0,
+    medium: 0,
+    long: 0,
+  };
+
+  for (const fortune of fortunes) {
+    // Count by mood
+    const fortuneMood = getCategoryMood(fortune.category);
+    moods[fortuneMood]++;
+
+    // Count by length
+    const fortuneLength = getMessageLengthType(fortune.message);
+    lengths[fortuneLength]++;
+  }
+
+  return {
+    moods,
+    lengths,
+    total: fortunes.length,
+  };
+}
+
+/**
+ * Get all unique tags from the database
+ */
+export function getAllTags(): string[] {
+  const tagSet = new Set<string>();
+  for (const fortune of fortuneDatabase) {
+    for (const tag of fortune.tags) {
+      tagSet.add(tag);
+    }
+  }
+  return Array.from(tagSet).sort();
+}
+
+/**
+ * Get fortunes by tag
+ */
+export function getFortunesByTag(tag: string): FortuneMessage[] {
+  const searchTag = tag.toLowerCase();
+  return fortuneDatabase.filter((fortune) =>
+    fortune.tags.some((t) => t.toLowerCase() === searchTag),
+  );
+}
