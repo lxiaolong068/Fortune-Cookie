@@ -1,143 +1,124 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 // SEO相关工具函数
 export function generateMetaTitle(title: string, suffix?: string): string {
-  const baseSuffix = suffix || "Fortune Cookie AI"
-  return `${title} | ${baseSuffix}`
+  const baseSuffix = suffix || "Fortune Cookie AI";
+  return `${title} | ${baseSuffix}`;
 }
 
-export function generateMetaDescription(description: string, maxLength: number = 160): string {
-  if (description.length <= maxLength) return description
-  return description.substring(0, maxLength - 3) + "..."
-}
-
-// 幸运数字生成器 - 使用确定性随机数避免 SSR/CSR 不一致
-export function generateLuckyNumbers(count: number = 6, max: number = 69, seed: number = 12345): number[] {
-  const rng = new SeededRandom(seed)
-  const numbers = new Set<number>()
-  while (numbers.size < count) {
-    numbers.add(Math.floor(rng.next() * max) + 1)
-  }
-  return Array.from(numbers).sort((a, b) => a - b)
+export function generateMetaDescription(
+  description: string,
+  maxLength: number = 160,
+): string {
+  if (description.length <= maxLength) return description;
+  return description.substring(0, maxLength - 3) + "...";
 }
 
 // 格式化日期
 export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date)
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
 }
 
 // 延迟函数
 export function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-// 随机选择数组元素 - 使用确定性随机数避免 SSR/CSR 不一致
-export function getRandomElement<T>(array: T[], seed: number = 12345): T {
-  if (array.length === 0) {
-    throw new Error('Cannot select from empty array')
-  }
-  const rng = new SeededRandom(seed)
-  const index = Math.floor(rng.next() * array.length)
-  const item = array[index]
-  if (item === undefined) {
-    throw new Error('Array index out of bounds')
-  }
-  return item
-}
-
-// 打乱数组 - 使用确定性随机数避免 SSR/CSR 不一致
-export function shuffleArray<T>(array: T[], seed: number = 12345): T[] {
-  const shuffled = [...array]
-  const rng = new SeededRandom(seed)
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(rng.next() * (i + 1))
-    const itemI = shuffled[i]
-    const itemJ = shuffled[j]
-    if (itemI !== undefined && itemJ !== undefined) {
-      shuffled[i] = itemJ
-      shuffled[j] = itemI
-    }
-  }
-  return shuffled
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // 验证环境变量
 export function getEnvVar(name: string, defaultValue?: string): string {
-  const value = process.env[name]
+  const value = process.env[name];
   if (!value && !defaultValue) {
-    throw new Error(`Environment variable ${name} is required`)
+    throw new Error(`Environment variable ${name} is required`);
   }
-  return value || defaultValue!
+  return value || defaultValue!;
 }
 
 // 生成唯一ID - 使用时间戳和计数器避免随机数
-let idCounter = 0
+let idCounter = 0;
 export function generateId(): string {
-  return (++idCounter).toString(36) + Date.now().toString(36)
+  return (++idCounter).toString(36) + Date.now().toString(36);
 }
 
-// 防抖函数
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => func(...args), wait)
-  }
-}
-
-// 节流函数
-export function throttle<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean
-  return (...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args)
-      inThrottle = true
-      setTimeout(() => inThrottle = false, limit)
-    }
-  }
-}
-
-// 确定性伪随机数生成器 (PRNG) - 用于避免 SSR/CSR hydration 不一致
+/**
+ * Deterministic Pseudo-Random Number Generator (PRNG)
+ *
+ * Used to avoid SSR/CSR hydration mismatches by producing consistent
+ * random sequences when given the same seed. Uses a Linear Congruential
+ * Generator (LCG) algorithm.
+ *
+ * @example
+ * ```ts
+ * const rng = new SeededRandom(42)
+ * const value = rng.next()      // Always same value for seed 42
+ * const integer = rng.int(1, 10) // Random integer between 1-9
+ * ```
+ */
 export class SeededRandom {
-  private seed: number
+  private seed: number;
 
+  /**
+   * Create a new seeded random number generator
+   * @param seed - Initial seed value (default: 12345)
+   */
   constructor(seed: number = 12345) {
-    this.seed = seed
+    this.seed = seed;
   }
 
-  // 线性同余生成器 (LCG)
+  /**
+   * Generate the next random number in the sequence
+   * @returns A number between 0 (inclusive) and 1 (exclusive)
+   */
   next(): number {
-    this.seed = (this.seed * 9301 + 49297) % 233280
-    return this.seed / 233280
+    this.seed = (this.seed * 9301 + 49297) % 233280;
+    return this.seed / 233280;
   }
 
-  // 生成指定范围内的随机数
+  /**
+   * Generate a random number within a specified range
+   * @param min - Minimum value (inclusive)
+   * @param max - Maximum value (exclusive)
+   * @returns A number between min and max
+   */
   range(min: number, max: number): number {
-    return min + this.next() * (max - min)
+    return min + this.next() * (max - min);
   }
 
-  // 生成指定范围内的随机整数
+  /**
+   * Generate a random integer within a specified range
+   * @param min - Minimum value (inclusive)
+   * @param max - Maximum value (exclusive)
+   * @returns An integer between min (inclusive) and max (exclusive)
+   */
   int(min: number, max: number): number {
-    return Math.floor(this.range(min, max))
+    return Math.floor(this.range(min, max));
   }
 }
 
-// 创建基于索引的确定性随机数生成器
+/**
+ * Create a SeededRandom instance with a seed based on an index
+ * Useful for generating deterministic random values per item in a list
+ *
+ * @param index - The index to use for generating the seed
+ * @returns A new SeededRandom instance
+ *
+ * @example
+ * ```ts
+ * // Each particle gets consistent random values across renders
+ * particles.map((_, i) => {
+ *   const rng = createSeededRandom(i)
+ *   return { x: rng.range(0, 100), y: rng.range(0, 100) }
+ * })
+ * ```
+ */
 export function createSeededRandom(index: number): SeededRandom {
-  return new SeededRandom(12345 + index * 1000)
+  return new SeededRandom(12345 + index * 1000);
 }
