@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Copy, Check, ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,6 +35,21 @@ export function CopyButton({
   const [copied, setCopied] = useState(false);
   const [copiedWithLucky, setCopiedWithLucky] = useState(false);
 
+  const handleCopyFeedback = useCallback((includeLucky: boolean) => {
+    if (includeLucky) {
+      setCopiedWithLucky(true);
+      setCopied(false);
+      setTimeout(() => setCopiedWithLucky(false), 2000);
+      toast.success("Copied with lucky numbers");
+      return;
+    }
+
+    setCopied(true);
+    setCopiedWithLucky(false);
+    setTimeout(() => setCopied(false), 2000);
+    toast.success("Copied message");
+  }, []);
+
   const copyToClipboard = useCallback(
     async (includeLucky: boolean = false) => {
       let textToCopy = message;
@@ -44,16 +60,7 @@ export function CopyButton({
 
       try {
         await navigator.clipboard.writeText(textToCopy);
-
-        if (includeLucky) {
-          setCopiedWithLucky(true);
-          setCopied(false);
-          setTimeout(() => setCopiedWithLucky(false), 2000);
-        } else {
-          setCopied(true);
-          setCopiedWithLucky(false);
-          setTimeout(() => setCopied(false), 2000);
-        }
+        handleCopyFeedback(includeLucky);
       } catch {
         // Fallback for older browsers
         const textArea = document.createElement("textarea");
@@ -64,19 +71,10 @@ export function CopyButton({
         textArea.select();
         document.execCommand("copy");
         document.body.removeChild(textArea);
-
-        if (includeLucky) {
-          setCopiedWithLucky(true);
-          setCopied(false);
-          setTimeout(() => setCopiedWithLucky(false), 2000);
-        } else {
-          setCopied(true);
-          setCopiedWithLucky(false);
-          setTimeout(() => setCopied(false), 2000);
-        }
+        handleCopyFeedback(includeLucky);
       }
     },
-    [message, luckyNumbers]
+    [handleCopyFeedback, message, luckyNumbers]
   );
 
   const hasLuckyNumbers = luckyNumbers && luckyNumbers.length > 0;

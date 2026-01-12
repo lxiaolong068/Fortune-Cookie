@@ -6,7 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/InternalLinks";
-import { fortuneDatabase } from "@/lib/fortune-database";
+import { CopyButton } from "@/components/messages/CopyButton";
+import { GenerateSimilarButton } from "@/components/messages/GenerateSimilarButton";
+import { fortuneDatabase, styleConfig } from "@/lib/fortune-database";
 import { getImageUrl } from "@/lib/site";
 
 // Define valid categories (expanded with new categories)
@@ -116,6 +118,12 @@ const categoryConfig: Record<
     bgColor: "bg-[#FFE4D6]",
   },
 };
+
+const lengthLabels = {
+  short: "Short",
+  medium: "Medium",
+  long: "Long",
+} as const;
 
 interface PageProps {
   params: Promise<{ category: string }>;
@@ -254,7 +262,25 @@ export default async function CategoryPage({ params }: PageProps) {
                 <blockquote className="text-[#222222] italic mb-3">
                   &ldquo;{fortune.message}&rdquo;
                 </blockquote>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {fortune.lengthType && (
+                    <Badge
+                      variant="secondary"
+                      className="text-xs bg-[#F5F5F5] text-[#555555]"
+                    >
+                      {lengthLabels[fortune.lengthType]}
+                    </Badge>
+                  )}
+                  {fortune.style && styleConfig[fortune.style] && (
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-[#E5E5E5] text-[#888888]"
+                      title={styleConfig[fortune.style].description}
+                    >
+                      {styleConfig[fortune.style].emoji}{" "}
+                      {styleConfig[fortune.style].label}
+                    </Badge>
+                  )}
                   {fortune.tags?.slice(0, 3).map((tag) => (
                     <Badge
                       key={tag}
@@ -265,19 +291,33 @@ export default async function CategoryPage({ params }: PageProps) {
                     </Badge>
                   ))}
                 </div>
-                {fortune.luckyNumbers && (
-                  <div className="mt-3 flex items-center gap-1.5 text-xs text-[#555555]">
-                    <span>Lucky:</span>
-                    {fortune.luckyNumbers.slice(0, 3).map((num, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#FFE4D6] text-[#E55328] font-medium"
-                      >
-                        {num}
-                      </span>
-                    ))}
+                <div className="flex items-center justify-between gap-2">
+                  {fortune.luckyNumbers && (
+                    <div className="flex items-center gap-1.5 text-xs text-[#555555]">
+                      <span>Lucky:</span>
+                      {fortune.luckyNumbers.slice(0, 3).map((num, i) => (
+                        <span
+                          key={i}
+                          className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#FFE4D6] text-[#E55328] font-medium"
+                        >
+                          {num}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1 ml-auto">
+                    <GenerateSimilarButton
+                      message={fortune.message}
+                      category={fortune.category}
+                      style={fortune.style}
+                      tags={fortune.tags}
+                    />
+                    <CopyButton
+                      message={fortune.message}
+                      luckyNumbers={fortune.luckyNumbers}
+                    />
                   </div>
-                )}
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -376,6 +416,13 @@ export default async function CategoryPage({ params }: PageProps) {
                   item: {
                     "@type": "Quotation",
                     text: fortune.message,
+                    author: {
+                      "@type": "Organization",
+                      name: "Fortune Cookie AI",
+                    },
+                    datePublished: fortune.dateAdded,
+                    inLanguage: "en",
+                    keywords: fortune.tags.join(", "),
                   },
                 })),
             },

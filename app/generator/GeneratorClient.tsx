@@ -91,6 +91,13 @@ export function GeneratorClient() {
   const urlCategory = searchParams.get("category");
   const urlStyle = searchParams.get("style");
   const urlRef = searchParams.get("ref");
+  const urlTags = searchParams.get("tags");
+  const parsedTags = urlTags
+    ? urlTags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+    : [];
 
   // Determine initial theme from URL params
   const getInitialTheme = (): Theme => {
@@ -117,10 +124,16 @@ export function GeneratorClient() {
 
   // Determine initial custom prompt from reference message
   const getInitialCustomPrompt = (): string => {
+    const prompts: string[] = [];
+
     if (urlRef) {
-      return `Generate a similar fortune to: "${urlRef}"`;
+      prompts.push(`Generate a similar fortune to: "${urlRef}"`);
     }
-    return "";
+    if (parsedTags.length > 0) {
+      prompts.push(`Include themes like: ${parsedTags.join(", ")}`);
+    }
+
+    return prompts.join(" ");
   };
 
   // Core state
@@ -135,7 +148,7 @@ export function GeneratorClient() {
   const [customPrompt, setCustomPrompt] = useState(getInitialCustomPrompt);
   // Auto-show personalization panel if we have URL params
   const [showPersonalization, setShowPersonalization] = useState(
-    Boolean(urlStyle || urlRef),
+    Boolean(urlStyle || urlRef || urlTags),
   );
 
   // UI state

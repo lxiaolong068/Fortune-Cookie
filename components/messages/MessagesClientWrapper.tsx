@@ -49,6 +49,7 @@ function CTAPlaceholder() {
 interface MessagesClientWrapperProps {
   allCategories: CategoryConfig[];
   categoryMessages: Record<string, FortuneMessage[]>;
+  categoryMeta: Record<string, { totalCount: number; lastUpdated?: string }>;
 }
 
 /**
@@ -74,6 +75,7 @@ interface MessagesClientWrapperProps {
 export function MessagesClientWrapper({
   allCategories,
   categoryMessages,
+  categoryMeta,
 }: MessagesClientWrapperProps) {
   // Track if filters are active to hide category sections
   const [filtersActive, setFiltersActive] = useState(false);
@@ -117,6 +119,8 @@ export function MessagesClientWrapper({
               key={category.id}
               category={category}
               messages={categoryMessages[category.id] || []}
+              totalCount={categoryMeta[category.id]?.totalCount}
+              lastUpdated={categoryMeta[category.id]?.lastUpdated}
             />
           ))}
 
@@ -130,6 +134,8 @@ export function MessagesClientWrapper({
               <MessageCategorySection
                 category={category}
                 messages={categoryMessages[category.id] || []}
+                totalCount={categoryMeta[category.id]?.totalCount}
+                lastUpdated={categoryMeta[category.id]?.lastUpdated}
               />
             </LazySection>
           ))}

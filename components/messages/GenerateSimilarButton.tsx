@@ -9,6 +9,7 @@ interface GenerateSimilarButtonProps {
   message: string;
   category: string;
   style?: FortuneStyle;
+  tags?: string[];
   className?: string;
 }
 
@@ -24,6 +25,7 @@ export function GenerateSimilarButton({
   message,
   category,
   style,
+  tags,
   className,
 }: GenerateSimilarButtonProps) {
   const router = useRouter();
@@ -32,8 +34,8 @@ export function GenerateSimilarButton({
     // Build URL params for the generator
     const params = new URLSearchParams();
 
-    // Map category to theme (generator uses "theme" terminology)
-    params.set("theme", category);
+    // Pass category to generator (generator maps category to theme)
+    params.set("category", category);
 
     // Add style if available
     if (style) {
@@ -44,6 +46,11 @@ export function GenerateSimilarButton({
     const shortMessage =
       message.length > 100 ? message.slice(0, 100) + "..." : message;
     params.set("ref", shortMessage);
+
+    const cleanedTags = tags?.map((tag) => tag.trim()).filter(Boolean);
+    if (cleanedTags && cleanedTags.length > 0) {
+      params.set("tags", cleanedTags.join(","));
+    }
 
     // Navigate to generator with params
     router.push(`/generator?${params.toString()}`);

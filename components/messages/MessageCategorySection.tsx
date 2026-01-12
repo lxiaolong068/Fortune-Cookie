@@ -17,7 +17,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import Link from "next/link";
-import { FortuneMessage } from "@/lib/fortune-database";
+import { FortuneMessage, styleConfig } from "@/lib/fortune-database";
 import { CopyButton } from "./CopyButton";
 import { GenerateSimilarButton } from "./GenerateSimilarButton";
 
@@ -70,6 +70,12 @@ const categoryLabels: Record<string, string> = {
   study: "Study",
 };
 
+const lengthLabels: Record<FortuneMessage["lengthType"], string> = {
+  short: "Short",
+  medium: "Medium",
+  long: "Long",
+};
+
 interface MessageCategorySectionProps {
   category: CategoryConfig;
   messages: FortuneMessage[];
@@ -99,12 +105,7 @@ export function MessageCategorySection({
   const related = relatedCategories[category.id] || [];
 
   // Format last updated date
-  const formattedDate = lastUpdated
-    ? new Date(lastUpdated).toLocaleDateString("en-US", {
-        month: "short",
-        year: "numeric",
-      })
-    : "Jan 2026";
+  const formattedDate = lastUpdated ?? "";
 
   const displayCount = totalCount || messages.length;
 
@@ -135,9 +136,11 @@ export function MessageCategorySection({
               <Badge variant="secondary" className={category.color}>
                 {displayCount} messages
               </Badge>
-              <span className="text-xs text-[#888888]">
-                · Updated {formattedDate}
-              </span>
+              {formattedDate && (
+                <span className="text-xs text-[#888888]">
+                  · Updated {formattedDate}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -182,6 +185,26 @@ export function MessageCategorySection({
                   <blockquote className="text-[#222222] italic leading-relaxed mb-3">
                     &ldquo;{fortune.message}&rdquo;
                   </blockquote>
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    {fortune.lengthType && (
+                      <Badge
+                        variant="secondary"
+                        className="text-xs bg-[#F5F5F5] text-[#555555]"
+                      >
+                        {lengthLabels[fortune.lengthType]}
+                      </Badge>
+                    )}
+                    {fortune.style && styleConfig[fortune.style] && (
+                      <Badge
+                        variant="outline"
+                        className="text-xs border-[#E5E5E5] text-[#888888]"
+                        title={styleConfig[fortune.style].description}
+                      >
+                        {styleConfig[fortune.style].emoji}{" "}
+                        {styleConfig[fortune.style].label}
+                      </Badge>
+                    )}
+                  </div>
                   <div className="flex items-center justify-between gap-2">
                     {fortune.luckyNumbers &&
                       fortune.luckyNumbers.length > 0 && (
@@ -199,11 +222,12 @@ export function MessageCategorySection({
                         </div>
                       )}
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1 ml-auto transition-opacity">
                       <GenerateSimilarButton
                         message={fortune.message}
                         category={category.id}
                         style={fortune.style}
+                        tags={fortune.tags}
                       />
                       <CopyButton
                         message={fortune.message}

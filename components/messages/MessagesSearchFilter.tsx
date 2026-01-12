@@ -29,6 +29,13 @@ interface MessagesSearchFilterProps {
   className?: string;
 }
 
+const lengthLabels: Record<LengthType, string> = {
+  all: "All",
+  short: "Short",
+  medium: "Medium",
+  long: "Long",
+};
+
 /**
  * MessagesSearchFilter - Search and filter component for fortune messages
  *
@@ -144,6 +151,13 @@ export function MessagesSearchFilter({
             </Badge>
           )}
         </Button>
+      </div>
+
+      <div className="flex items-center gap-2 text-xs text-[#888888]">
+        <Sparkles className="h-3.5 w-3.5 text-[#FF6B3D]" aria-hidden="true" />
+        <p>
+          Lucky numbers are optional. Use the copy menu to include them.
+        </p>
       </div>
 
       {/* Filters Panel */}
@@ -290,22 +304,30 @@ export function MessagesSearchFilter({
                         </blockquote>
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2 flex-wrap">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs bg-[#F5F5F5] text-[#555555]"
+                          >
+                            {fortune.category}
+                          </Badge>
+                          {fortune.lengthType && (
                             <Badge
                               variant="secondary"
                               className="text-xs bg-[#F5F5F5] text-[#555555]"
                             >
-                              {fortune.category}
+                              {lengthLabels[fortune.lengthType]}
                             </Badge>
-                            {fortune.style && styleConfig[fortune.style] && (
-                              <Badge
-                                variant="outline"
-                                className="text-xs border-[#E5E5E5] text-[#888888]"
-                                title={styleConfig[fortune.style].description}
-                              >
-                                {styleConfig[fortune.style].emoji}{" "}
-                                {styleConfig[fortune.style].label}
-                              </Badge>
-                            )}
+                          )}
+                          {fortune.style && styleConfig[fortune.style] && (
+                            <Badge
+                              variant="outline"
+                              className="text-xs border-[#E5E5E5] text-[#888888]"
+                              title={styleConfig[fortune.style].description}
+                            >
+                              {styleConfig[fortune.style].emoji}{" "}
+                              {styleConfig[fortune.style].label}
+                            </Badge>
+                          )}
                             {fortune.luckyNumbers &&
                               fortune.luckyNumbers.length > 0 && (
                                 <div className="flex items-center gap-1 text-xs text-[#888888]">
@@ -322,11 +344,12 @@ export function MessagesSearchFilter({
                                 </div>
                               )}
                           </div>
-                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                          <div className="flex items-center gap-1 transition-opacity">
                             <GenerateSimilarButton
                               message={fortune.message}
                               category={fortune.category}
                               style={fortune.style}
+                              tags={fortune.tags}
                             />
                             <CopyButton
                               message={fortune.message}

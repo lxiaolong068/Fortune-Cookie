@@ -169,11 +169,28 @@ export default function MessagesPage() {
 
   // Pre-fetch all category messages (server-side)
   const categoryMessages: Record<string, FortuneMessage[]> = {};
+  const categoryMeta: Record<
+    string,
+    { totalCount: number; lastUpdated?: string }
+  > = {};
   for (const category of categoryConfig) {
-    categoryMessages[category.id] = getFortunesByCategory(category.id).slice(
-      0,
-      15,
-    );
+    const allMessages = getFortunesByCategory(category.id);
+    categoryMessages[category.id] = allMessages.slice(0, 15);
+
+    const latestTimestamp = allMessages.reduce((latest, message) => {
+      const timestamp = new Date(message.dateAdded).getTime();
+      if (Number.isNaN(timestamp)) {
+        return latest;
+      }
+      return Math.max(latest, timestamp);
+    }, 0);
+
+    categoryMeta[category.id] = {
+      totalCount: allMessages.length,
+      lastUpdated: latestTimestamp
+        ? new Date(latestTimestamp).toISOString().split("T")[0]
+        : undefined,
+    };
   }
 
   // Prepare message items for structured data (only first 5 per category for SEO)
@@ -262,6 +279,7 @@ export default function MessagesPage() {
             <MessagesClientWrapper
               allCategories={categoryConfig}
               categoryMessages={categoryMessages}
+              categoryMeta={categoryMeta}
             />
           </div>
         </div>
