@@ -15,11 +15,14 @@ import {
 } from "@/components/ui/select";
 import {
   searchMessagesWithFilters,
+  styleConfig,
   type FortuneMessage,
   type MoodType,
   type LengthType,
+  type StyleFilterType,
 } from "@/lib/fortune-database";
 import { CopyButton } from "./CopyButton";
+import { GenerateSimilarButton } from "./GenerateSimilarButton";
 
 interface MessagesSearchFilterProps {
   onFiltersActive: (active: boolean) => void;
@@ -44,6 +47,7 @@ export function MessagesSearchFilter({
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [mood, setMood] = useState<MoodType>("all");
   const [length, setLength] = useState<LengthType>("all");
+  const [style, setStyle] = useState<StyleFilterType>("all");
   const [showFilters, setShowFilters] = useState(false);
 
   // Debounce search query
@@ -56,8 +60,13 @@ export function MessagesSearchFilter({
 
   // Check if any filters are active
   const hasActiveFilters = useMemo(() => {
-    return debouncedQuery.trim() !== "" || mood !== "all" || length !== "all";
-  }, [debouncedQuery, mood, length]);
+    return (
+      debouncedQuery.trim() !== "" ||
+      mood !== "all" ||
+      length !== "all" ||
+      style !== "all"
+    );
+  }, [debouncedQuery, mood, length, style]);
 
   // Notify parent of filter state
   useEffect(() => {
@@ -72,10 +81,11 @@ export function MessagesSearchFilter({
       query: debouncedQuery,
       mood,
       length,
+      style,
       sortBy: "popularity",
       limit: 50,
     });
-  }, [debouncedQuery, mood, length, hasActiveFilters]);
+  }, [debouncedQuery, mood, length, style, hasActiveFilters]);
 
   // Clear all filters
   const clearFilters = useCallback(() => {
@@ -83,6 +93,7 @@ export function MessagesSearchFilter({
     setDebouncedQuery("");
     setMood("all");
     setLength("all");
+    setStyle("all");
   }, []);
 
   // Toggle filters panel
@@ -125,9 +136,11 @@ export function MessagesSearchFilter({
         >
           <SlidersHorizontal className="h-4 w-4" />
           Filters
-          {(mood !== "all" || length !== "all") && (
+          {(mood !== "all" || length !== "all" || style !== "all") && (
             <Badge className="bg-[#FF6B3D] text-white text-xs px-1.5">
-              {(mood !== "all" ? 1 : 0) + (length !== "all" ? 1 : 0)}
+              {(mood !== "all" ? 1 : 0) +
+                (length !== "all" ? 1 : 0) +
+                (style !== "all" ? 1 : 0)}
             </Badge>
           )}
         </Button>
@@ -181,6 +194,32 @@ export function MessagesSearchFilter({
                 <SelectItem value="short">Short</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
                 <SelectItem value="long">Long</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Style Filter */}
+          <div className="flex items-center gap-2">
+            <label htmlFor="style-filter" className="text-sm text-[#555555]">
+              Style:
+            </label>
+            <Select
+              value={style}
+              onValueChange={(v) => setStyle(v as StyleFilterType)}
+            >
+              <SelectTrigger
+                id="style-filter"
+                className="w-36 border-[#FFD6C5] focus:ring-[#FF6B3D]"
+              >
+                <SelectValue placeholder="All styles" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Styles</SelectItem>
+                {Object.entries(styleConfig).map(([key, config]) => (
+                  <SelectItem key={key} value={key}>
+                    {config.emoji} {config.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -250,13 +289,23 @@ export function MessagesSearchFilter({
                           &ldquo;{fortune.message}&rdquo;
                         </blockquote>
                         <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Badge
                               variant="secondary"
                               className="text-xs bg-[#F5F5F5] text-[#555555]"
                             >
                               {fortune.category}
                             </Badge>
+                            {fortune.style && styleConfig[fortune.style] && (
+                              <Badge
+                                variant="outline"
+                                className="text-xs border-[#E5E5E5] text-[#888888]"
+                                title={styleConfig[fortune.style].description}
+                              >
+                                {styleConfig[fortune.style].emoji}{" "}
+                                {styleConfig[fortune.style].label}
+                              </Badge>
+                            )}
                             {fortune.luckyNumbers &&
                               fortune.luckyNumbers.length > 0 && (
                                 <div className="flex items-center gap-1 text-xs text-[#888888]">
@@ -273,11 +322,17 @@ export function MessagesSearchFilter({
                                 </div>
                               )}
                           </div>
-                          <CopyButton
-                            message={fortune.message}
-                            luckyNumbers={fortune.luckyNumbers}
-                            className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-                          />
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                            <GenerateSimilarButton
+                              message={fortune.message}
+                              category={fortune.category}
+                              style={fortune.style}
+                            />
+                            <CopyButton
+                              message={fortune.message}
+                              luckyNumbers={fortune.luckyNumbers}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>

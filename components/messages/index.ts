@@ -8,6 +8,7 @@ export { HistorySection } from "./HistorySection";
 export { HowToWriteSection } from "./HowToWriteSection";
 export { CTASection } from "./CTASection";
 export { CopyButton } from "./CopyButton";
+export { GenerateSimilarButton } from "./GenerateSimilarButton";
 export { FloatingNav } from "./FloatingNav";
 export { MessagesSearchFilter } from "./MessagesSearchFilter";
 export {

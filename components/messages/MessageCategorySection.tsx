@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { FortuneMessage } from "@/lib/fortune-database";
 import { CopyButton } from "./CopyButton";
+import { GenerateSimilarButton } from "./GenerateSimilarButton";
 
 // Icon name to component mapping (for client-side resolution)
 const iconMap = {
@@ -197,12 +198,18 @@ export function MessageCategorySection({
                           ))}
                         </div>
                       )}
-                    {/* Copy Button */}
-                    <CopyButton
-                      message={fortune.message}
-                      luckyNumbers={fortune.luckyNumbers}
-                      className="ml-auto opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-                    />
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                      <GenerateSimilarButton
+                        message={fortune.message}
+                        category={category.id}
+                        style={fortune.style}
+                      />
+                      <CopyButton
+                        message={fortune.message}
+                        luckyNumbers={fortune.luckyNumbers}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

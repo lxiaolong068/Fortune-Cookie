@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useAuthSession } from "@/lib/auth-client";
@@ -44,22 +45,98 @@ interface FortuneApiResponse {
   error?: string;
 }
 
+// Valid themes for URL param validation
+const VALID_THEMES: Theme[] = [
+  "funny",
+  "inspirational",
+  "love",
+  "success",
+  "wisdom",
+  "random",
+];
+
+// Map fortune style to generator tone
+const STYLE_TO_TONE: Record<string, Personalization["tone"]> = {
+  classic: "",
+  poetic: "soft",
+  modern: "direct",
+  playful: "playful",
+  calm: "soft",
+};
+
+// Map category names that differ between pages
+const CATEGORY_TO_THEME: Record<string, Theme> = {
+  // Direct mappings
+  funny: "funny",
+  inspirational: "inspirational",
+  love: "love",
+  success: "success",
+  wisdom: "wisdom",
+  // Indirect mappings (categories that don't have direct theme match)
+  friendship: "love", // friendship messages → love theme
+  birthday: "funny", // birthday messages → funny theme
+  study: "success", // study messages → success theme
+  health: "inspirational", // health messages → inspirational theme
+  travel: "inspirational", // travel messages → inspirational theme
+};
+
 export function GeneratorClient() {
   const { status } = useAuthSession();
   const isAuthenticated = status === "authenticated";
   const isAuthLoading = status === "loading";
+  const searchParams = useSearchParams();
+
+  // Parse URL params for "Generate Similar" feature
+  const urlTheme = searchParams.get("theme");
+  const urlCategory = searchParams.get("category");
+  const urlStyle = searchParams.get("style");
+  const urlRef = searchParams.get("ref");
+
+  // Determine initial theme from URL params
+  const getInitialTheme = (): Theme => {
+    // Check direct theme param first
+    if (urlTheme && VALID_THEMES.includes(urlTheme as Theme)) {
+      return urlTheme as Theme;
+    }
+    // Check category param and map to theme
+    if (urlCategory) {
+      const mappedTheme = CATEGORY_TO_THEME[urlCategory];
+      if (mappedTheme) return mappedTheme;
+    }
+    return "random";
+  };
+
+  // Determine initial tone from URL style param
+  const getInitialPersonalization = (): Personalization => {
+    const base = { ...DEFAULT_PERSONALIZATION };
+    if (urlStyle && urlStyle in STYLE_TO_TONE) {
+      base.tone = STYLE_TO_TONE[urlStyle] || "";
+    }
+    return base;
+  };
+
+  // Determine initial custom prompt from reference message
+  const getInitialCustomPrompt = (): string => {
+    if (urlRef) {
+      return `Generate a similar fortune to: "${urlRef}"`;
+    }
+    return "";
+  };
 
   // Core state
   const [cookieState, setCookieState] = useState<CookieState>("unopened");
   const [currentFortune, setCurrentFortune] = useState<Fortune | null>(null);
 
-  // Selection state
-  const [selectedTheme, setSelectedTheme] = useState<Theme>("random");
+  // Selection state - initialized from URL params
+  const [selectedTheme, setSelectedTheme] = useState<Theme>(getInitialTheme);
   const [personalization, setPersonalization] = useState<Personalization>(
-    DEFAULT_PERSONALIZATION,
+    getInitialPersonalization,
   );
-  const [customPrompt, setCustomPrompt] = useState("");
-  const [showPersonalization, setShowPersonalization] = useState(false);
+  const [customPrompt, setCustomPrompt] = useState(getInitialCustomPrompt);
+  // Auto-show personalization panel if we have URL params
+  const [showPersonalization, setShowPersonalization] = useState(
+    Boolean(urlStyle || urlRef),
+  );
 
   // UI state
   const [quotaStatus, setQuotaStatus] = useState<QuotaStatus | null>(null);

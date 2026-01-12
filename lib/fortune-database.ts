@@ -1,27 +1,152 @@
 // Extended Fortune Cookie Database with 200+ messages
 
+/**
+ * Fortune message style types
+ * - classic: Timeless wisdom, formal tone (古典)
+ * - poetic: Lyrical, metaphorical language (诗性)
+ * - modern: Contemporary, casual tone (现代口语)
+ * - playful: Humorous, light-hearted (俏皮)
+ * - calm: Serene, meditative (沉稳)
+ */
+export type FortuneStyle = "classic" | "poetic" | "modern" | "playful" | "calm";
+
+/**
+ * Fortune category types
+ */
+export type FortuneCategory =
+  | "inspirational"
+  | "funny"
+  | "love"
+  | "success"
+  | "wisdom"
+  | "friendship"
+  | "health"
+  | "travel"
+  | "birthday"
+  | "study";
+
 export interface FortuneMessage {
   id: string;
   message: string;
-  category:
-    | "inspirational"
-    | "funny"
-    | "love"
-    | "success"
-    | "wisdom"
-    | "friendship"
-    | "health"
-    | "travel"
-    | "birthday"
-    | "study";
+  category: FortuneCategory;
   tags: string[];
   luckyNumbers: number[];
   popularity: number; // 1-10 scale
   dateAdded: string;
+  // NEW: Style and length classification
+  style: FortuneStyle;
+  lengthType: "short" | "medium" | "long";
 }
 
+/**
+ * Style configuration with display metadata
+ */
+export const styleConfig: Record<
+  FortuneStyle,
+  { emoji: string; label: string; description: string }
+> = {
+  classic: {
+    emoji: "🏛️",
+    label: "Classic",
+    description: "Timeless wisdom with formal tone",
+  },
+  poetic: {
+    emoji: "🌸",
+    label: "Poetic",
+    description: "Lyrical language with metaphors",
+  },
+  modern: {
+    emoji: "💬",
+    label: "Modern",
+    description: "Contemporary, casual expression",
+  },
+  playful: {
+    emoji: "🎭",
+    label: "Playful",
+    description: "Witty and light-hearted",
+  },
+  calm: {
+    emoji: "🧘",
+    label: "Calm",
+    description: "Serene and meditative",
+  },
+};
+
+/**
+ * Auto-classify message style based on content analysis
+ */
+export function classifyMessageStyle(message: string): FortuneStyle {
+  const lowerMsg = message.toLowerCase();
+
+  // Playful indicators - humor, meta references, emojis, puns
+  if (
+    /😊|🍪|😂|🎉|lol|haha|pun|joke|!{2,}/i.test(message) ||
+    /help!|error 404|intentionally|obviously|probably your cat/i.test(
+      lowerMsg,
+    ) ||
+    (lowerMsg.includes("cookie") && /fortune|reading|factory/i.test(lowerMsg))
+  ) {
+    return "playful";
+  }
+
+  // Poetic indicators - metaphors, nature imagery, lyrical structure
+  if (
+    /like a |as the |garden|bloom|sunrise|sunset|ocean|river|moon|stars|wings|flow|petals|seasons/i.test(
+      lowerMsg,
+    ) ||
+    /soul inhabiting|golden thread|sunless garden/i.test(lowerMsg)
+  ) {
+    return "poetic";
+  }
+
+  // Calm indicators - meditation, peace, gentleness
+  if (
+    /breathe|peace|calm|gentle|patience|stillness|serene|tranquil|quiet|rest|relaxation/i.test(
+      lowerMsg,
+    )
+  ) {
+    return "calm";
+  }
+
+  // Modern indicators - short, direct, contemporary phrases
+  if (
+    message.length < 60 &&
+    !/thy|thou|shall|wisdom of|doth|hath|'tis/i.test(lowerMsg) &&
+    /you've got|keep showing|you're|gonna|gotta|awesome|amazing/i.test(lowerMsg)
+  ) {
+    return "modern";
+  }
+
+  // Default to classic for traditional wisdom quotes
+  return "classic";
+}
+
+/**
+ * Compute length type based on character count
+ * - short: ≤ 60 characters
+ * - medium: 61-120 characters
+ * - long: > 120 characters
+ */
+export function computeLengthType(
+  message: string,
+): "short" | "medium" | "long" {
+  const length = message.length;
+  if (length <= 60) return "short";
+  if (length <= 120) return "medium";
+  return "long";
+}
+
+/**
+ * Raw message type before auto-classification
+ * style and lengthType are computed at runtime during database initialization
+ */
+type RawFortuneMessage = Omit<
+  FortuneMessage,
+  "id" | "dateAdded" | "style" | "lengthType"
+>;
+
 // Inspirational Messages (25+)
-const inspirationalMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const inspirationalMessages: RawFortuneMessage[] = [
   {
     message: "Your future is created by what you do today, not tomorrow.",
     category: "inspirational",
@@ -208,7 +333,7 @@ const inspirationalMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Funny Messages (25+)
-const funnyMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const funnyMessages: RawFortuneMessage[] = [
   {
     message: "You will find happiness with a new love... probably your cat.",
     category: "funny",
@@ -391,7 +516,7 @@ const funnyMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Love & Relationship Messages (20+)
-const loveMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const loveMessages: RawFortuneMessage[] = [
   {
     message: "Love is the bridge between two hearts.",
     category: "love",
@@ -539,7 +664,7 @@ const loveMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Success & Career Messages (20+)
-const successMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const successMessages: RawFortuneMessage[] = [
   {
     message: "Success is where preparation and opportunity meet.",
     category: "success",
@@ -689,7 +814,7 @@ const successMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Wisdom Messages (20+)
-const wisdomMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const wisdomMessages: RawFortuneMessage[] = [
   {
     message: "Be yourself; everyone else is already taken.",
     category: "wisdom",
@@ -843,7 +968,7 @@ const wisdomMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Friendship Messages (20+) - NEW
-const friendshipMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const friendshipMessages: RawFortuneMessage[] = [
   {
     message: "A true friend is one soul in two bodies.",
     category: "friendship",
@@ -999,7 +1124,7 @@ const friendshipMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Birthday Messages (20+) - NEW
-const birthdayMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const birthdayMessages: RawFortuneMessage[] = [
   {
     message:
       "This year, your birthday wishes will come true in unexpected ways.",
@@ -1153,7 +1278,7 @@ const birthdayMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Study & Motivation Messages (20+) - NEW
-const studyMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const studyMessages: RawFortuneMessage[] = [
   {
     message:
       "The more you study, the more you know. The more you know, the more you grow.",
@@ -1307,7 +1432,7 @@ const studyMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Health Messages (keeping minimal for now)
-const healthMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const healthMessages: RawFortuneMessage[] = [
   {
     message: "Good health is the greatest wealth you can possess.",
     category: "health",
@@ -1346,7 +1471,7 @@ const healthMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
 ];
 
 // Travel Messages (keeping minimal for now)
-const travelMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
+const travelMessages: RawFortuneMessage[] = [
   {
     message: "Adventure awaits those who dare to explore.",
     category: "travel",
@@ -1385,7 +1510,7 @@ const travelMessages: Omit<FortuneMessage, "id" | "dateAdded">[] = [
   },
 ];
 
-// Combine all messages and add IDs and dates
+// Combine all messages and add IDs, dates, style, and lengthType
 export const fortuneDatabase: FortuneMessage[] = [
   ...inspirationalMessages,
   ...funnyMessages,
@@ -1401,6 +1526,9 @@ export const fortuneDatabase: FortuneMessage[] = [
   ...message,
   id: `fortune_${index + 1}`,
   dateAdded: new Date(2024, 0, 1 + (index % 365)).toISOString(),
+  // Auto-classify style and compute length type
+  style: classifyMessageStyle(message.message),
+  lengthType: computeLengthType(message.message),
 }));
 
 // Search and filter functions
@@ -1513,12 +1641,18 @@ const lengthThresholds = {
 };
 
 /**
+ * Style filter type (includes "all" option)
+ */
+export type StyleFilterType = FortuneStyle | "all";
+
+/**
  * Search and filter options interface
  */
 export interface SearchFilterOptions {
   query?: string;
   mood?: MoodType;
   length?: LengthType;
+  style?: StyleFilterType;
   hasLuckyNumbers?: boolean;
   category?: string;
   sortBy?: "popularity" | "recent" | "alphabetical";
@@ -1554,6 +1688,7 @@ export function getCategoryMood(category: string): MoodType {
  * - Keyword search (message text and tags)
  * - Mood filtering (positive, humor, romance, wisdom)
  * - Length filtering (short, medium, long)
+ * - Style filtering (classic, poetic, modern, playful, calm)
  * - Lucky numbers presence filter
  * - Category filtering
  * - Sorting (popularity, recent, alphabetical)
@@ -1565,6 +1700,7 @@ export function searchMessagesWithFilters(
     query,
     mood = "all",
     length = "all",
+    style = "all",
     hasLuckyNumbers,
     category,
     sortBy = "popularity",
@@ -1589,8 +1725,17 @@ export function searchMessagesWithFilters(
 
     // Length filter
     if (length !== "all") {
-      const messageLength = getMessageLengthType(fortune.message);
+      // Use pre-computed lengthType if available, fallback to runtime computation
+      const messageLength =
+        fortune.lengthType || getMessageLengthType(fortune.message);
       if (messageLength !== length) {
+        return false;
+      }
+    }
+
+    // Style filter (NEW)
+    if (style !== "all") {
+      if (fortune.style !== style) {
         return false;
       }
     }
@@ -1652,6 +1797,7 @@ export function searchMessagesWithFilters(
 export function getFilterCounts(baseCategory?: string): {
   moods: Record<MoodType, number>;
   lengths: Record<LengthType, number>;
+  styles: Record<StyleFilterType, number>;
   total: number;
 } {
   const fortunes = baseCategory
@@ -1673,19 +1819,34 @@ export function getFilterCounts(baseCategory?: string): {
     long: 0,
   };
 
+  const styles: Record<StyleFilterType, number> = {
+    all: fortunes.length,
+    classic: 0,
+    poetic: 0,
+    modern: 0,
+    playful: 0,
+    calm: 0,
+  };
+
   for (const fortune of fortunes) {
     // Count by mood
     const fortuneMood = getCategoryMood(fortune.category);
     moods[fortuneMood]++;
 
-    // Count by length
-    const fortuneLength = getMessageLengthType(fortune.message);
+    // Count by length (use pre-computed if available)
+    const fortuneLength =
+      fortune.lengthType || getMessageLengthType(fortune.message);
     lengths[fortuneLength]++;
+
+    // Count by style (use pre-computed if available)
+    const fortuneStyle = fortune.style || classifyMessageStyle(fortune.message);
+    styles[fortuneStyle]++;
   }
 
   return {
     moods,
     lengths,
+    styles,
     total: fortunes.length,
   };
 }
@@ -1711,4 +1872,128 @@ export function getFortunesByTag(tag: string): FortuneMessage[] {
   return fortuneDatabase.filter((fortune) =>
     fortune.tags.some((t) => t.toLowerCase() === searchTag),
   );
+}
+
+/**
+ * Get fortunes by style
+ */
+export function getFortunesByStyle(style: FortuneStyle): FortuneMessage[] {
+  return fortuneDatabase.filter((fortune) => fortune.style === style);
+}
+
+/**
+ * Get all available styles with counts
+ */
+export function getAvailableStyles(): Array<{
+  style: FortuneStyle;
+  count: number;
+  config: (typeof styleConfig)[FortuneStyle];
+}> {
+  const styleCounts = fortuneDatabase.reduce(
+    (acc, fortune) => {
+      acc[fortune.style] = (acc[fortune.style] || 0) + 1;
+      return acc;
+    },
+    {} as Record<FortuneStyle, number>,
+  );
+
+  return (Object.keys(styleConfig) as FortuneStyle[]).map((style) => ({
+    style,
+    count: styleCounts[style] || 0,
+    config: styleConfig[style],
+  }));
+}
+
+/**
+ * Diversity sampling algorithm
+ * Ensures variety in style, length, and popularity when selecting messages
+ *
+ * @param messages - Source messages to sample from
+ * @param count - Number of messages to return
+ * @returns Diverse sample of messages
+ */
+export function diverseSample(
+  messages: FortuneMessage[],
+  count: number = 15,
+): FortuneMessage[] {
+  if (messages.length <= count) {
+    return messages;
+  }
+
+  const result: FortuneMessage[] = [];
+  const usedIds = new Set<string>();
+
+  // Helper to add message if not already included
+  const addIfNotUsed = (msg: FortuneMessage | undefined): boolean => {
+    if (msg && !usedIds.has(msg.id)) {
+      result.push(msg);
+      usedIds.add(msg.id);
+      return true;
+    }
+    return false;
+  };
+
+  // First pass: Ensure style diversity (one of each style if available)
+  const styles: FortuneStyle[] = [
+    "classic",
+    "poetic",
+    "modern",
+    "playful",
+    "calm",
+  ];
+  for (const style of styles) {
+    if (result.length >= count) break;
+    const match = messages.find((m) => m.style === style && !usedIds.has(m.id));
+    addIfNotUsed(match);
+  }
+
+  // Second pass: Ensure length diversity
+  const lengths: Array<"short" | "medium" | "long"> = [
+    "short",
+    "medium",
+    "long",
+  ];
+  for (const length of lengths) {
+    if (result.length >= count) break;
+    const match = messages.find(
+      (m) => m.lengthType === length && !usedIds.has(m.id),
+    );
+    addIfNotUsed(match);
+  }
+
+  // Third pass: Fill remaining with popularity-weighted selection
+  const remaining = messages
+    .filter((m) => !usedIds.has(m.id))
+    .sort((a, b) => b.popularity - a.popularity);
+
+  // Take from top popular, but add some randomness
+  let idx = 0;
+  while (result.length < count && idx < remaining.length) {
+    // Pick from top 10 remaining with some randomness
+    const poolSize = Math.min(10, remaining.length - idx);
+    const pickIdx = idx + Math.floor(Math.random() * poolSize);
+    const picked = remaining[pickIdx];
+    if (picked) {
+      addIfNotUsed(picked);
+      // Swap picked with current index position to avoid re-picking
+      remaining[pickIdx] = remaining[idx]!;
+    }
+    idx++;
+  }
+
+  return result;
+}
+
+/**
+ * Get diverse fortunes by category
+ * Uses diversity sampling to ensure variety in displayed messages
+ */
+export function getDiverseFortunesByCategory(
+  category: string,
+  count: number = 15,
+): FortuneMessage[] {
+  const categoryFortunes = fortuneDatabase.filter(
+    (f) => f.category === category,
+  );
+  return diverseSample(categoryFortunes, count);
 }
