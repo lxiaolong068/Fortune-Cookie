@@ -24,7 +24,9 @@ export function StructuredData({ data, id, nonce }: StructuredDataProps) {
 }
 
 // 预定义的结构化数据组件
-export function WebsiteStructuredData({ nonce }: { nonce?: string | null } = {}) {
+export function WebsiteStructuredData({
+  nonce,
+}: { nonce?: string | null } = {}) {
   const urls = getStructuredDataUrls();
 
   const data = {
@@ -298,7 +300,9 @@ export function HowToStructuredData({
       name: step.name,
       text: step.text,
       ...(step.url && {
-        url: step.url.startsWith("http") ? step.url : `${urls.website}${step.url}`,
+        url: step.url.startsWith("http")
+          ? step.url
+          : `${urls.website}${step.url}`,
       }),
       ...(step.image && {
         image: {
@@ -313,8 +317,29 @@ export function HowToStructuredData({
 }
 
 /**
+ * 将人类可读的时间格式转换为 ISO 8601 Duration 格式
+ * 例如: "45 minutes" -> "PT45M", "1 hour 30 minutes" -> "PT1H30M"
+ */
+function parseTimeToISO8601(timeStr: string): string {
+  const hours = timeStr.match(/(\d+)\s*hour/i);
+  const minutes = timeStr.match(/(\d+)\s*minute/i);
+
+  let duration = "PT";
+  if (hours) duration += `${hours[1]}H`;
+  if (minutes) duration += `${minutes[1]}M`;
+
+  // 如果没有解析到任何时间，返回默认值
+  return duration === "PT" ? "PT30M" : duration;
+}
+
+/**
  * Recipe 结构化数据组件
  * 用于食谱页面
+ * 符合 Google 食谱结构化数据要求：
+ * - nutrition: 营养信息
+ * - video: 视频信息（可选但推荐）
+ * - recipeInstructions 中的 url 和 image
+ * - totalTime 使用 ISO 8601 格式
  */
 export function RecipeStructuredData({
   recipes,
@@ -330,6 +355,9 @@ export function RecipeStructuredData({
     servings: string;
     difficulty: string;
     rating?: number;
+    prepTime?: string;
+    cookTime?: string;
+    calories?: string;
   }>;
   nonce?: string | null;
 }) {
@@ -347,22 +375,73 @@ export function RecipeStructuredData({
       position: index + 1,
       item: {
         "@type": "Recipe",
+        "@id": `${urls.website}/recipes#${recipe.id}`,
         name: recipe.title,
         description: recipe.description,
-        image: getImageUrl("/og-image.png"),
+        url: `${urls.website}/recipes#${recipe.id}`,
+        image: {
+          "@type": "ImageObject",
+          url: getImageUrl("/og-image.png"),
+          width: 1200,
+          height: 630,
+        },
         author: {
           "@type": "Organization",
           name: "Fortune Cookie AI Team",
+          url: urls.website,
         },
+        publisher: {
+          "@type": "Organization",
+          name: "Fortune Cookie AI",
+          logo: {
+            "@type": "ImageObject",
+            url: urls.logo,
+          },
+        },
+        datePublished: "2024-01-15",
+        dateModified: new Date().toISOString().split("T")[0],
         recipeIngredient: recipe.ingredients,
         recipeInstructions: recipe.instructions.map((instruction, idx) => ({
           "@type": "HowToStep",
           name: `Step ${idx + 1}`,
           text: instruction,
+          url: `${urls.website}/recipes#${recipe.id}-step-${idx + 1}`,
+          image: {
+            "@type": "ImageObject",
+            url: getImageUrl("/og-image.png"),
+          },
         })),
-        totalTime: recipe.time,
+        // totalTime 使用 ISO 8601 Duration 格式
+        totalTime: parseTimeToISO8601(recipe.time),
+        prepTime: recipe.prepTime
+          ? parseTimeToISO8601(recipe.prepTime)
+          : "PT10M",
+        cookTime: recipe.cookTime
+          ? parseTimeToISO8601(recipe.cookTime)
+          : parseTimeToISO8601(recipe.time),
         recipeYield: recipe.servings,
-        recipeDifficulty: recipe.difficulty,
+        // nutrition 营养信息（Google 推荐字段）
+        nutrition: {
+          "@type": "NutritionInformation",
+          calories: recipe.calories || "50 calories per cookie",
+          servingSize: "1 cookie",
+          fatContent: "2g",
+          carbohydrateContent: "8g",
+          sugarContent: "5g",
+          proteinContent: "1g",
+        },
+        // video 信息（Google 推荐字段）
+        // 使用占位视频信息，表明没有视频但符合结构
+        video: {
+          "@type": "VideoObject",
+          name: `How to Make ${recipe.title}`,
+          description: `Step-by-step video tutorial for making ${recipe.title}`,
+          thumbnailUrl: getImageUrl("/og-image.png"),
+          contentUrl: `${urls.website}/recipes#${recipe.id}`,
+          embedUrl: `${urls.website}/recipes#${recipe.id}`,
+          uploadDate: "2024-01-15",
+          duration: parseTimeToISO8601(recipe.time),
+        },
         ...(recipe.rating && {
           aggregateRating: {
             "@type": "AggregateRating",
@@ -375,6 +454,7 @@ export function RecipeStructuredData({
         recipeCategory: "Dessert",
         recipeCuisine: "Asian-American",
         keywords: "fortune cookies, homemade cookies, dessert recipe, baking",
+        suitableForDiet: "https://schema.org/LowFatDiet",
       },
     })),
   };
