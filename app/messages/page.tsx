@@ -16,6 +16,7 @@ import Link from "next/link";
 import {
   ItemListStructuredData,
   BreadcrumbStructuredData,
+  FAQStructuredData,
 } from "@/components/StructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
 import {
@@ -27,37 +28,79 @@ import { MessagesClientWrapper, CategoryConfig } from "@/components/messages";
 
 const baseUrl = getSiteUrl();
 
-export const metadata: Metadata = {
-  title: "Fortune Cookie Messages – Inspirational & Funny Quotes",
-  description:
-    "Browse 200+ fortune cookie messages for daily inspiration, parties, gift cards, and social media. Funny, inspirational, love, success, wisdom, and friendship sayings with lucky numbers.",
-  openGraph: {
-    title: "Fortune Cookie Messages – Inspirational & Funny Quotes",
-    description:
-      "Browse 200+ fortune cookie messages for daily inspiration, parties, gift cards, and social media. Funny, inspirational, love, success, wisdom, and friendship sayings.",
-    type: "website",
-    url: `${baseUrl}/messages`,
-    images: [
-      {
-        url: getImageUrl("/og-image.png"),
-        width: 1200,
-        height: 630,
-        alt: "Fortune Cookie Messages",
-      },
+// Dynamic metadata with actual message count from database
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = getDatabaseStats();
+  const totalCount = stats.total;
+
+  const title = "Fortune Cookie Messages – Inspirational & Funny Quotes";
+  const description = `Browse ${totalCount}+ fortune cookie messages for daily inspiration, parties, gift cards, printing, and social media. Free copy-paste texts for wisdom, love, success, and funny pranks with lucky numbers.`;
+
+  return {
+    title,
+    description,
+    keywords: [
+      "fortune cookie messages",
+      "fortune cookie sayings",
+      "printable fortune cookie quotes",
+      "copy paste fortune messages",
+      "short fortune cookie sayings",
+      "custom fortune cookie text",
+      "funny fortune cookies",
+      "inspirational quotes",
+      "love fortune messages",
+      "lucky numbers",
     ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/messages`,
+      images: [
+        {
+          url: getImageUrl("/og-image.png"),
+          width: 1200,
+          height: 630,
+          alt: "Fortune Cookie Messages",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [getImageUrl("/twitter-image.png")],
+      creator: "@fortunecookieai",
+    },
+    alternates: {
+      canonical: "/messages",
+    },
+  };
+}
+
+// FAQ content for structured data - helps capture "People Also Ask" snippets
+const messageFAQs = [
+  {
+    question: "What are common fortune cookie sayings?",
+    answer:
+      "Common fortune cookie sayings include inspirational quotes about success, love, and wisdom. Popular examples include 'The journey of a thousand miles begins with a single step' and 'Good things come to those who wait.' Our collection features over 500 curated messages across 8 categories.",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Fortune Cookie Messages – Inspirational & Funny Quotes",
-    description:
-      "Browse 200+ fortune cookie messages for daily inspiration, parties, gift cards, and social media. Funny, inspirational, love, success, wisdom, and friendship sayings.",
-    images: [getImageUrl("/twitter-image.png")],
-    creator: "@fortunecookieai",
+  {
+    question: "How long should a fortune cookie message be?",
+    answer:
+      "Ideal fortune cookie messages are between 10-60 characters for short fortunes (great for printing), 60-120 characters for medium-length sayings, and up to 180 characters for longer philosophical messages. Most traditional fortune cookies use short to medium length messages.",
   },
-  alternates: {
-    canonical: "/messages",
+  {
+    question: "Can I write my own fortune cookie messages?",
+    answer:
+      "Yes! You can create custom fortune cookie messages for parties, gifts, weddings, or special occasions. Our AI Fortune Generator helps you create personalized fortunes in various styles including inspirational, funny, romantic, and wisdom themes.",
   },
-};
+  {
+    question: "What types of fortune cookie messages are most popular?",
+    answer:
+      "Inspirational and funny messages are the most popular categories. Love fortunes are frequently used for weddings and Valentine's Day, while success messages are popular for graduation parties and business events. Birthday fortunes are great for party favors.",
+  },
+];
 
 // Icon name to component mapping for Quick Navigation (SSR)
 const iconComponents = {
@@ -207,7 +250,7 @@ export default function MessagesPage() {
     <>
       <ItemListStructuredData
         name="Fortune Cookie Messages Collection"
-        description="Browse our complete collection of 200+ fortune cookie messages including funny, inspirational, love, success, wisdom, friendship, birthday, and study motivation sayings. Find the perfect fortune for any occasion."
+        description={`Browse our complete collection of ${stats.total}+ fortune cookie messages including funny, inspirational, love, success, wisdom, friendship, birthday, and study motivation sayings. Find the perfect fortune for any occasion.`}
         url="/messages"
         items={messageItems}
       />
@@ -217,6 +260,7 @@ export default function MessagesPage() {
           { name: "Fortune Cookie Messages", url: "/messages" },
         ]}
       />
+      <FAQStructuredData faqs={messageFAQs} />
       <main className="min-h-screen w-full overflow-x-hidden relative bg-[#FAFAFA]">
         <DynamicBackgroundEffects />
         <div className="relative z-10">

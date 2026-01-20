@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -144,6 +144,14 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { category } = await params;
 
+  // Redirect funny category to dedicated landing page - return minimal metadata
+  if (category === "funny") {
+    return {
+      title: "Redirecting...",
+      robots: { index: false, follow: true },
+    };
+  }
+
   if (!isValidCategory(category)) {
     return {
       title: "Category Not Found | Fortune Cookie AI",
@@ -191,6 +199,11 @@ export async function generateMetadata({
 
 export default async function CategoryPage({ params }: PageProps) {
   const { category } = await params;
+
+  // Redirect funny category to dedicated SEO landing page to avoid duplicate content
+  if (category === "funny") {
+    redirect("/funny-fortune-cookie-messages");
+  }
 
   if (!isValidCategory(category)) {
     notFound();
