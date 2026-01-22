@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { EdgeCacheManager } from "./lib/edge-cache";
+import {
+  i18n,
+  isValidLocale,
+  pathConfig,
+  type Locale,
+} from "./lib/i18n-config";
 
 // 需要缓存的路径模式
 const CACHEABLE_PATHS = [
@@ -22,6 +28,18 @@ const STATIC_PATHS = [
 
 // 不需要处理的路径
 const SKIP_PATHS = ["/_next", "/api/cache", "/__nextjs_original-stack-frame"];
+
+// 不进行语言重定向的路径
+const LOCALE_SKIP_PATHS = [
+  "/api",
+  "/_next",
+  "/favicon",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/ads.txt",
+  "/site.webmanifest",
+  "/__nextjs_original-stack-frame",
+];
 
 // 生成 CSP Nonce
 function generateNonce(): string {
@@ -52,8 +70,135 @@ export function middleware(request: NextRequest) {
     return handleApiCaching(request, startTime, nonce);
   }
 
+  // 处理多语言路由（在页面缓存之前）
+  const localeResponse = handleLocaleDetection(request, startTime, nonce);
+  if (localeResponse) {
+    return localeResponse;
+  }
+
   // 处理页面缓存
   return handlePageCaching(request, startTime, nonce);
+}
+
+/**
+ * Detect preferred locale from Accept-Language header
+ */
+function detectLocaleFromHeader(acceptLanguage: string | null): Locale {
+  if (!acceptLanguage) {
+    return i18n.defaultLocale;
+  }
+
+  // Parse Accept-Language header
+  const languages = acceptLanguage
+    .split(",")
+    .map((lang) => {
+      const parts = lang.trim().split(";q=");
+      const code = parts[0]?.toLowerCase() ?? "";
+      const qualityStr = parts[1];
+      return {
+        code,
+        quality: qualityStr ? parseFloat(qualityStr) : 1,
+      };
+    })
+    .sort((a, b) => b.quality - a.quality);
+
+  // Find the first supported locale
+  for (const { code } of languages) {
+    // Check exact match
+    if (isValidLocale(code)) {
+      return code;
+    }
+
+    // Check language code without region (e.g., "en-US" -> "en")
+    const languageCode = code.split("-")[0];
+    if (languageCode && isValidLocale(languageCode)) {
+      return languageCode;
+    }
+  }
+
+  return i18n.defaultLocale;
+}
+
+/**
+ * Handle locale detection and redirection
+ * Returns a response if redirection is needed, otherwise null
+ */
+function handleLocaleDetection(
+  request: NextRequest,
+  startTime: number,
+  nonce: string,
+): NextResponse | null {
+  const { pathname } = request.nextUrl;
+
+  // Skip locale handling for certain paths
+  if (LOCALE_SKIP_PATHS.some((path) => pathname.startsWith(path))) {
+    return null;
+  }
+
+  // Check if pathname starts with a locale
+  const segments = pathname.split("/").filter(Boolean);
+  const firstSegment = segments[0] ?? "";
+  const pathnameHasLocale = isValidLocale(firstSegment);
+
+  // Get locale from cookie or Accept-Language header
+  const cookieLocale = request.cookies.get(pathConfig.detection.cookieName)
+    ?.value as Locale | undefined;
+  const headerLocale = pathConfig.detection.header
+    ? detectLocaleFromHeader(request.headers.get("Accept-Language"))
+    : i18n.defaultLocale;
+
+  // Determine the preferred locale
+  const preferredLocale =
+    cookieLocale && isValidLocale(cookieLocale) ? cookieLocale : headerLocale;
+
+  // If path already has a locale prefix, check if it's valid
+  if (pathnameHasLocale) {
+    // Valid locale in path - continue with current locale
+    // Set locale cookie if not already set
+    const response = NextResponse.next();
+    if (!cookieLocale || cookieLocale !== firstSegment) {
+      response.cookies.set(pathConfig.detection.cookieName, firstSegment, {
+        path: "/",
+        maxAge: pathConfig.detection.cookieMaxAge,
+      });
+    }
+    return null; // Let the page caching handle it
+  }
+
+  // Path doesn't have a locale prefix
+  // For default locale without showDefaultLocale, don't redirect
+  if (preferredLocale === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
+    // Set cookie for default locale
+    const response = NextResponse.next();
+    if (cookieLocale !== i18n.defaultLocale) {
+      response.cookies.set(
+        pathConfig.detection.cookieName,
+        i18n.defaultLocale,
+        {
+          path: "/",
+          maxAge: pathConfig.detection.cookieMaxAge,
+        },
+      );
+    }
+    return null; // Don't redirect, serve default locale content
+  }
+
+  // Redirect to localized path for non-default locales
+  if (preferredLocale !== i18n.defaultLocale) {
+    const localizedUrl = new URL(request.url);
+    localizedUrl.pathname = `/${preferredLocale}${pathname === "/" ? "" : pathname}`;
+
+    const response = NextResponse.redirect(localizedUrl, 307);
+    response.cookies.set(pathConfig.detection.cookieName, preferredLocale, {
+      path: "/",
+      maxAge: pathConfig.detection.cookieMaxAge,
+    });
+    addServerTiming(response, startTime, "locale-redirect");
+    addSecurityHeaders(response, nonce);
+    return response;
+  }
+
+  return null;
 }
 
 // 添加Server-Timing头部的工具函数
@@ -227,12 +372,20 @@ function handlePageCaching(
   const response = NextResponse.next();
   const pathname = request.nextUrl.pathname;
 
+  // 从路径中提取实际页面路径（去除语言前缀）
+  const segments = pathname.split("/").filter(Boolean);
+  const firstSegment = segments[0] ?? "";
+  const hasLocalePrefix = isValidLocale(firstSegment);
+  const actualPath = hasLocalePrefix
+    ? "/" + segments.slice(1).join("/")
+    : pathname;
+
   // 为页面设置适当的缓存头部
-  if (pathname === "/") {
+  if (actualPath === "/" || actualPath === "") {
     // 首页 - 短期缓存
     response.headers.set("Cache-Control", "public, max-age=60, s-maxage=300");
     addServerTiming(response, startTime, "page-home");
-  } else if (pathname.startsWith("/messages")) {
+  } else if (actualPath.startsWith("/messages")) {
     // 消息页面 - 中期缓存
     response.headers.set("Cache-Control", "public, max-age=300, s-maxage=600");
     addServerTiming(response, startTime, "page-messages");
@@ -245,8 +398,8 @@ function handlePageCaching(
     addServerTiming(response, startTime, "page-other");
   }
 
-  // 添加Vary头部
-  response.headers.set("Vary", "Accept-Encoding, User-Agent");
+  // 添加Vary头部 - 包含Accept-Language以支持多语言缓存
+  response.headers.set("Vary", "Accept-Encoding, User-Agent, Accept-Language");
 
   // 添加安全标头
   addSecurityHeaders(response, nonce);

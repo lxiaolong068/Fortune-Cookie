@@ -23,6 +23,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { ThemeToggle } from "./ThemeToggle";
+import { LanguageSwitcher, CompactLanguageSwitcher } from "./LanguageSwitcher";
 import {
   startGoogleSignIn,
   startSignOut,
@@ -143,7 +144,7 @@ export function Navigation() {
               })}
             </ul>
 
-            {/* Theme toggle and offline status indicator */}
+            {/* Theme toggle, language switcher and offline status indicator */}
             <div className="flex items-center gap-2 ml-3 pl-3 border-l border-amber-200">
               <Button
                 variant="ghost"
@@ -170,6 +171,7 @@ export function Navigation() {
                   </>
                 )}
               </Button>
+              <LanguageSwitcher variant="dropdown" showNativeNames={false} />
               <ThemeToggle />
               <OfflineIndicator />
             </div>
@@ -276,6 +278,10 @@ export function Navigation() {
 
                 {/* Mobile bottom decoration */}
                 <div className="absolute bottom-6 left-6 right-6">
+                  {/* Language Switcher for Mobile */}
+                  <div className="mb-4 flex justify-center">
+                    <CompactLanguageSwitcher />
+                  </div>
                   <div className="mb-6">
                     <Button
                       variant="outline"
