@@ -24,6 +24,12 @@
     "oldest": "Mais antigo",
     "popular": "Popular",
     "random": "Aleatório",
+    "alphabetical": "A-Z",
+    "paginationLabel": "Navegação de paginação",
+    "goToPreviousPage": "Ir para a página anterior",
+    "goToNextPage": "Ir para a próxima página",
+    "goToPage": "Ir para a página {page}",
+    "paginationSummary": "Mostrando {start}-{end} de {total} resultados",
     "selectLanguage": "Selecionar idioma",
     "switchToLanguage": "Mudar para {language}",
     "languageOptions": "Opções de idioma",
@@ -211,6 +217,7 @@
     "allCategories": "Todas as categorias",
     "noResults": "Nenhuma sorte encontrada. Tente uma busca diferente.",
     "totalMessages": "{count} mensagens encontradas",
+    "tagsLabel": "Tags",
     "search": {
       "sectionLabel": "Pesquisar e filtrar mensagens",
       "placeholder": "Pesquisar mensagens por palavra-chave ou tag...",
@@ -240,6 +247,10 @@
       "noResultsTitle": "Nenhuma mensagem encontrada",
       "foundSingle": "Encontrada {count} mensagem",
       "foundPlural": "Encontradas {count} mensagens",
+      "summary": "Mostrando {pageCount} de {totalCount} resultados",
+      "summaryWithQuery": "Mostrando {pageCount} de {totalCount} resultados para \"{query}\"",
+      "summaryWithCategory": "Mostrando {pageCount} de {totalCount} resultados em {category}",
+      "summaryWithQueryAndCategory": "Mostrando {pageCount} de {totalCount} resultados para \"{query}\" em {category}",
       "filteredAria": "Mensagens da sorte filtradas",
       "backToCategories": "Voltar às categorias",
       "noResultsDescription": "Tente ajustar sua busca ou filtros para encontrar o que procura.",
@@ -397,9 +408,18 @@
   "browse": {
     "title": "Explorar sortes",
     "subtitle": "Explore sortes por categoria, tag ou humor",
+    "sortLabel": "Ordenar sortes",
+    "categoryTitle": "Mensagens de sorte de {category}",
+    "categoryDescription": "Explore mensagens de biscoitos da sorte de {category} para inspiração, diversão e orientação diária.",
+    "backToBrowse": "Voltar a todas as categorias",
     "categories": "Categorias",
     "tags": "Tags populares",
-    "recentlyAdded": "Adicionado recentemente"
+    "recentlyAdded": "Adicionado recentemente",
+    "stats": {
+      "totalMessages": "{count} mensagens no total",
+      "categories": "{count} categorias",
+      "tags": "{count} tags únicas"
+    }
   },
   "favorites": {
     "title": "Meus favoritos",
@@ -455,6 +475,14 @@
       "playful": "Engraçado e descontraído",
       "calm": "Sereno e meditativo"
     }
+  },
+  "consent": {
+    "title": "Consentimento de dados",
+    "description": "Usamos ferramentas de análise para melhorar a experiência. Seus dados serão anonimizados e não serão usados para outros fins.",
+    "accept": "Aceitar",
+    "decline": "Recusar",
+    "acceptAria": "Aceitar a coleta de dados e análises",
+    "declineAria": "Recusar a coleta de dados e análises"
   },
   "auth": {
     "signInTitle": "Entrar",

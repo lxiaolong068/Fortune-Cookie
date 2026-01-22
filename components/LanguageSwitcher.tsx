@@ -1,19 +1,15 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { Globe, ChevronDown, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   type Locale,
   i18n,
   languages,
-  getLocaleFromPath,
-  getLocalizedPath,
-  pathConfig,
 } from "@/lib/i18n-config";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/lib/locale-context";
+import { useLocale } from "@/lib/locale-context";
 
 interface LanguageSwitcherProps {
   className?: string;
@@ -30,13 +26,7 @@ export function LanguageSwitcher({
 }: LanguageSwitcherProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-  const router = useRouter();
-  const { t } = useTranslation();
-
-  // Get current locale from path
-  const { locale: currentLocale, pathname: currentPath } =
-    getLocaleFromPath(pathname);
+  const { t, locale: currentLocale, setLocale } = useLocale();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -60,14 +50,7 @@ export function LanguageSwitcher({
       return;
     }
 
-    // Get the new localized path
-    const newPath = getLocalizedPath(currentPath, newLocale);
-
-    // Set cookie for preference persistence
-    document.cookie = `${pathConfig.detection.cookieName}=${newLocale};path=/;max-age=${pathConfig.detection.cookieMaxAge}`;
-
-    // Navigate to the new locale
-    router.push(newPath);
+    setLocale(newLocale);
     setIsOpen(false);
   };
 

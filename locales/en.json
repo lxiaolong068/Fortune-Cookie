@@ -24,6 +24,12 @@
     "oldest": "Oldest",
     "popular": "Popular",
     "random": "Random",
+    "alphabetical": "A-Z",
+    "paginationLabel": "Pagination navigation",
+    "goToPreviousPage": "Go to previous page",
+    "goToNextPage": "Go to next page",
+    "goToPage": "Go to page {page}",
+    "paginationSummary": "Showing {start}-{end} of {total} results",
     "selectLanguage": "Select language",
     "switchToLanguage": "Switch to {language}",
     "languageOptions": "Language options",
@@ -211,6 +217,7 @@
     "allCategories": "All Categories",
     "noResults": "No fortunes found. Try a different search.",
     "totalMessages": "{count} messages found",
+    "tagsLabel": "Tags",
     "search": {
       "sectionLabel": "Search and filter messages",
       "placeholder": "Search messages by keyword or tag...",
@@ -240,6 +247,10 @@
       "noResultsTitle": "No messages found",
       "foundSingle": "Found {count} message",
       "foundPlural": "Found {count} messages",
+      "summary": "Showing {pageCount} of {totalCount} results",
+      "summaryWithQuery": "Showing {pageCount} of {totalCount} results for \"{query}\"",
+      "summaryWithCategory": "Showing {pageCount} of {totalCount} results in {category}",
+      "summaryWithQueryAndCategory": "Showing {pageCount} of {totalCount} results for \"{query}\" in {category}",
       "filteredAria": "Filtered fortune messages",
       "backToCategories": "Back to categories",
       "noResultsDescription": "Try adjusting your search or filters to find what you're looking for.",
@@ -397,9 +408,18 @@
   "browse": {
     "title": "Browse Fortunes",
     "subtitle": "Explore fortunes by category, tag, or mood",
+    "sortLabel": "Sort fortunes",
+    "categoryTitle": "{category} Fortune Messages",
+    "categoryDescription": "Explore {category} fortune cookie messages for inspiration, fun, and daily guidance.",
+    "backToBrowse": "Back to all categories",
     "categories": "Categories",
     "tags": "Popular Tags",
-    "recentlyAdded": "Recently Added"
+    "recentlyAdded": "Recently Added",
+    "stats": {
+      "totalMessages": "{count} Total Messages",
+      "categories": "{count} Categories",
+      "tags": "{count} Unique Tags"
+    }
   },
   "favorites": {
     "title": "My Favorites",
@@ -455,6 +475,14 @@
       "playful": "Witty and light-hearted",
       "calm": "Serene and meditative"
     }
+  },
+  "consent": {
+    "title": "Data Collection Consent",
+    "description": "We use analytics tools to improve user experience. Your data will be anonymized and not used for other purposes.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "acceptAria": "Accept data collection and analytics",
+    "declineAria": "Decline data collection and analytics"
   },
   "auth": {
     "signInTitle": "Sign In",

@@ -24,6 +24,12 @@
     "oldest": "最旧",
     "popular": "热门",
     "random": "随机",
+    "alphabetical": "A-Z",
+    "paginationLabel": "分页导航",
+    "goToPreviousPage": "前往上一页",
+    "goToNextPage": "前往下一页",
+    "goToPage": "前往第 {page} 页",
+    "paginationSummary": "显示 {start}-{end} 条，共 {total} 条结果",
     "selectLanguage": "选择语言",
     "switchToLanguage": "切换到 {language}",
     "languageOptions": "语言选项",
@@ -211,6 +217,7 @@
     "allCategories": "所有分类",
     "noResults": "未找到运势。尝试不同的搜索。",
     "totalMessages": "找到 {count} 条消息",
+    "tagsLabel": "标签",
     "search": {
       "sectionLabel": "搜索并筛选消息",
       "placeholder": "按关键字或标签搜索消息...",
@@ -240,6 +247,10 @@
       "noResultsTitle": "未找到消息",
       "foundSingle": "找到 {count} 条消息",
       "foundPlural": "找到 {count} 条消息",
+      "summary": "显示 {pageCount} 条，共 {totalCount} 条结果",
+      "summaryWithQuery": "显示 {pageCount} 条，共 {totalCount} 条结果，关键词 \"{query}\"",
+      "summaryWithCategory": "显示 {pageCount} 条，共 {totalCount} 条结果，分类 {category}",
+      "summaryWithQueryAndCategory": "显示 {pageCount} 条，共 {totalCount} 条结果，关键词 \"{query}\"，分类 {category}",
       "filteredAria": "筛选后的幸运消息",
       "backToCategories": "返回分类",
       "noResultsDescription": "尝试调整你的搜索或筛选条件，以找到想要的内容。",
@@ -397,9 +408,18 @@
   "browse": {
     "title": "浏览运势",
     "subtitle": "按分类、标签或心情探索运势",
+    "sortLabel": "排序",
+    "categoryTitle": "{category} 运势消息",
+    "categoryDescription": "探索 {category} 主题的幸运饼干消息，获取灵感、乐趣与每日指引。",
+    "backToBrowse": "返回全部分类",
     "categories": "分类",
     "tags": "热门标签",
-    "recentlyAdded": "最近添加"
+    "recentlyAdded": "最近添加",
+    "stats": {
+      "totalMessages": "共 {count} 条消息",
+      "categories": "{count} 个分类",
+      "tags": "{count} 个标签"
+    }
   },
   "favorites": {
     "title": "我的收藏",
@@ -455,6 +475,14 @@
       "playful": "诙谐有趣、轻松",
       "calm": "宁静沉稳、冥想感"
     }
+  },
+  "consent": {
+    "title": "数据收集说明",
+    "description": "我们使用分析工具以改进体验。您的数据将匿名化且不会用于其他目的。",
+    "accept": "接受",
+    "decline": "拒绝",
+    "acceptAria": "接受数据收集与分析",
+    "declineAria": "拒绝数据收集与分析"
   },
   "auth": {
     "signInTitle": "登录",

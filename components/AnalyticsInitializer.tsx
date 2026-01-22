@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { analyticsManager } from '@/lib/analytics-manager'
 import { sessionManager } from '@/lib/session-manager'
 import { captureBusinessEvent } from '@/lib/error-monitoring'
+import { useTranslation } from '@/lib/locale-context'
 
 export function AnalyticsInitializer() {
   const pathname = usePathname()
@@ -275,6 +276,7 @@ export function AnalyticsInitializer() {
 // 分析同意横幅组件
 export function AnalyticsConsentBanner() {
   const [showBanner, setShowBanner] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     // 检查用户是否已经做出选择
@@ -307,24 +309,24 @@ export function AnalyticsConsentBanner() {
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto">
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4">
-        <h3 className="font-semibold text-sm mb-2">Data Collection Consent</h3>
+        <h3 className="font-semibold text-sm mb-2">{t('consent.title')}</h3>
         <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-          We use analytics tools to improve user experience. Your data will be anonymized and not used for other purposes.
+          {t('consent.description')}
         </p>
         <div className="flex gap-2">
           <button
             onClick={handleAccept}
             className="flex-1 bg-orange-600 text-white text-xs py-2 px-3 rounded hover:bg-orange-700 transition-colors font-medium"
-            aria-label="Accept data collection and analytics"
+            aria-label={t('consent.acceptAria')}
           >
-            Accept
+            {t('consent.accept')}
           </button>
           <button
             onClick={handleDecline}
             className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs py-2 px-3 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
-            aria-label="Decline data collection and analytics"
+            aria-label={t('consent.declineAria')}
           >
-            Decline
+            {t('consent.decline')}
           </button>
         </div>
       </div>

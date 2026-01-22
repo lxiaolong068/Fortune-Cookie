@@ -32,6 +32,12 @@ export interface TranslationFile {
     oldest: string;
     popular: string;
     random: string;
+    alphabetical: string;
+    paginationLabel: string;
+    goToPreviousPage: string;
+    goToNextPage: string;
+    goToPage: string;
+    paginationSummary: string;
     selectLanguage: string;
     switchToLanguage: string;
     languageOptions: string;
@@ -219,6 +225,7 @@ export interface TranslationFile {
     allCategories: string;
     noResults: string;
     totalMessages: string;
+    tagsLabel: string;
     search: {
       sectionLabel: string;
       placeholder: string;
@@ -248,6 +255,10 @@ export interface TranslationFile {
       noResultsTitle: string;
       foundSingle: string;
       foundPlural: string;
+      summary: string;
+      summaryWithQuery: string;
+      summaryWithCategory: string;
+      summaryWithQueryAndCategory: string;
       filteredAria: string;
       backToCategories: string;
       noResultsDescription: string;
@@ -405,9 +416,18 @@ export interface TranslationFile {
   browse: {
     title: string;
     subtitle: string;
+    sortLabel: string;
+    categoryTitle: string;
+    categoryDescription: string;
+    backToBrowse: string;
     categories: string;
     tags: string;
     recentlyAdded: string;
+    stats: {
+      totalMessages: string;
+      categories: string;
+      tags: string;
+    };
   };
   favorites: {
     title: string;
@@ -463,6 +483,14 @@ export interface TranslationFile {
       playful: string;
       calm: string;
     };
+  };
+  consent: {
+    title: string;
+    description: string;
+    accept: string;
+    decline: string;
+    acceptAria: string;
+    declineAria: string;
   };
   auth: {
     signInTitle: string;

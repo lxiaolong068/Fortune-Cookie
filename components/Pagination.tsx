@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/locale-context";
 
 interface PaginationProps {
   currentPage: number;
@@ -98,6 +99,7 @@ export function Pagination({
   className,
   showItemCount = false,
 }: PaginationProps) {
+  const { t } = useTranslation();
   if (totalPages <= 1) {
     return null;
   }
@@ -126,19 +128,23 @@ export function Pagination({
       {/* Item count summary */}
       {showItemCount && startItem && endItem && totalItems && (
         <p className="text-sm text-gray-600">
-          Showing {startItem}-{endItem} of {totalItems} results
+          {t("common.paginationSummary", {
+            start: startItem,
+            end: endItem,
+            total: totalItems,
+          })}
         </p>
       )}
 
       <nav
-        aria-label="Pagination navigation"
+        aria-label={t("common.paginationLabel")}
         className="flex items-center justify-center gap-1 sm:gap-2"
       >
         {/* Previous Button - 44px touch target */}
         {hasPrevPage ? (
           <Link
             href={getPageUrl(currentPage - 1, basePath, filteredParams)}
-            aria-label="Go to previous page"
+            aria-label={t("common.goToPreviousPage")}
             rel="prev"
           >
             <Button
@@ -146,7 +152,7 @@ export function Pagination({
               className="gap-1 min-h-[44px] min-w-[44px] px-3 bg-white/80 border-amber-200 hover:bg-amber-50 hover:border-amber-300"
             >
               <ChevronLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">Previous</span>
+              <span className="hidden sm:inline">{t("common.previous")}</span>
             </Button>
           </Link>
         ) : (
@@ -156,7 +162,7 @@ export function Pagination({
             className="gap-1 min-h-[44px] min-w-[44px] px-3 bg-white/50 border-amber-100"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="hidden sm:inline">Previous</span>
+            <span className="hidden sm:inline">{t("common.previous")}</span>
           </Button>
         )}
 
@@ -175,7 +181,7 @@ export function Pagination({
               <Link
                 key={pageNum}
                 href={getPageUrl(pageNum, basePath, filteredParams)}
-                aria-label={`Go to page ${pageNum}`}
+                aria-label={t("common.goToPage", { page: pageNum })}
                 aria-current={pageNum === currentPage ? "page" : undefined}
               >
                 <Button
@@ -198,14 +204,14 @@ export function Pagination({
         {hasNextPage ? (
           <Link
             href={getPageUrl(currentPage + 1, basePath, filteredParams)}
-            aria-label="Go to next page"
+            aria-label={t("common.goToNextPage")}
             rel="next"
           >
             <Button
               variant="outline"
               className="gap-1 min-h-[44px] min-w-[44px] px-3 bg-white/80 border-amber-200 hover:bg-amber-50 hover:border-amber-300"
             >
-              <span className="hidden sm:inline">Next</span>
+              <span className="hidden sm:inline">{t("common.next")}</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </Link>
@@ -215,7 +221,7 @@ export function Pagination({
             disabled
             className="gap-1 min-h-[44px] min-w-[44px] px-3 bg-white/50 border-amber-100"
           >
-            <span className="hidden sm:inline">Next</span>
+            <span className="hidden sm:inline">{t("common.next")}</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
         )}

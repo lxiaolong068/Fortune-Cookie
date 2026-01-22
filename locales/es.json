@@ -24,6 +24,12 @@
     "oldest": "Más antiguo",
     "popular": "Popular",
     "random": "Aleatorio",
+    "alphabetical": "A-Z",
+    "paginationLabel": "Navegación de paginación",
+    "goToPreviousPage": "Ir a la página anterior",
+    "goToNextPage": "Ir a la página siguiente",
+    "goToPage": "Ir a la página {page}",
+    "paginationSummary": "Mostrando {start}-{end} de {total} resultados",
     "selectLanguage": "Seleccionar idioma",
     "switchToLanguage": "Cambiar a {language}",
     "languageOptions": "Opciones de idioma",
@@ -211,6 +217,7 @@
     "allCategories": "Todas las categorías",
     "noResults": "No se encontraron fortunas. Intenta una búsqueda diferente.",
     "totalMessages": "{count} mensajes encontrados",
+    "tagsLabel": "Etiquetas",
     "search": {
       "sectionLabel": "Buscar y filtrar mensajes",
       "placeholder": "Buscar mensajes por palabra clave o etiqueta...",
@@ -240,6 +247,10 @@
       "noResultsTitle": "No se encontraron mensajes",
       "foundSingle": "Se encontró {count} mensaje",
       "foundPlural": "Se encontraron {count} mensajes",
+      "summary": "Mostrando {pageCount} de {totalCount} resultados",
+      "summaryWithQuery": "Mostrando {pageCount} de {totalCount} resultados para \"{query}\"",
+      "summaryWithCategory": "Mostrando {pageCount} de {totalCount} resultados en {category}",
+      "summaryWithQueryAndCategory": "Mostrando {pageCount} de {totalCount} resultados para \"{query}\" en {category}",
       "filteredAria": "Mensajes de la fortuna filtrados",
       "backToCategories": "Volver a las categorías",
       "noResultsDescription": "Prueba ajustando tu búsqueda o filtros para encontrar lo que buscas.",
@@ -397,9 +408,18 @@
   "browse": {
     "title": "Explorar fortunas",
     "subtitle": "Explora fortunas por categoría, etiqueta o estado de ánimo",
+    "sortLabel": "Ordenar fortunas",
+    "categoryTitle": "Mensajes de fortuna de {category}",
+    "categoryDescription": "Explora mensajes de galletas de la fortuna de {category} para inspiración, diversión y guía diaria.",
+    "backToBrowse": "Volver a todas las categorías",
     "categories": "Categorías",
     "tags": "Etiquetas populares",
-    "recentlyAdded": "Añadido recientemente"
+    "recentlyAdded": "Añadido recientemente",
+    "stats": {
+      "totalMessages": "{count} mensajes en total",
+      "categories": "{count} categorías",
+      "tags": "{count} etiquetas únicas"
+    }
   },
   "favorites": {
     "title": "Mis favoritos",
@@ -455,6 +475,14 @@
       "playful": "Ingenioso y desenfadado",
       "calm": "Sereno y meditativo"
     }
+  },
+  "consent": {
+    "title": "Consentimiento de datos",
+    "description": "Usamos herramientas de análisis para mejorar la experiencia. Tus datos serán anonimizados y no se usarán para otros fines.",
+    "accept": "Aceptar",
+    "decline": "Rechazar",
+    "acceptAria": "Aceptar la recopilación de datos y análisis",
+    "declineAria": "Rechazar la recopilación de datos y análisis"
   },
   "auth": {
     "signInTitle": "Iniciar sesión",
