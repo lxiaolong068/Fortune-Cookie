@@ -7,11 +7,23 @@ import { ArrowRight, ExternalLink, Sparkles, MessageSquare, Clock, ChefHat, Sear
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/locale-context'
 
+const iconMap = {
+  sparkles: Sparkles,
+  messageSquare: MessageSquare,
+  clock: Clock,
+  chefHat: ChefHat,
+  search: Search,
+  heart: Heart,
+  smile: Smile,
+  trendingUp: TrendingUp
+}
+
 interface InternalLinkProps {
   href: string
   title: string
   description?: string
   badge?: string
+  iconName?: keyof typeof iconMap
   icon?: React.ComponentType<{ className?: string }>
   external?: boolean
   className?: string
@@ -22,10 +34,12 @@ export function InternalLink({
   title,
   description,
   badge,
+  iconName,
   icon: Icon,
   external = false,
   className
 }: InternalLinkProps) {
+  const ResolvedIcon = Icon ?? (iconName ? iconMap[iconName] : undefined)
   const LinkComponent = external ? 'a' : Link
   const linkProps = external 
     ? { href, target: '_blank', rel: 'noopener noreferrer' }
@@ -36,9 +50,9 @@ export function InternalLink({
       <Card className="p-4 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 hover:scale-105">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {Icon && (
+            {ResolvedIcon && (
               <div className="p-2 rounded-lg bg-amber-100">
-                <Icon className="w-5 h-5 text-amber-600" />
+                <ResolvedIcon className="w-5 h-5 text-amber-600" />
               </div>
             )}
             <div>

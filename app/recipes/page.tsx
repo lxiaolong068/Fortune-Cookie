@@ -10,14 +10,7 @@ import { FAQStructuredData, recipeFAQs } from "@/components/FAQStructuredData";
 import { InternalLink } from "@/components/InternalLinks";
 import { ExpandableRecipeCard } from "@/components/ExpandableRecipeCard";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
-import {
-  ChefHat,
-  Sparkles,
-  Heart,
-  Clock,
-  Smile,
-  MessageSquare,
-} from "lucide-react";
+import { ChefHat, Sparkles, Heart } from "lucide-react";
 
 const baseUrl = getSiteUrl();
 
@@ -358,40 +351,40 @@ export default function RecipesPage() {
                   href="/how-to-make-fortune-cookies"
                   title="How to Make Fortune Cookies"
                   description="Detailed step-by-step tutorial"
-                  icon={ChefHat}
+                  iconName="chefHat"
                   badge="Tutorial"
                 />
                 <InternalLink
                   href="/generator"
                   title="AI Fortune Generator"
                   description="Create personalized messages with AI"
-                  icon={Sparkles}
+                  iconName="sparkles"
                   badge="AI"
                 />
                 <InternalLink
                   href="/funny-fortune-cookie-messages"
                   title="Funny Fortune Messages"
                   description="Hilarious messages for parties"
-                  icon={Smile}
+                  iconName="smile"
                 />
                 <InternalLink
                   href="/history"
                   title="Fortune Cookie History"
                   description="Origins and cultural significance"
-                  icon={Clock}
+                  iconName="clock"
                 />
                 <InternalLink
                   href="/who-invented-fortune-cookies"
                   title="Who Invented Fortune Cookies?"
                   description="Discover the surprising story"
-                  icon={Clock}
+                  iconName="clock"
                   badge="Popular"
                 />
                 <InternalLink
                   href="/messages"
                   title="All Fortune Messages"
                   description="Browse our complete collection"
-                  icon={MessageSquare}
+                  iconName="messageSquare"
                 />
               </div>
             </section>

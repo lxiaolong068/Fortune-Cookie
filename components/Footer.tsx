@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Sparkles, Heart, Github, Twitter, Mail } from "lucide-react";
-import { FooterLinks } from "./InternalLinks";
 import { headers } from "next/headers";
 import { i18n, isValidLocale } from "@/lib/i18n-config";
 import { createServerTranslationContext } from "@/lib/translations";
@@ -69,7 +68,79 @@ export async function Footer() {
 
             {/* Navigation links */}
             <div className="lg:col-span-3">
-              <FooterLinks t={t} getLocalizedHref={getLocalizedHref} />
+              <div className="grid md:grid-cols-3 gap-8">
+                {[
+                  {
+                    title: t("footer.generate"),
+                    links: [
+                      {
+                        href: getLocalizedHref("/"),
+                        title: t("footer.fortuneGenerator"),
+                      },
+                      {
+                        href: getLocalizedHref("/generator"),
+                        title: t("footer.aiGenerator"),
+                      },
+                      {
+                        href: getLocalizedHref("/browse"),
+                        title: t("footer.browseMessages"),
+                      },
+                    ],
+                  },
+                  {
+                    title: t("footer.learn"),
+                    links: [
+                      {
+                        href: getLocalizedHref("/history"),
+                        title: t("navigation.history"),
+                      },
+                      {
+                        href: "/who-invented-fortune-cookies",
+                        title: t("footer.whoInvented"),
+                      },
+                      {
+                        href: getLocalizedHref("/recipes"),
+                        title: t("navigation.recipes"),
+                      },
+                    ],
+                  },
+                  {
+                    title: t("footer.messages"),
+                    links: [
+                      {
+                        href: getLocalizedHref("/messages"),
+                        title: t("footer.allMessages"),
+                      },
+                      {
+                        href: "/funny-fortune-cookie-messages",
+                        title: t("footer.funnyMessages"),
+                      },
+                      {
+                        href: "/how-to-make-fortune-cookies",
+                        title: t("footer.howToMake"),
+                      },
+                    ],
+                  },
+                ].map((group) => (
+                  <div key={group.title}>
+                    <h3 className="font-semibold text-gray-800 mb-4">
+                      {group.title}
+                    </h3>
+                    <ul className="space-y-2">
+                      {group.links.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className="text-gray-600 hover:text-amber-600 transition-colors text-sm"
+                          >
+                            {link.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
