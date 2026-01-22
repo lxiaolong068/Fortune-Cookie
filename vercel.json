@@ -26,11 +26,23 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=60"
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
         },
         {
           "key": "CDN-Cache-Control",
-          "value": "public, max-age=60"
+          "value": "no-store"
+        },
+        {
+          "key": "Surrogate-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
         }
       ]
     },

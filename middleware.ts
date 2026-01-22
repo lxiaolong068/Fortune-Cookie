@@ -261,10 +261,34 @@ function handleStaticAssets(
   startTime: number,
 ): NextResponse {
   const response = NextResponse.next();
+  const pathname = request.nextUrl.pathname;
 
-  // 设置长期缓存头部
-  response.headers.set("Cache-Control", "public, max-age=31536000, immutable");
-  response.headers.set("CDN-Cache-Control", "public, max-age=31536000");
+  // manifest.webmanifest 和 sw.js 使用短缓存，其他静态资源使用长期缓存
+  if (
+    pathname === "/manifest.webmanifest" ||
+    pathname === "/site.webmanifest"
+  ) {
+    // PWA manifest - 短缓存以便快速更新
+    response.headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate",
+    );
+    response.headers.set("CDN-Cache-Control", "no-store");
+  } else if (pathname === "/sw.js") {
+    // Service Worker - 不缓存以确保更新
+    response.headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate",
+    );
+    response.headers.set("CDN-Cache-Control", "no-store");
+  } else {
+    // 其他静态资源 - 长期缓存
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=31536000, immutable",
+    );
+    response.headers.set("CDN-Cache-Control", "public, max-age=31536000");
+  }
 
   // 添加Server-Timing头部
   addServerTiming(response, startTime, "static");
