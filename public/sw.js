@@ -1,10 +1,10 @@
 // Fortune Cookie AI - Service Worker
 // 提供离线支持和缓存管理
 
-const CACHE_NAME = "fortune-cookie-ai-v1";
-const STATIC_CACHE_NAME = "fortune-static-v1";
-const DYNAMIC_CACHE_NAME = "fortune-dynamic-v1";
-const API_CACHE_NAME = "fortune-api-v1";
+const CACHE_NAME = "fortune-cookie-ai-v2";
+const STATIC_CACHE_NAME = "fortune-static-v2";
+const DYNAMIC_CACHE_NAME = "fortune-dynamic-v2";
+const API_CACHE_NAME = "fortune-api-v2";
 
 // 需要预缓存的关键静态资源（仅限关键资源，避免HTML路由）
 const STATIC_ASSETS = [
