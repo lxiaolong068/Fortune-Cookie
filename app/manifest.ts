@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getBlobUrl } from "@/lib/blob-urls";
 
+// PWA Web App Manifest - https://web.dev/add-manifest/
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Fortune Cookie - AI Generator",
