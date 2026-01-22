@@ -280,3 +280,23 @@ model Favorite {
   @@unique([userId, message])
   @@map("favorites")
 }
+
+// 推送通知订阅
+model PushSubscription {
+  id               String    @id @default(cuid())
+  endpoint         String    @unique
+  p256dh           String
+  auth             String
+  expirationTime   DateTime?
+  userId           String?
+  dailyFortune     Boolean   @default(true)
+  dailyFortuneTime String    @default("08:00")
+  specialEvents    Boolean   @default(true)
+  newFeatures      Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([dailyFortuneTime])
+  @@map("push_subscriptions")
+}

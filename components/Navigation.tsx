@@ -18,6 +18,7 @@ import {
   Heart,
   LogIn,
   LogOut,
+  CalendarDays,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -60,6 +61,12 @@ const navigationItems = [
     href: "/favorites",
     icon: Heart,
     description: "Your saved fortunes",
+  },
+  {
+    name: "Calendar",
+    href: "/calendar",
+    icon: CalendarDays,
+    description: "Daily fortune calendar",
   },
   {
     name: "History",

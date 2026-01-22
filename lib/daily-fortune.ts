@@ -416,3 +416,193 @@ export function getScoreBgClass(score: number): string {
 // ============================================================================
 
 export { LUCKY_COLORS, LUCKY_DIRECTIONS };
+
+// ============================================================================
+// Calendar Utilities
+// ============================================================================
+
+/**
+ * Generate fortunes for a month (for calendar view)
+ * @param year - Year (e.g., 2024)
+ * @param month - Month (0-11, JavaScript Date format)
+ * @returns Array of daily fortunes for the month
+ */
+export function getMonthFortunes(year: number, month: number): DailyFortune[] {
+  const fortunes: DailyFortune[] = [];
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(Date.UTC(year, month, day));
+    const dateStr = date.toISOString().split("T")[0] ?? "";
+    fortunes.push(generateDailyFortune(dateStr));
+  }
+
+  return fortunes;
+}
+
+/**
+ * Get fortune for a specific date
+ * @param year - Year
+ * @param month - Month (0-11)
+ * @param day - Day of month
+ * @returns Daily fortune for the specified date
+ */
+export function getDateFortune(
+  year: number,
+  month: number,
+  day: number,
+): DailyFortune {
+  const date = new Date(Date.UTC(year, month, day));
+  const dateStr = date.toISOString().split("T")[0] ?? "";
+  return generateDailyFortune(dateStr);
+}
+
+/**
+ * Check if a date is today
+ */
+export function isToday(dateStr: string): boolean {
+  return dateStr === getTodayDateString();
+}
+
+/**
+ * Check if a date is in the past
+ */
+export function isPastDate(dateStr: string): boolean {
+  return dateStr < getTodayDateString();
+}
+
+/**
+ * Check if a date is in the future
+ */
+export function isFutureDate(dateStr: string): boolean {
+  return dateStr > getTodayDateString();
+}
+
+/**
+ * Get week day names
+ */
+export function getWeekDayNames(
+  locale: string = "en-US",
+  format: "long" | "short" | "narrow" = "short",
+): string[] {
+  const formatter = new Intl.DateTimeFormat(locale, { weekday: format });
+  const days: string[] = [];
+
+  // Start from Sunday (0) to Saturday (6)
+  // Dec 31, 2023 was Sunday, so we use it as reference
+  for (let i = 0; i < 7; i++) {
+    const adjustedDate = new Date(2023, 11, 31 + i);
+    days.push(formatter.format(adjustedDate));
+  }
+
+  return days;
+}
+
+/**
+ * Get month name
+ */
+export function getMonthName(
+  year: number,
+  month: number,
+  locale: string = "en-US",
+  format: "long" | "short" = "long",
+): string {
+  const date = new Date(year, month, 1);
+  return new Intl.DateTimeFormat(locale, { month: format }).format(date);
+}
+
+/**
+ * Get calendar grid data for a month
+ * Returns a 2D array representing weeks and days, including padding days from adjacent months
+ */
+export interface CalendarDay {
+  date: string; // ISO date string
+  day: number; // Day of month
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  isPast: boolean;
+  isFuture: boolean;
+  fortune?: DailyFortune;
+}
+
+export function getCalendarGrid(
+  year: number,
+  month: number,
+  includeFortunes: boolean = true,
+): CalendarDay[][] {
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const daysInMonth = lastDay.getDate();
+  const startDayOfWeek = firstDay.getDay(); // 0 = Sunday
+
+  const todayStr = getTodayDateString();
+  const grid: CalendarDay[][] = [];
+  let currentWeek: CalendarDay[] = [];
+
+  // Add padding days from previous month
+  const prevMonthLastDay = new Date(year, month, 0).getDate();
+  for (let i = startDayOfWeek - 1; i >= 0; i--) {
+    const day = prevMonthLastDay - i;
+    const prevMonth = month === 0 ? 11 : month - 1;
+    const prevYear = month === 0 ? year - 1 : year;
+    const date = new Date(Date.UTC(prevYear, prevMonth, day));
+    const dateStr = date.toISOString().split("T")[0] ?? "";
+
+    currentWeek.push({
+      date: dateStr,
+      day,
+      isCurrentMonth: false,
+      isToday: dateStr === todayStr,
+      isPast: dateStr < todayStr,
+      isFuture: dateStr > todayStr,
+      fortune: includeFortunes ? generateDailyFortune(dateStr) : undefined,
+    });
+  }
+
+  // Add days of current month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(Date.UTC(year, month, day));
+    const dateStr = date.toISOString().split("T")[0] ?? "";
+
+    currentWeek.push({
+      date: dateStr,
+      day,
+      isCurrentMonth: true,
+      isToday: dateStr === todayStr,
+      isPast: dateStr < todayStr,
+      isFuture: dateStr > todayStr,
+      fortune: includeFortunes ? generateDailyFortune(dateStr) : undefined,
+    });
+
+    if (currentWeek.length === 7) {
+      grid.push(currentWeek);
+      currentWeek = [];
+    }
+  }
+
+  // Add padding days from next month
+  if (currentWeek.length > 0) {
+    let nextDay = 1;
+    const nextMonth = month === 11 ? 0 : month + 1;
+    const nextYear = month === 11 ? year + 1 : year;
+
+    while (currentWeek.length < 7) {
+      const date = new Date(Date.UTC(nextYear, nextMonth, nextDay));
+      const dateStr = date.toISOString().split("T")[0] ?? "";
+
+      currentWeek.push({
+        date: dateStr,
+        day: nextDay,
+        isCurrentMonth: false,
+        isToday: dateStr === todayStr,
+        isPast: dateStr < todayStr,
+        isFuture: dateStr > todayStr,
+        fortune: includeFortunes ? generateDailyFortune(dateStr) : undefined,
+      });
+      nextDay++;
+    }
+    grid.push(currentWeek);
+  }
+
+  return grid;
+}
