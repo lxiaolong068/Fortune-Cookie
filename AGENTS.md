@@ -11,6 +11,7 @@ This is a Next.js 14 (App Router) TypeScript app. Key paths:
 - `prisma/`: schema and migrations.
 - `__tests__/` and `tests/e2e/`: unit/integration tests and Playwright E2E tests.
 - `scripts/`: deployment and database utilities.
+- `task_plan.md`, `progress.md`, `findings.md`: planning logs and execution notes.
 
 ## Build, Test, and Development Commands
 Common commands (from `package.json`):
@@ -49,3 +50,9 @@ Database helpers (Prisma):
 ## Security & Configuration Tips
 - Configure secrets via `.env.local` (e.g., `OPENROUTER_API_KEY`, analytics IDs).
 - Never commit credentials; use sample env files where available.
+
+## Current Project Status (2026-01-12)
+- **Focus:** FortuneCookie messages doc update + UI parity for messages pages.
+- **Phase:** Phase 4 (Testing & Verification) — see `task_plan.md` and `progress.md`.
+- **Recent changes:** length/style badges in cards and search results, always-visible actions, lucky number copy tip, category totals + ISO updated dates, tags passed into generator flows, JSON-LD enrichment, copy success feedback.
+- **Open items:** verify doc scope against source files, validate category totals/ISO dates + JSON-LD output, confirm missing doc file name/path, confirm language preference for doc updates.

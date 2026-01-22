@@ -206,11 +206,193 @@
   "messages": {
     "title": "运势消息",
     "subtitle": "浏览我们的幸运饼干消息合集",
-    "searchPlaceholder": "搜索运势...",
+    "searchPlaceholder": "按关键字或标签搜索消息...",
     "filterByCategory": "按分类筛选",
     "allCategories": "所有分类",
     "noResults": "未找到运势。尝试不同的搜索。",
-    "totalMessages": "找到 {count} 条消息"
+    "totalMessages": "找到 {count} 条消息",
+    "search": {
+      "sectionLabel": "搜索并筛选消息",
+      "placeholder": "按关键字或标签搜索消息...",
+      "ariaLabel": "搜索幸运消息",
+      "clear": "清除搜索",
+      "filtersButton": "筛选"
+    },
+    "tip": {
+      "luckyNumbers": "幸运数字是可选的。使用复制菜单可包含它们。"
+    },
+    "filters": {
+      "moodLabel": "情绪",
+      "lengthLabel": "长度",
+      "styleLabel": "风格",
+      "allMoods": "全部情绪",
+      "allLengths": "全部长度",
+      "allStyles": "全部风格",
+      "moodOptions": {
+        "positive": "积极",
+        "humor": "幽默",
+        "romance": "浪漫",
+        "wisdom": "智慧"
+      },
+      "clearAll": "清除全部"
+    },
+    "results": {
+      "noResultsTitle": "未找到消息",
+      "foundSingle": "找到 {count} 条消息",
+      "foundPlural": "找到 {count} 条消息",
+      "filteredAria": "筛选后的幸运消息",
+      "backToCategories": "返回分类",
+      "noResultsDescription": "尝试调整你的搜索或筛选条件，以找到想要的内容。",
+      "clearFilters": "清除筛选"
+    },
+    "category": {
+      "messagesCount": "{count} 条消息",
+      "lastUpdated": "更新于 {date}",
+      "viewAllCategory": "查看全部 {category}",
+      "seeAllCount": "查看全部 {count} 条{category}消息",
+      "aiCtaSuffix": "使用我们的 AI 生成器",
+      "relatedLabel": "相关：",
+      "luckyLabel": "幸运：",
+      "luckyNumberAria": "幸运数字 {number}",
+      "listAriaLabel": "{category}消息",
+      "structuredDescription": "{category}幸运饼干消息"
+    },
+    "structuredData": {
+      "collectionName": "幸运饼干消息合集",
+      "collectionDescription": "浏览我们完整的 {count}+ 条幸运饼干消息合集。"
+    },
+    "navigation": {
+      "categories": "分类",
+      "categoryNavigation": "分类导航",
+      "openToc": "打开目录",
+      "closeToc": "关闭目录",
+      "backToTop": "返回顶部"
+    },
+    "copy": {
+      "copied": "已复制！",
+      "message": "复制消息",
+      "options": "复制选项",
+      "withLucky": "复制并包含幸运数字",
+      "copiedMessageToast": "已复制消息",
+      "copiedWithLuckyToast": "已复制并包含幸运数字",
+      "copiedMessageAria": "消息已复制到剪贴板",
+      "copiedWithLuckyAria": "包含幸运数字的消息已复制到剪贴板"
+    },
+    "generateSimilar": {
+      "title": "用 AI 生成相似内容",
+      "ariaLabel": "用 AI 生成相似的幸运消息"
+    },
+    "categories": {
+      "inspirational": {
+        "title": "励志幸运饼干消息",
+        "intro": "发现鼓舞人心的幸运饼干语句，激发积极、动力与个人成长。",
+        "cta": "想要更多励志消息？"
+      },
+      "funny": {
+        "title": "搞笑幸运饼干消息",
+        "intro": "准备开怀大笑，我们收集了搞笑的幸运饼干语句和机智笑话。",
+        "cta": "想要更多搞笑幸运饼干？"
+      },
+      "love": {
+        "title": "爱情幸运饼干消息",
+        "intro": "探索关于爱情、关系与内心情感的浪漫幸运饼干消息。",
+        "cta": "想要更多爱情消息？"
+      },
+      "success": {
+        "title": "成功与事业幸运饼干消息",
+        "intro": "关于成就、事业成功和达成目标的激励幸运饼干消息。",
+        "cta": "想要更多成功消息？"
+      },
+      "wisdom": {
+        "title": "智慧幸运饼干消息",
+        "intro": "富有思想与哲理的幸运饼干消息，带来永恒的智慧与人生洞见。",
+        "cta": "想要更多智慧消息？"
+      },
+      "friendship": {
+        "title": "友谊幸运饼干消息",
+        "intro": "用这些暖心的幸运饼干消息庆祝友谊的纽带。",
+        "cta": "想要更多友谊消息？"
+      },
+      "birthday": {
+        "title": "生日幸运饼干消息",
+        "intro": "用这些庆祝性的幸运饼干消息让生日更特别。",
+        "cta": "想要更多生日消息？"
+      },
+      "study": {
+        "title": "学习与考试激励消息",
+        "intro": "给学生、考试备考者和终身学习者的鼓励型幸运饼干消息。",
+        "cta": "想要更多学习动力？"
+      }
+    },
+    "history": {
+      "title": "幸运饼干消息的历史与心理学",
+      "introPrefix": "在西方文化中常与中餐联系在一起，但",
+      "introLink": "幸运饼干的历史",
+      "introMiddle": "其实可以追溯到",
+      "introHighlight": "19 世纪的日本",
+      "introSuffix": "。一种名为“tsujiura senbei”的日本薄饼在京都出售，里面夹着纸条占卜。现代这种带有香草甜味的版本在 20 世纪初于加州流行。了解更多关于",
+      "inventedLink": "谁发明了幸运饼干",
+      "introEnd": "。",
+      "psychologyPrefix": "幸运饼干的吸引力与",
+      "barnumEffect": "巴纳姆效应",
+      "psychologySuffix": "有关——这是一种心理现象，人们会认为模糊而普遍的描述与自己高度相关。积极、开放式的幸运饼干消息让我们投射希望与梦想，从而产生个人化的连接与愉悦。",
+      "funFactsTitle": "你知道吗？",
+      "funFacts": {
+        "notChinese": {
+          "title": "并非中国起源",
+          "content": "幸运饼干很可能起源于日本而非中国。京都 19 世纪的一种日本薄饼“tsujiura senbei”就是其雏形。"
+        },
+        "billionsServed": {
+          "title": "产量惊人",
+          "content": "全球每年约生产 30 亿个幸运饼干，其中绝大多数在美国被消费。"
+        },
+        "lotteryWinners": {
+          "title": "彩票中奖",
+          "content": "不少人会使用幸运饼干背面的“幸运数字”买彩票，并有人因此赢得大奖！"
+        }
+      }
+    },
+    "howToWrite": {
+      "title": "如何写出自己的幸运饼干消息",
+      "introPrefix": "创作自己的幸运饼干消息是一门艺术，需要简短、积极，并带有恰到好处的神秘感。最好的运势短小、鼓舞人心，并足够开放，让读者找到个人意义。无论你是在制作",
+      "introLink": "自制幸运饼干",
+      "introSuffix": "还是为活动撰写内容，这些原则都会帮助你。",
+      "principlesTitle": "写作原则",
+      "principles": {
+        "one": "使用第二人称“你”以建立个人连接",
+        "two": "保持开放式表达，便于读者投射",
+        "three": "避免具体日期或数字（幸运数字除外）",
+        "four": "保持积极并面向未来",
+        "five": "短句与较长的反思性句子结合",
+        "six": "使用跨时代、普遍共鸣的语言"
+      },
+      "templatesTitle": "模板示例",
+      "templates": {
+        "one": "很快，你将在[工作/爱情/创意]中发现新的机会。",
+        "two": "你今天的耐心将在明天带来意想不到的回报。",
+        "three": "一次偶遇将带来持久的友谊。",
+        "four": "你未曾预料的道路将带来最大的喜悦。",
+        "five": "你的善意会以十倍回馈。",
+        "six": "你本周做出的决定将影响你的未来。",
+        "seven": "相信你的直觉——它知道方向。",
+        "eight": "有人正带着深深的爱意想着你。"
+      },
+      "ctaStrong": "不想从零开始写？",
+      "ctaSuffix": " 让我们的 AI 为你生成个性化的幸运饼干消息。",
+      "ctaButton": "试用 AI 生成器"
+    },
+    "cta": {
+      "title": "创造属于你的命运",
+      "descriptionPrefix": "何必等待饼干告诉你的未来？使用我们先进的",
+      "descriptionEmphasis": "AI 幸运饼干生成器",
+      "descriptionSuffix": "，立刻生成独特、个性化的消息并附带幸运数字。",
+      "steps": {
+        "one": "选择主题（爱情、工作、生日、考试...）",
+        "two": "用一句话描述你的处境",
+        "three": "获得独特消息 + 幸运数字"
+      },
+      "button": "打开 AI 幸运饼干生成器"
+    }
   },
   "browse": {
     "title": "浏览运势",
@@ -252,6 +434,27 @@
     "statistics": "你的统计",
     "fortunesGenerated": "已生成运势",
     "favoritesSaved": "已保存收藏"
+  },
+  "tags": {
+    "length": {
+      "short": "短",
+      "medium": "中",
+      "long": "长"
+    },
+    "style": {
+      "classic": "经典",
+      "poetic": "诗意",
+      "modern": "现代",
+      "playful": "俏皮",
+      "calm": "沉稳"
+    },
+    "styleDescription": {
+      "classic": "正式而经典的智慧",
+      "poetic": "富有隐喻的抒情语言",
+      "modern": "现代、随性的表达",
+      "playful": "诙谐有趣、轻松",
+      "calm": "宁静沉稳、冥想感"
+    }
   },
   "auth": {
     "signInTitle": "登录",

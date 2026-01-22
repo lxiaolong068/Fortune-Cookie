@@ -119,6 +119,7 @@ const iconComponents = {
 const categoryConfig: CategoryConfig[] = [
   {
     id: "inspirational",
+    label: "Inspirational",
     seoTitle: "Inspirational Fortune Cookie Messages",
     iconName: "star",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -130,6 +131,7 @@ const categoryConfig: CategoryConfig[] = [
   },
   {
     id: "funny",
+    label: "Funny",
     seoTitle: "Funny Fortune Cookie Messages",
     iconName: "smile",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -141,6 +143,7 @@ const categoryConfig: CategoryConfig[] = [
   },
   {
     id: "love",
+    label: "Love",
     seoTitle: "Love Fortune Cookie Messages",
     iconName: "heart",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -152,6 +155,7 @@ const categoryConfig: CategoryConfig[] = [
   },
   {
     id: "success",
+    label: "Success",
     seoTitle: "Success & Career Fortune Cookie Messages",
     iconName: "trending-up",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -163,6 +167,7 @@ const categoryConfig: CategoryConfig[] = [
   },
   {
     id: "wisdom",
+    label: "Wisdom",
     seoTitle: "Wisdom Fortune Cookie Messages",
     iconName: "brain",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -174,6 +179,7 @@ const categoryConfig: CategoryConfig[] = [
   },
   {
     id: "friendship",
+    label: "Friendship",
     seoTitle: "Friendship Fortune Cookie Messages",
     iconName: "users",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -185,6 +191,7 @@ const categoryConfig: CategoryConfig[] = [
   },
   {
     id: "birthday",
+    label: "Birthday",
     seoTitle: "Birthday Fortune Cookie Messages",
     iconName: "cake",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -196,6 +203,7 @@ const categoryConfig: CategoryConfig[] = [
   },
   {
     id: "study",
+    label: "Study",
     seoTitle: "Study & Exam Motivation Messages",
     iconName: "book-open",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
@@ -241,7 +249,7 @@ export default function MessagesPage() {
     const messages = categoryMessages[category.id] || [];
     return messages.slice(0, 5).map((fortune) => ({
       name: fortune.message,
-      description: `${category.seoTitle.replace(" Fortune Cookie Messages", "").replace(" Messages", "")} fortune cookie message`,
+      description: `${category.label} fortune cookie message`,
       category: category.seoTitle,
     }));
   });
@@ -309,9 +317,7 @@ export default function MessagesPage() {
                     >
                       <IconComponent className="h-4 w-4" />
                       <span className="text-sm font-medium">
-                        {category.seoTitle
-                          .replace(" Fortune Cookie Messages", "")
-                          .replace(" Messages", "")}
+                        {category.label}
                       </span>
                     </Link>
                   );

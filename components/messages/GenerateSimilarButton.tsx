@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { FortuneStyle } from "@/lib/fortune-database";
+import { useLocale } from "@/lib/locale-context";
 
 interface GenerateSimilarButtonProps {
   message: string;
@@ -29,6 +30,7 @@ export function GenerateSimilarButton({
   className,
 }: GenerateSimilarButtonProps) {
   const router = useRouter();
+  const { t, getLocalizedHref } = useLocale();
 
   const handleClick = () => {
     // Build URL params for the generator
@@ -53,7 +55,7 @@ export function GenerateSimilarButton({
     }
 
     // Navigate to generator with params
-    router.push(`/generator?${params.toString()}`);
+    router.push(`${getLocalizedHref("/generator")}?${params.toString()}`);
   };
 
   return (
@@ -61,9 +63,9 @@ export function GenerateSimilarButton({
       variant="ghost"
       size="icon"
       onClick={handleClick}
-      title="Generate similar with AI"
+      title={t("messages.generateSimilar.title")}
       className={`h-8 w-8 text-[#888888] hover:text-[#FF6B3D] hover:bg-[#FFE4D6] ${className || ""}`}
-      aria-label="Generate similar fortune with AI"
+      aria-label={t("messages.generateSimilar.ariaLabel")}
     >
       <Wand2 className="h-4 w-4" />
     </Button>

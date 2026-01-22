@@ -206,11 +206,193 @@
   "messages": {
     "title": "Mensagens de sorte",
     "subtitle": "Explore nossa coleção de mensagens de biscoitos da sorte",
-    "searchPlaceholder": "Buscar sortes...",
+    "searchPlaceholder": "Pesquisar mensagens por palavra-chave ou tag...",
     "filterByCategory": "Filtrar por categoria",
     "allCategories": "Todas as categorias",
     "noResults": "Nenhuma sorte encontrada. Tente uma busca diferente.",
-    "totalMessages": "{count} mensagens encontradas"
+    "totalMessages": "{count} mensagens encontradas",
+    "search": {
+      "sectionLabel": "Pesquisar e filtrar mensagens",
+      "placeholder": "Pesquisar mensagens por palavra-chave ou tag...",
+      "ariaLabel": "Pesquisar mensagens da sorte",
+      "clear": "Limpar busca",
+      "filtersButton": "Filtros"
+    },
+    "tip": {
+      "luckyNumbers": "Os números da sorte são opcionais. Use o menu de cópia para incluí-los."
+    },
+    "filters": {
+      "moodLabel": "Humor",
+      "lengthLabel": "Comprimento",
+      "styleLabel": "Estilo",
+      "allMoods": "Todos os humores",
+      "allLengths": "Todos os comprimentos",
+      "allStyles": "Todos os estilos",
+      "moodOptions": {
+        "positive": "Positivo",
+        "humor": "Humor",
+        "romance": "Romance",
+        "wisdom": "Sabedoria"
+      },
+      "clearAll": "Limpar tudo"
+    },
+    "results": {
+      "noResultsTitle": "Nenhuma mensagem encontrada",
+      "foundSingle": "Encontrada {count} mensagem",
+      "foundPlural": "Encontradas {count} mensagens",
+      "filteredAria": "Mensagens da sorte filtradas",
+      "backToCategories": "Voltar às categorias",
+      "noResultsDescription": "Tente ajustar sua busca ou filtros para encontrar o que procura.",
+      "clearFilters": "Limpar filtros"
+    },
+    "category": {
+      "messagesCount": "{count} mensagens",
+      "lastUpdated": "Atualizado em {date}",
+      "viewAllCategory": "Ver tudo de {category}",
+      "seeAllCount": "Ver todas as {count} mensagens de {category}",
+      "aiCtaSuffix": "Use nosso gerador com IA",
+      "relatedLabel": "Relacionado:",
+      "luckyLabel": "Sorte:",
+      "luckyNumberAria": "Número da sorte {number}",
+      "listAriaLabel": "Mensagens de {category}",
+      "structuredDescription": "Mensagem de biscoito da sorte de {category}"
+    },
+    "structuredData": {
+      "collectionName": "Coleção de mensagens de biscoitos da sorte",
+      "collectionDescription": "Explore nossa coleção completa de mais de {count} mensagens de biscoitos da sorte."
+    },
+    "navigation": {
+      "categories": "Categorias",
+      "categoryNavigation": "Navegação por categorias",
+      "openToc": "Abrir sumário",
+      "closeToc": "Fechar sumário",
+      "backToTop": "Voltar ao topo"
+    },
+    "copy": {
+      "copied": "Copiado!",
+      "message": "Copiar mensagem",
+      "options": "Opções de cópia",
+      "withLucky": "Copiar com números da sorte",
+      "copiedMessageToast": "Mensagem copiada",
+      "copiedWithLuckyToast": "Copiado com números da sorte",
+      "copiedMessageAria": "Mensagem copiada para a área de transferência",
+      "copiedWithLuckyAria": "Mensagem com números da sorte copiada para a área de transferência"
+    },
+    "generateSimilar": {
+      "title": "Gerar semelhante com IA",
+      "ariaLabel": "Gerar uma mensagem semelhante com IA"
+    },
+    "categories": {
+      "inspirational": {
+        "title": "Mensagens inspiradoras de biscoito da sorte",
+        "intro": "Descubra frases inspiradoras de biscoito da sorte que promovem positividade, motivação e crescimento pessoal.",
+        "cta": "Quer mais mensagens inspiradoras?"
+      },
+      "funny": {
+        "title": "Mensagens engraçadas de biscoito da sorte",
+        "intro": "Prepare-se para rir com nossa coleção de frases engraçadas e piadas espirituosas.",
+        "cta": "Quer mais biscoitos da sorte engraçados?"
+      },
+      "love": {
+        "title": "Mensagens de amor de biscoito da sorte",
+        "intro": "Explore mensagens românticas sobre amor, relacionamentos e assuntos do coração.",
+        "cta": "Quer mais mensagens de amor?"
+      },
+      "success": {
+        "title": "Mensagens de sucesso e carreira",
+        "intro": "Mensagens motivadoras sobre conquistas, sucesso profissional e alcançar metas.",
+        "cta": "Quer mais mensagens de sucesso?"
+      },
+      "wisdom": {
+        "title": "Mensagens de sabedoria de biscoito da sorte",
+        "intro": "Mensagens reflexivas e filosóficas com sabedoria atemporal e insights de vida.",
+        "cta": "Quer mais mensagens de sabedoria?"
+      },
+      "friendship": {
+        "title": "Mensagens de amizade de biscoito da sorte",
+        "intro": "Celebre os laços de amizade com estas mensagens calorosas.",
+        "cta": "Quer mais mensagens de amizade?"
+      },
+      "birthday": {
+        "title": "Mensagens de aniversário de biscoito da sorte",
+        "intro": "Deixe os aniversários ainda mais especiais com estas mensagens comemorativas.",
+        "cta": "Quer mais mensagens de aniversário?"
+      },
+      "study": {
+        "title": "Mensagens de motivação para estudo e provas",
+        "intro": "Mensagens inspiradoras para estudantes, provas e aprendizado contínuo.",
+        "cta": "Quer mais motivação para estudar?"
+      }
+    },
+    "history": {
+      "title": "História e psicologia por trás das mensagens de biscoito da sorte",
+      "introPrefix": "Embora muitas vezes associadas à culinária chinesa no Ocidente, a ",
+      "introLink": "história do biscoito da sorte",
+      "introMiddle": " na verdade remonta ao ",
+      "introHighlight": "Japão do século XIX",
+      "introSuffix": ". Um cracker japonês chamado \"tsujiura senbei\" era vendido em Kyoto com mensagens de sorte dentro. A versão moderna, adoçada com baunilha, se popularizou na Califórnia no início do século XX. Saiba mais sobre ",
+      "inventedLink": "quem inventou os biscoitos da sorte",
+      "introEnd": ".",
+      "psychologyPrefix": "O apelo dos biscoitos da sorte está ligado ao ",
+      "barnumEffect": "efeito Barnum",
+      "psychologySuffix": "—um fenômeno psicológico em que as pessoas acreditam que afirmações vagas e gerais se aplicam especificamente a elas. A natureza positiva e aberta dessas mensagens nos permite projetar esperanças e sonhos, criando um momento de conexão pessoal e encanto.",
+      "funFactsTitle": "Você sabia?",
+      "funFacts": {
+        "notChinese": {
+          "title": "Não são realmente chineses",
+          "content": "Os biscoitos da sorte provavelmente se originaram no Japão, não na China. Um cracker japonês chamado \"tsujiura senbei\" data do Kyoto do século XIX."
+        },
+        "billionsServed": {
+          "title": "Bilhões servidos",
+          "content": "Aproximadamente 3 bilhões de biscoitos da sorte são produzidos no mundo todos os anos, e a grande maioria é consumida nos Estados Unidos."
+        },
+        "lotteryWinners": {
+          "title": "Ganhadores da loteria",
+          "content": "Um número surpreendente de pessoas já ganhou na loteria usando os \"números da sorte\" impressos nos bilhetes do biscoito!"
+        }
+      }
+    },
+    "howToWrite": {
+      "title": "Como escrever suas próprias mensagens de biscoito da sorte",
+      "introPrefix": "Criar suas próprias mensagens é uma arte que combina concisão, positividade e a medida certa de mistério. As melhores mensagens são curtas, animadoras e abertas o suficiente para que o leitor encontre significado pessoal. Seja para fazer ",
+      "introLink": "biscoitos da sorte caseiros",
+      "introSuffix": " ou escrever mensagens para um evento, estes princípios vão ajudar.",
+      "principlesTitle": "Princípios de escrita",
+      "principles": {
+        "one": "Use a segunda pessoa \"você\" para criar conexão pessoal",
+        "two": "Mantenha as mensagens abertas para projeção do leitor",
+        "three": "Evite datas ou números específicos (exceto números da sorte)",
+        "four": "Mantenha um tom positivo e voltado para o futuro",
+        "five": "Misture frases curtas e impactantes com outras mais reflexivas",
+        "six": "Use uma linguagem atemporal que ressoe por gerações"
+      },
+      "templatesTitle": "Exemplos de modelo",
+      "templates": {
+        "one": "Em breve você descobrirá uma nova oportunidade em [trabalho/amor/criatividade].",
+        "two": "Sua paciência hoje trará recompensas inesperadas amanhã.",
+        "three": "Um encontro casual levará a uma amizade duradoura.",
+        "four": "O caminho que você menos espera trará a maior alegria.",
+        "five": "Sua bondade retornará multiplicada.",
+        "six": "Uma decisão que você tomar esta semana moldará seu futuro.",
+        "seven": "Confie em seus instintos — eles conhecem o caminho.",
+        "eight": "Alguém pensa em você com grande carinho."
+      },
+      "ctaStrong": "Não quer escrever do zero?",
+      "ctaSuffix": " Deixe nossa IA criar mensagens personalizadas para você.",
+      "ctaButton": "Experimentar gerador com IA"
+    },
+    "cta": {
+      "title": "Crie seu próprio destino",
+      "descriptionPrefix": "Por que esperar que um biscoito diga seu futuro? Use nosso avançado ",
+      "descriptionEmphasis": "gerador de biscoitos da sorte com IA",
+      "descriptionSuffix": " para criar mensagens únicas e personalizadas com números da sorte instantaneamente.",
+      "steps": {
+        "one": "Escolha um tema (amor, trabalho, aniversário, prova...)",
+        "two": "Descreva sua situação em uma frase",
+        "three": "Receba mensagens únicas + números da sorte"
+      },
+      "button": "Abrir gerador de biscoitos da sorte com IA"
+    }
   },
   "browse": {
     "title": "Explorar sortes",
@@ -252,6 +434,27 @@
     "statistics": "Suas estatísticas",
     "fortunesGenerated": "Sortes geradas",
     "favoritesSaved": "Favoritos salvos"
+  },
+  "tags": {
+    "length": {
+      "short": "Curta",
+      "medium": "Média",
+      "long": "Longa"
+    },
+    "style": {
+      "classic": "Clássico",
+      "poetic": "Poético",
+      "modern": "Moderno",
+      "playful": "Divertido",
+      "calm": "Calmo"
+    },
+    "styleDescription": {
+      "classic": "Sabedoria atemporal com tom formal",
+      "poetic": "Linguagem lírica com metáforas",
+      "modern": "Expressão contemporânea e casual",
+      "playful": "Engraçado e descontraído",
+      "calm": "Sereno e meditativo"
+    }
   },
   "auth": {
     "signInTitle": "Entrar",

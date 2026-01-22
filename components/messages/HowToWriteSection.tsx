@@ -1,25 +1,28 @@
+"use client";
+
 import { Pen, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useLocale } from "@/lib/locale-context";
 
-const writingPrinciples = [
-  "Use second person 'you' to create personal connection",
-  "Keep messages open-ended for reader projection",
-  "Avoid specific dates or numbers (except lucky numbers)",
-  "Stay positive and forward-looking",
-  "Mix short punchy sentences with longer reflective ones",
-  "Use timeless language that resonates across generations",
+const writingPrincipleKeys = [
+  "messages.howToWrite.principles.one",
+  "messages.howToWrite.principles.two",
+  "messages.howToWrite.principles.three",
+  "messages.howToWrite.principles.four",
+  "messages.howToWrite.principles.five",
+  "messages.howToWrite.principles.six",
 ];
 
-const templateExamples = [
-  "Soon, you will discover a new opportunity in [work/love/creativity].",
-  "Your patience today will bring unexpected rewards tomorrow.",
-  "A chance encounter will lead to lasting friendship.",
-  "The path you least expect will bring the greatest joy.",
-  "Your kindness will return to you tenfold.",
-  "A decision you make this week will shape your future.",
-  "Trust your instincts—they know the way.",
-  "Someone is thinking of you with great affection.",
+const templateExampleKeys = [
+  "messages.howToWrite.templates.one",
+  "messages.howToWrite.templates.two",
+  "messages.howToWrite.templates.three",
+  "messages.howToWrite.templates.four",
+  "messages.howToWrite.templates.five",
+  "messages.howToWrite.templates.six",
+  "messages.howToWrite.templates.seven",
+  "messages.howToWrite.templates.eight",
 ];
 
 /**
@@ -32,6 +35,9 @@ const templateExamples = [
  * - Internal link to how-to-make page
  */
 export function HowToWriteSection() {
+  const { t, getLocalizedHref } = useLocale();
+  const generatorHref = getLocalizedHref("/generator");
+
   return (
     <section className="mt-16 max-w-5xl mx-auto">
       <div className="rounded-3xl border border-[#FFE4D6] bg-white p-8 shadow-lg md:p-12">
@@ -40,39 +46,34 @@ export function HowToWriteSection() {
             <Pen className="h-8 w-8 text-[#E55328]" />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-[#222222]">
-            How to Write Your Own Fortune Cookie Messages
+            {t("messages.howToWrite.title")}
           </h2>
         </div>
 
         <p className="text-[#555555] leading-relaxed mb-8">
-          Creating your own fortune cookie messages is an art that
-          combines brevity, positivity, and just the right amount of
-          mystery. The best fortunes are short, uplifting, and
-          open-ended enough for readers to find personal meaning.
-          Whether you&apos;re making{" "}
+          {t("messages.howToWrite.introPrefix")}
           <Link
             href="/how-to-make-fortune-cookies"
             className="font-medium text-[#FF6B3D] hover:text-[#E55328] hover:underline"
           >
-            homemade fortune cookies
-          </Link>{" "}
-          or crafting messages for an event, these principles will guide
-          you.
+            {t("messages.howToWrite.introLink")}
+          </Link>
+          {t("messages.howToWrite.introSuffix")}
         </p>
 
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* Writing Principles */}
           <div>
             <h3 className="text-lg font-semibold text-[#222222] mb-4">
-              Writing Principles
+              {t("messages.howToWrite.principlesTitle")}
             </h3>
             <ul className="space-y-3">
-              {writingPrinciples.map((principle, idx) => (
+              {writingPrincipleKeys.map((principleKey, idx) => (
                 <li key={idx} className="flex items-start gap-3">
                   <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#FFE4D6] text-sm font-medium text-[#E55328]">
                     {idx + 1}
                   </span>
-                  <span className="text-[#555555]">{principle}</span>
+                  <span className="text-[#555555]">{t(principleKey)}</span>
                 </li>
               ))}
             </ul>
@@ -81,15 +82,15 @@ export function HowToWriteSection() {
           {/* Template Examples */}
           <div>
             <h3 className="text-lg font-semibold text-[#222222] mb-4">
-              Template Examples
+              {t("messages.howToWrite.templatesTitle")}
             </h3>
             <ul className="space-y-2">
-              {templateExamples.map((template, idx) => (
+              {templateExampleKeys.map((templateKey, idx) => (
                 <li
                   key={idx}
                   className="border-l-2 border-[#FFE4D6] py-1 pl-3 text-[#555555] italic"
                 >
-                  &ldquo;{template}&rdquo;
+                  &ldquo;{t(templateKey)}&rdquo;
                 </li>
               ))}
             </ul>
@@ -99,12 +100,12 @@ export function HowToWriteSection() {
         {/* Writing CTA */}
         <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[#FFE4D6] bg-[#FAFAFA] p-6 sm:flex-row">
           <p className="text-[#555555]">
-            <strong>Don&apos;t want to write from scratch?</strong> Let
-            our AI create personalized fortune cookie messages for you.
+            <strong>{t("messages.howToWrite.ctaStrong")}</strong>
+            {t("messages.howToWrite.ctaSuffix")}
           </p>
-          <Link href="/generator">
+          <Link href={generatorHref}>
             <Button className="whitespace-nowrap bg-[#FF6B3D] text-white hover:bg-[#E55328]">
-              Try AI Generator
+              {t("messages.howToWrite.ctaButton")}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>

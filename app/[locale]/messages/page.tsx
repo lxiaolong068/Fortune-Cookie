@@ -129,95 +129,68 @@ const iconComponents = {
   "book-open": BookOpen,
 } as const;
 
+type CategoryBaseConfig = Omit<
+  CategoryConfig,
+  "label" | "seoTitle" | "intro" | "ctaText"
+>;
+
 // Category configuration
-const categoryConfig: CategoryConfig[] = [
+const categoryBaseConfig: CategoryBaseConfig[] = [
   {
     id: "inspirational",
-    seoTitle: "Inspirational Fortune Cookie Messages",
     iconName: "star",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Discover uplifting fortune cookie sayings that inspire positivity, motivation, and personal growth.",
     viewAllPath: "/messages/inspirational",
-    ctaText: "Want more inspirational messages?",
   },
   {
     id: "funny",
-    seoTitle: "Funny Fortune Cookie Messages",
     iconName: "smile",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Get ready to laugh with our collection of hilarious fortune cookie sayings and witty jokes.",
     viewAllPath: "/funny-fortune-cookie-messages",
-    ctaText: "Want more funny fortune cookies?",
   },
   {
     id: "love",
-    seoTitle: "Love Fortune Cookie Messages",
     iconName: "heart",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Explore romantic fortune cookie messages about love, relationships, and matters of the heart.",
     viewAllPath: "/messages/love",
-    ctaText: "Want more love fortune messages?",
   },
   {
     id: "success",
-    seoTitle: "Success & Career Fortune Cookie Messages",
     iconName: "trending-up",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Motivating fortune cookie messages about achievement, career success, and reaching your goals.",
     viewAllPath: "/messages/success",
-    ctaText: "Want more success messages?",
   },
   {
     id: "wisdom",
-    seoTitle: "Wisdom Fortune Cookie Messages",
     iconName: "brain",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Thoughtful and philosophical fortune cookie messages offering timeless wisdom and life insights.",
     viewAllPath: "/messages/wisdom",
-    ctaText: "Want more wisdom fortunes?",
   },
   {
     id: "friendship",
-    seoTitle: "Friendship Fortune Cookie Messages",
     iconName: "users",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Celebrate the bonds of friendship with these heartwarming fortune cookie messages.",
     viewAllPath: "/messages/friendship",
-    ctaText: "Want more friendship fortunes?",
   },
   {
     id: "birthday",
-    seoTitle: "Birthday Fortune Cookie Messages",
     iconName: "cake",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Make birthdays extra special with these celebratory fortune cookie messages.",
     viewAllPath: "/messages/birthday",
-    ctaText: "Want more birthday messages?",
   },
   {
     id: "study",
-    seoTitle: "Study & Exam Motivation Messages",
     iconName: "book-open",
     color: "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]",
     borderColor: "border-l-[#FFE4D6]",
-    intro:
-      "Inspiring fortune cookie messages for students, test-takers, and lifelong learners.",
     viewAllPath: "/messages/study",
-    ctaText: "Want more study motivation?",
   },
 ];
 
@@ -251,6 +224,20 @@ export default async function LocaleMessagesPage({
     }
     return `/${locale}${path}`;
   };
+
+  const categoryConfig: CategoryConfig[] = categoryBaseConfig.map(
+    (category) => {
+      const label = t(`generator.themes.${category.id}`);
+      return {
+        ...category,
+        label:
+          label === `generator.themes.${category.id}` ? category.id : label,
+        seoTitle: t(`messages.categories.${category.id}.title`),
+        intro: t(`messages.categories.${category.id}.intro`),
+        ctaText: t(`messages.categories.${category.id}.cta`),
+      };
+    },
+  );
 
   const stats = getDatabaseStats();
 
@@ -286,7 +273,9 @@ export default async function LocaleMessagesPage({
     const messages = categoryMessages[category.id] || [];
     return messages.slice(0, 5).map((fortune) => ({
       name: fortune.message,
-      description: `${category.seoTitle.replace(" Fortune Cookie Messages", "").replace(" Messages", "")} fortune cookie message`,
+      description: t("messages.category.structuredDescription", {
+        category: category.label,
+      }),
       category: category.seoTitle,
     }));
   });
@@ -297,8 +286,10 @@ export default async function LocaleMessagesPage({
       initialTranslations={translations}
     >
       <ItemListStructuredData
-        name="Fortune Cookie Messages Collection"
-        description={`Browse our complete collection of ${stats.total}+ fortune cookie messages.`}
+        name={t("messages.structuredData.collectionName")}
+        description={t("messages.structuredData.collectionDescription", {
+          count: stats.total,
+        })}
         url={getLocalizedHref("/messages")}
         items={messageItems}
       />
@@ -348,12 +339,7 @@ export default async function LocaleMessagesPage({
               <div className="flex flex-wrap justify-center gap-3">
                 {categoryConfig.map((category) => {
                   const IconComponent = iconComponents[category.iconName];
-                  // Try to get localized category name from translations
-                  const categoryName =
-                    t(`generator.themes.${category.id}`) ||
-                    category.seoTitle
-                      .replace(" Fortune Cookie Messages", "")
-                      .replace(" Messages", "");
+                  const categoryName = category.label;
                   return (
                     <Link
                       key={category.id}

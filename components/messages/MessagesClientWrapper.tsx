@@ -13,6 +13,7 @@ import { FloatingNav } from "./FloatingNav";
 import { CategorySectionSkeleton } from "./MessageCardSkeleton";
 import { MessagesSearchFilter } from "./MessagesSearchFilter";
 import { FortuneMessage } from "@/lib/fortune-database";
+import { useTranslation } from "@/lib/locale-context";
 
 // Content section placeholder for history/how-to-write sections
 function ContentSectionPlaceholder() {
@@ -77,6 +78,7 @@ export function MessagesClientWrapper({
   categoryMessages,
   categoryMeta,
 }: MessagesClientWrapperProps) {
+  const { t } = useTranslation();
   // Track if filters are active to hide category sections
   const [filtersActive, setFiltersActive] = useState(false);
 
@@ -94,16 +96,17 @@ export function MessagesClientWrapper({
   const navCategories = useMemo(() => {
     return allCategories.map((cat) => ({
       id: cat.id,
-      label: cat.seoTitle
-        .replace(" Fortune Cookie Messages", "")
-        .replace(" Messages", ""),
+      label: cat.label || cat.seoTitle,
     }));
   }, [allCategories]);
 
   return (
     <>
       {/* Search and Filter Section */}
-      <section className="mb-12" aria-label="Search and filter messages">
+      <section
+        className="mb-12"
+        aria-label={t("messages.search.sectionLabel")}
+      >
         <MessagesSearchFilter
           onFiltersActive={handleFiltersActive}
           className=""

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { FortuneMessage, styleConfig } from "@/lib/fortune-database";
+import { useLocale } from "@/lib/locale-context";
 import { CopyButton } from "./CopyButton";
 import { GenerateSimilarButton } from "./GenerateSimilarButton";
 
@@ -37,6 +38,7 @@ export type IconName = keyof typeof iconMap;
 
 export interface CategoryConfig {
   id: string;
+  label: string;
   seoTitle: string;
   iconName: IconName; // Serializable string instead of function
   color: string;
@@ -56,24 +58,6 @@ const relatedCategories: Record<string, string[]> = {
   friendship: ["love", "birthday"],
   birthday: ["funny", "friendship"],
   study: ["wisdom", "success"],
-};
-
-// Category labels for display
-const categoryLabels: Record<string, string> = {
-  inspirational: "Inspirational",
-  funny: "Funny",
-  love: "Love",
-  success: "Success",
-  wisdom: "Wisdom",
-  friendship: "Friendship",
-  birthday: "Birthday",
-  study: "Study",
-};
-
-const lengthLabels: Record<FortuneMessage["lengthType"], string> = {
-  short: "Short",
-  medium: "Medium",
-  long: "Long",
 };
 
 interface MessageCategorySectionProps {
@@ -99,10 +83,13 @@ export function MessageCategorySection({
   totalCount,
   lastUpdated,
 }: MessageCategorySectionProps) {
+  const { t, getLocalizedHref } = useLocale();
   const IconComponent = iconMap[category.iconName];
   const displayMessages = messages.slice(0, 15);
   const headingId = `${category.id}-heading`;
   const related = relatedCategories[category.id] || [];
+  const categoryLabel = category.label || category.seoTitle;
+  const generatorHref = `${getLocalizedHref("/generator")}?category=${category.id}`;
 
   // Format last updated date
   const formattedDate = lastUpdated ?? "";
@@ -134,11 +121,16 @@ export function MessageCategorySection({
             </h2>
             <div className="flex flex-wrap items-center gap-2 mt-2">
               <Badge variant="secondary" className={category.color}>
-                {displayCount} messages
+                {t("messages.category.messagesCount", {
+                  count: displayCount,
+                })}
               </Badge>
               {formattedDate && (
                 <span className="text-xs text-[#888888]">
-                  · Updated {formattedDate}
+                  ·{" "}
+                  {t("messages.category.lastUpdated", {
+                    date: formattedDate,
+                  })}
                 </span>
               )}
             </div>
@@ -153,7 +145,7 @@ export function MessageCategorySection({
             className="border-[#FFD6C5] text-[#FF6B3D] hover:bg-[#FFE4D6] hover:text-[#E55328] hover:border-[#FF6B3D]"
           >
             <Link href={category.viewAllPath} prefetch={true}>
-              View All
+              {t("common.viewAll")}
               <ChevronRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
@@ -169,7 +161,9 @@ export function MessageCategorySection({
       <ul
         role="list"
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-6 list-none p-0"
-        aria-label={`${category.seoTitle} messages`}
+        aria-label={t("messages.category.listAriaLabel", {
+          category: categoryLabel,
+        })}
       >
         {displayMessages.map((fortune) => (
           <li key={fortune.id}>
@@ -191,17 +185,17 @@ export function MessageCategorySection({
                         variant="secondary"
                         className="text-xs bg-[#F5F5F5] text-[#555555]"
                       >
-                        {lengthLabels[fortune.lengthType]}
+                        {t(`tags.length.${fortune.lengthType}`)}
                       </Badge>
                     )}
                     {fortune.style && styleConfig[fortune.style] && (
                       <Badge
                         variant="outline"
                         className="text-xs border-[#E5E5E5] text-[#888888]"
-                        title={styleConfig[fortune.style].description}
+                        title={t(`tags.styleDescription.${fortune.style}`)}
                       >
                         {styleConfig[fortune.style].emoji}{" "}
-                        {styleConfig[fortune.style].label}
+                        {t(`tags.style.${fortune.style}`)}
                       </Badge>
                     )}
                   </div>
@@ -209,12 +203,15 @@ export function MessageCategorySection({
                     {fortune.luckyNumbers &&
                       fortune.luckyNumbers.length > 0 && (
                         <div className="flex items-center gap-1.5 text-xs text-[#555555]">
-                          <span>Lucky:</span>
+                          <span>{t("messages.category.luckyLabel")}</span>
                           {fortune.luckyNumbers.slice(0, 3).map((num, i) => (
                             <span
                               key={i}
                               className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#FFE4D6] text-[#E55328] font-medium"
-                              aria-label={`Lucky number ${num}`}
+                              aria-label={t(
+                                "messages.category.luckyNumberAria",
+                                { number: num },
+                              )}
                             >
                               {num}
                             </span>
@@ -252,7 +249,9 @@ export function MessageCategorySection({
             prefetch={true}
             className="sm:hidden inline-flex items-center font-medium text-[#FF6B3D] transition-colors hover:text-[#E55328] hover:underline group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B3D] focus-visible:ring-offset-2 rounded"
           >
-            View all {category.seoTitle.toLowerCase()}
+            {t("messages.category.viewAllCategory", {
+              category: categoryLabel,
+            })}
             <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
 
@@ -262,22 +261,20 @@ export function MessageCategorySection({
             prefetch={true}
             className="hidden sm:inline-flex items-center font-medium text-[#FF6B3D] transition-colors hover:text-[#E55328] hover:underline group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B3D] focus-visible:ring-offset-2 rounded"
           >
-            See all {displayCount}{" "}
-            {category.seoTitle
-              .toLowerCase()
-              .replace(" fortune cookie messages", "")
-              .replace(" messages", "")}{" "}
-            messages
+            {t("messages.category.seeAllCount", {
+              count: displayCount,
+              category: categoryLabel,
+            })}
             <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
 
           {/* AI Generator CTA */}
           <Link
-            href={`/generator?category=${category.id}`}
+            href={generatorHref}
             prefetch={true}
             className="inline-flex items-center text-sm text-[#555555] transition-colors hover:text-[#E55328] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B3D] focus-visible:ring-offset-2 rounded"
           >
-            {category.ctaText} Use our AI generator
+            {category.ctaText} {t("messages.category.aiCtaSuffix")}
             <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
@@ -285,14 +282,21 @@ export function MessageCategorySection({
         {/* Related Categories - Internal Linking */}
         {related.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="text-[#888888]">Related:</span>
+            <span className="text-[#888888]">
+              {t("messages.category.relatedLabel")}
+            </span>
             {related.map((relatedId) => (
               <Link
                 key={relatedId}
                 href={`#${relatedId}`}
                 className="inline-flex items-center px-3 py-1 rounded-full bg-[#F5F5F5] text-[#555555] hover:bg-[#FFE4D6] hover:text-[#E55328] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B3D] focus-visible:ring-offset-2"
               >
-                {categoryLabels[relatedId] || relatedId}
+                {(() => {
+                  const label = t(`generator.themes.${relatedId}`);
+                  return label === `generator.themes.${relatedId}`
+                    ? relatedId
+                    : label;
+                })()}
               </Link>
             ))}
           </div>

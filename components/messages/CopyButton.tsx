@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "@/lib/locale-context";
 
 interface CopyButtonProps {
   message: string;
@@ -32,6 +33,7 @@ export function CopyButton({
   luckyNumbers,
   className = "",
 }: CopyButtonProps) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [copiedWithLucky, setCopiedWithLucky] = useState(false);
 
@@ -40,15 +42,15 @@ export function CopyButton({
       setCopiedWithLucky(true);
       setCopied(false);
       setTimeout(() => setCopiedWithLucky(false), 2000);
-      toast.success("Copied with lucky numbers");
+      toast.success(t("messages.copy.copiedWithLuckyToast"));
       return;
     }
 
     setCopied(true);
     setCopiedWithLucky(false);
     setTimeout(() => setCopied(false), 2000);
-    toast.success("Copied message");
-  }, []);
+    toast.success(t("messages.copy.copiedMessageToast"));
+  }, [t]);
 
   const copyToClipboard = useCallback(
     async (includeLucky: boolean = false) => {
@@ -89,7 +91,9 @@ export function CopyButton({
           size="sm"
           onClick={() => copyToClipboard(false)}
           className={`h-8 w-8 p-0 text-[#555555] hover:text-[#FF6B3D] hover:bg-[#FFE4D6] focus-visible:ring-2 focus-visible:ring-[#FF6B3D] focus-visible:ring-offset-2 ${className}`}
-          aria-label={copied ? "Copied!" : "Copy message"}
+          aria-label={
+            copied ? t("messages.copy.copied") : t("messages.copy.message")
+          }
         >
           {copied ? (
             <Check className="h-4 w-4 text-green-600" />
@@ -99,7 +103,7 @@ export function CopyButton({
         </Button>
         {/* ARIA live region for screen reader announcement */}
         <span className="sr-only" aria-live="polite" aria-atomic="true">
-          {copied ? "Message copied to clipboard" : ""}
+          {copied ? t("messages.copy.copiedMessageAria") : ""}
         </span>
       </>
     );
@@ -114,7 +118,9 @@ export function CopyButton({
             variant="ghost"
             size="sm"
             className={`h-8 px-2 text-[#555555] hover:text-[#FF6B3D] hover:bg-[#FFE4D6] focus-visible:ring-2 focus-visible:ring-[#FF6B3D] focus-visible:ring-offset-2 ${className}`}
-            aria-label={isCopied ? "Copied!" : "Copy options"}
+            aria-label={
+              isCopied ? t("messages.copy.copied") : t("messages.copy.options")
+            }
           >
             {isCopied ? (
               <Check className="h-4 w-4 text-green-600" />
@@ -132,23 +138,23 @@ export function CopyButton({
             className="cursor-pointer focus:bg-[#FFE4D6] focus:text-[#E55328]"
           >
             <Copy className="h-4 w-4 mr-2" />
-            Copy message
+            {t("messages.copy.message")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => copyToClipboard(true)}
             className="cursor-pointer focus:bg-[#FFE4D6] focus:text-[#E55328]"
           >
             <Copy className="h-4 w-4 mr-2" />
-            Copy with lucky numbers
+            {t("messages.copy.withLucky")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {/* ARIA live region for screen reader announcement */}
       <span className="sr-only" aria-live="polite" aria-atomic="true">
         {copied
-          ? "Message copied to clipboard"
+          ? t("messages.copy.copiedMessageAria")
           : copiedWithLucky
-            ? "Message with lucky numbers copied to clipboard"
+            ? t("messages.copy.copiedWithLuckyAria")
             : ""}
       </span>
     </>

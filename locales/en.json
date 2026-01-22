@@ -206,11 +206,193 @@
   "messages": {
     "title": "Fortune Messages",
     "subtitle": "Browse our collection of fortune cookie messages",
-    "searchPlaceholder": "Search fortunes...",
+    "searchPlaceholder": "Search messages by keyword or tag...",
     "filterByCategory": "Filter by Category",
     "allCategories": "All Categories",
     "noResults": "No fortunes found. Try a different search.",
-    "totalMessages": "{count} messages found"
+    "totalMessages": "{count} messages found",
+    "search": {
+      "sectionLabel": "Search and filter messages",
+      "placeholder": "Search messages by keyword or tag...",
+      "ariaLabel": "Search fortune messages",
+      "clear": "Clear search",
+      "filtersButton": "Filters"
+    },
+    "tip": {
+      "luckyNumbers": "Lucky numbers are optional. Use the copy menu to include them."
+    },
+    "filters": {
+      "moodLabel": "Mood",
+      "lengthLabel": "Length",
+      "styleLabel": "Style",
+      "allMoods": "All moods",
+      "allLengths": "All lengths",
+      "allStyles": "All styles",
+      "moodOptions": {
+        "positive": "Positive",
+        "humor": "Humor",
+        "romance": "Romance",
+        "wisdom": "Wisdom"
+      },
+      "clearAll": "Clear all"
+    },
+    "results": {
+      "noResultsTitle": "No messages found",
+      "foundSingle": "Found {count} message",
+      "foundPlural": "Found {count} messages",
+      "filteredAria": "Filtered fortune messages",
+      "backToCategories": "Back to categories",
+      "noResultsDescription": "Try adjusting your search or filters to find what you're looking for.",
+      "clearFilters": "Clear filters"
+    },
+    "category": {
+      "messagesCount": "{count} messages",
+      "lastUpdated": "Updated {date}",
+      "viewAllCategory": "View all {category}",
+      "seeAllCount": "See all {count} {category} messages",
+      "aiCtaSuffix": "Use our AI generator",
+      "relatedLabel": "Related:",
+      "luckyLabel": "Lucky:",
+      "luckyNumberAria": "Lucky number {number}",
+      "listAriaLabel": "{category} messages",
+      "structuredDescription": "{category} fortune cookie message"
+    },
+    "structuredData": {
+      "collectionName": "Fortune Cookie Messages Collection",
+      "collectionDescription": "Browse our complete collection of {count}+ fortune cookie messages."
+    },
+    "navigation": {
+      "categories": "Categories",
+      "categoryNavigation": "Category navigation",
+      "openToc": "Open table of contents",
+      "closeToc": "Close table of contents",
+      "backToTop": "Back to top"
+    },
+    "copy": {
+      "copied": "Copied!",
+      "message": "Copy message",
+      "options": "Copy options",
+      "withLucky": "Copy with lucky numbers",
+      "copiedMessageToast": "Copied message",
+      "copiedWithLuckyToast": "Copied with lucky numbers",
+      "copiedMessageAria": "Message copied to clipboard",
+      "copiedWithLuckyAria": "Message with lucky numbers copied to clipboard"
+    },
+    "generateSimilar": {
+      "title": "Generate similar with AI",
+      "ariaLabel": "Generate similar fortune with AI"
+    },
+    "categories": {
+      "inspirational": {
+        "title": "Inspirational Fortune Cookie Messages",
+        "intro": "Discover uplifting fortune cookie sayings that inspire positivity, motivation, and personal growth.",
+        "cta": "Want more inspirational messages?"
+      },
+      "funny": {
+        "title": "Funny Fortune Cookie Messages",
+        "intro": "Get ready to laugh with our collection of hilarious fortune cookie sayings and witty jokes.",
+        "cta": "Want more funny fortune cookies?"
+      },
+      "love": {
+        "title": "Love Fortune Cookie Messages",
+        "intro": "Explore romantic fortune cookie messages about love, relationships, and matters of the heart.",
+        "cta": "Want more love fortune messages?"
+      },
+      "success": {
+        "title": "Success & Career Fortune Cookie Messages",
+        "intro": "Motivating fortune cookie messages about achievement, career success, and reaching your goals.",
+        "cta": "Want more success messages?"
+      },
+      "wisdom": {
+        "title": "Wisdom Fortune Cookie Messages",
+        "intro": "Thoughtful and philosophical fortune cookie messages offering timeless wisdom and life insights.",
+        "cta": "Want more wisdom fortunes?"
+      },
+      "friendship": {
+        "title": "Friendship Fortune Cookie Messages",
+        "intro": "Celebrate the bonds of friendship with these heartwarming fortune cookie messages.",
+        "cta": "Want more friendship fortunes?"
+      },
+      "birthday": {
+        "title": "Birthday Fortune Cookie Messages",
+        "intro": "Make birthdays extra special with these celebratory fortune cookie messages.",
+        "cta": "Want more birthday messages?"
+      },
+      "study": {
+        "title": "Study & Exam Motivation Messages",
+        "intro": "Inspiring fortune cookie messages for students, test-takers, and lifelong learners.",
+        "cta": "Want more study motivation?"
+      }
+    },
+    "history": {
+      "title": "History & Psychology Behind Fortune Cookie Messages",
+      "introPrefix": "While often associated with Chinese cuisine in Western culture, the ",
+      "introLink": "fortune cookie history",
+      "introMiddle": " actually traces back to ",
+      "introHighlight": "19th-century Japan",
+      "introSuffix": ". A similar cracker called \"tsujiura senbei\" was sold in Kyoto with paper fortunes tucked inside. The modern, vanilla-sweetened version was popularized in California in the early 20th century. Learn more about ",
+      "inventedLink": "who invented fortune cookies",
+      "introEnd": ".",
+      "psychologyPrefix": "The appeal of fortune cookies is linked to the ",
+      "barnumEffect": "Barnum Effect",
+      "psychologySuffix": "—a psychological phenomenon where individuals believe vague, general statements apply specifically to them. The positive, open-ended nature of fortune cookie messages allows us to project our hopes and dreams onto the text, creating a moment of personal connection and delight.",
+      "funFactsTitle": "Did You Know?",
+      "funFacts": {
+        "notChinese": {
+          "title": "Not Actually Chinese",
+          "content": "Fortune cookies likely originated in Japan, not China. A Japanese cracker called \"tsujiura senbei\" dates back to 19th-century Kyoto."
+        },
+        "billionsServed": {
+          "title": "Billions Served",
+          "content": "Approximately 3 billion fortune cookies are produced globally every year, with the vast majority consumed in the United States."
+        },
+        "lotteryWinners": {
+          "title": "Lottery Winners",
+          "content": "A surprising number of people have won lottery jackpots by playing the \"lucky numbers\" found on the back of their fortune cookie slips!"
+        }
+      }
+    },
+    "howToWrite": {
+      "title": "How to Write Your Own Fortune Cookie Messages",
+      "introPrefix": "Creating your own fortune cookie messages is an art that combines brevity, positivity, and just the right amount of mystery. The best fortunes are short, uplifting, and open-ended enough for readers to find personal meaning. Whether you're making ",
+      "introLink": "homemade fortune cookies",
+      "introSuffix": " or crafting messages for an event, these principles will guide you.",
+      "principlesTitle": "Writing Principles",
+      "principles": {
+        "one": "Use second person 'you' to create personal connection",
+        "two": "Keep messages open-ended for reader projection",
+        "three": "Avoid specific dates or numbers (except lucky numbers)",
+        "four": "Stay positive and forward-looking",
+        "five": "Mix short punchy sentences with longer reflective ones",
+        "six": "Use timeless language that resonates across generations"
+      },
+      "templatesTitle": "Template Examples",
+      "templates": {
+        "one": "Soon, you will discover a new opportunity in [work/love/creativity].",
+        "two": "Your patience today will bring unexpected rewards tomorrow.",
+        "three": "A chance encounter will lead to lasting friendship.",
+        "four": "The path you least expect will bring the greatest joy.",
+        "five": "Your kindness will return to you tenfold.",
+        "six": "A decision you make this week will shape your future.",
+        "seven": "Trust your instincts—they know the way.",
+        "eight": "Someone is thinking of you with great affection."
+      },
+      "ctaStrong": "Don't want to write from scratch?",
+      "ctaSuffix": " Let our AI create personalized fortune cookie messages for you.",
+      "ctaButton": "Try AI Generator"
+    },
+    "cta": {
+      "title": "Create Your Own Destiny",
+      "descriptionPrefix": "Why wait for a cookie to tell your future? Use our advanced ",
+      "descriptionEmphasis": "AI fortune cookie generator",
+      "descriptionSuffix": " to craft unique, personalized messages with lucky numbers instantly.",
+      "steps": {
+        "one": "Choose a theme (love, work, birthday, exam...)",
+        "two": "Describe your situation in one sentence",
+        "three": "Get unique messages + lucky numbers"
+      },
+      "button": "Open AI Fortune Cookie Generator"
+    }
   },
   "browse": {
     "title": "Browse Fortunes",
@@ -252,6 +434,27 @@
     "statistics": "Your Statistics",
     "fortunesGenerated": "Fortunes Generated",
     "favoritesSaved": "Favorites Saved"
+  },
+  "tags": {
+    "length": {
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Long"
+    },
+    "style": {
+      "classic": "Classic",
+      "poetic": "Poetic",
+      "modern": "Modern",
+      "playful": "Playful",
+      "calm": "Calm"
+    },
+    "styleDescription": {
+      "classic": "Timeless wisdom with formal tone",
+      "poetic": "Lyrical language with metaphors",
+      "modern": "Contemporary, casual expression",
+      "playful": "Witty and light-hearted",
+      "calm": "Serene and meditative"
+    }
   },
   "auth": {
     "signInTitle": "Sign In",

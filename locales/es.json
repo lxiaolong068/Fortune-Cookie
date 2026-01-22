@@ -206,11 +206,193 @@
   "messages": {
     "title": "Mensajes de fortuna",
     "subtitle": "Explora nuestra colección de mensajes de galletas de la fortuna",
-    "searchPlaceholder": "Buscar fortunas...",
+    "searchPlaceholder": "Buscar mensajes por palabra clave o etiqueta...",
     "filterByCategory": "Filtrar por categoría",
     "allCategories": "Todas las categorías",
     "noResults": "No se encontraron fortunas. Intenta una búsqueda diferente.",
-    "totalMessages": "{count} mensajes encontrados"
+    "totalMessages": "{count} mensajes encontrados",
+    "search": {
+      "sectionLabel": "Buscar y filtrar mensajes",
+      "placeholder": "Buscar mensajes por palabra clave o etiqueta...",
+      "ariaLabel": "Buscar mensajes de la fortuna",
+      "clear": "Borrar búsqueda",
+      "filtersButton": "Filtros"
+    },
+    "tip": {
+      "luckyNumbers": "Los números de la suerte son opcionales. Usa el menú de copia para incluirlos."
+    },
+    "filters": {
+      "moodLabel": "Estado de ánimo",
+      "lengthLabel": "Longitud",
+      "styleLabel": "Estilo",
+      "allMoods": "Todos los estados de ánimo",
+      "allLengths": "Todas las longitudes",
+      "allStyles": "Todos los estilos",
+      "moodOptions": {
+        "positive": "Positivo",
+        "humor": "Humor",
+        "romance": "Romance",
+        "wisdom": "Sabiduría"
+      },
+      "clearAll": "Borrar todo"
+    },
+    "results": {
+      "noResultsTitle": "No se encontraron mensajes",
+      "foundSingle": "Se encontró {count} mensaje",
+      "foundPlural": "Se encontraron {count} mensajes",
+      "filteredAria": "Mensajes de la fortuna filtrados",
+      "backToCategories": "Volver a las categorías",
+      "noResultsDescription": "Prueba ajustando tu búsqueda o filtros para encontrar lo que buscas.",
+      "clearFilters": "Borrar filtros"
+    },
+    "category": {
+      "messagesCount": "{count} mensajes",
+      "lastUpdated": "Actualizado {date}",
+      "viewAllCategory": "Ver todo {category}",
+      "seeAllCount": "Ver los {count} mensajes de {category}",
+      "aiCtaSuffix": "Usa nuestro generador con IA",
+      "relatedLabel": "Relacionado:",
+      "luckyLabel": "Suerte:",
+      "luckyNumberAria": "Número de la suerte {number}",
+      "listAriaLabel": "Mensajes de {category}",
+      "structuredDescription": "Mensaje de galleta de la fortuna de {category}"
+    },
+    "structuredData": {
+      "collectionName": "Colección de mensajes de galletas de la fortuna",
+      "collectionDescription": "Explora nuestra colección completa de más de {count} mensajes de galletas de la fortuna."
+    },
+    "navigation": {
+      "categories": "Categorías",
+      "categoryNavigation": "Navegación por categorías",
+      "openToc": "Abrir tabla de contenidos",
+      "closeToc": "Cerrar tabla de contenidos",
+      "backToTop": "Volver arriba"
+    },
+    "copy": {
+      "copied": "¡Copiado!",
+      "message": "Copiar mensaje",
+      "options": "Opciones de copia",
+      "withLucky": "Copiar con números de la suerte",
+      "copiedMessageToast": "Mensaje copiado",
+      "copiedWithLuckyToast": "Copiado con números de la suerte",
+      "copiedMessageAria": "Mensaje copiado al portapapeles",
+      "copiedWithLuckyAria": "Mensaje con números de la suerte copiado al portapapeles"
+    },
+    "generateSimilar": {
+      "title": "Generar similar con IA",
+      "ariaLabel": "Generar una fortuna similar con IA"
+    },
+    "categories": {
+      "inspirational": {
+        "title": "Mensajes inspiradores de galleta de la fortuna",
+        "intro": "Descubre frases motivadoras de galleta de la fortuna que inspiran positividad, motivación y crecimiento personal.",
+        "cta": "¿Quieres más mensajes inspiradores?"
+      },
+      "funny": {
+        "title": "Mensajes divertidos de galleta de la fortuna",
+        "intro": "Prepárate para reír con nuestra colección de frases graciosas y chistes ingeniosos.",
+        "cta": "¿Quieres más galletas de la suerte divertidas?"
+      },
+      "love": {
+        "title": "Mensajes de amor de galleta de la fortuna",
+        "intro": "Explora mensajes románticos sobre amor, relaciones y asuntos del corazón.",
+        "cta": "¿Quieres más mensajes de amor?"
+      },
+      "success": {
+        "title": "Mensajes de éxito y carrera",
+        "intro": "Mensajes motivadores sobre logros, éxito profesional y alcanzar tus metas.",
+        "cta": "¿Quieres más mensajes de éxito?"
+      },
+      "wisdom": {
+        "title": "Mensajes de sabiduría de galleta de la fortuna",
+        "intro": "Mensajes reflexivos y filosóficos que ofrecen sabiduría atemporal e ideas para la vida.",
+        "cta": "¿Quieres más mensajes de sabiduría?"
+      },
+      "friendship": {
+        "title": "Mensajes de amistad de galleta de la fortuna",
+        "intro": "Celebra los lazos de amistad con estos mensajes cálidos.",
+        "cta": "¿Quieres más mensajes de amistad?"
+      },
+      "birthday": {
+        "title": "Mensajes de cumpleaños de galleta de la fortuna",
+        "intro": "Haz los cumpleaños aún más especiales con estos mensajes festivos.",
+        "cta": "¿Quieres más mensajes de cumpleaños?"
+      },
+      "study": {
+        "title": "Mensajes de motivación para estudio y exámenes",
+        "intro": "Mensajes inspiradores para estudiantes, exámenes y aprendizaje continuo.",
+        "cta": "¿Quieres más motivación para estudiar?"
+      }
+    },
+    "history": {
+      "title": "Historia y psicología detrás de los mensajes de galleta de la fortuna",
+      "introPrefix": "Aunque en Occidente se asocian con la cocina china, la ",
+      "introLink": "historia de la galleta de la fortuna",
+      "introMiddle": " en realidad se remonta al ",
+      "introHighlight": "Japón del siglo XIX",
+      "introSuffix": ". Un cracker japonés llamado \"tsujiura senbei\" se vendía en Kioto con mensajes de fortuna en su interior. La versión moderna, endulzada con vainilla, se popularizó en California a principios del siglo XX. Aprende más sobre ",
+      "inventedLink": "quién inventó las galletas de la fortuna",
+      "introEnd": ".",
+      "psychologyPrefix": "El atractivo de las galletas de la fortuna está relacionado con el ",
+      "barnumEffect": "efecto Barnum",
+      "psychologySuffix": "—un fenómeno psicológico en el que las personas creen que afirmaciones vagas y generales se aplican específicamente a ellas. La naturaleza positiva y abierta de los mensajes permite proyectar esperanzas y sueños, creando un momento de conexión personal y deleite.",
+      "funFactsTitle": "¿Sabías que?",
+      "funFacts": {
+        "notChinese": {
+          "title": "No son realmente chinas",
+          "content": "Las galletas de la fortuna probablemente se originaron en Japón, no en China. Un cracker japonés llamado \"tsujiura senbei\" data del Kioto del siglo XIX."
+        },
+        "billionsServed": {
+          "title": "Miles de millones servidas",
+          "content": "Aproximadamente 3.000 millones de galletas de la fortuna se producen cada año en el mundo, y la gran mayoría se consume en Estados Unidos."
+        },
+        "lotteryWinners": {
+          "title": "Ganadores de lotería",
+          "content": "¡Un número sorprendente de personas ha ganado premios de lotería usando los \"números de la suerte\" impresos en las tiras de las galletas!"
+        }
+      }
+    },
+    "howToWrite": {
+      "title": "Cómo escribir tus propios mensajes de galleta de la fortuna",
+      "introPrefix": "Crear tus propios mensajes es un arte que combina brevedad, positividad y la dosis justa de misterio. Las mejores fortunas son cortas, alentadoras y lo suficientemente abiertas para que el lector encuentre significado personal. Ya sea que estés preparando ",
+      "introLink": "galletas de la fortuna caseras",
+      "introSuffix": " o escribiendo mensajes para un evento, estos principios te guiarán.",
+      "principlesTitle": "Principios de escritura",
+      "principles": {
+        "one": "Usa la segunda persona \"tú\" para crear conexión personal",
+        "two": "Mantén los mensajes abiertos para que el lector proyecte",
+        "three": "Evita fechas o números específicos (excepto números de la suerte)",
+        "four": "Mantén un tono positivo y orientado al futuro",
+        "five": "Combina frases cortas con otras más reflexivas",
+        "six": "Usa un lenguaje atemporal que resuene a lo largo de generaciones"
+      },
+      "templatesTitle": "Ejemplos de plantilla",
+      "templates": {
+        "one": "Pronto descubrirás una nueva oportunidad en [trabajo/amor/creatividad].",
+        "two": "Tu paciencia de hoy traerá recompensas inesperadas mañana.",
+        "three": "Un encuentro casual dará lugar a una amistad duradera.",
+        "four": "El camino que menos esperas traerá la mayor alegría.",
+        "five": "Tu amabilidad volverá multiplicada.",
+        "six": "Una decisión que tomes esta semana dará forma a tu futuro.",
+        "seven": "Confía en tus instintos: conocen el camino.",
+        "eight": "Alguien piensa en ti con gran cariño."
+      },
+      "ctaStrong": "¿No quieres escribir desde cero?",
+      "ctaSuffix": " Deja que nuestra IA cree mensajes personalizados para ti.",
+      "ctaButton": "Probar generador con IA"
+    },
+    "cta": {
+      "title": "Crea tu propio destino",
+      "descriptionPrefix": "¿Por qué esperar a que una galleta te diga tu futuro? Usa nuestro avanzado ",
+      "descriptionEmphasis": "generador de galletas de la fortuna con IA",
+      "descriptionSuffix": " para crear mensajes únicos y personalizados con números de la suerte al instante.",
+      "steps": {
+        "one": "Elige un tema (amor, trabajo, cumpleaños, examen...)",
+        "two": "Describe tu situación en una sola frase",
+        "three": "Obtén mensajes únicos + números de la suerte"
+      },
+      "button": "Abrir generador de galletas de la fortuna con IA"
+    }
   },
   "browse": {
     "title": "Explorar fortunas",
@@ -252,6 +434,27 @@
     "statistics": "Tus estadísticas",
     "fortunesGenerated": "Fortunas generadas",
     "favoritesSaved": "Favoritos guardados"
+  },
+  "tags": {
+    "length": {
+      "short": "Corta",
+      "medium": "Media",
+      "long": "Larga"
+    },
+    "style": {
+      "classic": "Clásico",
+      "poetic": "Poético",
+      "modern": "Moderno",
+      "playful": "Juguetón",
+      "calm": "Sereno"
+    },
+    "styleDescription": {
+      "classic": "Sabiduría atemporal con tono formal",
+      "poetic": "Lenguaje lírico con metáforas",
+      "modern": "Expresión contemporánea y casual",
+      "playful": "Ingenioso y desenfadado",
+      "calm": "Sereno y meditativo"
+    }
   },
   "auth": {
     "signInTitle": "Iniciar sesión",

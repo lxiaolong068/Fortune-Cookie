@@ -21,6 +21,7 @@ import {
   type LengthType,
   type StyleFilterType,
 } from "@/lib/fortune-database";
+import { useTranslation } from "@/lib/locale-context";
 import { CopyButton } from "./CopyButton";
 import { GenerateSimilarButton } from "./GenerateSimilarButton";
 
@@ -28,13 +29,6 @@ interface MessagesSearchFilterProps {
   onFiltersActive: (active: boolean) => void;
   className?: string;
 }
-
-const lengthLabels: Record<LengthType, string> = {
-  all: "All",
-  short: "Short",
-  medium: "Medium",
-  long: "Long",
-};
 
 /**
  * MessagesSearchFilter - Search and filter component for fortune messages
@@ -50,6 +44,7 @@ export function MessagesSearchFilter({
   onFiltersActive,
   className = "",
 }: MessagesSearchFilterProps) {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [mood, setMood] = useState<MoodType>("all");
@@ -116,17 +111,17 @@ export function MessagesSearchFilter({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#888888]" />
           <Input
             type="search"
-            placeholder="Search messages by keyword or tag..."
+            placeholder={t("messages.search.placeholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 pr-10 border-[#FFD6C5] focus:border-[#FF6B3D] focus:ring-[#FF6B3D]"
-            aria-label="Search fortune messages"
+            aria-label={t("messages.search.ariaLabel")}
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
               className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#888888] hover:text-[#555555] focus:outline-none"
-              aria-label="Clear search"
+              aria-label={t("messages.search.clear")}
             >
               <X className="h-4 w-4" />
             </button>
@@ -142,7 +137,7 @@ export function MessagesSearchFilter({
           aria-controls="filter-panel"
         >
           <SlidersHorizontal className="h-4 w-4" />
-          Filters
+          {t("messages.search.filtersButton")}
           {(mood !== "all" || length !== "all" || style !== "all") && (
             <Badge className="bg-[#FF6B3D] text-white text-xs px-1.5">
               {(mood !== "all" ? 1 : 0) +
@@ -155,9 +150,7 @@ export function MessagesSearchFilter({
 
       <div className="flex items-center gap-2 text-xs text-[#888888]">
         <Sparkles className="h-3.5 w-3.5 text-[#FF6B3D]" aria-hidden="true" />
-        <p>
-          Lucky numbers are optional. Use the copy menu to include them.
-        </p>
+        <p>{t("messages.tip.luckyNumbers")}</p>
       </div>
 
       {/* Filters Panel */}
@@ -169,21 +162,31 @@ export function MessagesSearchFilter({
           {/* Mood Filter */}
           <div className="flex items-center gap-2">
             <label htmlFor="mood-filter" className="text-sm text-[#555555]">
-              Mood:
+              {t("messages.filters.moodLabel")}:
             </label>
             <Select value={mood} onValueChange={(v) => setMood(v as MoodType)}>
               <SelectTrigger
                 id="mood-filter"
                 className="w-32 border-[#FFD6C5] focus:ring-[#FF6B3D]"
               >
-                <SelectValue placeholder="All moods" />
+                <SelectValue placeholder={t("messages.filters.allMoods")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Moods</SelectItem>
-                <SelectItem value="positive">Positive</SelectItem>
-                <SelectItem value="humor">Humor</SelectItem>
-                <SelectItem value="romance">Romance</SelectItem>
-                <SelectItem value="wisdom">Wisdom</SelectItem>
+                <SelectItem value="all">
+                  {t("messages.filters.allMoods")}
+                </SelectItem>
+                <SelectItem value="positive">
+                  {t("messages.filters.moodOptions.positive")}
+                </SelectItem>
+                <SelectItem value="humor">
+                  {t("messages.filters.moodOptions.humor")}
+                </SelectItem>
+                <SelectItem value="romance">
+                  {t("messages.filters.moodOptions.romance")}
+                </SelectItem>
+                <SelectItem value="wisdom">
+                  {t("messages.filters.moodOptions.wisdom")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -191,7 +194,7 @@ export function MessagesSearchFilter({
           {/* Length Filter */}
           <div className="flex items-center gap-2">
             <label htmlFor="length-filter" className="text-sm text-[#555555]">
-              Length:
+              {t("messages.filters.lengthLabel")}:
             </label>
             <Select
               value={length}
@@ -201,13 +204,15 @@ export function MessagesSearchFilter({
                 id="length-filter"
                 className="w-32 border-[#FFD6C5] focus:ring-[#FF6B3D]"
               >
-                <SelectValue placeholder="All lengths" />
+                <SelectValue placeholder={t("messages.filters.allLengths")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Lengths</SelectItem>
-                <SelectItem value="short">Short</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="long">Long</SelectItem>
+                <SelectItem value="all">
+                  {t("messages.filters.allLengths")}
+                </SelectItem>
+                <SelectItem value="short">{t("tags.length.short")}</SelectItem>
+                <SelectItem value="medium">{t("tags.length.medium")}</SelectItem>
+                <SelectItem value="long">{t("tags.length.long")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -215,7 +220,7 @@ export function MessagesSearchFilter({
           {/* Style Filter */}
           <div className="flex items-center gap-2">
             <label htmlFor="style-filter" className="text-sm text-[#555555]">
-              Style:
+              {t("messages.filters.styleLabel")}:
             </label>
             <Select
               value={style}
@@ -225,13 +230,15 @@ export function MessagesSearchFilter({
                 id="style-filter"
                 className="w-36 border-[#FFD6C5] focus:ring-[#FF6B3D]"
               >
-                <SelectValue placeholder="All styles" />
+                <SelectValue placeholder={t("messages.filters.allStyles")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Styles</SelectItem>
+                <SelectItem value="all">
+                  {t("messages.filters.allStyles")}
+                </SelectItem>
                 {Object.entries(styleConfig).map(([key, config]) => (
                   <SelectItem key={key} value={key}>
-                    {config.emoji} {config.label}
+                    {config.emoji} {t(`tags.style.${key}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -247,7 +254,7 @@ export function MessagesSearchFilter({
               className="text-[#888888] hover:text-[#E55328] hover:bg-[#FFE4D6]"
             >
               <X className="h-4 w-4 mr-1" />
-              Clear all
+              {t("messages.filters.clearAll")}
             </Button>
           )}
         </div>
@@ -260,15 +267,32 @@ export function MessagesSearchFilter({
           <div className="flex items-center justify-between">
             <p className="text-sm text-[#555555]">
               {filteredResults.length === 0 ? (
-                "No messages found"
+                t("messages.results.noResultsTitle")
               ) : (
-                <>
-                  Found{" "}
-                  <span className="font-semibold text-[#222222]">
-                    {filteredResults.length}
-                  </span>{" "}
-                  {filteredResults.length === 1 ? "message" : "messages"}
-                </>
+                (() => {
+                  const countText = String(filteredResults.length);
+                  const resultText =
+                    filteredResults.length === 1
+                      ? t("messages.results.foundSingle", {
+                          count: countText,
+                        })
+                      : t("messages.results.foundPlural", {
+                          count: countText,
+                        });
+                  const index = resultText.indexOf(countText);
+                  if (index === -1) {
+                    return resultText;
+                  }
+                  return (
+                    <>
+                      {resultText.slice(0, index)}
+                      <span className="font-semibold text-[#222222]">
+                        {countText}
+                      </span>
+                      {resultText.slice(index + countText.length)}
+                    </>
+                  );
+                })()
               )}
             </p>
             {filteredResults.length > 0 && (
@@ -278,7 +302,7 @@ export function MessagesSearchFilter({
                 onClick={clearFilters}
                 className="text-[#FF6B3D] hover:text-[#E55328] hover:bg-[#FFE4D6]"
               >
-                Back to categories
+                {t("messages.results.backToCategories")}
               </Button>
             )}
           </div>
@@ -288,7 +312,7 @@ export function MessagesSearchFilter({
             <ul
               role="list"
               className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
-              aria-label="Filtered fortune messages"
+              aria-label={t("messages.results.filteredAria")}
             >
               {filteredResults.map((fortune: FortuneMessage) => (
                 <li key={fortune.id}>
@@ -308,24 +332,34 @@ export function MessagesSearchFilter({
                             variant="secondary"
                             className="text-xs bg-[#F5F5F5] text-[#555555]"
                           >
-                            {fortune.category}
+                            {(() => {
+                              const label = t(
+                                `generator.themes.${fortune.category}`,
+                              );
+                              return label ===
+                                `generator.themes.${fortune.category}`
+                                ? fortune.category
+                                : label;
+                            })()}
                           </Badge>
                           {fortune.lengthType && (
                             <Badge
                               variant="secondary"
                               className="text-xs bg-[#F5F5F5] text-[#555555]"
                             >
-                              {lengthLabels[fortune.lengthType]}
+                              {t(`tags.length.${fortune.lengthType}`)}
                             </Badge>
                           )}
                           {fortune.style && styleConfig[fortune.style] && (
                             <Badge
                               variant="outline"
                               className="text-xs border-[#E5E5E5] text-[#888888]"
-                              title={styleConfig[fortune.style].description}
+                              title={t(
+                                `tags.styleDescription.${fortune.style}`,
+                              )}
                             >
                               {styleConfig[fortune.style].emoji}{" "}
-                              {styleConfig[fortune.style].label}
+                              {t(`tags.style.${fortune.style}`)}
                             </Badge>
                           )}
                             {fortune.luckyNumbers &&
@@ -370,18 +404,17 @@ export function MessagesSearchFilter({
             <div className="text-center py-12 px-4 bg-[#F9F9F9] rounded-xl border border-[#FFE4D6]">
               <Search className="h-12 w-12 mx-auto text-[#FFD6C5] mb-4" />
               <h3 className="text-lg font-semibold text-[#222222] mb-2">
-                No messages found
+                {t("messages.results.noResultsTitle")}
               </h3>
               <p className="text-[#555555] mb-4">
-                Try adjusting your search or filters to find what you&apos;re
-                looking for.
+                {t("messages.results.noResultsDescription")}
               </p>
               <Button
                 variant="outline"
                 onClick={clearFilters}
                 className="border-[#FFD6C5] text-[#FF6B3D] hover:bg-[#FFE4D6]"
               >
-                Clear filters
+                {t("messages.results.clearFilters")}
               </Button>
             </div>
           )}

@@ -1,23 +1,23 @@
+"use client";
+
 import { Scroll, Globe, TrendingUp, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useLocale } from "@/lib/locale-context";
 
 const funFacts = [
   {
-    title: "Not Actually Chinese",
-    content:
-      "Fortune cookies likely originated in Japan, not China. A Japanese cracker called 'tsujiura senbei' dates back to 19th-century Kyoto.",
+    titleKey: "messages.history.funFacts.notChinese.title",
+    contentKey: "messages.history.funFacts.notChinese.content",
     icon: Globe,
   },
   {
-    title: "Billions Served",
-    content:
-      "Approximately 3 billion fortune cookies are produced globally every year, with the vast majority consumed in the United States.",
+    titleKey: "messages.history.funFacts.billionsServed.title",
+    contentKey: "messages.history.funFacts.billionsServed.content",
     icon: TrendingUp,
   },
   {
-    title: "Lottery Winners",
-    content:
-      "A surprising number of people have won lottery jackpots by playing the 'lucky numbers' found on the back of their fortune cookie slips!",
+    titleKey: "messages.history.funFacts.lotteryWinners.title",
+    contentKey: "messages.history.funFacts.lotteryWinners.content",
     icon: Sparkles,
   },
 ];
@@ -32,6 +32,9 @@ const funFacts = [
  * - Internal links to related pages
  */
 export function HistorySection() {
+  const { t, getLocalizedHref } = useLocale();
+  const historyHref = getLocalizedHref("/history");
+
   return (
     <section className="mt-24 max-w-5xl mx-auto">
       <div className="rounded-3xl border border-[#FFE4D6] bg-white p-8 shadow-lg md:p-12">
@@ -40,7 +43,7 @@ export function HistorySection() {
             <Scroll className="h-8 w-8 text-[#E55328]" />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-[#222222]">
-            History & Psychology Behind Fortune Cookie Messages
+            {t("messages.history.title")}
           </h2>
         </div>
 
@@ -48,40 +51,32 @@ export function HistorySection() {
           {/* History */}
           <div className="prose prose-lg text-[#555555]">
             <p>
-              While often associated with Chinese cuisine in Western
-              culture, the{" "}
+              {t("messages.history.introPrefix")}
               <Link
-                href="/history"
+                href={historyHref}
                 className="font-medium text-[#FF6B3D] hover:text-[#E55328] hover:underline"
               >
-                fortune cookie history
-              </Link>{" "}
-              actually traces back to{" "}
-              <strong>19th-century Japan</strong>. A similar cracker
-              called <em>&quot;tsujiura senbei&quot;</em> was sold in
-              Kyoto with paper fortunes tucked inside. The modern,
-              vanilla-sweetened version was popularized in California in
-              the early 20th century. Learn more about{" "}
+                {t("messages.history.introLink")}
+              </Link>
+              {t("messages.history.introMiddle")}
+              <strong>{t("messages.history.introHighlight")}</strong>
+              {t("messages.history.introSuffix")}
               <Link
                 href="/who-invented-fortune-cookies"
                 className="font-medium text-[#FF6B3D] hover:text-[#E55328] hover:underline"
               >
-                who invented fortune cookies
+                {t("messages.history.inventedLink")}
               </Link>
-              .
+              {t("messages.history.introEnd")}
             </p>
           </div>
 
           {/* Psychology */}
           <div className="prose prose-lg text-[#555555]">
             <p>
-              The appeal of fortune cookies is linked to the{" "}
-              <strong>Barnum Effect</strong>—a psychological phenomenon
-              where individuals believe vague, general statements apply
-              specifically to them. The positive, open-ended nature of
-              fortune cookie messages allows us to project our hopes and
-              dreams onto the text, creating a moment of personal
-              connection and delight.
+              {t("messages.history.psychologyPrefix")}
+              <strong>{t("messages.history.barnumEffect")}</strong>
+              {t("messages.history.psychologySuffix")}
             </p>
           </div>
         </div>
@@ -89,7 +84,7 @@ export function HistorySection() {
         {/* Did You Know */}
         <div className="rounded-2xl border border-[#FFE4D6] bg-[#FAFAFA] p-6">
           <h3 className="text-lg font-bold text-[#222222] mb-4">
-            Did You Know?
+            {t("messages.history.funFactsTitle")}
           </h3>
           <ul className="space-y-3">
             {funFacts.map((fact, idx) => (
@@ -97,9 +92,11 @@ export function HistorySection() {
                 <fact.icon className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#FF6B3D]" />
                 <div>
                   <strong className="text-[#222222]">
-                    {fact.title}:
+                    {t(fact.titleKey)}:
                   </strong>{" "}
-                  <span className="text-[#555555]">{fact.content}</span>
+                  <span className="text-[#555555]">
+                    {t(fact.contentKey)}
+                  </span>
                 </div>
               </li>
             ))}

@@ -219,6 +219,188 @@ export interface TranslationFile {
     allCategories: string;
     noResults: string;
     totalMessages: string;
+    search: {
+      sectionLabel: string;
+      placeholder: string;
+      ariaLabel: string;
+      clear: string;
+      filtersButton: string;
+    };
+    tip: {
+      luckyNumbers: string;
+    };
+    filters: {
+      moodLabel: string;
+      lengthLabel: string;
+      styleLabel: string;
+      allMoods: string;
+      allLengths: string;
+      allStyles: string;
+      moodOptions: {
+        positive: string;
+        humor: string;
+        romance: string;
+        wisdom: string;
+      };
+      clearAll: string;
+    };
+    results: {
+      noResultsTitle: string;
+      foundSingle: string;
+      foundPlural: string;
+      filteredAria: string;
+      backToCategories: string;
+      noResultsDescription: string;
+      clearFilters: string;
+    };
+    category: {
+      messagesCount: string;
+      lastUpdated: string;
+      viewAllCategory: string;
+      seeAllCount: string;
+      aiCtaSuffix: string;
+      relatedLabel: string;
+      luckyLabel: string;
+      luckyNumberAria: string;
+      listAriaLabel: string;
+      structuredDescription: string;
+    };
+    structuredData: {
+      collectionName: string;
+      collectionDescription: string;
+    };
+    navigation: {
+      categories: string;
+      categoryNavigation: string;
+      openToc: string;
+      closeToc: string;
+      backToTop: string;
+    };
+    copy: {
+      copied: string;
+      message: string;
+      options: string;
+      withLucky: string;
+      copiedMessageToast: string;
+      copiedWithLuckyToast: string;
+      copiedMessageAria: string;
+      copiedWithLuckyAria: string;
+    };
+    generateSimilar: {
+      title: string;
+      ariaLabel: string;
+    };
+    categories: {
+      inspirational: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+      funny: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+      love: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+      success: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+      wisdom: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+      friendship: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+      birthday: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+      study: {
+        title: string;
+        intro: string;
+        cta: string;
+      };
+    };
+    history: {
+      title: string;
+      introPrefix: string;
+      introLink: string;
+      introMiddle: string;
+      introHighlight: string;
+      introSuffix: string;
+      inventedLink: string;
+      introEnd: string;
+      psychologyPrefix: string;
+      barnumEffect: string;
+      psychologySuffix: string;
+      funFactsTitle: string;
+      funFacts: {
+        notChinese: {
+          title: string;
+          content: string;
+        };
+        billionsServed: {
+          title: string;
+          content: string;
+        };
+        lotteryWinners: {
+          title: string;
+          content: string;
+        };
+      };
+    };
+    howToWrite: {
+      title: string;
+      introPrefix: string;
+      introLink: string;
+      introSuffix: string;
+      principlesTitle: string;
+      principles: {
+        one: string;
+        two: string;
+        three: string;
+        four: string;
+        five: string;
+        six: string;
+      };
+      templatesTitle: string;
+      templates: {
+        one: string;
+        two: string;
+        three: string;
+        four: string;
+        five: string;
+        six: string;
+        seven: string;
+        eight: string;
+      };
+      ctaStrong: string;
+      ctaSuffix: string;
+      ctaButton: string;
+    };
+    cta: {
+      title: string;
+      descriptionPrefix: string;
+      descriptionEmphasis: string;
+      descriptionSuffix: string;
+      steps: {
+        one: string;
+        two: string;
+        three: string;
+      };
+      button: string;
+    };
   };
   browse: {
     title: string;
@@ -260,6 +442,27 @@ export interface TranslationFile {
     statistics: string;
     fortunesGenerated: string;
     favoritesSaved: string;
+  };
+  tags: {
+    length: {
+      short: string;
+      medium: string;
+      long: string;
+    };
+    style: {
+      classic: string;
+      poetic: string;
+      modern: string;
+      playful: string;
+      calm: string;
+    };
+    styleDescription: {
+      classic: string;
+      poetic: string;
+      modern: string;
+      playful: string;
+      calm: string;
+    };
   };
   auth: {
     signInTitle: string;
