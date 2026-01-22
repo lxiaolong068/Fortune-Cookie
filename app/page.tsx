@@ -74,6 +74,11 @@ const HotFortuneCarousel = dynamic(
   { ssr: false, loading: () => null },
 );
 
+const DailyFortune = dynamic(
+  () => import("@/components/DailyFortune").then((mod) => mod.DailyFortune),
+  { ssr: false, loading: () => null },
+);
+
 const UseCaseScenes = dynamic(
   () =>
     import("@/components/homepage/UseCaseScenes").then(
@@ -214,6 +219,19 @@ export default function HomePage() {
               <HotFortuneCarousel />
             </DeferredMount>
           </Suspense>
+        </div>
+
+        {/* Daily Fortune Section - For User Retention */}
+        <div className="relative z-10 bg-gradient-to-b from-white to-amber-50/50">
+          <div className="container mx-auto px-4 py-12">
+            <Suspense fallback={null}>
+              <DeferredMount delay={2200} useIdle={false}>
+                <div className="max-w-2xl mx-auto">
+                  <DailyFortune showTomorrowPreview={true} compact={false} />
+                </div>
+              </DeferredMount>
+            </Suspense>
+          </div>
         </div>
 
         {/* SEO-optimized visible content */}
