@@ -15,17 +15,19 @@ import {
   type FortuneMessage,
   type FortuneCategory,
 } from "@/lib/fortune-database";
-import { getImageUrl, getSiteUrl } from "@/lib/site";
 import {
   i18n,
-  getLocalizedPath,
+  isValidLocale,
   getLanguageConfig,
   getSEOConfig,
+  type Locale,
 } from "@/lib/i18n-config";
 import { loadTranslations, getTranslation } from "@/lib/translations";
+import { LocaleProvider } from "@/lib/locale-context";
+import { getSiteUrl, getImageUrl } from "@/lib/site";
 
 interface PageProps {
-  params: Promise<{ tag: string }>;
+  params: { locale: string; tag: string };
 }
 
 const baseUrl = getSiteUrl();
@@ -54,8 +56,11 @@ function formatTagName(tag: string): string {
     .join(" ");
 }
 
-function getLocalizedHref(path: string) {
-  return getLocalizedPath(path, i18n.defaultLocale);
+function getLocalizedHref(locale: Locale, path: string) {
+  if (locale === i18n.defaultLocale) {
+    return path;
+  }
+  return `/${locale}${path}`;
 }
 
 function getLocalizedCategoryLabel(
@@ -72,39 +77,36 @@ function getLocalizedCategoryLabel(
 
 export async function generateStaticParams() {
   const tags = getAllTags();
-  return tags.map((tag) => ({
-    tag: encodeURIComponent(tag),
-  }));
+  return i18n.locales.flatMap((locale) =>
+    tags.map((tag) => ({
+      locale,
+      tag: encodeURIComponent(tag),
+    })),
+  );
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { tag } = await params;
+  const { locale, tag } = params;
+  if (!isValidLocale(locale)) {
+    return {};
+  }
+
   const decodedTag = decodeURIComponent(tag);
   const fortunes = getFortunesByTag(decodedTag);
-  const translations = await loadTranslations(i18n.defaultLocale);
-
-  if (fortunes.length === 0) {
-    const noTagKey = "tagsPage.noTagTitle";
-    const noTagTitle = getTranslation(translations, noTagKey);
-    return {
-      title: noTagTitle !== noTagKey ? noTagTitle : "Tag Not Found",
-    };
-  }
+  const translations = await loadTranslations(locale);
 
   const formattedTag = formatTagName(decodedTag);
   const metaTitleKey = "tagsPage.metaTitle";
-  const metaDescriptionKey = "tagsPage.metaDescription";
   const metaTitle = getTranslation(translations, metaTitleKey, {
     tag: formattedTag,
   });
+  const metaDescriptionKey = "tagsPage.metaDescription";
   const metaDescription = getTranslation(translations, metaDescriptionKey, {
     count: fortunes.length,
     tag: decodedTag,
   });
-  const seoConfig = getSEOConfig(i18n.defaultLocale);
-  const langConfig = getLanguageConfig(i18n.defaultLocale);
 
   const title =
     metaTitle !== metaTitleKey
@@ -114,13 +116,30 @@ export async function generateMetadata({
     metaDescription !== metaDescriptionKey
       ? metaDescription
       : `Discover ${fortunes.length}+ fortune cookie messages about ${decodedTag}.`;
+
+  if (fortunes.length === 0) {
+    const noTagKey = "tagsPage.noTagTitle";
+    const noTagTitle = getTranslation(translations, noTagKey);
+    return {
+      title: noTagTitle !== noTagKey ? noTagTitle : "Tag Not Found",
+    };
+  }
+
+  const seoConfig = getSEOConfig(locale);
+  const langConfig = getLanguageConfig(locale);
+
+  const canonicalUrl =
+    locale === i18n.defaultLocale
+      ? `${baseUrl}/tag/${tag}`
+      : `${baseUrl}/${locale}/tag/${tag}`;
+
   const alternates: Record<string, string> = {};
-  for (const locale of i18n.locales) {
-    const config = getLanguageConfig(locale);
-    alternates[config.hreflang] = `${baseUrl}${getLocalizedPath(
-      `/tag/${tag}`,
-      locale,
-    )}`;
+  for (const loc of i18n.locales) {
+    const config = getLanguageConfig(loc);
+    alternates[config.hreflang] =
+      loc === i18n.defaultLocale
+        ? `${baseUrl}/tag/${tag}`
+        : `${baseUrl}/${loc}/tag/${tag}`;
   }
 
   return {
@@ -130,7 +149,7 @@ export async function generateMetadata({
       title,
       description,
       type: "website",
-      url: `${baseUrl}/tag/${tag}`,
+      url: canonicalUrl,
       siteName: seoConfig.siteName,
       locale: langConfig.hreflang.replace("-", "_"),
       images: [
@@ -150,27 +169,31 @@ export async function generateMetadata({
       creator: "@fortunecookieai",
     },
     alternates: {
-      canonical: `/tag/${tag}`,
+      canonical: canonicalUrl,
       languages: alternates,
     },
   };
 }
 
-export default async function TagPage({ params }: PageProps) {
-  const { tag } = await params;
+export default async function LocaleTagPage({ params }: PageProps) {
+  const { locale, tag } = params;
+  if (!isValidLocale(locale)) {
+    notFound();
+  }
+
   const decodedTag = decodeURIComponent(tag);
   const fortunes = getFortunesByTag(decodedTag);
-
   if (fortunes.length === 0) {
     notFound();
   }
 
-  const translations = await loadTranslations(i18n.defaultLocale);
+  const translations = await loadTranslations(locale as Locale);
   const t = (key: string, p?: Record<string, string | number>) =>
     getTranslation(translations, key, p);
 
   const formattedTag = formatTagName(decodedTag);
   const allTags = getAllTags();
+  const localizedBrowseHref = getLocalizedHref(locale as Locale, "/browse");
 
   // Get related tags (tags that appear with this tag)
   const relatedTags = new Set<string>();
@@ -185,28 +208,44 @@ export default async function TagPage({ params }: PageProps) {
 
   // Breadcrumb items
   const navBreadcrumbs = [
-    { name: t("navigation.home"), href: getLocalizedHref("/") },
-    { name: t("navigation.browse"), href: getLocalizedHref("/browse") },
+    { name: t("navigation.home"), href: getLocalizedHref(locale as Locale, "/") },
+    { name: t("navigation.browse"), href: localizedBrowseHref },
     { name: formattedTag },
   ];
 
+  const metaTitleKey = "tagsPage.metaTitle";
+  const pageTitle =
+    t(metaTitleKey, { tag: formattedTag }) !== metaTitleKey
+      ? t(metaTitleKey, { tag: formattedTag })
+      : `${formattedTag} Fortune Messages`;
+
+  const pageDescriptionKey = "tagsPage.metaDescription";
+  const pageDescription =
+    t(pageDescriptionKey, { count: fortunes.length, tag: decodedTag }) !==
+    pageDescriptionKey
+      ? t(pageDescriptionKey, { count: fortunes.length, tag: decodedTag })
+      : `Collection of ${fortunes.length} fortune cookie messages about ${decodedTag}`;
+
   return (
-    <>
+    <LocaleProvider
+      initialLocale={locale as Locale}
+      initialTranslations={translations}
+    >
       <BreadcrumbStructuredData
         items={[
-          { name: t("navigation.home"), url: getLocalizedHref("/") },
-          { name: t("navigation.browse"), url: getLocalizedHref("/browse") },
-          { name: formattedTag, url: getLocalizedHref(`/tag/${tag}`) },
+          { name: t("navigation.home"), url: getLocalizedHref(locale as Locale, "/") },
+          { name: t("navigation.browse"), url: localizedBrowseHref },
+          {
+            name: formattedTag,
+            url: getLocalizedHref(locale, `/tag/${tag}`),
+          },
         ]}
       />
 
       <ItemListStructuredData
-        name={t("tagsPage.metaTitle", { tag: formattedTag })}
-        description={t("tagsPage.metaDescription", {
-          count: fortunes.length,
-          tag: decodedTag,
-        })}
-        url={getLocalizedHref(`/tag/${tag}`)}
+        name={pageTitle}
+        description={pageDescription}
+        url={getLocalizedHref(locale as Locale, `/tag/${tag}`)}
         items={fortunes.slice(0, 10).map((fortune) => ({
           name: fortune.message,
           description: t("messages.category.structuredDescription", {
@@ -256,6 +295,7 @@ export default async function TagPage({ params }: PageProps) {
                       <Link
                         key={t}
                         href={getLocalizedHref(
+                          locale as Locale,
                           `/tag/${encodeURIComponent(t.toLowerCase())}`,
                         )}
                       >
@@ -311,7 +351,13 @@ export default async function TagPage({ params }: PageProps) {
             </h2>
             <div className="flex flex-wrap justify-center gap-2">
               {relatedTagsArray.map((t) => (
-                <Link key={t} href={getLocalizedHref(`/tag/${encodeURIComponent(t)}`)}>
+                <Link
+                  key={t}
+                  href={getLocalizedHref(
+                    locale as Locale,
+                    `/tag/${encodeURIComponent(t)}`,
+                  )}
+                >
                   <Badge
                     variant="outline"
                     className="text-sm px-3 py-1 cursor-pointer hover:bg-amber-100 hover:border-amber-300"
@@ -333,7 +379,13 @@ export default async function TagPage({ params }: PageProps) {
             {allTags.slice(0, 30).map((t) => {
               const count = getFortunesByTag(t).length;
               return (
-                <Link key={t} href={getLocalizedHref(`/tag/${encodeURIComponent(t)}`)}>
+                <Link
+                  key={t}
+                  href={getLocalizedHref(
+                    locale as Locale,
+                    `/tag/${encodeURIComponent(t)}`,
+                  )}
+                >
                   <Badge
                     variant={
                       t === decodedTag.toLowerCase() ? "default" : "secondary"
@@ -366,7 +418,7 @@ export default async function TagPage({ params }: PageProps) {
                 size="lg"
                 className="bg-white text-amber-600 hover:bg-amber-50"
               >
-                <Link href={getLocalizedHref("/generator")}>
+                <Link href={getLocalizedHref(locale as Locale, "/generator")}>
                   {t("tagsPage.ctaButton")}{" "}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -375,6 +427,6 @@ export default async function TagPage({ params }: PageProps) {
           </Card>
         </section>
       </div>
-    </>
+    </LocaleProvider>
   );
 }

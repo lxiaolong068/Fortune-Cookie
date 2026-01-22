@@ -4,13 +4,13 @@ import { getImageUrl, getSiteUrl } from "@/lib/site";
 const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "Browse 500+ Fortune Cookie Messages by Category",
+  title: "Browse Fortune Messages - Search & Filter",
   description:
-    "Search and filter our collection of 500+ fortune cookie messages. Browse by category: inspirational, funny, love, success, wisdom, and more.",
+    "Browse and search through fortune cookie messages. Filter by category, sort by popularity, and find the perfect fortune for any occasion.",
   openGraph: {
-    title: "Browse 500+ Fortune Cookie Messages by Category",
+    title: "Browse Fortune Messages - Search & Filter",
     description:
-      "Search and filter our collection of 500+ fortune cookie messages. Browse by category: inspirational, funny, love, success, wisdom, and more.",
+      "Browse and search through fortune cookie messages. Filter by category, sort by popularity, and find the perfect fortune for any occasion.",
     type: "website",
     url: `${baseUrl}/browse`,
     images: [
@@ -18,15 +18,15 @@ export const metadata: Metadata = {
         url: getImageUrl("/og-image.png"),
         width: 1200,
         height: 630,
-        alt: "Browse Fortune Cookie Messages",
+        alt: "Browse Fortune Messages",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Browse 500+ Fortune Cookie Messages by Category",
+    title: "Browse Fortune Messages - Search & Filter",
     description:
-      "Search and filter our collection of 500+ fortune cookie messages. Browse by category: inspirational, funny, love, success, wisdom, and more.",
+      "Browse and search through fortune cookie messages. Filter by category, sort by popularity, and find the perfect fortune for any occasion.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },

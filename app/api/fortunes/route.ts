@@ -7,7 +7,12 @@ import {
   getRandomFortune,
   getFortuneById,
   getDatabaseStats,
+  localizeFortune,
+  localizeFortunes,
+  getLocalizedFortuneMessage,
 } from "@/lib/fortune-database";
+import { detectLocaleFromHeader } from "@/lib/translations";
+import { i18n, isValidLocale, type Locale } from "@/lib/i18n-config";
 import {
   rateLimiters,
   cacheManager,
@@ -28,6 +33,25 @@ function sanitizeString(input: string, maxLength: number = 100): string {
     .replace(/on\w+\s*=/gi, "")
     .trim()
     .slice(0, maxLength);
+}
+
+function resolveRequestLocale(request: NextRequest): Locale {
+  const { searchParams } = new URL(request.url);
+  const localeParam = sanitizeString(searchParams.get("locale") || "", 10)
+    .toLowerCase()
+    .trim();
+
+  if (localeParam) {
+    if (isValidLocale(localeParam)) {
+      return localeParam;
+    }
+    const shortCode = localeParam.split("-")[0];
+    if (shortCode && isValidLocale(shortCode)) {
+      return shortCode;
+    }
+  }
+
+  return detectLocaleFromHeader(request.headers.get("accept-language"));
 }
 
 function validatePositiveInteger(
@@ -95,6 +119,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
+    const locale = resolveRequestLocale(request);
     const action = searchParams.get("action") || "list";
 
     switch (action) {
@@ -115,6 +140,7 @@ export async function GET(request: NextRequest) {
           query,
           category || "all",
           limit.toString(),
+          locale,
         );
 
         // checkcache
@@ -139,18 +165,20 @@ export async function GET(request: NextRequest) {
 
         CachePerformanceMonitor.recordMiss();
 
-        const results = searchFortunes(query, category).slice(0, limit);
+        const results = searchFortunes(query, category, locale).slice(0, limit);
+        const localizedResults = localizeFortunes(results, locale);
 
         const responseData = {
-          results,
-          total: results.length,
+          results: localizedResults,
+          total: localizedResults.length,
           query,
           category,
+          locale,
           cached: false,
         };
 
         // cache结果
-        await cacheManager.cacheFortuneList(cacheKey, results);
+        await cacheManager.cacheFortuneList(cacheKey, localizedResults);
 
         const optimizedResponse = EdgeCacheManager.optimizeApiResponse(
           responseData,
@@ -178,10 +206,12 @@ export async function GET(request: NextRequest) {
 
         const sanitizedCategory = sanitizeString(category, 50);
         const results = getFortunesByCategory(sanitizedCategory);
+        const localizedResults = localizeFortunes(results, locale);
         const response = NextResponse.json({
-          results,
-          total: results.length,
+          results: localizedResults,
+          total: localizedResults.length,
           category: sanitizedCategory,
+          locale,
         });
 
         return addSecurityHeaders(response);
@@ -194,7 +224,7 @@ export async function GET(request: NextRequest) {
           50,
         );
 
-        const cacheKey = generateCacheKey("popular", limit.toString());
+        const cacheKey = generateCacheKey("popular", limit.toString(), locale);
         const cachedResults = await cacheManager.getCachedFortuneList(cacheKey);
 
         if (cachedResults) {
@@ -216,17 +246,19 @@ export async function GET(request: NextRequest) {
         CachePerformanceMonitor.recordMiss();
 
         const results = getPopularFortunes(limit);
+        const localizedResults = localizeFortunes(results, locale);
         const responseData = createSuccessResponse(
           {
-            results,
-            total: results.length,
+            results: localizedResults,
+            total: localizedResults.length,
+            locale,
           },
           {
             cached: false,
           },
         );
 
-        await cacheManager.cacheFortuneList(cacheKey, results);
+        await cacheManager.cacheFortuneList(cacheKey, localizedResults);
 
         const optimizedResponse = EdgeCacheManager.optimizeApiResponse(
           responseData,
@@ -255,10 +287,12 @@ export async function GET(request: NextRequest) {
         const results = Array.from({ length: count }, () =>
           getRandomFortune(category),
         );
+        const localizedResults = localizeFortunes(results, locale);
 
         const responseData = createSuccessResponse({
-          results: count === 1 ? results[0] : results,
+          results: count === 1 ? localizedResults[0] : localizedResults,
           total: count,
+          locale,
         });
 
         const response = NextResponse.json(responseData);
@@ -293,7 +327,10 @@ export async function GET(request: NextRequest) {
           return addSecurityHeaders(response);
         }
 
-        const responseData = createSuccessResponse(fortune);
+        const localizedFortune = localizeFortune(fortune, locale);
+        const responseData = createSuccessResponse(localizedFortune, {
+          locale,
+        });
         const response = NextResponse.json(responseData);
         return addSecurityHeaders(response);
       }
@@ -340,21 +377,30 @@ export async function GET(request: NextRequest) {
                 new Date(a.dateAdded).getTime(),
             );
             break;
-          case "alphabetical":
-            results.sort((a, b) => a.message.localeCompare(b.message));
+          case "alphabetical": {
+            const getSortMessage = (fortune: typeof results[number]) =>
+              locale === i18n.defaultLocale
+                ? fortune.message
+                : getLocalizedFortuneMessage(fortune, locale).message;
+            results.sort((a, b) =>
+              getSortMessage(a).localeCompare(getSortMessage(b)),
+            );
             break;
+          }
         }
 
         // Pagination
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;
         const paginatedResults = results.slice(startIndex, endIndex);
+        const localizedResults = localizeFortunes(paginatedResults, locale);
 
         const responseData = createSuccessResponse(
           {
-            results: paginatedResults,
+            results: localizedResults,
             category,
             sortBy: finalSortBy,
+            locale,
           },
           {
             pagination: {

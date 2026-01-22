@@ -429,6 +429,59 @@ export interface TranslationFile {
       tags: string;
     };
   };
+  tagsPage: {
+    title: string;
+    subtitle: string;
+    messagesFound: string;
+    relatedTags: string;
+    allTags: string;
+    ctaTitle: string;
+    ctaDescription: string;
+    ctaButton: string;
+    metaTitle: string;
+    metaDescription: string;
+    noTagTitle: string;
+  };
+  internalLinks: {
+    relatedPagesTitle: string;
+    categoryNavigationTitle: string;
+    badges: {
+      popular: string;
+      ai: string;
+      tutorial: string;
+      funny: string;
+    };
+    relatedPages: {
+      generatorTitle: string;
+      generatorDescription: string;
+      aiGeneratorTitle: string;
+      aiGeneratorDescription: string;
+      messagesTitle: string;
+      messagesDescription: string;
+      browseTitle: string;
+      browseDescription: string;
+      historyTitle: string;
+      historyDescription: string;
+      recipesTitle: string;
+      recipesDescription: string;
+      whoInventedTitle: string;
+      whoInventedDescription: string;
+      howToMakeTitle: string;
+      howToMakeDescription: string;
+      funnyTitle: string;
+      funnyDescription: string;
+    };
+    categoryNavigation: {
+      inspirationalTitle: string;
+      inspirationalDescription: string;
+      funnyTitle: string;
+      funnyDescription: string;
+      loveTitle: string;
+      loveDescription: string;
+      successTitle: string;
+      successDescription: string;
+    };
+  };
   favorites: {
     title: string;
     subtitle: string;

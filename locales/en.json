@@ -421,6 +421,59 @@
       "tags": "{count} Unique Tags"
     }
   },
+  "tagsPage": {
+    "title": "{tag} Fortunes",
+    "subtitle": "Explore fortune cookie messages related to {tag}",
+    "messagesFound": "{count} Messages Found",
+    "relatedTags": "Related Tags",
+    "allTags": "Explore All Tags",
+    "ctaTitle": "Get Your AI Fortune",
+    "ctaDescription": "Want a personalized fortune about {tag}? Let our AI create one just for you.",
+    "ctaButton": "Generate AI Fortune",
+    "metaTitle": "{tag} Fortune Messages",
+    "metaDescription": "Discover {count}+ fortune cookie messages about {tag}. Find inspiring quotes and wisdom related to {tag}.",
+    "noTagTitle": "Tag Not Found"
+  },
+  "internalLinks": {
+    "relatedPagesTitle": "Related Pages",
+    "categoryNavigationTitle": "Browse by Category",
+    "badges": {
+      "popular": "Popular",
+      "ai": "AI",
+      "tutorial": "Tutorial",
+      "funny": "Funny"
+    },
+    "relatedPages": {
+      "generatorTitle": "Fortune Cookie Generator",
+      "generatorDescription": "Generate personalized fortune cookies with AI",
+      "aiGeneratorTitle": "AI Generator",
+      "aiGeneratorDescription": "Advanced AI-powered fortune creation",
+      "messagesTitle": "Fortune Messages",
+      "messagesDescription": "Browse our collection of fortune messages",
+      "browseTitle": "Search & Browse",
+      "browseDescription": "Search and filter fortune messages",
+      "historyTitle": "Fortune Cookie History",
+      "historyDescription": "Learn about fortune cookie origins",
+      "recipesTitle": "Fortune Cookie Recipes",
+      "recipesDescription": "Make your own fortune cookies at home",
+      "whoInventedTitle": "Who Invented Fortune Cookies?",
+      "whoInventedDescription": "Discover the surprising history",
+      "howToMakeTitle": "How to Make Fortune Cookies",
+      "howToMakeDescription": "Easy step-by-step tutorial",
+      "funnyTitle": "Funny Fortune Messages",
+      "funnyDescription": "Hilarious and witty fortune sayings"
+    },
+    "categoryNavigation": {
+      "inspirationalTitle": "Inspirational Messages",
+      "inspirationalDescription": "Motivational and uplifting fortunes",
+      "funnyTitle": "Funny Messages",
+      "funnyDescription": "Humorous and witty fortunes",
+      "loveTitle": "Love & Romance",
+      "loveDescription": "Messages about love and relationships",
+      "successTitle": "Success & Career",
+      "successDescription": "Professional and achievement-focused"
+    }
+  },
   "favorites": {
     "title": "My Favorites",
     "subtitle": "Your saved fortune cookies",

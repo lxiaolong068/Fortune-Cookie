@@ -1,8 +1,11 @@
+"use client";
+
 import Link from 'next/link'
 import { Card } from './ui/card'
 import { Badge } from './ui/badge'
 import { ArrowRight, ExternalLink, Sparkles, MessageSquare, Clock, ChefHat, Search, Heart, Smile, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/locale-context'
 
 interface InternalLinkProps {
   href: string
@@ -67,65 +70,67 @@ export function InternalLink({
 
 // Related pages component
 export function RelatedPages({ currentPage }: { currentPage: string }) {
+  const { t } = useTranslation()
+
   const allPages = [
     {
       href: '/',
-      title: 'Fortune Cookie Generator',
-      description: 'Generate personalized fortune cookies with AI',
+      title: t('internalLinks.relatedPages.generatorTitle'),
+      description: t('internalLinks.relatedPages.generatorDescription'),
       icon: Sparkles,
-      badge: 'Popular'
+      badge: t('internalLinks.badges.popular')
     },
     {
       href: '/generator',
-      title: 'AI Generator',
-      description: 'Advanced AI-powered fortune creation',
+      title: t('internalLinks.relatedPages.aiGeneratorTitle'),
+      description: t('internalLinks.relatedPages.aiGeneratorDescription'),
       icon: Sparkles,
-      badge: 'AI'
+      badge: t('internalLinks.badges.ai')
     },
     {
       href: '/messages',
-      title: 'Fortune Messages',
-      description: 'Browse our collection of fortune messages',
+      title: t('internalLinks.relatedPages.messagesTitle'),
+      description: t('internalLinks.relatedPages.messagesDescription'),
       icon: MessageSquare
     },
     {
       href: '/browse',
-      title: 'Search & Browse',
-      description: 'Search and filter fortune messages',
+      title: t('internalLinks.relatedPages.browseTitle'),
+      description: t('internalLinks.relatedPages.browseDescription'),
       icon: Search
     },
     {
       href: '/history',
-      title: 'Fortune Cookie History',
-      description: 'Learn about fortune cookie origins',
+      title: t('internalLinks.relatedPages.historyTitle'),
+      description: t('internalLinks.relatedPages.historyDescription'),
       icon: Clock
     },
     {
       href: '/recipes',
-      title: 'Fortune Cookie Recipes',
-      description: 'Make your own fortune cookies at home',
+      title: t('internalLinks.relatedPages.recipesTitle'),
+      description: t('internalLinks.relatedPages.recipesDescription'),
       icon: ChefHat
     },
     {
       href: '/who-invented-fortune-cookies',
-      title: 'Who Invented Fortune Cookies?',
-      description: 'Discover the surprising history',
+      title: t('internalLinks.relatedPages.whoInventedTitle'),
+      description: t('internalLinks.relatedPages.whoInventedDescription'),
       icon: Clock,
-      badge: 'Popular'
+      badge: t('internalLinks.badges.popular')
     },
     {
       href: '/how-to-make-fortune-cookies',
-      title: 'How to Make Fortune Cookies',
-      description: 'Easy step-by-step tutorial',
+      title: t('internalLinks.relatedPages.howToMakeTitle'),
+      description: t('internalLinks.relatedPages.howToMakeDescription'),
       icon: ChefHat,
-      badge: 'Tutorial'
+      badge: t('internalLinks.badges.tutorial')
     },
     {
       href: '/funny-fortune-cookie-messages',
-      title: 'Funny Fortune Messages',
-      description: 'Hilarious and witty fortune sayings',
+      title: t('internalLinks.relatedPages.funnyTitle'),
+      description: t('internalLinks.relatedPages.funnyDescription'),
       icon: Smile,
-      badge: 'Funny'
+      badge: t('internalLinks.badges.funny')
     }
   ]
 
@@ -137,7 +142,7 @@ export function RelatedPages({ currentPage }: { currentPage: string }) {
   return (
     <section className="mt-12">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-        Related Pages
+        {t('internalLinks.relatedPagesTitle')}
       </h2>
       <div className="grid md:grid-cols-2 gap-4">
         {relatedPages.map((page) => (
@@ -157,32 +162,34 @@ export function RelatedPages({ currentPage }: { currentPage: string }) {
 
 // Category navigation component
 export function CategoryNavigation() {
+  const { t } = useTranslation()
+
   const categories = [
     {
       href: '/messages?category=inspirational',
-      title: 'Inspirational Messages',
-      description: 'Motivational and uplifting fortunes',
+      title: t('internalLinks.categoryNavigation.inspirationalTitle'),
+      description: t('internalLinks.categoryNavigation.inspirationalDescription'),
       icon: Sparkles,
       color: 'bg-blue-100 text-blue-800'
     },
     {
       href: '/messages?category=funny',
-      title: 'Funny Messages',
-      description: 'Humorous and witty fortunes',
+      title: t('internalLinks.categoryNavigation.funnyTitle'),
+      description: t('internalLinks.categoryNavigation.funnyDescription'),
       icon: Smile,
       color: 'bg-yellow-100 text-yellow-800'
     },
     {
       href: '/messages?category=love',
-      title: 'Love & Romance',
-      description: 'Messages about love and relationships',
+      title: t('internalLinks.categoryNavigation.loveTitle'),
+      description: t('internalLinks.categoryNavigation.loveDescription'),
       icon: Heart,
       color: 'bg-pink-100 text-pink-800'
     },
     {
       href: '/messages?category=success',
-      title: 'Success & Career',
-      description: 'Professional and achievement-focused',
+      title: t('internalLinks.categoryNavigation.successTitle'),
+      description: t('internalLinks.categoryNavigation.successDescription'),
       icon: TrendingUp,
       color: 'bg-green-100 text-green-800'
     }
@@ -191,7 +198,7 @@ export function CategoryNavigation() {
   return (
     <section className="mb-12">
       <h2 className="text-xl font-semibold text-gray-800 mb-6 text-center">
-        Browse by Category
+        {t('internalLinks.categoryNavigationTitle')}
       </h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         {categories.map((category) => (

@@ -421,6 +421,59 @@
       "tags": "{count} etiquetas únicas"
     }
   },
+  "tagsPage": {
+    "title": "Fortunas de {tag}",
+    "subtitle": "Explora mensajes de galletas de la fortuna relacionados con {tag}",
+    "messagesFound": "{count} mensajes encontrados",
+    "relatedTags": "Etiquetas relacionadas",
+    "allTags": "Explorar todas las etiquetas",
+    "ctaTitle": "Obtén tu fortuna con IA",
+    "ctaDescription": "¿Quieres una fortuna personalizada sobre {tag}? Deja que nuestra IA cree una para ti.",
+    "ctaButton": "Generar fortuna con IA",
+    "metaTitle": "Mensajes de fortuna de {tag}",
+    "metaDescription": "Descubre más de {count} mensajes de galletas de la fortuna sobre {tag}. Encuentra frases inspiradoras y sabiduría relacionada con {tag}.",
+    "noTagTitle": "Etiqueta no encontrada"
+  },
+  "internalLinks": {
+    "relatedPagesTitle": "Páginas relacionadas",
+    "categoryNavigationTitle": "Explorar por categoría",
+    "badges": {
+      "popular": "Popular",
+      "ai": "IA",
+      "tutorial": "Tutorial",
+      "funny": "Divertido"
+    },
+    "relatedPages": {
+      "generatorTitle": "Generador de galletas de la fortuna",
+      "generatorDescription": "Genera galletas de la fortuna personalizadas con IA",
+      "aiGeneratorTitle": "Generador con IA",
+      "aiGeneratorDescription": "Creación avanzada de fortunas con IA",
+      "messagesTitle": "Mensajes de fortuna",
+      "messagesDescription": "Explora nuestra colección de mensajes de fortuna",
+      "browseTitle": "Buscar y explorar",
+      "browseDescription": "Busca y filtra mensajes de fortuna",
+      "historyTitle": "Historia de las galletas de la fortuna",
+      "historyDescription": "Conoce el origen de las galletas de la fortuna",
+      "recipesTitle": "Recetas de galletas de la fortuna",
+      "recipesDescription": "Haz tus propias galletas de la fortuna en casa",
+      "whoInventedTitle": "¿Quién inventó las galletas de la fortuna?",
+      "whoInventedDescription": "Descubre la historia sorprendente",
+      "howToMakeTitle": "Cómo hacer galletas de la fortuna",
+      "howToMakeDescription": "Tutorial fácil paso a paso",
+      "funnyTitle": "Mensajes de fortuna divertidos",
+      "funnyDescription": "Frases ingeniosas y graciosas"
+    },
+    "categoryNavigation": {
+      "inspirationalTitle": "Mensajes inspiradores",
+      "inspirationalDescription": "Fortunas motivadoras y alentadoras",
+      "funnyTitle": "Mensajes divertidos",
+      "funnyDescription": "Fortunas humorísticas e ingeniosas",
+      "loveTitle": "Amor y romance",
+      "loveDescription": "Mensajes sobre amor y relaciones",
+      "successTitle": "Éxito y carrera",
+      "successDescription": "Enfoque profesional y de logros"
+    }
+  },
   "favorites": {
     "title": "Mis favoritos",
     "subtitle": "Tus galletas de la fortuna guardadas",

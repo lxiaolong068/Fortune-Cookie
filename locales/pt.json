@@ -421,6 +421,59 @@
       "tags": "{count} tags únicas"
     }
   },
+  "tagsPage": {
+    "title": "Sortes de {tag}",
+    "subtitle": "Explore mensagens de biscoitos da sorte relacionadas a {tag}",
+    "messagesFound": "{count} mensagens encontradas",
+    "relatedTags": "Tags relacionadas",
+    "allTags": "Explorar todas as tags",
+    "ctaTitle": "Receba sua sorte com IA",
+    "ctaDescription": "Quer uma sorte personalizada sobre {tag}? Deixe nossa IA criar uma para você.",
+    "ctaButton": "Gerar sorte com IA",
+    "metaTitle": "Mensagens de sorte de {tag}",
+    "metaDescription": "Descubra mais de {count} mensagens de biscoitos da sorte sobre {tag}. Encontre frases inspiradoras e sabedoria relacionada a {tag}.",
+    "noTagTitle": "Tag não encontrada"
+  },
+  "internalLinks": {
+    "relatedPagesTitle": "Páginas relacionadas",
+    "categoryNavigationTitle": "Explorar por categoria",
+    "badges": {
+      "popular": "Popular",
+      "ai": "IA",
+      "tutorial": "Tutorial",
+      "funny": "Engraçado"
+    },
+    "relatedPages": {
+      "generatorTitle": "Gerador de biscoitos da sorte",
+      "generatorDescription": "Gere biscoitos da sorte personalizados com IA",
+      "aiGeneratorTitle": "Gerador com IA",
+      "aiGeneratorDescription": "Criação avançada de sortes com IA",
+      "messagesTitle": "Mensagens de sorte",
+      "messagesDescription": "Explore nossa coleção de mensagens de sorte",
+      "browseTitle": "Buscar e explorar",
+      "browseDescription": "Busque e filtre mensagens de sorte",
+      "historyTitle": "História dos biscoitos da sorte",
+      "historyDescription": "Conheça a origem dos biscoitos da sorte",
+      "recipesTitle": "Receitas de biscoitos da sorte",
+      "recipesDescription": "Faça seus próprios biscoitos da sorte em casa",
+      "whoInventedTitle": "Quem inventou os biscoitos da sorte?",
+      "whoInventedDescription": "Descubra a história surpreendente",
+      "howToMakeTitle": "Como fazer biscoitos da sorte",
+      "howToMakeDescription": "Tutorial fácil passo a passo",
+      "funnyTitle": "Mensagens de sorte engraçadas",
+      "funnyDescription": "Frases engraçadas e espirituosas"
+    },
+    "categoryNavigation": {
+      "inspirationalTitle": "Mensagens inspiradoras",
+      "inspirationalDescription": "Sortes motivadoras e animadoras",
+      "funnyTitle": "Mensagens engraçadas",
+      "funnyDescription": "Sortes humoradas e espirituosas",
+      "loveTitle": "Amor e romance",
+      "loveDescription": "Mensagens sobre amor e relacionamentos",
+      "successTitle": "Sucesso e carreira",
+      "successDescription": "Foco profissional e de conquistas"
+    }
+  },
   "favorites": {
     "title": "Meus favoritos",
     "subtitle": "Seus biscoitos da sorte salvos",

@@ -421,6 +421,59 @@
       "tags": "{count} 个标签"
     }
   },
+  "tagsPage": {
+    "title": "{tag} 运势",
+    "subtitle": "探索与 {tag} 相关的幸运饼干消息",
+    "messagesFound": "找到 {count} 条消息",
+    "relatedTags": "相关标签",
+    "allTags": "探索全部标签",
+    "ctaTitle": "获取你的 AI 运势",
+    "ctaDescription": "想要与 {tag} 相关的个性化运势？让我们的 AI 为你生成。",
+    "ctaButton": "生成 AI 运势",
+    "metaTitle": "{tag} 运势消息",
+    "metaDescription": "发现与 {tag} 相关的 {count}+ 条幸运饼干消息，获取灵感与智慧。",
+    "noTagTitle": "标签未找到"
+  },
+  "internalLinks": {
+    "relatedPagesTitle": "相关页面",
+    "categoryNavigationTitle": "按分类浏览",
+    "badges": {
+      "popular": "热门",
+      "ai": "AI",
+      "tutorial": "教程",
+      "funny": "搞笑"
+    },
+    "relatedPages": {
+      "generatorTitle": "幸运饼干生成器",
+      "generatorDescription": "使用 AI 生成个性化幸运饼干",
+      "aiGeneratorTitle": "AI 生成器",
+      "aiGeneratorDescription": "高级 AI 驱动的运势创作",
+      "messagesTitle": "运势消息",
+      "messagesDescription": "浏览我们的运势消息合集",
+      "browseTitle": "搜索与浏览",
+      "browseDescription": "搜索并筛选运势消息",
+      "historyTitle": "幸运饼干历史",
+      "historyDescription": "了解幸运饼干起源",
+      "recipesTitle": "幸运饼干食谱",
+      "recipesDescription": "在家制作幸运饼干",
+      "whoInventedTitle": "谁发明了幸运饼干？",
+      "whoInventedDescription": "发现意想不到的历史",
+      "howToMakeTitle": "如何制作幸运饼干",
+      "howToMakeDescription": "简单易懂的步骤教程",
+      "funnyTitle": "搞笑运势消息",
+      "funnyDescription": "幽默风趣的运势语录"
+    },
+    "categoryNavigation": {
+      "inspirationalTitle": "励志消息",
+      "inspirationalDescription": "充满动力与鼓舞的运势",
+      "funnyTitle": "搞笑消息",
+      "funnyDescription": "幽默机智的运势",
+      "loveTitle": "爱情与浪漫",
+      "loveDescription": "关于爱情与关系的消息",
+      "successTitle": "成功与事业",
+      "successDescription": "职场与成就导向"
+    }
+  },
   "favorites": {
     "title": "我的收藏",
     "subtitle": "你保存的幸运饼干",
