@@ -229,7 +229,7 @@ export default function RootLayout({
           href={getBlobUrl("/favicon-16x16.png")}
         />
         {/* PWA Manifest with cache-busting version parameter to bypass stale browser cache */}
-        <link rel="manifest" href="/manifest.webmanifest?v=2" />
+        <link rel="manifest" href="/app-manifest.json" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         {/* Skip to main content link for accessibility (WCAG 2.1) */}

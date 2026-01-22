@@ -22,7 +22,7 @@
 
   "headers": [
     {
-      "source": "/manifest.webmanifest",
+      "source": "/app-manifest.json",
       "headers": [
         {
           "key": "Cache-Control",
@@ -89,8 +89,8 @@
 
   "rewrites": [
     {
-      "source": "/:locale/manifest.webmanifest",
-      "destination": "/manifest.webmanifest"
+      "source": "/:locale/app-manifest.json",
+      "destination": "/app-manifest.json"
     },
     {
       "source": "/:locale/sw.js",

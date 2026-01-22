@@ -22,7 +22,7 @@ const STATIC_PATHS = [
   "/favicon-32x32.png",
   "/favicon-16x16.png",
   "/site.webmanifest",
-  "/manifest.webmanifest",
+  "/app-manifest.json",
   "/sw.js",
   "/robots.txt",
   "/sitemap.xml",
@@ -40,14 +40,14 @@ const LOCALE_SKIP_PATHS = [
   "/sitemap.xml",
   "/ads.txt",
   "/site.webmanifest",
-  "/manifest.webmanifest",
+  "/app-manifest.json",
   "/sw.js",
   "/__nextjs_original-stack-frame",
 ];
 
 // 静态文件扩展名和文件名（用于重定向到根路径）
 const STATIC_FILE_PATTERNS = [
-  "manifest.webmanifest",
+  "app-manifest.json",
   "sw.js",
   "robots.txt",
   "sitemap.xml",
@@ -69,13 +69,13 @@ export function middleware(request: NextRequest) {
   // 生成 CSP Nonce
   const nonce = generateNonce();
 
-  // 检查是否是根路径的静态文件（如 /manifest.webmanifest）
+  // 检查是否是根路径的静态文件（如 /app-manifest.json）
   // 这些文件应该直接返回，不进行任何语言检测或重定向
   if (STATIC_FILE_PATTERNS.some((file) => pathname === `/${file}`)) {
     return handleStaticAssets(request, startTime);
   }
 
-  // 检查是否是带语言前缀的静态文件请求（如 /zh/manifest.webmanifest）
+  // 检查是否是带语言前缀的静态文件请求（如 /zh/app-manifest.json）
   // 需要重定向到根路径
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length >= 2) {
@@ -263,9 +263,9 @@ function handleStaticAssets(
   const response = NextResponse.next();
   const pathname = request.nextUrl.pathname;
 
-  // manifest.webmanifest 和 sw.js 使用短缓存，其他静态资源使用长期缓存
+  // app-manifest.json 和 sw.js 使用短缓存，其他静态资源使用长期缓存
   if (
-    pathname === "/manifest.webmanifest" ||
+    pathname === "/app-manifest.json" ||
     pathname === "/site.webmanifest"
   ) {
     // PWA manifest - 短缓存以便快速更新
@@ -488,12 +488,12 @@ export const config = {
      * - _next/static (静态文件)
      * - _next/image (图像优化文件)
      * - favicon.ico (favicon文件)
-     * - manifest.webmanifest (PWA manifest)
+     * - app-manifest.json (PWA manifest)
      * - sw.js (Service Worker)
      * - robots.txt (搜索引擎爬虫)
      * - sitemap.xml (网站地图)
      * - ads.txt (广告配置)
      */
-    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|robots.txt|sitemap.xml|ads.txt).*)",
+    "/((?!_next/static|_next/image|favicon.ico|app-manifest.json|sw.js|robots.txt|sitemap.xml|ads.txt).*)",
   ],
 };

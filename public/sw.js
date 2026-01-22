@@ -8,7 +8,7 @@ const API_CACHE_NAME = "fortune-api-v2";
 
 // 需要预缓存的关键静态资源（仅限关键资源，避免HTML路由）
 const STATIC_ASSETS = [
-  "/manifest.webmanifest",
+  "/app-manifest.json",
   "/favicon.ico",
   "/apple-touch-icon.png",
   "/favicon-32x32.png",

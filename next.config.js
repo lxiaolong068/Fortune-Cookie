@@ -72,7 +72,7 @@ const nextConfig = {
       },
       // Manifest 文件缓存
       {
-        source: "/manifest.webmanifest",
+        source: "/app-manifest.json",
         headers: [
           {
             key: "Cache-Control",
