@@ -79,12 +79,13 @@ export function HotFortuneCarousel({
   }, []);
 
   const currentFortune = fortunes[currentIndex];
+
+  if (fortunes.length === 0 || !currentFortune) return null;
+
   const categoryKey = currentFortune.category as FortuneCategory;
   const localizedCategory = allCategories.includes(categoryKey)
     ? t(`generator.themes.${categoryKey}`)
     : currentFortune.category;
-
-  if (fortunes.length === 0 || !currentFortune) return null;
 
   return (
     <section
