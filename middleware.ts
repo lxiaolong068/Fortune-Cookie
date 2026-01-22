@@ -45,6 +45,16 @@ const LOCALE_SKIP_PATHS = [
   "/__nextjs_original-stack-frame",
 ];
 
+// 静态文件扩展名和文件名（用于重定向到根路径）
+const STATIC_FILE_PATTERNS = [
+  "manifest.webmanifest",
+  "sw.js",
+  "robots.txt",
+  "sitemap.xml",
+  "ads.txt",
+  "site.webmanifest",
+];
+
 // 生成 CSP Nonce
 function generateNonce(): string {
   const array = new Uint8Array(16);
@@ -58,6 +68,23 @@ export function middleware(request: NextRequest) {
 
   // 生成 CSP Nonce
   const nonce = generateNonce();
+
+  // 检查是否是带语言前缀的静态文件请求（如 /zh/manifest.webmanifest）
+  // 需要重定向到根路径
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length >= 2) {
+    const lastSegment = segments[segments.length - 1];
+    if (
+      lastSegment &&
+      STATIC_FILE_PATTERNS.includes(lastSegment) &&
+      isValidLocale(segments[0] ?? "")
+    ) {
+      // 重定向到根路径的静态文件
+      const rootUrl = new URL(request.url);
+      rootUrl.pathname = `/${lastSegment}`;
+      return NextResponse.redirect(rootUrl, 301);
+    }
+  }
 
   // 跳过不需要处理的路径
   if (SKIP_PATHS.some((path) => pathname.startsWith(path))) {
@@ -353,7 +380,7 @@ function addSecurityHeaders(
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
     "connect-src 'self' https://openrouter.ai https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google",
-    "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://fundingchoicesmessages.google.com",
+    "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://fundingchoicesmessages.google.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://www.google.com",
     "media-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
