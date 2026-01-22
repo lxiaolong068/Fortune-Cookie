@@ -69,6 +69,12 @@ export function middleware(request: NextRequest) {
   // 生成 CSP Nonce
   const nonce = generateNonce();
 
+  // 检查是否是根路径的静态文件（如 /manifest.webmanifest）
+  // 这些文件应该直接返回，不进行任何语言检测或重定向
+  if (STATIC_FILE_PATTERNS.some((file) => pathname === `/${file}`)) {
+    return handleStaticAssets(request, startTime);
+  }
+
   // 检查是否是带语言前缀的静态文件请求（如 /zh/manifest.webmanifest）
   // 需要重定向到根路径
   const segments = pathname.split("/").filter(Boolean);
