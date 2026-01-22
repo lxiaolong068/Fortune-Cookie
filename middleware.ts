@@ -22,6 +22,8 @@ const STATIC_PATHS = [
   "/favicon-32x32.png",
   "/favicon-16x16.png",
   "/site.webmanifest",
+  "/manifest.webmanifest",
+  "/sw.js",
   "/robots.txt",
   "/sitemap.xml",
 ];
@@ -38,6 +40,8 @@ const LOCALE_SKIP_PATHS = [
   "/sitemap.xml",
   "/ads.txt",
   "/site.webmanifest",
+  "/manifest.webmanifest",
+  "/sw.js",
   "/__nextjs_original-stack-frame",
 ];
 
