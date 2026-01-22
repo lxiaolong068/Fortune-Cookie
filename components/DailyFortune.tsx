@@ -279,20 +279,20 @@ export function DailyFortune({
 
   // Generate fortunes on mount
   useEffect(() => {
-    setTodayFortune(getTodayFortune());
+    setTodayFortune(getTodayFortune(undefined, locale));
     if (showTomorrowPreview) {
-      setTomorrowFortune(getTomorrowFortune());
+      setTomorrowFortune(getTomorrowFortune(undefined, locale));
     }
-  }, [showTomorrowPreview]);
+  }, [showTomorrowPreview, locale]);
 
   // Refresh fortunes (for when day changes)
   const refreshFortunes = useCallback(() => {
-    setTodayFortune(getTodayFortune());
+    setTodayFortune(getTodayFortune(undefined, locale));
     if (showTomorrowPreview) {
-      setTomorrowFortune(getTomorrowFortune());
+      setTomorrowFortune(getTomorrowFortune(undefined, locale));
     }
     setTomorrowRevealed(false);
-  }, [showTomorrowPreview]);
+  }, [showTomorrowPreview, locale]);
 
   if (!todayFortune) {
     return (

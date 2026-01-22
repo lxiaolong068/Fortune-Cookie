@@ -14,6 +14,7 @@ import {
   getFortunesByCategory,
   getDatabaseStats,
   type FortuneCategory,
+  localizeFortunes,
 } from "@/lib/fortune-database";
 import {
   i18n,
@@ -211,7 +212,8 @@ export default async function LocaleBrowseCategoryPage({
     notFound();
   }
 
-  const translations = await loadTranslations(locale as Locale);
+  const resolvedLocale = locale as Locale;
+  const translations = await loadTranslations(resolvedLocale);
   const label = getLocalizedCategoryLabel(
     category as FortuneCategory,
     translations,
@@ -228,7 +230,10 @@ export default async function LocaleBrowseCategoryPage({
   );
 
   const stats = getDatabaseStats();
-  const fortunes = getFortunesByCategory(category as FortuneCategory);
+  const fortunes = localizeFortunes(
+    getFortunesByCategory(category as FortuneCategory),
+    resolvedLocale,
+  );
   const config = categoryConfig[category as FortuneCategory];
   const Icon = config.icon;
   const badgeColor =
@@ -238,22 +243,22 @@ export default async function LocaleBrowseCategoryPage({
     getTranslation(translations, key, p);
 
   const localizedBrowseHref = getLocalizedHref(
-    locale as Locale,
+    resolvedLocale,
     "/browse",
   );
 
   return (
     <LocaleProvider
-      initialLocale={locale as Locale}
+      initialLocale={resolvedLocale}
       initialTranslations={translations}
     >
       <BreadcrumbStructuredData
         items={[
-          { name: t("navigation.home"), url: getLocalizedHref(locale as Locale, "/") },
+          { name: t("navigation.home"), url: getLocalizedHref(resolvedLocale, "/") },
           { name: t("navigation.browse"), url: localizedBrowseHref },
           {
             name: title,
-            url: getLocalizedHref(locale as Locale, `/browse/category/${category}`),
+            url: getLocalizedHref(resolvedLocale, `/browse/category/${category}`),
           },
         ]}
       />
@@ -261,7 +266,7 @@ export default async function LocaleBrowseCategoryPage({
       <ItemListStructuredData
         name={title}
         description={description}
-        url={getLocalizedHref(locale as Locale, `/browse/category/${category}`)}
+        url={getLocalizedHref(resolvedLocale, `/browse/category/${category}`)}
         items={fortunes.slice(0, 20).map((fortune) => ({
           name: fortune.message,
           description: t("messages.category.structuredDescription", {

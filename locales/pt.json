@@ -183,6 +183,7 @@
   },
   "dailyFortune": {
     "title": "Sorte do dia",
+    "fortuneLabel": "Sorte",
     "subtitle": "Sua sabedoria e orientação diária",
     "overallScore": "Pontuação geral de sorte",
     "dimensions": {
@@ -207,6 +208,56 @@
       "good": "Boa sorte",
       "fair": "Dia equilibrado",
       "challenging": "Dia de crescimento"
+    }
+  },
+  "calendarPage": {
+    "pageTitle": "Calendário da Sorte",
+    "pageSubtitle": "Explore suas sortes diárias. Clique em qualquer dia para ver a previsão, números, cores e conselhos.",
+    "headerTitle": "Calendário da Sorte",
+    "headerSubtitle": "Veja suas sortes diárias",
+    "todayButton": "Hoje",
+    "prevMonthAria": "Mês anterior",
+    "nextMonthAria": "Próximo mês",
+    "howToTitle": "Como usar",
+    "howToSteps": {
+      "step1": "Navegue pelos meses com as setas ou toque em \"Hoje\" para voltar ao mês atual.",
+      "step2": "Cada dia mostra um indicador de pontuação — mais pontos preenchidos significam melhor sorte.",
+      "step3": "Clique em qualquer dia para ver a sorte completa, números, cores e conselhos.",
+      "step4": "Procure os ✨ brilhos nos dias com pontuações excelentes."
+    },
+    "scoreGuideTitle": "Guia de pontuação",
+    "scoreLabels": {
+      "excellent": "Excelente (9-10)",
+      "good": "Boa (7-8)",
+      "fair": "Regular (5-6)",
+      "challenging": "Desafiadora (3-4)",
+      "today": "Hoje"
+    },
+    "ctaTitle": "Quer uma sorte personalizada?",
+    "ctaDescription": "Receba uma sorte gerada por IA com seus temas e preferências.",
+    "ctaButton": "Experimentar o gerador de IA",
+    "seoTitle": "Sobre o Calendário da Sorte",
+    "seoIntro": "O Calendário da Sorte é seu guia diário de sorte e sabedoria. Cada dia traz uma previsão única gerada com nosso algoritmo inspirado em práticas tradicionais.",
+    "seoSections": {
+      "dailyTitle": "O que você encontra a cada dia",
+      "dailyItems": {
+        "overallLabel": "Pontuação geral",
+        "overallText": "Uma nota de 1 a 10 do potencial de sorte do dia.",
+        "dimensionsLabel": "Pontuações por dimensão",
+        "dimensionsText": "Notas separadas para carreira, amor, saúde e riqueza.",
+        "messageLabel": "Mensagem de sorte",
+        "messageText": "Uma citação ou previsão do dia.",
+        "numbersLabel": "Números da sorte",
+        "numbersText": "Seis números especiais para orientar decisões.",
+        "elementsLabel": "Cor e direção da sorte",
+        "elementsText": "Aumente sua sorte incorporando esses elementos.",
+        "adviceLabel": "Conselho diário",
+        "adviceText": "Orientação prática baseada na pontuação."
+      },
+      "howTitle": "Como funciona",
+      "howText": "O calendário usa um algoritmo determinístico para que todos vejam a mesma sorte em cada data. Atualiza à meia-noite UTC.",
+      "planningTitle": "Planeje com a sorte",
+      "planningText": "Use dias com pontuação alta para eventos importantes como entrevistas, encontros ou decisões financeiras."
     }
   },
   "messages": {

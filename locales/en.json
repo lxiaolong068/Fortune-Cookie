@@ -183,6 +183,7 @@
   },
   "dailyFortune": {
     "title": "Today's Fortune",
+    "fortuneLabel": "Fortune",
     "subtitle": "Your daily wisdom and guidance",
     "overallScore": "Overall Fortune Score",
     "dimensions": {
@@ -207,6 +208,56 @@
       "good": "Good Fortune",
       "fair": "Balanced Day",
       "challenging": "Growth Day"
+    }
+  },
+  "calendarPage": {
+    "pageTitle": "Fortune Calendar",
+    "pageSubtitle": "Explore your daily fortunes. Click any day to reveal your prediction, lucky numbers, colors, and advice.",
+    "headerTitle": "Fortune Calendar",
+    "headerSubtitle": "View your daily fortunes",
+    "todayButton": "Today",
+    "prevMonthAria": "Previous month",
+    "nextMonthAria": "Next month",
+    "howToTitle": "How to Use",
+    "howToSteps": {
+      "step1": "Navigate months with the arrows or tap \"Today\" to return to the current month.",
+      "step2": "Each day shows a score indicator — more filled dots mean better fortune.",
+      "step3": "Click any day to see the full fortune with lucky numbers, colors, and advice.",
+      "step4": "Look for ✨ sparkles on days with excellent fortune scores."
+    },
+    "scoreGuideTitle": "Score Guide",
+    "scoreLabels": {
+      "excellent": "Excellent (9-10)",
+      "good": "Good (7-8)",
+      "fair": "Fair (5-6)",
+      "challenging": "Challenging (3-4)",
+      "today": "Today"
+    },
+    "ctaTitle": "Want a Personal Fortune?",
+    "ctaDescription": "Get a customized AI-generated fortune with your themes and preferences.",
+    "ctaButton": "Try AI Generator",
+    "seoTitle": "About the Fortune Calendar",
+    "seoIntro": "The Fortune Calendar is your daily guide to luck and wisdom. Each day features a unique prediction generated with our algorithm inspired by traditional fortune practices.",
+    "seoSections": {
+      "dailyTitle": "What You'll Find Each Day",
+      "dailyItems": {
+        "overallLabel": "Overall Fortune Score",
+        "overallText": "A 1-10 rating of your day's overall luck potential.",
+        "dimensionsLabel": "Dimensional Scores",
+        "dimensionsText": "Separate ratings for career, love, health, and wealth.",
+        "messageLabel": "Fortune Message",
+        "messageText": "A personalized wisdom quote or prediction for the day.",
+        "numbersLabel": "Lucky Numbers",
+        "numbersText": "Six special numbers to guide your decisions.",
+        "elementsLabel": "Lucky Color & Direction",
+        "elementsText": "Enhance your fortune by incorporating these elements.",
+        "adviceLabel": "Daily Advice",
+        "adviceText": "Practical guidance based on your fortune score."
+      },
+      "howTitle": "How It Works",
+      "howText": "The calendar uses a deterministic algorithm so everyone sees the same fortune for each date. Fortunes refresh at midnight UTC.",
+      "planningTitle": "Planning with Fortune",
+      "planningText": "Use high-score days for important events like interviews, dates, or financial decisions."
     }
   },
   "messages": {

@@ -17,7 +17,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/Pagination";
 import { Sparkles, Search, Clock, Flame, SortAsc } from "lucide-react";
-import { searchFortunes, getDatabaseStats } from "@/lib/fortune-database";
+import {
+  searchFortunes,
+  getDatabaseStats,
+  localizeFortunes,
+} from "@/lib/fortune-database";
 import {
   categoryConfig,
   categoryBadgeColors,
@@ -31,7 +35,7 @@ export function BrowsePageContent() {
   const searchParams = useSearchParams();
   const searchParamsKey = searchParams.toString();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
-  const { t, getLocalizedHref } = useLocale();
+  const { t, getLocalizedHref, locale } = useLocale();
 
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("q") || "",
@@ -89,26 +93,28 @@ export function BrowsePageContent() {
     const results = searchFortunes(
       searchQuery,
       selectedCategory === "all" ? undefined : selectedCategory,
+      locale,
     );
+    const localizedResults = localizeFortunes(results, locale);
 
     // Sort results
     switch (sortBy) {
       case "popularity":
-        results.sort((a, b) => b.popularity - a.popularity);
+        localizedResults.sort((a, b) => b.popularity - a.popularity);
         break;
       case "recent":
-        results.sort(
+        localizedResults.sort(
           (a, b) =>
             new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
         );
         break;
       case "alphabetical":
-        results.sort((a, b) => a.message.localeCompare(b.message));
+        localizedResults.sort((a, b) => a.message.localeCompare(b.message));
         break;
     }
 
-    return results;
-  }, [searchQuery, selectedCategory, sortBy]);
+    return localizedResults;
+  }, [searchQuery, selectedCategory, sortBy, locale]);
 
   // Paginate results
   const totalPages = Math.ceil(

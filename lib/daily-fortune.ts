@@ -17,7 +17,9 @@ import {
   fortuneDatabase,
   type FortuneMessage,
   type FortuneCategory,
+  localizeFortune,
 } from "./fortune-database";
+import { i18n, type Locale } from "./i18n-config";
 
 // ============================================================================
 // Types
@@ -76,6 +78,57 @@ const LUCKY_COLORS = [
   { name: "Teal", hex: "#14B8A6", emoji: "💠" },
 ];
 
+const LUCKY_COLOR_LABELS: Record<Locale, Record<string, string>> = {
+  en: {
+    Red: "Red",
+    Orange: "Orange",
+    Yellow: "Yellow",
+    Green: "Green",
+    Blue: "Blue",
+    Purple: "Purple",
+    Pink: "Pink",
+    Gold: "Gold",
+    Silver: "Silver",
+    Teal: "Teal",
+  },
+  zh: {
+    Red: "红色",
+    Orange: "橙色",
+    Yellow: "黄色",
+    Green: "绿色",
+    Blue: "蓝色",
+    Purple: "紫色",
+    Pink: "粉色",
+    Gold: "金色",
+    Silver: "银色",
+    Teal: "蓝绿色",
+  },
+  es: {
+    Red: "Rojo",
+    Orange: "Naranja",
+    Yellow: "Amarillo",
+    Green: "Verde",
+    Blue: "Azul",
+    Purple: "Morado",
+    Pink: "Rosa",
+    Gold: "Dorado",
+    Silver: "Plateado",
+    Teal: "Verde azulado",
+  },
+  pt: {
+    Red: "Vermelho",
+    Orange: "Laranja",
+    Yellow: "Amarelo",
+    Green: "Verde",
+    Blue: "Azul",
+    Purple: "Roxo",
+    Pink: "Rosa",
+    Gold: "Dourado",
+    Silver: "Prata",
+    Teal: "Verde-água",
+  },
+};
+
 /**
  * Lucky directions pool
  */
@@ -89,6 +142,49 @@ const LUCKY_DIRECTIONS = [
   { name: "West", emoji: "⬅️" },
   { name: "Northwest", emoji: "↖️" },
 ];
+
+const LUCKY_DIRECTION_LABELS: Record<Locale, Record<string, string>> = {
+  en: {
+    North: "North",
+    Northeast: "Northeast",
+    East: "East",
+    Southeast: "Southeast",
+    South: "South",
+    Southwest: "Southwest",
+    West: "West",
+    Northwest: "Northwest",
+  },
+  zh: {
+    North: "北",
+    Northeast: "东北",
+    East: "东",
+    Southeast: "东南",
+    South: "南",
+    Southwest: "西南",
+    West: "西",
+    Northwest: "西北",
+  },
+  es: {
+    North: "Norte",
+    Northeast: "Noreste",
+    East: "Este",
+    Southeast: "Sureste",
+    South: "Sur",
+    Southwest: "Suroeste",
+    West: "Oeste",
+    Northwest: "Noroeste",
+  },
+  pt: {
+    North: "Norte",
+    Northeast: "Nordeste",
+    East: "Leste",
+    Southeast: "Sudeste",
+    South: "Sul",
+    Southwest: "Sudoeste",
+    West: "Oeste",
+    Northwest: "Noroeste",
+  },
+};
 
 /**
  * Daily advice pool based on score ranges
@@ -115,6 +211,79 @@ const DAILY_ADVICE: Record<"high" | "medium" | "low", string[]> = {
     "Sometimes the best action is no action. Be patient.",
     "Use today to prepare for brighter days ahead.",
   ],
+};
+
+const DAILY_ADVICE_BY_LOCALE: Record<Locale, typeof DAILY_ADVICE> = {
+  en: DAILY_ADVICE,
+  zh: {
+    high: [
+      "今天是你的好日子！大胆行动，抓住机会。",
+      "星象对你有利，信任你的直觉。",
+      "好运相伴，记得把好心情分享给他人。",
+      "正能量会吸引成功，保持自信！",
+      "美好将临，保持开放与好奇。",
+    ],
+    medium: [
+      "今天节奏平稳，专注稳步前进。",
+      "花点时间思考，规划下一步。",
+      "今日的小努力，会成为明日的大成果。",
+      "保持耐心与积极，好事会发生。",
+      "相信过程，每一步都算数。",
+    ],
+    low: [
+      "适合休息与反思，给自己充电。",
+      "今天重在自我照顾，明天会更好。",
+      "挑战是垫脚石，从经历中学习。",
+      "有时最好的行动是不行动，保持耐心。",
+      "用今天准备更明亮的明天。",
+    ],
+  },
+  es: {
+    high: [
+      "¡Hoy es tu día! Actúa con valentía y aprovecha las oportunidades.",
+      "Las estrellas están de tu lado. Confía en tu intuición.",
+      "La fortuna te sonríe. Comparte tu buena suerte con los demás.",
+      "Tu energía positiva atraerá el éxito. ¡Mantén la confianza!",
+      "Hoy te esperan grandes cosas. Mantente abierto a nuevas posibilidades.",
+    ],
+    medium: [
+      "Un día equilibrado. Enfócate en un progreso constante.",
+      "Tómate un tiempo para reflexionar y planear tus próximos pasos.",
+      "Pequeños esfuerzos hoy traerán grandes resultados mañana.",
+      "Mantén la paciencia y una actitud positiva. Lo bueno llegará.",
+      "Confía en el proceso. Cada paso cuenta.",
+    ],
+    low: [
+      "Un día para descansar y reflexionar. Tómatelo con calma.",
+      "Prioriza el autocuidado hoy. Mañana trae nuevas oportunidades.",
+      "Los retos son peldaños. Aprende de lo vivido hoy.",
+      "A veces la mejor acción es no actuar. Sé paciente.",
+      "Usa el día de hoy para prepararte para tiempos mejores.",
+    ],
+  },
+  pt: {
+    high: [
+      "Hoje é o seu dia! Aja com coragem e aproveite as oportunidades.",
+      "As estrelas estão a seu favor. Confie na sua intuição.",
+      "A sorte sorri para você. Compartilhe sua boa sorte.",
+      "Sua energia positiva atrairá sucesso. Mantenha a confiança!",
+      "Grandes coisas esperam por você hoje. Fique aberto ao novo.",
+    ],
+    medium: [
+      "Um dia equilibrado. Foque em um progresso constante.",
+      "Reserve um tempo para refletir e planejar os próximos passos.",
+      "Pequenos esforços hoje trarão grandes resultados amanhã.",
+      "Mantenha a paciência e o otimismo. Coisas boas virão.",
+      "Confie no processo. Cada passo conta.",
+    ],
+    low: [
+      "Um dia para descanso e reflexão. Vá com calma.",
+      "Foque no autocuidado hoje. Amanhã trará novas oportunidades.",
+      "Desafios são degraus. Aprenda com o dia de hoje.",
+      "Às vezes, a melhor ação é não agir. Tenha paciência.",
+      "Use o dia de hoje para se preparar para dias melhores.",
+    ],
+  },
 };
 
 // ============================================================================
@@ -245,19 +414,46 @@ export function selectLuckyDirection(
   return direction;
 }
 
+function getLocalizedColorName(
+  colorName: string,
+  locale?: Locale,
+): string {
+  if (!locale || locale === i18n.defaultLocale) {
+    return colorName;
+  }
+  return LUCKY_COLOR_LABELS[locale]?.[colorName] ?? colorName;
+}
+
+function getLocalizedDirectionName(
+  directionName: string,
+  locale?: Locale,
+): string {
+  if (!locale || locale === i18n.defaultLocale) {
+    return directionName;
+  }
+  return LUCKY_DIRECTION_LABELS[locale]?.[directionName] ?? directionName;
+}
+
 /**
  * Select daily advice based on overall score
  */
-export function selectDailyAdvice(seed: number, overallScore: number): string {
+export function selectDailyAdvice(
+  seed: number,
+  overallScore: number,
+  locale?: Locale,
+): string {
   const rng = new SeededRandom(seed + 11111);
 
   let advicePool: string[];
   if (overallScore >= 8) {
-    advicePool = DAILY_ADVICE.high;
+    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? i18n.defaultLocale] ??
+      DAILY_ADVICE).high;
   } else if (overallScore >= 5) {
-    advicePool = DAILY_ADVICE.medium;
+    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? i18n.defaultLocale] ??
+      DAILY_ADVICE).medium;
   } else {
-    advicePool = DAILY_ADVICE.low;
+    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? i18n.defaultLocale] ??
+      DAILY_ADVICE).low;
   }
 
   const index = rng.int(0, advicePool.length);
@@ -277,6 +473,7 @@ export function selectDailyAdvice(seed: number, overallScore: number): string {
 export function generateDailyFortune(
   date?: string | Date,
   category?: FortuneCategory,
+  locale?: Locale,
 ): DailyFortune {
   let dateStr: string;
   if (typeof date === "string") {
@@ -291,16 +488,23 @@ export function generateDailyFortune(
   const seed = getDateSeed(dateStr);
   const scores = generateFortuneScores(seed);
   const fortune = selectDailyFortune(seed, category);
+  const localizedFortune = locale ? localizeFortune(fortune, locale) : fortune;
   const luckyColorObj = selectLuckyColor(seed);
   const luckyDirectionObj = selectLuckyDirection(seed);
-  const advice = selectDailyAdvice(seed, scores.overall);
+  const advice = selectDailyAdvice(seed, scores.overall, locale);
 
   return {
     date: dateStr,
-    fortune,
+    fortune: localizedFortune,
     scores,
-    luckyColor: `${luckyColorObj.emoji} ${luckyColorObj.name}`,
-    luckyDirection: `${luckyDirectionObj.emoji} ${luckyDirectionObj.name}`,
+    luckyColor: `${luckyColorObj.emoji} ${getLocalizedColorName(
+      luckyColorObj.name,
+      locale,
+    )}`,
+    luckyDirection: `${luckyDirectionObj.emoji} ${getLocalizedDirectionName(
+      luckyDirectionObj.name,
+      locale,
+    )}`,
     advice,
   };
 }
@@ -308,15 +512,21 @@ export function generateDailyFortune(
 /**
  * Get today's fortune
  */
-export function getTodayFortune(category?: FortuneCategory): DailyFortune {
-  return generateDailyFortune(getTodayDateString(), category);
+export function getTodayFortune(
+  category?: FortuneCategory,
+  locale?: Locale,
+): DailyFortune {
+  return generateDailyFortune(getTodayDateString(), category, locale);
 }
 
 /**
  * Get tomorrow's fortune (for preview)
  */
-export function getTomorrowFortune(category?: FortuneCategory): DailyFortune {
-  return generateDailyFortune(getTomorrowDateString(), category);
+export function getTomorrowFortune(
+  category?: FortuneCategory,
+  locale?: Locale,
+): DailyFortune {
+  return generateDailyFortune(getTomorrowDateString(), category, locale);
 }
 
 /**
@@ -427,14 +637,18 @@ export { LUCKY_COLORS, LUCKY_DIRECTIONS };
  * @param month - Month (0-11, JavaScript Date format)
  * @returns Array of daily fortunes for the month
  */
-export function getMonthFortunes(year: number, month: number): DailyFortune[] {
+export function getMonthFortunes(
+  year: number,
+  month: number,
+  locale?: Locale,
+): DailyFortune[] {
   const fortunes: DailyFortune[] = [];
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(Date.UTC(year, month, day));
     const dateStr = date.toISOString().split("T")[0] ?? "";
-    fortunes.push(generateDailyFortune(dateStr));
+    fortunes.push(generateDailyFortune(dateStr, undefined, locale));
   }
 
   return fortunes;
@@ -451,10 +665,11 @@ export function getDateFortune(
   year: number,
   month: number,
   day: number,
+  locale?: Locale,
 ): DailyFortune {
   const date = new Date(Date.UTC(year, month, day));
   const dateStr = date.toISOString().split("T")[0] ?? "";
-  return generateDailyFortune(dateStr);
+  return generateDailyFortune(dateStr, undefined, locale);
 }
 
 /**
@@ -529,6 +744,7 @@ export function getCalendarGrid(
   year: number,
   month: number,
   includeFortunes: boolean = true,
+  locale?: Locale,
 ): CalendarDay[][] {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
@@ -555,7 +771,9 @@ export function getCalendarGrid(
       isToday: dateStr === todayStr,
       isPast: dateStr < todayStr,
       isFuture: dateStr > todayStr,
-      fortune: includeFortunes ? generateDailyFortune(dateStr) : undefined,
+      fortune: includeFortunes
+        ? generateDailyFortune(dateStr, undefined, locale)
+        : undefined,
     });
   }
 
@@ -571,7 +789,9 @@ export function getCalendarGrid(
       isToday: dateStr === todayStr,
       isPast: dateStr < todayStr,
       isFuture: dateStr > todayStr,
-      fortune: includeFortunes ? generateDailyFortune(dateStr) : undefined,
+      fortune: includeFortunes
+        ? generateDailyFortune(dateStr, undefined, locale)
+        : undefined,
     });
 
     if (currentWeek.length === 7) {
@@ -597,7 +817,9 @@ export function getCalendarGrid(
         isToday: dateStr === todayStr,
         isPast: dateStr < todayStr,
         isFuture: dateStr > todayStr,
-        fortune: includeFortunes ? generateDailyFortune(dateStr) : undefined,
+        fortune: includeFortunes
+          ? generateDailyFortune(dateStr, undefined, locale)
+          : undefined,
       });
       nextDay++;
     }

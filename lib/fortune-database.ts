@@ -1,6 +1,7 @@
 // Extended Fortune Cookie Database with 200+ messages
 
 import { type Locale, i18n } from "./i18n-config";
+import fortuneTranslationData from "@/content/fortune-translations.json";
 
 /**
  * Fortune message style types
@@ -64,12 +65,10 @@ export interface LocalizedFortuneMessage extends FortuneMessage {
   sourceLocale: Locale;
 }
 
-const fortuneTranslations: Partial<Record<Locale, Record<string, FortuneTranslation>>> =
-  {
-    zh: {},
-    es: {},
-    pt: {},
-  };
+const fortuneTranslations =
+  fortuneTranslationData as Partial<
+    Record<Locale, Record<string, FortuneTranslation>>
+  >;
 
 function getTranslationsForId(id: string): FortuneTranslationMap | undefined {
   const translations: FortuneTranslationMap = {};
@@ -1811,6 +1810,7 @@ export interface SearchFilterOptions {
   category?: string;
   sortBy?: "popularity" | "recent" | "alphabetical";
   limit?: number;
+  locale?: Locale;
 }
 
 /**
@@ -1859,6 +1859,7 @@ export function searchMessagesWithFilters(
     category,
     sortBy = "popularity",
     limit,
+    locale,
   } = options;
 
   const searchTerm = query?.toLowerCase().trim() || "";
@@ -1908,7 +1909,12 @@ export function searchMessagesWithFilters(
 
     // Keyword search (message text and tags)
     if (searchTerm) {
-      const matchesMessage = fortune.message.toLowerCase().includes(searchTerm);
+      const messageToSearch = locale
+        ? getLocalizedFortuneMessage(fortune, locale).message
+        : fortune.message;
+      const matchesMessage = messageToSearch
+        .toLowerCase()
+        .includes(searchTerm);
       const matchesTags = fortune.tags.some((tag) =>
         tag.toLowerCase().includes(searchTerm),
       );
@@ -1932,13 +1938,25 @@ export function searchMessagesWithFilters(
       );
       break;
     case "alphabetical":
-      results = results.sort((a, b) => a.message.localeCompare(b.message));
+      results = results.sort((a, b) => {
+        const messageA = locale
+          ? getLocalizedFortuneMessage(a, locale).message
+          : a.message;
+        const messageB = locale
+          ? getLocalizedFortuneMessage(b, locale).message
+          : b.message;
+        return messageA.localeCompare(messageB);
+      });
       break;
   }
 
   // Limit results
   if (limit && limit > 0) {
     results = results.slice(0, limit);
+  }
+
+  if (locale) {
+    return localizeFortunes(results, locale);
   }
 
   return results;

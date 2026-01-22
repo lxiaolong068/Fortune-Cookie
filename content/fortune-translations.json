@@ -1,0 +1,68 @@
+{
+  "zh": {
+    "fortune_1": {
+      "message": "你的未来由你今天的行动创造，而不是明天。",
+      "status": "machine"
+    },
+    "fortune_2": {
+      "message": "种树最好的时间是二十年前，其次是现在。",
+      "status": "machine"
+    },
+    "fortune_3": {
+      "message": "成功不是终点，失败也非终结：继续前行的勇气才重要。",
+      "status": "machine"
+    },
+    "fortune_4": {
+      "message": "相信你能做到，你已经成功了一半。",
+      "status": "machine"
+    },
+    "fortune_5": {
+      "message": "只有热爱所做之事，才能成就伟大的工作。",
+      "status": "machine"
+    }
+  },
+  "es": {
+    "fortune_1": {
+      "message": "Tu futuro lo crean tus acciones de hoy, no las de mañana.",
+      "status": "machine"
+    },
+    "fortune_2": {
+      "message": "El mejor momento para plantar un árbol fue hace 20 años; el segundo mejor es ahora.",
+      "status": "machine"
+    },
+    "fortune_3": {
+      "message": "El éxito no es definitivo, el fracaso no es fatal: lo que cuenta es el valor de seguir.",
+      "status": "machine"
+    },
+    "fortune_4": {
+      "message": "Cree que puedes y ya estás a mitad de camino.",
+      "status": "machine"
+    },
+    "fortune_5": {
+      "message": "La única manera de hacer un gran trabajo es amar lo que haces.",
+      "status": "machine"
+    }
+  },
+  "pt": {
+    "fortune_1": {
+      "message": "Seu futuro é criado pelo que você faz hoje, não amanhã.",
+      "status": "machine"
+    },
+    "fortune_2": {
+      "message": "O melhor momento para plantar uma árvore foi há 20 anos; o segundo melhor é agora.",
+      "status": "machine"
+    },
+    "fortune_3": {
+      "message": "O sucesso não é definitivo, o fracasso não é fatal: o que importa é a coragem de continuar.",
+      "status": "machine"
+    },
+    "fortune_4": {
+      "message": "Acredite que você consegue e já está no meio do caminho.",
+      "status": "machine"
+    },
+    "fortune_5": {
+      "message": "A única maneira de fazer um grande trabalho é amar o que você faz.",
+      "status": "machine"
+    }
+  }
+}

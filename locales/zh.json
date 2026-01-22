@@ -183,6 +183,7 @@
   },
   "dailyFortune": {
     "title": "今日运势",
+    "fortuneLabel": "运势",
     "subtitle": "你的每日智慧与指引",
     "overallScore": "综合运势评分",
     "dimensions": {
@@ -207,6 +208,56 @@
       "good": "好运",
       "fair": "平衡的一天",
       "challenging": "成长的一天"
+    }
+  },
+  "calendarPage": {
+    "pageTitle": "运势日历",
+    "pageSubtitle": "探索每日运势。点击任意日期查看预测、幸运数字、幸运颜色与建议。",
+    "headerTitle": "运势日历",
+    "headerSubtitle": "查看每日运势",
+    "todayButton": "今天",
+    "prevMonthAria": "上一月",
+    "nextMonthAria": "下一月",
+    "howToTitle": "使用方法",
+    "howToSteps": {
+      "step1": "使用箭头切换月份，或点击“今天”返回当月。",
+      "step2": "每天都有评分指示，点数越多代表运势越好。",
+      "step3": "点击任意日期查看完整运势、幸运数字、颜色与建议。",
+      "step4": "运势极佳的日期会出现 ✨ 闪光标记。"
+    },
+    "scoreGuideTitle": "评分说明",
+    "scoreLabels": {
+      "excellent": "极佳（9-10）",
+      "good": "良好（7-8）",
+      "fair": "一般（5-6）",
+      "challenging": "挑战（3-4）",
+      "today": "今天"
+    },
+    "ctaTitle": "想要专属运势？",
+    "ctaDescription": "使用 AI 生成符合你主题与偏好的专属运势。",
+    "ctaButton": "试试 AI 生成器",
+    "seoTitle": "关于运势日历",
+    "seoIntro": "运势日历是你每日的好运指南。每天都会基于传统运势理念生成独特预测。",
+    "seoSections": {
+      "dailyTitle": "每天你将看到",
+      "dailyItems": {
+        "overallLabel": "综合运势评分",
+        "overallText": "对当天整体运势的 1–10 评分。",
+        "dimensionsLabel": "维度评分",
+        "dimensionsText": "分别对事业、爱情、健康与财运评分。",
+        "messageLabel": "运势箴言",
+        "messageText": "当天的智慧语或预测。",
+        "numbersLabel": "幸运数字",
+        "numbersText": "六个引导决策的幸运数字。",
+        "elementsLabel": "幸运颜色与方位",
+        "elementsText": "通过这些元素提升好运。",
+        "adviceLabel": "每日建议",
+        "adviceText": "基于评分的实用指引。"
+      },
+      "howTitle": "运作方式",
+      "howText": "日历使用确定性算法，确保同一日期人人看到相同运势，并在 UTC 午夜刷新。",
+      "planningTitle": "用运势来规划",
+      "planningText": "可把高分日用于重要安排，如面试、约会或财务决策。"
     }
   },
   "messages": {

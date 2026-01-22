@@ -19,6 +19,8 @@ import {
   type CalendarDay,
 } from "@/lib/daily-fortune";
 import { FortuneScore } from "./FortuneScore";
+import { useLocale } from "@/lib/locale-context";
+import { languages } from "@/lib/i18n-config";
 
 // ============================================================================
 // Types
@@ -53,6 +55,7 @@ function CalendarHeader({
   onNextMonth: () => void;
   onToday: () => void;
 }) {
+  const { t } = useLocale();
   const monthName = getMonthName(year, month, locale);
 
   return (
@@ -62,9 +65,11 @@ function CalendarHeader({
           <Calendar className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold">Fortune Calendar</h2>
+          <h2 className="text-xl font-semibold">
+            {t("calendarPage.headerTitle")}
+          </h2>
           <p className="text-sm text-muted-foreground">
-            View your daily fortunes
+            {t("calendarPage.headerSubtitle")}
           </p>
         </div>
       </div>
@@ -74,13 +79,13 @@ function CalendarHeader({
           onClick={onToday}
           className="px-3 py-1.5 text-sm font-medium text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/30 rounded-lg transition-colors"
         >
-          Today
+          {t("calendarPage.todayButton")}
         </button>
         <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
           <button
             onClick={onPrevMonth}
             className="p-2 hover:bg-background rounded-md transition-colors"
-            aria-label="Previous month"
+            aria-label={t("calendarPage.prevMonthAria")}
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -90,7 +95,7 @@ function CalendarHeader({
           <button
             onClick={onNextMonth}
             className="p-2 hover:bg-background rounded-md transition-colors"
-            aria-label="Next month"
+            aria-label={t("calendarPage.nextMonthAria")}
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -211,16 +216,20 @@ function FortuneDetail({
   day: CalendarDay;
   onClose: () => void;
 }) {
+  const { t, locale } = useLocale();
   if (!day.fortune) return null;
 
   const fortune = day.fortune;
   const dateObj = new Date(day.date);
-  const formattedDate = dateObj.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const formattedDate = dateObj.toLocaleDateString(
+    languages[locale].hreflang,
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    },
+  );
 
   return (
     <motion.div
@@ -246,7 +255,9 @@ function FortuneDetail({
               </div>
               <div>
                 <h3 className="font-semibold">
-                  {day.isToday ? "Today's Fortune" : "Fortune"}
+                  {day.isToday
+                    ? t("dailyFortune.title")
+                    : t("dailyFortune.fortuneLabel")}
                 </h3>
                 <p className="text-sm text-muted-foreground">{formattedDate}</p>
               </div>
@@ -279,7 +290,7 @@ function FortuneDetail({
             {fortune.fortune.luckyNumbers && (
               <div className="mt-4 flex items-center justify-center gap-2">
                 <span className="text-xs text-amber-700 dark:text-amber-300">
-                  Lucky Numbers:
+                  {t("dailyFortune.luckyNumbers")}:
                 </span>
                 <div className="flex gap-1">
                   {fortune.fortune.luckyNumbers.map((num, i) => (
@@ -298,12 +309,14 @@ function FortuneDetail({
           {/* Lucky Color & Direction */}
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 rounded-lg bg-muted/50">
-              <p className="text-xs text-muted-foreground mb-1">Lucky Color</p>
+              <p className="text-xs text-muted-foreground mb-1">
+                {t("dailyFortune.luckyColor")}
+              </p>
               <p className="text-sm font-medium">{fortune.luckyColor}</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/50">
               <p className="text-xs text-muted-foreground mb-1">
-                Lucky Direction
+                {t("dailyFortune.luckyDirection")}
               </p>
               <p className="text-sm font-medium">{fortune.luckyDirection}</p>
             </div>
@@ -312,7 +325,7 @@ function FortuneDetail({
           {/* Advice */}
           <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200/50 dark:border-blue-800/50">
             <p className="text-xs font-medium text-blue-600 dark:text-blue-400 mb-1">
-              Advice
+              {t("dailyFortune.advice")}
             </p>
             <p className="text-sm text-blue-900 dark:text-blue-100">
               {fortune.advice}
@@ -328,27 +341,28 @@ function FortuneDetail({
  * Legend for calendar colors
  */
 function CalendarLegend() {
+  const { t } = useLocale();
   return (
     <div className="flex flex-wrap items-center justify-center gap-4 mt-4 text-xs text-muted-foreground">
       <div className="flex items-center gap-1.5">
         <div className="w-3 h-3 rounded-full bg-yellow-500" />
-        <span>Excellent (9-10)</span>
+        <span>{t("calendarPage.scoreLabels.excellent")}</span>
       </div>
       <div className="flex items-center gap-1.5">
         <div className="w-3 h-3 rounded-full bg-green-500" />
-        <span>Good (7-8)</span>
+        <span>{t("calendarPage.scoreLabels.good")}</span>
       </div>
       <div className="flex items-center gap-1.5">
         <div className="w-3 h-3 rounded-full bg-blue-500" />
-        <span>Fair (5-6)</span>
+        <span>{t("calendarPage.scoreLabels.fair")}</span>
       </div>
       <div className="flex items-center gap-1.5">
         <div className="w-3 h-3 rounded-full bg-orange-500" />
-        <span>Challenging (3-4)</span>
+        <span>{t("calendarPage.scoreLabels.challenging")}</span>
       </div>
       <div className="flex items-center gap-1.5">
         <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-        <span>Today</span>
+        <span>{t("calendarPage.scoreLabels.today")}</span>
       </div>
     </div>
   );
@@ -368,8 +382,10 @@ export function FortuneCalendar({
   className,
   initialYear,
   initialMonth,
-  locale = "en-US",
+  locale: localeOverride,
 }: FortuneCalendarProps) {
+  const { locale } = useLocale();
+  const dateLocale = localeOverride || languages[locale].hreflang;
   const now = new Date();
   const [year, setYear] = useState(initialYear ?? now.getFullYear());
   const [month, setMonth] = useState(initialMonth ?? now.getMonth());
@@ -377,8 +393,8 @@ export function FortuneCalendar({
 
   // Generate calendar grid
   const calendarGrid = useMemo(
-    () => getCalendarGrid(year, month, true),
-    [year, month],
+    () => getCalendarGrid(year, month, true, locale),
+    [year, month, locale],
   );
 
   // Navigation handlers
@@ -425,14 +441,14 @@ export function FortuneCalendar({
       <CalendarHeader
         year={year}
         month={month}
-        locale={locale}
+        locale={dateLocale}
         onPrevMonth={handlePrevMonth}
         onNextMonth={handleNextMonth}
         onToday={handleToday}
       />
 
       {/* Week day header */}
-      <WeekDayHeader locale={locale} />
+      <WeekDayHeader locale={dateLocale} />
 
       {/* Calendar grid */}
       <div className="grid grid-cols-7 gap-1">

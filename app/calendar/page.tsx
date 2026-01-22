@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import { headers } from "next/headers";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import {
   BreadcrumbStructuredData,
@@ -8,6 +9,8 @@ import {
 } from "@/components/StructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
 import { DailyFortuneCompact } from "@/components/DailyFortune";
+import { i18n, isValidLocale, type Locale } from "@/lib/i18n-config";
+import { loadTranslations, getTranslation } from "@/lib/translations";
 
 const baseUrl = getSiteUrl();
 
@@ -72,13 +75,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CalendarPage() {
+export default async function CalendarPage() {
+  const headerLocale = headers().get("x-locale") ?? "";
+  const resolvedLocale = isValidLocale(headerLocale)
+    ? (headerLocale as Locale)
+    : i18n.defaultLocale;
+  const translations = await loadTranslations(resolvedLocale);
+  const t = (key: string, params?: Record<string, string | number>) =>
+    getTranslation(translations, key, params);
+
   return (
     <>
       <BreadcrumbStructuredData
         items={[
-          { name: "Home", url: "/" },
-          { name: "Fortune Calendar", url: "/calendar" },
+          { name: t("navigation.home"), url: "/" },
+          { name: t("navigation.calendar"), url: "/calendar" },
         ]}
       />
       <WebApplicationStructuredData />
@@ -91,11 +102,10 @@ export default function CalendarPage() {
             {/* Page Header */}
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                🗓️ Fortune Calendar
+                🗓️ {t("calendarPage.pageTitle")}
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Explore your daily fortunes! Click on any day to reveal your
-                fortune prediction, lucky numbers, colors, and personalized advice.
+                {t("calendarPage.pageSubtitle")}
               </p>
             </div>
 
@@ -135,15 +145,16 @@ export default function CalendarPage() {
 
                 {/* How to Use */}
                 <div className="bg-card rounded-2xl border shadow-sm p-6">
-                  <h2 className="text-lg font-semibold mb-4">How to Use</h2>
+                  <h2 className="text-lg font-semibold mb-4">
+                    {t("calendarPage.howToTitle")}
+                  </h2>
                   <ul className="space-y-3 text-sm text-muted-foreground">
                     <li className="flex items-start gap-2">
                       <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
                         1
                       </span>
                       <span>
-                        Navigate months using the arrows or click &quot;Today&quot; to
-                        return to the current month
+                        {t("calendarPage.howToSteps.step1")}
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
@@ -151,8 +162,7 @@ export default function CalendarPage() {
                         2
                       </span>
                       <span>
-                        Each day shows a score indicator - more filled dots mean
-                        better fortune
+                        {t("calendarPage.howToSteps.step2")}
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
@@ -160,8 +170,7 @@ export default function CalendarPage() {
                         3
                       </span>
                       <span>
-                        Click any day to see the full fortune with lucky numbers,
-                        colors, and advice
+                        {t("calendarPage.howToSteps.step3")}
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
@@ -169,7 +178,7 @@ export default function CalendarPage() {
                         4
                       </span>
                       <span>
-                        Look for ✨ sparkles on days with excellent fortune scores
+                        {t("calendarPage.howToSteps.step4")}
                       </span>
                     </li>
                   </ul>
@@ -177,10 +186,14 @@ export default function CalendarPage() {
 
                 {/* Fortune Score Guide */}
                 <div className="bg-card rounded-2xl border shadow-sm p-6">
-                  <h2 className="text-lg font-semibold mb-4">Score Guide</h2>
+                  <h2 className="text-lg font-semibold mb-4">
+                    {t("calendarPage.scoreGuideTitle")}
+                  </h2>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Excellent (9-10)</span>
+                      <span className="text-sm">
+                        {t("calendarPage.scoreLabels.excellent")}
+                      </span>
                       <div className="flex gap-0.5">
                         {[...Array(5)].map((_, i) => (
                           <div
@@ -191,7 +204,9 @@ export default function CalendarPage() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Good (7-8)</span>
+                      <span className="text-sm">
+                        {t("calendarPage.scoreLabels.good")}
+                      </span>
                       <div className="flex gap-0.5">
                         {[...Array(5)].map((_, i) => (
                           <div
@@ -202,7 +217,9 @@ export default function CalendarPage() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Fair (5-6)</span>
+                      <span className="text-sm">
+                        {t("calendarPage.scoreLabels.fair")}
+                      </span>
                       <div className="flex gap-0.5">
                         {[...Array(5)].map((_, i) => (
                           <div
@@ -213,7 +230,9 @@ export default function CalendarPage() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Challenging (3-4)</span>
+                      <span className="text-sm">
+                        {t("calendarPage.scoreLabels.challenging")}
+                      </span>
                       <div className="flex gap-0.5">
                         {[...Array(5)].map((_, i) => (
                           <div
@@ -229,17 +248,16 @@ export default function CalendarPage() {
                 {/* CTA */}
                 <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-6 text-white">
                   <h2 className="text-lg font-semibold mb-2">
-                    Want a Personal Fortune?
+                    {t("calendarPage.ctaTitle")}
                   </h2>
                   <p className="text-sm text-white/90 mb-4">
-                    Get a customized AI-generated fortune with your specific
-                    themes and preferences.
+                    {t("calendarPage.ctaDescription")}
                   </p>
                   <a
                     href="/generator"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-white text-amber-600 font-medium rounded-lg hover:bg-amber-50 transition-colors"
                   >
-                    Try AI Generator
+                    {t("calendarPage.ctaButton")}
                     <span>→</span>
                   </a>
                 </div>
@@ -249,57 +267,41 @@ export default function CalendarPage() {
             {/* SEO Content Section */}
             <section className="mt-16 max-w-4xl mx-auto">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                About the Fortune Calendar
+                {t("calendarPage.seoTitle")}
               </h2>
               <div className="prose prose-amber max-w-none text-gray-600">
-                <p>
-                  The Fortune Calendar is your daily guide to luck and wisdom.
-                  Each day features a unique fortune prediction generated using
-                  our proprietary algorithm that considers cosmic patterns and
-                  traditional fortune-telling wisdom.
-                </p>
-                <h3>What You&apos;ll Find Each Day</h3>
+                <p>{t("calendarPage.seoIntro")}</p>
+                <h3>{t("calendarPage.seoSections.dailyTitle")}</h3>
                 <ul>
                   <li>
-                    <strong>Overall Fortune Score:</strong> A 1-10 rating of your
-                    day&apos;s overall luck potential
+                    <strong>{t("calendarPage.seoSections.dailyItems.overallLabel")}:</strong>{" "}
+                    {t("calendarPage.seoSections.dailyItems.overallText")}
                   </li>
                   <li>
-                    <strong>Dimensional Scores:</strong> Separate ratings for
-                    career, love, health, and wealth
+                    <strong>{t("calendarPage.seoSections.dailyItems.dimensionsLabel")}:</strong>{" "}
+                    {t("calendarPage.seoSections.dailyItems.dimensionsText")}
                   </li>
                   <li>
-                    <strong>Fortune Message:</strong> A personalized wisdom quote
-                    or prediction for the day
+                    <strong>{t("calendarPage.seoSections.dailyItems.messageLabel")}:</strong>{" "}
+                    {t("calendarPage.seoSections.dailyItems.messageText")}
                   </li>
                   <li>
-                    <strong>Lucky Numbers:</strong> Six special numbers to guide
-                    your decisions
+                    <strong>{t("calendarPage.seoSections.dailyItems.numbersLabel")}:</strong>{" "}
+                    {t("calendarPage.seoSections.dailyItems.numbersText")}
                   </li>
                   <li>
-                    <strong>Lucky Color & Direction:</strong> Enhance your fortune
-                    by incorporating these elements
+                    <strong>{t("calendarPage.seoSections.dailyItems.elementsLabel")}:</strong>{" "}
+                    {t("calendarPage.seoSections.dailyItems.elementsText")}
                   </li>
                   <li>
-                    <strong>Daily Advice:</strong> Practical guidance based on your
-                    fortune score
+                    <strong>{t("calendarPage.seoSections.dailyItems.adviceLabel")}:</strong>{" "}
+                    {t("calendarPage.seoSections.dailyItems.adviceText")}
                   </li>
                 </ul>
-                <h3>How It Works</h3>
-                <p>
-                  Our fortune calendar uses a deterministic algorithm that ensures
-                  everyone sees the same fortune for each specific date. This
-                  creates a shared experience where you can discuss your daily
-                  fortunes with friends and family. The fortunes are generated
-                  fresh at midnight UTC, giving you a new prediction each day.
-                </p>
-                <h3>Planning with Fortune</h3>
-                <p>
-                  Use the calendar to plan important events on days with high
-                  fortune scores. Whether you&apos;re scheduling a job interview,
-                  planning a date, or making financial decisions, the Fortune
-                  Calendar can help you choose the most auspicious timing.
-                </p>
+                <h3>{t("calendarPage.seoSections.howTitle")}</h3>
+                <p>{t("calendarPage.seoSections.howText")}</p>
+                <h3>{t("calendarPage.seoSections.planningTitle")}</h3>
+                <p>{t("calendarPage.seoSections.planningText")}</p>
               </div>
             </section>
           </div>

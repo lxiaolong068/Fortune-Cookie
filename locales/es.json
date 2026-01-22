@@ -183,6 +183,7 @@
   },
   "dailyFortune": {
     "title": "Fortuna del día",
+    "fortuneLabel": "Fortuna",
     "subtitle": "Tu sabiduría y guía diaria",
     "overallScore": "Puntuación general de fortuna",
     "dimensions": {
@@ -207,6 +208,56 @@
       "good": "Buena fortuna",
       "fair": "Día equilibrado",
       "challenging": "Día de crecimiento"
+    }
+  },
+  "calendarPage": {
+    "pageTitle": "Calendario de la Fortuna",
+    "pageSubtitle": "Explora tus fortunas diarias. Haz clic en cualquier día para ver tu predicción, números de la suerte, colores y consejos.",
+    "headerTitle": "Calendario de la Fortuna",
+    "headerSubtitle": "Consulta tus fortunas diarias",
+    "todayButton": "Hoy",
+    "prevMonthAria": "Mes anterior",
+    "nextMonthAria": "Mes siguiente",
+    "howToTitle": "Cómo usarlo",
+    "howToSteps": {
+      "step1": "Navega por los meses con las flechas o pulsa \"Hoy\" para volver al mes actual.",
+      "step2": "Cada día muestra un indicador de puntuación: más puntos llenos, mejor fortuna.",
+      "step3": "Haz clic en cualquier día para ver la fortuna completa, números, colores y consejos.",
+      "step4": "Busca los ✨ destellos en días con puntuaciones excelentes."
+    },
+    "scoreGuideTitle": "Guía de puntuación",
+    "scoreLabels": {
+      "excellent": "Excelente (9-10)",
+      "good": "Buena (7-8)",
+      "fair": "Regular (5-6)",
+      "challenging": "Desafiante (3-4)",
+      "today": "Hoy"
+    },
+    "ctaTitle": "¿Quieres una fortuna personal?",
+    "ctaDescription": "Obtén una fortuna generada por IA con tus temas y preferencias.",
+    "ctaButton": "Probar el generador de IA",
+    "seoTitle": "Acerca del Calendario de la Fortuna",
+    "seoIntro": "El Calendario de la Fortuna es tu guía diaria de suerte y sabiduría. Cada día ofrece una predicción única generada con nuestro algoritmo inspirado en prácticas tradicionales.",
+    "seoSections": {
+      "dailyTitle": "Qué encontrarás cada día",
+      "dailyItems": {
+        "overallLabel": "Puntuación general",
+        "overallText": "Una valoración de 1 a 10 del potencial de suerte del día.",
+        "dimensionsLabel": "Puntuaciones por dimensión",
+        "dimensionsText": "Valoraciones separadas de carrera, amor, salud y riqueza.",
+        "messageLabel": "Mensaje de fortuna",
+        "messageText": "Una cita de sabiduría o predicción del día.",
+        "numbersLabel": "Números de la suerte",
+        "numbersText": "Seis números especiales para guiar tus decisiones.",
+        "elementsLabel": "Color y dirección de la suerte",
+        "elementsText": "Mejora tu fortuna incorporando estos elementos.",
+        "adviceLabel": "Consejo diario",
+        "adviceText": "Guía práctica según tu puntuación."
+      },
+      "howTitle": "Cómo funciona",
+      "howText": "El calendario usa un algoritmo determinista para que todos vean la misma fortuna en cada fecha. Se renueva a medianoche UTC.",
+      "planningTitle": "Planificar con la fortuna",
+      "planningText": "Usa los días con mayor puntuación para eventos importantes como entrevistas, citas o decisiones financieras."
     }
   },
   "messages": {

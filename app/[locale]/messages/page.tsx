@@ -23,6 +23,7 @@ import {
   getFortunesByCategory,
   getDatabaseStats,
   FortuneMessage,
+  localizeFortunes,
 } from "@/lib/fortune-database";
 import { MessagesClientWrapper, CategoryConfig } from "@/components/messages";
 import {
@@ -211,7 +212,8 @@ export default async function LocaleMessagesPage({
   }
 
   // Load translations
-  const translations = await loadTranslations(locale as Locale);
+  const resolvedLocale = locale as Locale;
+  const translations = await loadTranslations(resolvedLocale);
 
   // Helper function to get translation
   const t = (key: string, p?: Record<string, string | number>) =>
@@ -219,10 +221,10 @@ export default async function LocaleMessagesPage({
 
   // Get localized path helper
   const getLocalizedHref = (path: string) => {
-    if (locale === i18n.defaultLocale) {
+    if (resolvedLocale === i18n.defaultLocale) {
       return path;
     }
-    return `/${locale}${path}`;
+    return `/${resolvedLocale}${path}`;
   };
 
   const categoryConfig: CategoryConfig[] = categoryBaseConfig.map(
@@ -250,7 +252,10 @@ export default async function LocaleMessagesPage({
 
   for (const category of categoryConfig) {
     const allMessages = getFortunesByCategory(category.id);
-    categoryMessages[category.id] = allMessages.slice(0, 15);
+    categoryMessages[category.id] = localizeFortunes(
+      allMessages.slice(0, 15),
+      resolvedLocale,
+    );
 
     const latestTimestamp = allMessages.reduce((latest, message) => {
       const timestamp = new Date(message.dateAdded).getTime();
@@ -282,7 +287,7 @@ export default async function LocaleMessagesPage({
 
   return (
     <LocaleProvider
-      initialLocale={locale as Locale}
+      initialLocale={resolvedLocale}
       initialTranslations={translations}
     >
       <ItemListStructuredData

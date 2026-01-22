@@ -44,7 +44,7 @@ export function MessagesSearchFilter({
   onFiltersActive,
   className = "",
 }: MessagesSearchFilterProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [mood, setMood] = useState<MoodType>("all");
@@ -86,8 +86,9 @@ export function MessagesSearchFilter({
       style,
       sortBy: "popularity",
       limit: 50,
+      locale,
     });
-  }, [debouncedQuery, mood, length, style, hasActiveFilters]);
+  }, [debouncedQuery, mood, length, style, hasActiveFilters, locale]);
 
   // Clear all filters
   const clearFilters = useCallback(() => {

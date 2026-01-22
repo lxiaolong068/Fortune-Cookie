@@ -14,6 +14,7 @@ import {
   fortuneDatabase,
   type FortuneMessage,
   type FortuneCategory,
+  localizeFortunes,
 } from "@/lib/fortune-database";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
 import {
@@ -160,6 +161,10 @@ export default async function TagPage({ params }: PageProps) {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
   const fortunes = getFortunesByTag(decodedTag);
+  const localizedFortunes = localizeFortunes(
+    fortunes,
+    i18n.defaultLocale,
+  );
 
   if (fortunes.length === 0) {
     notFound();
@@ -207,7 +212,7 @@ export default async function TagPage({ params }: PageProps) {
           tag: decodedTag,
         })}
         url={getLocalizedHref(`/tag/${tag}`)}
-        items={fortunes.slice(0, 10).map((fortune) => ({
+        items={localizedFortunes.slice(0, 10).map((fortune) => ({
           name: fortune.message,
           description: t("messages.category.structuredDescription", {
             category: formattedTag,
@@ -242,7 +247,7 @@ export default async function TagPage({ params }: PageProps) {
         {/* Fortune Messages Grid */}
         <section className="container mx-auto px-4 py-8">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {fortunes.map((fortune) => (
+            {localizedFortunes.map((fortune) => (
               <Card
                 key={fortune.id}
                 className="hover:shadow-lg transition-shadow duration-200 border-l-4 border-l-amber-500"

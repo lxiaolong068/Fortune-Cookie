@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Flame, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import {
   getPopularFortunes,
+  localizeFortunes,
   type FortuneMessage,
 } from "@/lib/fortune-database";
 import { cn } from "@/lib/utils";
@@ -34,9 +35,10 @@ export function HotFortuneCarousel({
   count = 5,
   interval = 5000,
 }: HotFortuneCarouselProps) {
-  const { t } = useTranslation();
-  const [fortunes] = useState<FortuneMessage[]>(() =>
-    getPopularFortunes(count),
+  const { t, locale } = useTranslation();
+  const fortunes = useMemo<FortuneMessage[]>(
+    () => localizeFortunes(getPopularFortunes(count), locale),
+    [count, locale],
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);

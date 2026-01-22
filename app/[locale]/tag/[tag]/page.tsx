@@ -14,6 +14,7 @@ import {
   fortuneDatabase,
   type FortuneMessage,
   type FortuneCategory,
+  localizeFortunes,
 } from "@/lib/fortune-database";
 import {
   i18n,
@@ -181,19 +182,21 @@ export default async function LocaleTagPage({ params }: PageProps) {
     notFound();
   }
 
+  const resolvedLocale = locale as Locale;
   const decodedTag = decodeURIComponent(tag);
   const fortunes = getFortunesByTag(decodedTag);
   if (fortunes.length === 0) {
     notFound();
   }
 
-  const translations = await loadTranslations(locale as Locale);
+  const translations = await loadTranslations(resolvedLocale);
   const t = (key: string, p?: Record<string, string | number>) =>
     getTranslation(translations, key, p);
 
   const formattedTag = formatTagName(decodedTag);
   const allTags = getAllTags();
-  const localizedBrowseHref = getLocalizedHref(locale as Locale, "/browse");
+  const localizedBrowseHref = getLocalizedHref(resolvedLocale, "/browse");
+  const localizedFortunes = localizeFortunes(fortunes, resolvedLocale);
 
   // Get related tags (tags that appear with this tag)
   const relatedTags = new Set<string>();
@@ -208,7 +211,7 @@ export default async function LocaleTagPage({ params }: PageProps) {
 
   // Breadcrumb items
   const navBreadcrumbs = [
-    { name: t("navigation.home"), href: getLocalizedHref(locale as Locale, "/") },
+    { name: t("navigation.home"), href: getLocalizedHref(resolvedLocale, "/") },
     { name: t("navigation.browse"), href: localizedBrowseHref },
     { name: formattedTag },
   ];
@@ -228,16 +231,16 @@ export default async function LocaleTagPage({ params }: PageProps) {
 
   return (
     <LocaleProvider
-      initialLocale={locale as Locale}
+      initialLocale={resolvedLocale}
       initialTranslations={translations}
     >
       <BreadcrumbStructuredData
         items={[
-          { name: t("navigation.home"), url: getLocalizedHref(locale as Locale, "/") },
+          { name: t("navigation.home"), url: getLocalizedHref(resolvedLocale, "/") },
           { name: t("navigation.browse"), url: localizedBrowseHref },
           {
             name: formattedTag,
-            url: getLocalizedHref(locale, `/tag/${tag}`),
+            url: getLocalizedHref(resolvedLocale, `/tag/${tag}`),
           },
         ]}
       />
@@ -245,8 +248,8 @@ export default async function LocaleTagPage({ params }: PageProps) {
       <ItemListStructuredData
         name={pageTitle}
         description={pageDescription}
-        url={getLocalizedHref(locale as Locale, `/tag/${tag}`)}
-        items={fortunes.slice(0, 10).map((fortune) => ({
+        url={getLocalizedHref(resolvedLocale, `/tag/${tag}`)}
+        items={localizedFortunes.slice(0, 10).map((fortune) => ({
           name: fortune.message,
           description: t("messages.category.structuredDescription", {
             category: formattedTag,
@@ -281,7 +284,7 @@ export default async function LocaleTagPage({ params }: PageProps) {
         {/* Fortune Messages Grid */}
         <section className="container mx-auto px-4 py-8">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {fortunes.map((fortune) => (
+            {localizedFortunes.map((fortune) => (
               <Card
                 key={fortune.id}
                 className="hover:shadow-lg transition-shadow duration-200 border-l-4 border-l-amber-500"
@@ -295,7 +298,7 @@ export default async function LocaleTagPage({ params }: PageProps) {
                       <Link
                         key={t}
                         href={getLocalizedHref(
-                          locale as Locale,
+                          resolvedLocale,
                           `/tag/${encodeURIComponent(t.toLowerCase())}`,
                         )}
                       >
@@ -354,7 +357,7 @@ export default async function LocaleTagPage({ params }: PageProps) {
                 <Link
                   key={t}
                   href={getLocalizedHref(
-                    locale as Locale,
+                    resolvedLocale,
                     `/tag/${encodeURIComponent(t)}`,
                   )}
                 >
@@ -382,7 +385,7 @@ export default async function LocaleTagPage({ params }: PageProps) {
                 <Link
                   key={t}
                   href={getLocalizedHref(
-                    locale as Locale,
+                    resolvedLocale,
                     `/tag/${encodeURIComponent(t)}`,
                   )}
                 >
@@ -418,7 +421,7 @@ export default async function LocaleTagPage({ params }: PageProps) {
                 size="lg"
                 className="bg-white text-amber-600 hover:bg-amber-50"
               >
-                <Link href={getLocalizedHref(locale as Locale, "/generator")}>
+                <Link href={getLocalizedHref(resolvedLocale, "/generator")}>
                   {t("tagsPage.ctaButton")}{" "}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
