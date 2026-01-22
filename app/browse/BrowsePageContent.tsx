@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
@@ -23,18 +23,53 @@ import {
   categoryBadgeColors,
   type FortuneCategory,
 } from "@/lib/category-config";
+import { useLocale } from "@/lib/locale-context";
 
 const ITEMS_PER_PAGE = 24;
 
 export function BrowsePageContent() {
   const searchParams = useSearchParams();
+  const searchParamsKey = searchParams.toString();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  const { getLocalizedHref } = useLocale();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("q") || "",
+  );
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    searchParams.get("category") || "all",
+  );
   const [sortBy, setSortBy] = useState<
     "popularity" | "recent" | "alphabetical"
-  >("popularity");
+  >(() => {
+    const sortParam = searchParams.get("sort");
+    if (sortParam === "recent" || sortParam === "alphabetical") {
+      return sortParam;
+    }
+    return "popularity";
+  });
+
+  useEffect(() => {
+    const nextQuery = searchParams.get("q") || "";
+    const nextCategory = searchParams.get("category") || "all";
+    const sortParam = searchParams.get("sort");
+    const nextSort =
+      sortParam === "recent" || sortParam === "alphabetical"
+        ? sortParam
+        : "popularity";
+
+    if (nextQuery !== searchQuery) {
+      setSearchQuery(nextQuery);
+    }
+
+    if (nextCategory !== selectedCategory) {
+      setSelectedCategory(nextCategory);
+    }
+
+    if (nextSort !== sortBy) {
+      setSortBy(nextSort);
+    }
+  }, [searchParamsKey, searchQuery, selectedCategory, sortBy, searchParams]);
 
   const stats = getDatabaseStats();
 
@@ -110,7 +145,12 @@ export function BrowsePageContent() {
             {/* SEO Category Links - improved touch targets */}
             <div className="flex flex-wrap justify-center gap-3 md:gap-2 mb-8 max-w-3xl mx-auto">
               {Object.keys(stats.categories).map((category) => (
-                <Link key={category} href={`/browse/category/${category}`}>
+                <Link
+                  key={category}
+                  href={`${getLocalizedHref("/browse")}?category=${encodeURIComponent(
+                    category,
+                  )}`}
+                >
                   <Badge
                     variant="outline"
                     className="hover:bg-amber-50 cursor-pointer transition-colors py-2 px-4 min-h-[40px] text-sm flex items-center"

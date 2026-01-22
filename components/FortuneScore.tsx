@@ -16,6 +16,7 @@ import {
   getScoreColorClass,
   getScoreBgClass,
 } from "@/lib/daily-fortune";
+import { useTranslation } from "@/lib/locale-context";
 
 // ============================================================================
 // Types
@@ -30,9 +31,7 @@ interface FortuneScoreProps {
 
 interface ScoreDimension {
   key: keyof Omit<FortuneScores, "overall">;
-  label: string;
   icon: React.ComponentType<{ className?: string }>;
-  description: string;
 }
 
 // ============================================================================
@@ -42,27 +41,19 @@ interface ScoreDimension {
 const SCORE_DIMENSIONS: ScoreDimension[] = [
   {
     key: "career",
-    label: "Career",
     icon: Briefcase,
-    description: "Work & Professional Growth",
   },
   {
     key: "love",
-    label: "Love",
     icon: Heart,
-    description: "Relationships & Romance",
   },
   {
     key: "health",
-    label: "Health",
     icon: Activity,
-    description: "Wellness & Vitality",
   },
   {
     key: "wealth",
-    label: "Wealth",
     icon: Coins,
-    description: "Money & Prosperity",
   },
 ];
 
@@ -76,20 +67,17 @@ const SCORE_DIMENSIONS: ScoreDimension[] = [
 function OverallScore({
   score,
   animated,
+  label,
+  ratingLabels,
 }: {
   score: number;
   animated?: boolean;
+  label: string;
+  ratingLabels: Record<ReturnType<typeof getScoreRating>, string>;
 }) {
   const rating = getScoreRating(score);
   const colorClass = getScoreColorClass(score);
   const bgClass = getScoreBgClass(score);
-
-  const ratingLabels: Record<typeof rating, string> = {
-    excellent: "Excellent Day!",
-    good: "Good Fortune",
-    fair: "Balanced Day",
-    challenging: "Growth Day",
-  };
 
   const ratingEmoji: Record<typeof rating, string> = {
     excellent: "🌟",
@@ -103,7 +91,7 @@ function OverallScore({
       <div className="flex items-center justify-center gap-2 mb-2">
         <Star className={cn("w-5 h-5", colorClass)} />
         <span className="text-sm font-medium text-muted-foreground">
-          Overall Fortune
+          {label}
         </span>
       </div>
 
@@ -135,11 +123,13 @@ function DimensionScore({
   score,
   animated,
   index,
+  label,
 }: {
   dimension: ScoreDimension;
   score: number;
   animated?: boolean;
   index: number;
+  label: string;
 }) {
   const Icon = dimension.icon;
   const colorClass = getScoreColorClass(score);
@@ -155,7 +145,7 @@ function DimensionScore({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Icon className={cn("w-4 h-4", colorClass)} />
-          <span className="text-sm font-medium">{dimension.label}</span>
+          <span className="text-sm font-medium">{label}</span>
         </div>
         <span className={cn("text-sm font-bold", colorClass)}>{score}/10</span>
       </div>
@@ -187,9 +177,11 @@ function DimensionScore({
 function CompactScores({
   scores,
   animated,
+  labels,
 }: {
   scores: FortuneScores;
   animated?: boolean;
+  labels: Record<ScoreDimension["key"], string>;
 }) {
   return (
     <div className="flex flex-wrap gap-2 justify-center">
@@ -198,6 +190,7 @@ function CompactScores({
         const Icon = dim.icon;
         const colorClass = getScoreColorClass(score);
         const bgClass = getScoreBgClass(score);
+        const label = labels[dim.key];
 
         return (
           <motion.div
@@ -209,7 +202,7 @@ function CompactScores({
               "flex items-center gap-1.5 px-3 py-1.5 rounded-full",
               bgClass
             )}
-            title={`${dim.label}: ${score}/10`}
+            title={`${label}: ${score}/10`}
           >
             <Icon className={cn("w-3.5 h-3.5", colorClass)} />
             <span className={cn("text-xs font-semibold", colorClass)}>
@@ -238,17 +231,36 @@ export function FortuneScore({
   animated = true,
   className,
 }: FortuneScoreProps) {
+  const { t } = useTranslation();
+  const labels = {
+    career: t("dailyFortune.dimensions.career"),
+    love: t("dailyFortune.dimensions.love"),
+    health: t("dailyFortune.dimensions.health"),
+    wealth: t("dailyFortune.dimensions.wealth"),
+  } satisfies Record<ScoreDimension["key"], string>;
+  const ratingLabels = {
+    excellent: t("dailyFortune.ratings.excellent"),
+    good: t("dailyFortune.ratings.good"),
+    fair: t("dailyFortune.ratings.fair"),
+    challenging: t("dailyFortune.ratings.challenging"),
+  } satisfies Record<ReturnType<typeof getScoreRating>, string>;
+
   return (
     <div className={cn("space-y-4", className)}>
       {/* Overall Score */}
-      <OverallScore score={scores.overall} animated={animated} />
+      <OverallScore
+        score={scores.overall}
+        animated={animated}
+        label={t("dailyFortune.overallScore")}
+        ratingLabels={ratingLabels}
+      />
 
       {/* Dimension Details */}
       {showDetails ? (
         <div className="space-y-3 pt-2">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <TrendingUp className="w-4 h-4" />
-            <span>Fortune Breakdown</span>
+            <span>{t("dailyFortune.breakdown")}</span>
           </div>
           <div className="space-y-3">
             {SCORE_DIMENSIONS.map((dimension, index) => (
@@ -258,12 +270,13 @@ export function FortuneScore({
                 score={scores[dimension.key]}
                 animated={animated}
                 index={index}
+                label={labels[dimension.key]}
               />
             ))}
           </div>
         </div>
       ) : (
-        <CompactScores scores={scores} animated={animated} />
+        <CompactScores scores={scores} animated={animated} labels={labels} />
       )}
     </div>
   );

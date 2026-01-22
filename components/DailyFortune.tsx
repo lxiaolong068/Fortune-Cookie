@@ -26,6 +26,8 @@ import {
 } from "@/lib/daily-fortune";
 import { FortuneScore } from "./FortuneScore";
 import { SocialShare } from "./SocialShare";
+import { useLocale } from "@/lib/locale-context";
+import { languages } from "@/lib/i18n-config";
 
 // ============================================================================
 // Types
@@ -45,6 +47,7 @@ interface DailyFortuneProps {
  * Countdown timer to next fortune reset
  */
 function ResetCountdown({ className }: { className?: string }) {
+  const { t } = useLocale();
   const [timeUntil, setTimeUntil] = useState<TimeUntilReset | null>(null);
 
   useEffect(() => {
@@ -69,7 +72,11 @@ function ResetCountdown({ className }: { className?: string }) {
       )}
     >
       <Clock className="w-4 h-4" />
-      <span>New fortune in {formatTimeUntilReset(timeUntil)}</span>
+      <span>
+        {t("dailyFortune.resetIn", {
+          time: formatTimeUntilReset(timeUntil),
+        })}
+      </span>
     </div>
   );
 }
@@ -86,6 +93,7 @@ function FortuneCard({
   isBlurred?: boolean;
   onReveal?: () => void;
 }) {
+  const { t } = useLocale();
   return (
     <div className="relative">
       <motion.div
@@ -115,7 +123,9 @@ function FortuneCard({
                 className="flex items-center gap-2 px-4 py-2 bg-amber-500/90 hover:bg-amber-500 text-white rounded-full shadow-lg transition-colors"
               >
                 <Eye className="w-4 h-4" />
-                <span className="text-sm font-medium">Reveal Preview</span>
+                <span className="text-sm font-medium">
+                  {t("dailyFortune.revealTomorrow")}
+                </span>
               </button>
             </div>
           )}
@@ -125,7 +135,7 @@ function FortuneCard({
         {!isBlurred && fortune.fortune.luckyNumbers && (
           <div className="mt-4 flex items-center justify-center gap-2">
             <span className="text-xs text-amber-700 dark:text-amber-300">
-              Lucky Numbers:
+              {t("dailyFortune.luckyNumbers")}:
             </span>
             <div className="flex gap-1">
               {fortune.fortune.luckyNumbers.map((num, i) => (
@@ -148,13 +158,16 @@ function FortuneCard({
  * Daily extras (lucky color, direction, advice)
  */
 function DailyExtras({ fortune }: { fortune: DailyFortuneType }) {
+  const { t } = useLocale();
   return (
     <div className="grid grid-cols-2 gap-3">
       {/* Lucky Color */}
       <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
         <Palette className="w-4 h-4 text-muted-foreground" />
         <div>
-          <p className="text-xs text-muted-foreground">Lucky Color</p>
+          <p className="text-xs text-muted-foreground">
+            {t("dailyFortune.luckyColor")}
+          </p>
           <p className="text-sm font-medium">{fortune.luckyColor}</p>
         </div>
       </div>
@@ -163,7 +176,9 @@ function DailyExtras({ fortune }: { fortune: DailyFortuneType }) {
       <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
         <Compass className="w-4 h-4 text-muted-foreground" />
         <div>
-          <p className="text-xs text-muted-foreground">Lucky Direction</p>
+          <p className="text-xs text-muted-foreground">
+            {t("dailyFortune.luckyDirection")}
+          </p>
           <p className="text-sm font-medium">{fortune.luckyDirection}</p>
         </div>
       </div>
@@ -175,12 +190,13 @@ function DailyExtras({ fortune }: { fortune: DailyFortuneType }) {
  * Daily advice section
  */
 function DailyAdvice({ advice }: { advice: string }) {
+  const { t } = useLocale();
   return (
     <div className="flex items-start gap-3 p-4 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200/50 dark:border-blue-800/50">
       <Lightbulb className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
       <div>
         <p className="text-xs font-medium text-blue-600 dark:text-blue-400 mb-1">
-          Today&apos;s Advice
+          {t("dailyFortune.advice")}
         </p>
         <p className="text-sm text-blue-900 dark:text-blue-100">{advice}</p>
       </div>
@@ -200,12 +216,15 @@ function TomorrowPreview({
   isRevealed: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useLocale();
   return (
     <div className="mt-6 pt-6 border-t border-border">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Tomorrow&apos;s Fortune Preview</span>
+          <span className="text-sm font-medium">
+            {t("dailyFortune.tomorrowPreview")}
+          </span>
         </div>
         <button
           onClick={onToggle}
@@ -214,12 +233,12 @@ function TomorrowPreview({
           {isRevealed ? (
             <>
               <EyeOff className="w-3 h-3" />
-              Hide
+              {t("dailyFortune.hide")}
             </>
           ) : (
             <>
               <Eye className="w-3 h-3" />
-              Peek
+              {t("dailyFortune.peek")}
             </>
           )}
         </button>
@@ -249,6 +268,7 @@ export function DailyFortune({
   showTomorrowPreview = true,
   compact = false,
 }: DailyFortuneProps) {
+  const { t, locale, getLocalizedHref } = useLocale();
   const [todayFortune, setTodayFortune] = useState<DailyFortuneType | null>(
     null
   );
@@ -299,13 +319,18 @@ export function DailyFortune({
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold">Today&apos;s Fortune</h2>
+              <h2 className="text-lg font-semibold">
+                {t("dailyFortune.title")}
+              </h2>
               <p className="text-sm text-muted-foreground">
-                {new Date(todayFortune.date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                })}
+                {new Date(todayFortune.date).toLocaleDateString(
+                  languages[locale].hreflang,
+                  {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  },
+                )}
               </p>
             </div>
           </div>
@@ -314,14 +339,14 @@ export function DailyFortune({
             <button
               onClick={refreshFortunes}
               className="p-2 rounded-full hover:bg-muted transition-colors"
-              title="Refresh"
+              title={t("common.refresh")}
             >
               <RefreshCw className="w-4 h-4 text-muted-foreground" />
             </button>
             <button
               onClick={() => setIsSharing(!isSharing)}
               className="p-2 rounded-full hover:bg-muted transition-colors"
-              title="Share"
+              title={t("common.share")}
             >
               <Share2 className="w-4 h-4 text-muted-foreground" />
             </button>
@@ -383,11 +408,11 @@ export function DailyFortune({
       {/* Footer CTA */}
       <div className="p-4 md:p-6 border-t bg-muted/30">
         <a
-          href="/generator"
+          href={getLocalizedHref("/generator")}
           className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-medium rounded-xl transition-all shadow-md hover:shadow-lg"
         >
           <Sparkles className="w-4 h-4" />
-          Generate Your Personal AI Fortune
+          {t("dailyFortune.getAIFortune")}
           <ChevronRight className="w-4 h-4" />
         </a>
       </div>

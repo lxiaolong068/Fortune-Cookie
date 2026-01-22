@@ -8,6 +8,8 @@ import {
   type FortuneMessage,
 } from "@/lib/fortune-database";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/locale-context";
+import { allCategories, type FortuneCategory } from "@/lib/category-config";
 
 interface HotFortuneCarouselProps {
   className?: string;
@@ -32,6 +34,7 @@ export function HotFortuneCarousel({
   count = 5,
   interval = 5000,
 }: HotFortuneCarouselProps) {
+  const { t } = useTranslation();
   const [fortunes] = useState<FortuneMessage[]>(() =>
     getPopularFortunes(count),
   );
@@ -76,6 +79,10 @@ export function HotFortuneCarousel({
   }, []);
 
   const currentFortune = fortunes[currentIndex];
+  const categoryKey = currentFortune.category as FortuneCategory;
+  const localizedCategory = allCategories.includes(categoryKey)
+    ? t(`generator.themes.${categoryKey}`)
+    : currentFortune.category;
 
   if (fortunes.length === 0 || !currentFortune) return null;
 
@@ -94,7 +101,7 @@ export function HotFortuneCarousel({
             id="hot-fortunes-heading"
             className="text-xl font-semibold text-gray-800"
           >
-            Today&apos;s Popular Fortunes
+            {t("home.hotFortunesTitle")}
           </h2>
           <Flame className="h-5 w-5 text-orange-500" aria-hidden="true" />
         </div>
@@ -105,7 +112,7 @@ export function HotFortuneCarousel({
           <button
             onClick={goToPrevious}
             className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow-md transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-amber-400"
-            aria-label="Previous fortune"
+            aria-label={t("common.previousFortune")}
           >
             <ChevronLeft className="h-5 w-5 text-gray-600" />
           </button>
@@ -113,7 +120,7 @@ export function HotFortuneCarousel({
           <button
             onClick={goToNext}
             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow-md transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-amber-400"
-            aria-label="Next fortune"
+            aria-label={t("common.nextFortune")}
           >
             <ChevronRight className="h-5 w-5 text-gray-600" />
           </button>
@@ -144,7 +151,7 @@ export function HotFortuneCarousel({
 
                 {/* Category badge */}
                 <span className="inline-block px-3 py-1 text-xs font-medium text-amber-700 bg-amber-100 rounded-full capitalize">
-                  {currentFortune.category}
+                  {localizedCategory}
                 </span>
               </motion.div>
             </AnimatePresence>
@@ -154,7 +161,9 @@ export function HotFortuneCarousel({
           <button
             onClick={() => setIsPaused(!isPaused)}
             className="absolute bottom-2 right-2 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-white/50 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400"
-            aria-label={isPaused ? "Resume auto-play" : "Pause auto-play"}
+            aria-label={
+              isPaused ? t("common.resumeAutoPlay") : t("common.pauseAutoPlay")
+            }
           >
             {isPaused ? (
               <Play className="h-4 w-4" />
@@ -168,7 +177,7 @@ export function HotFortuneCarousel({
         <div
           className="flex justify-center gap-2 mt-4"
           role="tablist"
-          aria-label="Fortune carousel navigation"
+          aria-label={t("common.carouselNavigation")}
         >
           {fortunes.map((_, index) => (
             <button
@@ -182,7 +191,7 @@ export function HotFortuneCarousel({
               )}
               role="tab"
               aria-selected={index === currentIndex}
-              aria-label={`Go to fortune ${index + 1}`}
+              aria-label={t("common.goToFortune", { index: index + 1 })}
             />
           ))}
         </div>

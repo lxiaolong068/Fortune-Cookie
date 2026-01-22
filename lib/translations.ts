@@ -32,6 +32,19 @@ export interface TranslationFile {
     oldest: string;
     popular: string;
     random: string;
+    selectLanguage: string;
+    switchToLanguage: string;
+    languageOptions: string;
+    skipToContent: string;
+    online: string;
+    offline: string;
+    refresh: string;
+    pauseAutoPlay: string;
+    resumeAutoPlay: string;
+    previousFortune: string;
+    nextFortune: string;
+    goToFortune: string;
+    carouselNavigation: string;
   };
   navigation: {
     home: string;
@@ -44,8 +57,24 @@ export interface TranslationFile {
     faq: string;
     profile: string;
     favorites: string;
+    calendar: string;
     signIn: string;
     signOut: string;
+    mainLabel: string;
+    mobileLabel: string;
+    menuLabel: string;
+    openMenu: string;
+    closeMenu: string;
+    homeDescription: string;
+    generatorDescription: string;
+    messagesDescription: string;
+    browseDescription: string;
+    favoritesDescription: string;
+    calendarDescription: string;
+    historyDescription: string;
+    recipesDescription: string;
+    blogDescription: string;
+    profileDescription: string;
   };
   footer: {
     about: string;
@@ -55,6 +84,39 @@ export interface TranslationFile {
     contact: string;
     copyright: string;
     madeWith: string;
+    poweredBy: string;
+    generate: string;
+    learn: string;
+    messages: string;
+    fortuneGenerator: string;
+    aiGenerator: string;
+    browseMessages: string;
+    whoInvented: string;
+    allMessages: string;
+    funnyMessages: string;
+    howToMake: string;
+    popularSearches: string;
+    fortuneCategories: string;
+    learnMore: string;
+    resources: string;
+    myFavorites: string;
+    fortuneDatabase: string;
+    sitemap: string;
+    contactUs: string;
+    followTwitter: string;
+    viewGithub: string;
+    contactEmail: string;
+    funnyFortuneMessages: string;
+    whoInventedFull: string;
+    howToMakeFull: string;
+    inspirationalQuotes: string;
+    loveFortunes: string;
+    successMessages: string;
+    wisdomQuotes: string;
+    friendshipMessages: string;
+    fortuneHistory: string;
+    fortuneRecipes: string;
+    blogArticles: string;
   };
   home: {
     title: string;
@@ -67,6 +129,32 @@ export interface TranslationFile {
     testimonials: string;
     cta: string;
     ctaButton: string;
+    heroTitle: string;
+    heroTitleShort: string;
+    heroDescription: string;
+    experienceLabel: string;
+    tapToOpen: string;
+    magicAwaits: string;
+    whyUseTitle: string;
+    hotFortunesTitle: string;
+    features: {
+      feature1: string;
+      feature2: string;
+      feature3: string;
+      feature4: string;
+      feature5: string;
+      feature6: string;
+      feature7: string;
+      feature8: string;
+    };
+    howToUseTitle: string;
+    howToUseDescription: string;
+    howToUseStep1: string;
+    howToUseStep2: string;
+    howToUseStep3: string;
+    howToUseCta: string;
+    aiGeneratorLink: string;
+    howToUseCtaSuffix: string;
   };
   generator: {
     title: string;
@@ -112,6 +200,16 @@ export interface TranslationFile {
     revealTomorrow: string;
     resetIn: string;
     getAIFortune: string;
+    luckyNumbers: string;
+    breakdown: string;
+    peek: string;
+    hide: string;
+    ratings: {
+      excellent: string;
+      good: string;
+      fair: string;
+      challenging: string;
+    };
   };
   messages: {
     title: string;
@@ -487,6 +585,7 @@ export type TranslationKey =
   | `generator.themes.${keyof TranslationFile["generator"]["themes"]}`
   | `dailyFortune.${keyof TranslationFile["dailyFortune"]}`
   | `dailyFortune.dimensions.${keyof TranslationFile["dailyFortune"]["dimensions"]}`
+  | `dailyFortune.ratings.${keyof TranslationFile["dailyFortune"]["ratings"]}`
   | `messages.${keyof TranslationFile["messages"]}`
   | `browse.${keyof TranslationFile["browse"]}`
   | `favorites.${keyof TranslationFile["favorites"]}`

@@ -250,30 +250,36 @@ export function Breadcrumbs({
 }
 
 // Footer links component
-export function FooterLinks() {
+export function FooterLinks({
+  t,
+  getLocalizedHref,
+}: {
+  t: (key: string) => string;
+  getLocalizedHref: (path: string) => string;
+}) {
   const linkGroups = [
     {
-      title: 'Generate',
+      title: t("footer.generate"),
       links: [
-        { href: '/', title: 'Fortune Generator' },
-        { href: '/generator', title: 'AI Generator' },
-        { href: '/browse', title: 'Browse Messages' }
+        { href: getLocalizedHref("/"), title: t("footer.fortuneGenerator") },
+        { href: getLocalizedHref("/generator"), title: t("footer.aiGenerator") },
+        { href: getLocalizedHref("/browse"), title: t("footer.browseMessages") }
       ]
     },
     {
-      title: 'Learn',
+      title: t("footer.learn"),
       links: [
-        { href: '/history', title: 'History' },
-        { href: '/who-invented-fortune-cookies', title: 'Who Invented?' },
-        { href: '/recipes', title: 'Recipes' }
+        { href: getLocalizedHref("/history"), title: t("navigation.history") },
+        { href: "/who-invented-fortune-cookies", title: t("footer.whoInvented") },
+        { href: getLocalizedHref("/recipes"), title: t("navigation.recipes") }
       ]
     },
     {
-      title: 'Messages',
+      title: t("footer.messages"),
       links: [
-        { href: '/messages', title: 'All Messages' },
-        { href: '/funny-fortune-cookie-messages', title: 'Funny Messages' },
-        { href: '/how-to-make-fortune-cookies', title: 'How to Make' }
+        { href: getLocalizedHref("/messages"), title: t("footer.allMessages") },
+        { href: "/funny-fortune-cookie-messages", title: t("footer.funnyMessages") },
+        { href: "/how-to-make-fortune-cookies", title: t("footer.howToMake") }
       ]
     }
   ]

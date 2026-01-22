@@ -19,6 +19,9 @@ import {
   WebsiteStructuredData,
 } from "@/components/StructuredData";
 import { Toaster } from "@/components/ui/sonner";
+import { i18n, isValidLocale } from "@/lib/i18n-config";
+import { LocaleProvider } from "@/lib/locale-context";
+import { getTranslation, loadTranslations } from "@/lib/translations";
 
 // Dynamic imports for non-critical components to reduce initial bundle size
 const Footer = dynamic(
@@ -175,17 +178,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   // 获取 nonce 用于 CSP（仅在生产环境）
+  const requestHeaders = headers();
   const nonce =
-    process.env.NODE_ENV === "production" ? headers().get("x-nonce") : null;
+    process.env.NODE_ENV === "production" ? requestHeaders.get("x-nonce") : null;
+
+  const headerLocale = requestHeaders.get("x-locale") ?? "";
+  const locale = isValidLocale(headerLocale) ? headerLocale : i18n.defaultLocale;
+  const translations = await loadTranslations(locale);
+  const skipToContentLabel = getTranslation(translations, "common.skipToContent");
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <CriticalCSS />
 
@@ -232,37 +241,39 @@ export default function RootLayout({
         <link rel="manifest" href="/app-manifest.json" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        {/* Skip to main content link for accessibility (WCAG 2.1) */}
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-        <ThemeInitializer />
-        <ServiceWorkerInitializer />
-        <ErrorMonitorInitializer />
-        <OptimizedPreloader />
-        <DeferredScripts>
-          <PerformanceMonitor />
-          <GoogleAnalytics
-            measurementId={process.env.GOOGLE_ANALYTICS_ID || "G-7QBCKNQ980"}
-          />
-          {/* Use optimized AdSense Facade for better LCP performance */}
-          <OptimizedAdSense
-            clientId={
-              process.env.GOOGLE_ADSENSE_CLIENT_ID || "ca-pub-6958408841088360"
-            }
-          />
-        </DeferredScripts>
-        <ErrorBoundary>
-          <Suspense fallback={null}>
-            <RouteProgress />
-            <AnalyticsInitializer />
-          </Suspense>
-          <Navigation />
-          <main id="main-content">{children}</main>
-          <Footer />
-          <AnalyticsConsentBanner />
-          <Toaster />
-        </ErrorBoundary>
+        <LocaleProvider initialLocale={locale} initialTranslations={translations}>
+          {/* Skip to main content link for accessibility (WCAG 2.1) */}
+          <a href="#main-content" className="skip-link">
+            {skipToContentLabel}
+          </a>
+          <ThemeInitializer />
+          <ServiceWorkerInitializer />
+          <ErrorMonitorInitializer />
+          <OptimizedPreloader />
+          <DeferredScripts>
+            <PerformanceMonitor />
+            <GoogleAnalytics
+              measurementId={process.env.GOOGLE_ANALYTICS_ID || "G-7QBCKNQ980"}
+            />
+            {/* Use optimized AdSense Facade for better LCP performance */}
+            <OptimizedAdSense
+              clientId={
+                process.env.GOOGLE_ADSENSE_CLIENT_ID || "ca-pub-6958408841088360"
+              }
+            />
+          </DeferredScripts>
+          <ErrorBoundary>
+            <Suspense fallback={null}>
+              <RouteProgress />
+              <AnalyticsInitializer />
+            </Suspense>
+            <Navigation />
+            <main id="main-content">{children}</main>
+            <Footer />
+            <AnalyticsConsentBanner />
+            <Toaster />
+          </ErrorBoundary>
+        </LocaleProvider>
       </body>
     </html>
   );

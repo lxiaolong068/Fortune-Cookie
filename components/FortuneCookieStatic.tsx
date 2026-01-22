@@ -2,6 +2,9 @@
 // import Image from "next/image";
 // import { getImageUrl } from "@/lib/site";
 import { HeroDecorations } from "./HeroDecorations";
+import { headers } from "next/headers";
+import { i18n, isValidLocale } from "@/lib/i18n-config";
+import { getTranslation, loadTranslations } from "@/lib/translations";
 
 /**
  * Static LCP Component - Server-Side Rendered
@@ -18,12 +21,18 @@ import { HeroDecorations } from "./HeroDecorations";
  *
  * Expected LCP improvement: 7.4s → ~2.5s (66% reduction)
  */
-export function FortuneCookieStatic() {
+export async function FortuneCookieStatic() {
+  const requestHeaders = headers();
+  const headerLocale = requestHeaders.get("x-locale") ?? "";
+  const locale = isValidLocale(headerLocale) ? headerLocale : i18n.defaultLocale;
+  const translations = await loadTranslations(locale);
+  const t = (key: string) => getTranslation(translations, key);
+
   return (
     <section
       className="fortune-cookie-lcp relative flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-orange-50/80 to-amber-100/80 backdrop-blur-sm"
       style={{ contentVisibility: "auto" }}
-      aria-label="Fortune Cookie Experience"
+      aria-label={t("home.experienceLabel")}
     >
       {/* Hero Background Decorations */}
       <HeroDecorations />
@@ -81,12 +90,12 @@ export function FortuneCookieStatic() {
 
           {/* Main Title - LCP Text Element */}
           <h2 className="text-3xl mb-3 font-semibold bg-gradient-to-r from-amber-700 via-yellow-600 to-orange-700 bg-clip-text text-transparent relative z-10">
-            Fortune Cookie
+            {t("home.heroTitleShort")}
           </h2>
 
           {/* Subtitle */}
           <p className="text-amber-700 mb-4 relative z-10">
-            Tap the cookie to crack it open!
+            {t("home.tapToOpen")}
           </p>
 
           {/* Magic hint badge */}
@@ -100,7 +109,7 @@ export function FortuneCookieStatic() {
               <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
             </svg>
             <span className="text-sm text-amber-700 font-medium">
-              Magic awaits inside
+              {t("home.magicAwaits")}
             </span>
             <svg
               className="w-4 h-4 text-orange-500 cookie-sparkle-reverse"

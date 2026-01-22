@@ -13,6 +13,7 @@ import {
   pathConfig,
 } from "@/lib/i18n-config";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/locale-context";
 
 interface LanguageSwitcherProps {
   className?: string;
@@ -31,6 +32,7 @@ export function LanguageSwitcher({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
+  const { t } = useTranslation();
 
   // Get current locale from path
   const { locale: currentLocale, pathname: currentPath } =
@@ -86,7 +88,9 @@ export function LanguageSwitcher({
                 ? "bg-amber-100 text-amber-800 font-medium"
                 : "text-gray-600 hover:bg-gray-100"
             )}
-            aria-label={`Switch to ${languages[locale].name}`}
+            aria-label={t("common.switchToLanguage", {
+              language: languages[locale].name,
+            })}
           >
             {showFlags ? languages[locale].flag : locale.toUpperCase()}
           </button>
@@ -113,7 +117,9 @@ export function LanguageSwitcher({
                   ? "text-amber-700 font-medium"
                   : "text-gray-500 hover:text-gray-700"
               )}
-              aria-label={`Switch to ${languages[locale].name}`}
+              aria-label={t("common.switchToLanguage", {
+                language: languages[locale].name,
+              })}
             >
               {showFlags && <span>{languages[locale].flag}</span>}
               <span>
@@ -145,7 +151,7 @@ export function LanguageSwitcher({
         )}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-label="Select language"
+        aria-label={t("common.selectLanguage")}
       >
         <Globe className="w-4 h-4 text-gray-500" />
         {showFlags && <span>{currentLanguage.flag}</span>}
@@ -175,7 +181,7 @@ export function LanguageSwitcher({
               "overflow-hidden"
             )}
             role="listbox"
-            aria-label="Language options"
+            aria-label={t("common.languageOptions")}
           >
             {i18n.locales.map((locale) => {
               const lang = languages[locale];

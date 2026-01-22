@@ -157,6 +157,32 @@ function detectLocaleFromHeader(acceptLanguage: string | null): Locale {
 }
 
 /**
+ * Resolve the effective locale for the current request.
+ * Prioritizes explicit locale in path, then cookie, then Accept-Language header.
+ */
+function resolveRequestLocale(request: NextRequest): Locale {
+  const { pathname } = request.nextUrl;
+  const segments = pathname.split("/").filter(Boolean);
+  const pathLocale = segments[0];
+
+  if (pathLocale && isValidLocale(pathLocale)) {
+    return pathLocale;
+  }
+
+  const cookieLocale = request.cookies.get(pathConfig.detection.cookieName)
+    ?.value as Locale | undefined;
+  if (cookieLocale && isValidLocale(cookieLocale)) {
+    return cookieLocale;
+  }
+
+  if (pathConfig.detection.header) {
+    return detectLocaleFromHeader(request.headers.get("Accept-Language"));
+  }
+
+  return i18n.defaultLocale;
+}
+
+/**
  * Handle locale detection and redirection
  * Returns a response if redirection is needed, otherwise null
  */
@@ -430,7 +456,14 @@ function handlePageCaching(
   startTime: number,
   nonce: string,
 ): NextResponse {
-  const response = NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-locale", resolveRequestLocale(request));
+
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
   const pathname = request.nextUrl.pathname;
 
   // 从路径中提取实际页面路径（去除语言前缀）
