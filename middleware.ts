@@ -431,7 +431,12 @@ export const config = {
      * - _next/static (静态文件)
      * - _next/image (图像优化文件)
      * - favicon.ico (favicon文件)
+     * - manifest.webmanifest (PWA manifest)
+     * - sw.js (Service Worker)
+     * - robots.txt (搜索引擎爬虫)
+     * - sitemap.xml (网站地图)
+     * - ads.txt (广告配置)
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|robots.txt|sitemap.xml|ads.txt).*)",
   ],
 };
