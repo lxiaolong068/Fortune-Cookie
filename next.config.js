@@ -36,6 +36,57 @@ const nextConfig = {
     ignoreDuringBuilds: process.env.VERCEL === "1",
   },
 
+  // ============================================
+  // SEO 重定向配置
+  // 将旧入口 /messages 和 /browse 永久重定向到统一入口 /explore
+  // 使用 permanent: true 返回 308 状态码（SEO 等效于 301）
+  // ============================================
+  async redirects() {
+    return [
+      // 主入口重定向：/messages 和 /browse → /explore
+      { source: "/messages", destination: "/explore", permanent: true },
+      { source: "/browse", destination: "/explore", permanent: true },
+
+      // 分类重定向：/messages/:category → /explore?category=
+      // 注意：funny 有专属 SEO 页面，需优先匹配
+      {
+        source: "/messages/funny",
+        destination: "/funny-fortune-cookie-messages",
+        permanent: true,
+      },
+      {
+        source: "/messages/:category",
+        destination: "/explore?category=:category",
+        permanent: true,
+      },
+
+      // browse 子路径
+      { source: "/browse/:path*", destination: "/explore", permanent: true },
+
+      // 多语言重定向（zh, es, pt - 不含默认语言 en）
+      {
+        source: "/:locale(zh|es|pt)/messages",
+        destination: "/:locale/explore",
+        permanent: true,
+      },
+      {
+        source: "/:locale(zh|es|pt)/messages/:category",
+        destination: "/:locale/explore?category=:category",
+        permanent: true,
+      },
+      {
+        source: "/:locale(zh|es|pt)/browse",
+        destination: "/:locale/explore",
+        permanent: true,
+      },
+      {
+        source: "/:locale(zh|es|pt)/browse/:path*",
+        destination: "/:locale/explore",
+        permanent: true,
+      },
+    ];
+  },
+
   // 安全和SEO优化配置
   async headers() {
     return [
