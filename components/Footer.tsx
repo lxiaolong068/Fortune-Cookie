@@ -7,7 +7,9 @@ import { createServerTranslationContext } from "@/lib/translations";
 export async function Footer() {
   const requestHeaders = headers();
   const headerLocale = requestHeaders.get("x-locale") ?? "";
-  const locale = isValidLocale(headerLocale) ? headerLocale : i18n.defaultLocale;
+  const locale = isValidLocale(headerLocale)
+    ? headerLocale
+    : i18n.defaultLocale;
   const { t, getLocalizedHref } = await createServerTranslationContext(locale);
   const currentYear = new Date().getFullYear();
 
@@ -82,7 +84,7 @@ export async function Footer() {
                         title: t("footer.aiGenerator"),
                       },
                       {
-                        href: getLocalizedHref("/browse"),
+                        href: getLocalizedHref("/explore"),
                         title: t("footer.browseMessages"),
                       },
                     ],
@@ -108,7 +110,7 @@ export async function Footer() {
                     title: t("footer.messages"),
                     links: [
                       {
-                        href: getLocalizedHref("/messages"),
+                        href: getLocalizedHref("/explore"),
                         title: t("footer.allMessages"),
                       },
                       {
@@ -178,7 +180,7 @@ export async function Footer() {
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/messages?category=inspirational")}
+                      href={getLocalizedHref("/explore?category=inspirational")}
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
                       {t("footer.inspirationalQuotes")}
@@ -194,7 +196,7 @@ export async function Footer() {
                 <ul className="space-y-3 text-gray-600">
                   <li>
                     <Link
-                      href={getLocalizedHref("/messages?category=love")}
+                      href={getLocalizedHref("/explore?category=love")}
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
                       {t("footer.loveFortunes")}
@@ -202,7 +204,7 @@ export async function Footer() {
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/messages?category=success")}
+                      href={getLocalizedHref("/explore?category=success")}
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
                       {t("footer.successMessages")}
@@ -210,7 +212,7 @@ export async function Footer() {
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/messages?category=wisdom")}
+                      href={getLocalizedHref("/explore?category=wisdom")}
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
                       {t("footer.wisdomQuotes")}
@@ -218,7 +220,7 @@ export async function Footer() {
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/messages?category=friendship")}
+                      href={getLocalizedHref("/explore?category=friendship")}
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
                       {t("footer.friendshipMessages")}
