@@ -9,7 +9,6 @@ import {
   X,
   Home,
   Sparkles,
-  MessageSquare,
   Clock,
   ChefHat,
   Search,
@@ -46,16 +45,10 @@ const navigationItems = [
     descriptionKey: "generatorDescription",
   },
   {
-    key: "messages",
-    href: "/messages",
-    icon: MessageSquare,
-    descriptionKey: "messagesDescription",
-  },
-  {
-    key: "browse",
-    href: "/browse",
+    key: "explore",
+    href: "/explore",
     icon: Search,
-    descriptionKey: "browseDescription",
+    descriptionKey: "exploreDescription",
   },
   {
     key: "favorites",

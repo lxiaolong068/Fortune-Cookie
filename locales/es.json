@@ -47,8 +47,7 @@
   "navigation": {
     "home": "Inicio",
     "generator": "Generador AI",
-    "messages": "Mensajes",
-    "browse": "Explorar",
+    "explore": "Explorar",
     "history": "Historia",
     "recipes": "Recetas",
     "blog": "Blog",
@@ -65,8 +64,7 @@
     "closeMenu": "Cerrar menú de navegación",
     "homeDescription": "Generar galletas de la fortuna",
     "generatorDescription": "Generador con IA",
-    "messagesDescription": "Explorar mensajes de fortuna",
-    "browseDescription": "Buscar y filtrar fortunas",
+    "exploreDescription": "Buscar y explorar fortunas",
     "favoritesDescription": "Tus fortunas guardadas",
     "calendarDescription": "Calendario diario de fortunas",
     "historyDescription": "Conocer los orígenes",
@@ -454,6 +452,20 @@
         "three": "Obtén mensajes únicos + números de la suerte"
       },
       "button": "Abrir generador de galletas de la fortuna con IA"
+    }
+  },
+  "explore": {
+    "title": "Explorar mensajes de la fortuna",
+    "subtitle": "Descubre cientos de mensajes de galletas de la fortuna. Busca, filtra por categoría y encuentra la fortuna perfecta para cualquier ocasión.",
+    "stats": {
+      "messages": "Mensajes",
+      "categories": "Categorías",
+      "aiAvailable": "Generador AI disponible"
+    },
+    "cta": {
+      "title": "¿Quieres una fortuna personalizada?",
+      "description": "Nuestra IA puede generar fortunas únicas adaptadas a tus preferencias, estado de ánimo y ocasión.",
+      "button": "Generar fortuna AI"
     }
   },
   "browse": {

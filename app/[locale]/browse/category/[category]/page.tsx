@@ -25,10 +25,7 @@ import {
 } from "@/lib/i18n-config";
 import { loadTranslations, getTranslation } from "@/lib/translations";
 import { LocaleProvider } from "@/lib/locale-context";
-import {
-  categoryConfig,
-  categoryBadgeColors,
-} from "@/lib/category-config";
+import { categoryConfig, categoryBadgeColors } from "@/lib/category-config";
 
 const baseUrl = getSiteUrl();
 
@@ -76,7 +73,9 @@ function resolveCategoryTitle(
     }
   }
   const fallbackKey = "browse.categoryTitle";
-  const fallback = getTranslation(translations, fallbackKey, { category: label });
+  const fallback = getTranslation(translations, fallbackKey, {
+    category: label,
+  });
   if (fallback !== fallbackKey) {
     return fallback;
   }
@@ -96,7 +95,9 @@ function resolveCategoryDescription(
     }
   }
   const fallbackKey = "browse.categoryDescription";
-  const fallback = getTranslation(translations, fallbackKey, { category: label });
+  const fallback = getTranslation(translations, fallbackKey, {
+    category: label,
+  });
   if (fallback !== fallbackKey) {
     return fallback;
   }
@@ -242,10 +243,7 @@ export default async function LocaleBrowseCategoryPage({
   const t = (key: string, p?: Record<string, string | number>) =>
     getTranslation(translations, key, p);
 
-  const localizedBrowseHref = getLocalizedHref(
-    resolvedLocale,
-    "/browse",
-  );
+  const localizedBrowseHref = getLocalizedHref(resolvedLocale, "/browse");
 
   return (
     <LocaleProvider
@@ -254,11 +252,20 @@ export default async function LocaleBrowseCategoryPage({
     >
       <BreadcrumbStructuredData
         items={[
-          { name: t("navigation.home"), url: getLocalizedHref(resolvedLocale, "/") },
-          { name: t("navigation.browse"), url: localizedBrowseHref },
+          {
+            name: t("navigation.home"),
+            url: getLocalizedHref(resolvedLocale, "/"),
+          },
+          {
+            name: t("navigation.explore"),
+            url: getLocalizedHref(resolvedLocale, "/explore"),
+          },
           {
             name: title,
-            url: getLocalizedHref(resolvedLocale, `/browse/category/${category}`),
+            url: getLocalizedHref(
+              resolvedLocale,
+              `/browse/category/${category}`,
+            ),
           },
         ]}
       />
@@ -365,7 +372,11 @@ export default async function LocaleBrowseCategoryPage({
                         </p>
                         <div className="flex flex-wrap gap-1">
                           {fortune.tags.slice(0, 3).map((tag) => (
-                            <Badge key={tag} variant="outline" className="text-xs">
+                            <Badge
+                              key={tag}
+                              variant="outline"
+                              className="text-xs"
+                            >
                               {tag}
                             </Badge>
                           ))}

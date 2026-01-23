@@ -110,9 +110,7 @@ export async function generateMetadata({
   });
 
   const title =
-    metaTitle !== metaTitleKey
-      ? metaTitle
-      : `${formattedTag} Fortune Messages`;
+    metaTitle !== metaTitleKey ? metaTitle : `${formattedTag} Fortune Messages`;
   const description =
     metaDescription !== metaDescriptionKey
       ? metaDescription
@@ -209,10 +207,11 @@ export default async function LocaleTagPage({ params }: PageProps) {
   });
   const relatedTagsArray = Array.from(relatedTags).slice(0, 10);
 
-  // Breadcrumb items
+  // Breadcrumb items - use explore page
+  const localizedExploreHref = getLocalizedHref(resolvedLocale, "/explore");
   const navBreadcrumbs = [
     { name: t("navigation.home"), href: getLocalizedHref(resolvedLocale, "/") },
-    { name: t("navigation.browse"), href: localizedBrowseHref },
+    { name: t("navigation.explore"), href: localizedExploreHref },
     { name: formattedTag },
   ];
 
@@ -236,8 +235,11 @@ export default async function LocaleTagPage({ params }: PageProps) {
     >
       <BreadcrumbStructuredData
         items={[
-          { name: t("navigation.home"), url: getLocalizedHref(resolvedLocale, "/") },
-          { name: t("navigation.browse"), url: localizedBrowseHref },
+          {
+            name: t("navigation.home"),
+            url: getLocalizedHref(resolvedLocale, "/"),
+          },
+          { name: t("navigation.explore"), url: localizedExploreHref },
           {
             name: formattedTag,
             url: getLocalizedHref(resolvedLocale, `/tag/${tag}`),

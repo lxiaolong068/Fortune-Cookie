@@ -108,9 +108,7 @@ export async function generateMetadata({
   const langConfig = getLanguageConfig(i18n.defaultLocale);
 
   const title =
-    metaTitle !== metaTitleKey
-      ? metaTitle
-      : `${formattedTag} Fortune Messages`;
+    metaTitle !== metaTitleKey ? metaTitle : `${formattedTag} Fortune Messages`;
   const description =
     metaDescription !== metaDescriptionKey
       ? metaDescription
@@ -161,10 +159,7 @@ export default async function TagPage({ params }: PageProps) {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
   const fortunes = getFortunesByTag(decodedTag);
-  const localizedFortunes = localizeFortunes(
-    fortunes,
-    i18n.defaultLocale,
-  );
+  const localizedFortunes = localizeFortunes(fortunes, i18n.defaultLocale);
 
   if (fortunes.length === 0) {
     notFound();
@@ -191,7 +186,7 @@ export default async function TagPage({ params }: PageProps) {
   // Breadcrumb items
   const navBreadcrumbs = [
     { name: t("navigation.home"), href: getLocalizedHref("/") },
-    { name: t("navigation.browse"), href: getLocalizedHref("/browse") },
+    { name: t("navigation.explore"), href: getLocalizedHref("/explore") },
     { name: formattedTag },
   ];
 
@@ -200,7 +195,7 @@ export default async function TagPage({ params }: PageProps) {
       <BreadcrumbStructuredData
         items={[
           { name: t("navigation.home"), url: getLocalizedHref("/") },
-          { name: t("navigation.browse"), url: getLocalizedHref("/browse") },
+          { name: t("navigation.explore"), url: getLocalizedHref("/explore") },
           { name: formattedTag, url: getLocalizedHref(`/tag/${tag}`) },
         ]}
       />
@@ -316,7 +311,10 @@ export default async function TagPage({ params }: PageProps) {
             </h2>
             <div className="flex flex-wrap justify-center gap-2">
               {relatedTagsArray.map((t) => (
-                <Link key={t} href={getLocalizedHref(`/tag/${encodeURIComponent(t)}`)}>
+                <Link
+                  key={t}
+                  href={getLocalizedHref(`/tag/${encodeURIComponent(t)}`)}
+                >
                   <Badge
                     variant="outline"
                     className="text-sm px-3 py-1 cursor-pointer hover:bg-amber-100 hover:border-amber-300"
@@ -338,7 +336,10 @@ export default async function TagPage({ params }: PageProps) {
             {allTags.slice(0, 30).map((t) => {
               const count = getFortunesByTag(t).length;
               return (
-                <Link key={t} href={getLocalizedHref(`/tag/${encodeURIComponent(t)}`)}>
+                <Link
+                  key={t}
+                  href={getLocalizedHref(`/tag/${encodeURIComponent(t)}`)}
+                >
                   <Badge
                     variant={
                       t === decodedTag.toLowerCase() ? "default" : "secondary"

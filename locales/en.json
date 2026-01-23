@@ -47,8 +47,7 @@
   "navigation": {
     "home": "Home",
     "generator": "AI Generator",
-    "messages": "Messages",
-    "browse": "Browse",
+    "explore": "Explore",
     "history": "History",
     "recipes": "Recipes",
     "blog": "Blog",
@@ -65,8 +64,7 @@
     "closeMenu": "Close navigation menu",
     "homeDescription": "Generate fortune cookies",
     "generatorDescription": "AI-powered generator",
-    "messagesDescription": "Browse fortune messages",
-    "browseDescription": "Search & filter fortunes",
+    "exploreDescription": "Browse & search fortunes",
     "favoritesDescription": "Your saved fortunes",
     "calendarDescription": "Daily fortune calendar",
     "historyDescription": "Learn the origins",
@@ -470,6 +468,20 @@
       "totalMessages": "{count} Total Messages",
       "categories": "{count} Categories",
       "tags": "{count} Unique Tags"
+    }
+  },
+  "explore": {
+    "title": "Explore Fortune Messages",
+    "subtitle": "Discover hundreds of fortune cookie messages. Search, filter by category, and find the perfect fortune for any occasion.",
+    "stats": {
+      "messages": "Messages",
+      "categories": "Categories",
+      "aiAvailable": "AI Generator Available"
+    },
+    "cta": {
+      "title": "Want a Personalized Fortune?",
+      "description": "Our AI can generate unique fortunes tailored to your preferences, mood, and occasion.",
+      "button": "Generate AI Fortune"
     }
   },
   "tagsPage": {

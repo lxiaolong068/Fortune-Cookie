@@ -302,8 +302,8 @@ export default async function LocaleMessagesPage({
         items={[
           { name: t("navigation.home"), url: getLocalizedHref("/") },
           {
-            name: t("navigation.messages"),
-            url: getLocalizedHref("/messages"),
+            name: t("navigation.explore"),
+            url: getLocalizedHref("/explore"),
           },
         ]}
       />

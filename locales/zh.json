@@ -47,8 +47,7 @@
   "navigation": {
     "home": "首页",
     "generator": "AI 生成器",
-    "messages": "消息",
-    "browse": "浏览",
+    "explore": "探索",
     "history": "历史",
     "recipes": "食谱",
     "blog": "博客",
@@ -65,8 +64,7 @@
     "closeMenu": "关闭导航菜单",
     "homeDescription": "生成幸运饼干",
     "generatorDescription": "AI 驱动生成器",
-    "messagesDescription": "浏览幸运消息",
-    "browseDescription": "搜索并筛选运势",
+    "exploreDescription": "浏览并搜索运势",
     "favoritesDescription": "你的收藏运势",
     "calendarDescription": "每日运势日历",
     "historyDescription": "了解起源",
@@ -470,6 +468,20 @@
       "totalMessages": "共 {count} 条消息",
       "categories": "{count} 个分类",
       "tags": "{count} 个标签"
+    }
+  },
+  "explore": {
+    "title": "探索运势消息",
+    "subtitle": "发现数百条幸运饼干消息。搜索、按分类筛选，找到适合任何场合的完美运势。",
+    "stats": {
+      "messages": "条消息",
+      "categories": "个分类",
+      "aiAvailable": "AI 生成器可用"
+    },
+    "cta": {
+      "title": "想要个性化运势？",
+      "description": "我们的 AI 可以根据你的喜好、心情和场合生成独特的运势。",
+      "button": "生成 AI 运势"
     }
   },
   "tagsPage": {

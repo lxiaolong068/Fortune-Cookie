@@ -69,16 +69,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: weeklyContentDate, // AI generator, frequently enhanced
     },
     {
-      path: "/messages",
+      path: "/explore",
       priority: 0.8,
       changeFrequency: "weekly" as const,
-      lastModified: weeklyContentDate, // Message collection grows weekly
-    },
-    {
-      path: "/browse",
-      priority: 0.8,
-      changeFrequency: "weekly" as const,
-      lastModified: weeklyContentDate, // Browse page updated with new messages
+      lastModified: weeklyContentDate, // Unified explore page with all fortune messages
     },
     {
       path: "/history",
@@ -154,29 +148,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ].filter((page) => !excludedPages.has(page.path));
 
-  // Add category pages dynamically
+  // Add category filter pages for /explore
+  // Note: These are query parameter URLs, not separate paths
+  // Search engines can index them via internal linking
   const stats = getDatabaseStats();
   Object.keys(stats.categories).forEach((category) => {
     pages.push({
-      path: `/browse/category/${category}`,
+      path: `/explore?category=${category}`,
       priority: 0.7,
-      changeFrequency: "weekly" as const,
-      lastModified: weeklyContentDate,
-    });
-  });
-
-  // Add message category sub-pages
-  const messageCategories = [
-    "inspirational",
-    "funny",
-    "love",
-    "success",
-    "wisdom",
-  ];
-  messageCategories.forEach((category) => {
-    pages.push({
-      path: `/messages/${category}`,
-      priority: 0.8,
       changeFrequency: "weekly" as const,
       lastModified: weeklyContentDate,
     });

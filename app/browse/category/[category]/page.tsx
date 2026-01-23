@@ -1,202 +1,35 @@
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { getFortunesByCategory, getDatabaseStats } from '@/lib/fortune-database'
-import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Sparkles, Smile, Heart, TrendingUp, Brain, Users, Activity, Plane, type LucideIcon } from 'lucide-react'
-import { BreadcrumbStructuredData, ItemListStructuredData } from '@/components/StructuredData'
-import Link from 'next/link'
-
-// Category configuration
-const categoryConfig: Record<string, { icon: LucideIcon, color: string, description: string }> = {
-    inspirational: {
-        icon: Sparkles,
-        color: 'bg-blue-100 text-blue-800',
-        description: 'Find daily motivation and inspiration with our collection of uplifting fortune cookie messages. Perfect for starting your day with positivity and purpose.'
-    },
-    funny: {
-        icon: Smile,
-        color: 'bg-yellow-100 text-yellow-800',
-        description: 'Add laughter to your day with our hilarious and witty fortune cookie sayings. Great for parties, pranks, and sharing a smile with friends.'
-    },
-    love: {
-        icon: Heart,
-        color: 'bg-pink-100 text-pink-800',
-        description: 'Discover romantic insights and relationship wisdom with our love-themed fortune cookies. Find the perfect message for your crush or partner.'
-    },
-    success: {
-        icon: TrendingUp,
-        color: 'bg-green-100 text-green-800',
-        description: 'Unlock secrets to career growth and personal achievement. Motivational fortune messages to guide your path to success and prosperity.'
-    },
-    wisdom: {
-        icon: Brain,
-        color: 'bg-purple-100 text-purple-800',
-        description: 'Explore ancient wisdom and philosophical thoughts. Deep, meaningful fortune cookie messages to guide your life journey and decision making.'
-    },
-    friendship: {
-        icon: Users,
-        color: 'bg-orange-100 text-orange-800',
-        description: 'Celebrate the bond of friendship with heartwarming messages. Share appreciation and joy with your best friends through these special fortunes.'
-    },
-    health: {
-        icon: Activity,
-        color: 'bg-red-100 text-red-800',
-        description: 'Positive affirmations and wisdom for a healthy mind and body. Encourage wellness and vitality with our health-focused fortune cookie messages.'
-    },
-    travel: {
-        icon: Plane,
-        color: 'bg-indigo-100 text-indigo-800',
-        description: 'Inspiring quotes for adventurers and explorers. Fuel your wanderlust and excitement for new journeys with travel-themed fortune cookies.'
-    }
-}
+import { permanentRedirect } from "next/navigation";
+import { Metadata } from "next";
+import { getDatabaseStats } from "@/lib/fortune-database";
 
 interface Props {
-    params: Promise<{ category: string }>
+  params: Promise<{ category: string }>;
 }
 
 export async function generateStaticParams() {
-    const stats = getDatabaseStats()
-    return Object.keys(stats.categories).map((category) => ({
-        category,
-    }))
+  const stats = getDatabaseStats();
+  return Object.keys(stats.categories).map((category) => ({
+    category,
+  }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { category } = await params
-    const config = categoryConfig[category]
-
-    if (!config) {
-        return {
-            title: 'Category Not Found',
-        }
-    }
-
-    const capitalizedCategory = category.charAt(0).toUpperCase() + category.slice(1)
-
-    return {
-        title: `${capitalizedCategory} Fortune Cookie Messages - Fortune Cookie AI`,
-        description: config.description,
-        openGraph: {
-            title: `${capitalizedCategory} Fortune Cookie Messages`,
-            description: config.description,
-            type: 'website',
-        },
-        alternates: {
-            canonical: `/browse/category/${category}`,
-        },
-    }
+// Return minimal metadata for redirect page
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Redirecting to Explore...",
+    robots: { index: false, follow: true },
+  };
 }
 
-export default async function CategoryPage({ params }: Props) {
-    const { category } = await params
+/**
+ * Legacy /browse/category/[category] page - 301 redirect to /explore?category=
+ *
+ * This redirect preserves SEO value while consolidating
+ * content browsing into a single unified experience.
+ */
+export default async function CategoryRedirectPage({ params }: Props) {
+  const { category } = await params;
 
-    if (!categoryConfig[category]) {
-        notFound()
-    }
-
-    const fortunes = getFortunesByCategory(category)
-    const config = categoryConfig[category]
-    const Icon = config.icon
-    const capitalizedCategory = category.charAt(0).toUpperCase() + category.slice(1)
-
-    return (
-        <>
-            <BreadcrumbStructuredData items={[
-                { name: 'Home', url: '/' },
-                { name: 'Browse', url: '/browse' },
-                { name: `${capitalizedCategory} Fortunes`, url: `/browse/category/${category}` }
-            ]} />
-
-            <ItemListStructuredData
-                name={`${capitalizedCategory} Fortune Cookie Messages`}
-                description={config.description}
-                url={`/browse/category/${category}`}
-                items={fortunes.map(f => ({
-                    name: f.message,
-                    category: f.category
-                }))}
-            />
-
-            <main className="min-h-screen w-full overflow-x-hidden relative">
-                <DynamicBackgroundEffects />
-                <div className="relative z-10">
-                    <div className="container mx-auto px-4 py-8">
-                        {/* Header */}
-                        <div className="text-center mb-12">
-                            <div className="flex items-center justify-center gap-3 mb-4">
-                                <div className={`p-3 rounded-full ${config.color.split(' ')[0]}`}>
-                                    <Icon className={`w-8 h-8 ${config.color.split(' ')[1]}`} />
-                                </div>
-                            </div>
-                            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent mb-4">
-                                {capitalizedCategory} Fortune Messages
-                            </h1>
-                            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-                                {config.description}
-                            </p>
-
-                            <Link href="/browse">
-                                <Badge variant="outline" className="hover:bg-amber-50 cursor-pointer transition-colors">
-                                    ← Back to All Categories
-                                </Badge>
-                            </Link>
-                        </div>
-
-                        {/* Fortune List */}
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {fortunes.map((fortune) => (
-                                <Card key={fortune.id} className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 hover:scale-105">
-                                    <div className="flex items-start justify-between mb-3">
-                                        <Badge className={config.color}>
-                                            <Icon className="w-3 h-3 mr-1" />
-                                            {fortune.category}
-                                        </Badge>
-                                        <div className="flex items-center gap-1">
-                                            <Sparkles className="w-3 h-3 text-amber-500" />
-                                            <span className="text-xs text-gray-500">{fortune.popularity}/10</span>
-                                        </div>
-                                    </div>
-
-                                    <blockquote className="text-gray-700 italic leading-relaxed mb-4">
-                                        &ldquo;{fortune.message}&rdquo;
-                                    </blockquote>
-
-                                    <div className="space-y-3">
-                                        <div>
-                                            <p className="text-xs text-gray-500 mb-1">Lucky Numbers:</p>
-                                            <div className="flex gap-1">
-                                                {fortune.luckyNumbers.map((number) => (
-                                                    <span
-                                                        key={number}
-                                                        className="w-6 h-6 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                                                    >
-                                                        {number}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {fortune.tags.length > 0 && (
-                                            <div>
-                                                <p className="text-xs text-gray-500 mb-1">Tags:</p>
-                                                <div className="flex flex-wrap gap-1">
-                                                    {fortune.tags.slice(0, 3).map((tag) => (
-                                                        <Badge key={tag} variant="outline" className="text-xs">
-                                                            {tag}
-                                                        </Badge>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </>
-    )
+  // Redirect to explore with category filter
+  permanentRedirect(`/explore?category=${encodeURIComponent(category)}`);
 }

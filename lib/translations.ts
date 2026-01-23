@@ -55,8 +55,7 @@ export interface TranslationFile {
   navigation: {
     home: string;
     generator: string;
-    messages: string;
-    browse: string;
+    explore: string;
     history: string;
     recipes: string;
     blog: string;
@@ -73,8 +72,7 @@ export interface TranslationFile {
     closeMenu: string;
     homeDescription: string;
     generatorDescription: string;
-    messagesDescription: string;
-    browseDescription: string;
+    exploreDescription: string;
     favoritesDescription: string;
     calendarDescription: string;
     historyDescription: string;

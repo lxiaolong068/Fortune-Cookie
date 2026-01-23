@@ -47,8 +47,7 @@
   "navigation": {
     "home": "Início",
     "generator": "Gerador AI",
-    "messages": "Mensagens",
-    "browse": "Explorar",
+    "explore": "Explorar",
     "history": "História",
     "recipes": "Receitas",
     "blog": "Blog",
@@ -65,8 +64,7 @@
     "closeMenu": "Fechar menu de navegação",
     "homeDescription": "Gerar biscoitos da sorte",
     "generatorDescription": "Gerador com IA",
-    "messagesDescription": "Explorar mensagens de sorte",
-    "browseDescription": "Buscar e filtrar sortes",
+    "exploreDescription": "Buscar e explorar sortes",
     "favoritesDescription": "Suas sortes salvas",
     "calendarDescription": "Calendário diário de sortes",
     "historyDescription": "Conheça as origens",
@@ -454,6 +452,20 @@
         "three": "Receba mensagens únicas + números da sorte"
       },
       "button": "Abrir gerador de biscoitos da sorte com IA"
+    }
+  },
+  "explore": {
+    "title": "Explorar mensagens da sorte",
+    "subtitle": "Descubra centenas de mensagens de biscoitos da sorte. Busque, filtre por categoria e encontre a sorte perfeita para qualquer ocasião.",
+    "stats": {
+      "messages": "Mensagens",
+      "categories": "Categorias",
+      "aiAvailable": "Gerador AI disponível"
+    },
+    "cta": {
+      "title": "Quer uma sorte personalizada?",
+      "description": "Nossa IA pode gerar sortes únicas adaptadas às suas preferências, humor e ocasião.",
+      "button": "Gerar sorte AI"
     }
   },
   "browse": {

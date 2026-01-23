@@ -16,7 +16,18 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/Pagination";
-import { Sparkles, Search, Clock, Flame, SortAsc } from "lucide-react";
+import {
+  Sparkles,
+  Search,
+  Clock,
+  Flame,
+  SortAsc,
+  Star,
+  TrendingUp,
+  Copy,
+  Check,
+  ArrowRight,
+} from "lucide-react";
 import {
   searchFortunes,
   getDatabaseStats,
@@ -31,7 +42,7 @@ import { useLocale } from "@/lib/locale-context";
 
 const ITEMS_PER_PAGE = 24;
 
-export function BrowsePageContent() {
+export function ExplorePageContent() {
   const searchParams = useSearchParams();
   const searchParamsKey = searchParams.toString();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
@@ -39,7 +50,7 @@ export function BrowsePageContent() {
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    searchParams.get("category") || "all",
+    searchParams.get("category") || "all"
   );
   const [sortBy, setSortBy] = useState<
     "popularity" | "recent" | "alphabetical"
@@ -50,6 +61,7 @@ export function BrowsePageContent() {
     }
     return "popularity";
   });
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const formatCategoryLabel = useCallback(
     (category: string) => {
@@ -60,30 +72,26 @@ export function BrowsePageContent() {
       }
       return category.charAt(0).toUpperCase() + category.slice(1);
     },
-    [t],
+    [t]
   );
 
   const formatTagLabel = useCallback(
     (tag: string) => {
-      // 尝试从 tags.length 翻译
       const lengthKey = `tags.length.${tag}`;
       const lengthTranslated = t(lengthKey);
       if (lengthTranslated !== lengthKey) return lengthTranslated;
 
-      // 尝试从 tags.style 翻译
       const styleKey = `tags.style.${tag}`;
       const styleTranslated = t(styleKey);
       if (styleTranslated !== styleKey) return styleTranslated;
 
-      // 尝试从 generator.themes 翻译
       const themeKey = `generator.themes.${tag}`;
       const themeTranslated = t(themeKey);
       if (themeTranslated !== themeKey) return themeTranslated;
 
-      // 回退到首字母大写
       return tag.charAt(0).toUpperCase() + tag.slice(1);
     },
-    [t],
+    [t]
   );
 
   useEffect(() => {
@@ -114,11 +122,10 @@ export function BrowsePageContent() {
     const results = searchFortunes(
       searchQuery,
       selectedCategory === "all" ? undefined : selectedCategory,
-      locale,
+      locale
     );
     const localizedResults = localizeFortunes(results, locale);
 
-    // Sort results
     switch (sortBy) {
       case "popularity":
         localizedResults.sort((a, b) => b.popularity - a.popularity);
@@ -126,7 +133,7 @@ export function BrowsePageContent() {
       case "recent":
         localizedResults.sort(
           (a, b) =>
-            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
+            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
         );
         break;
       case "alphabetical":
@@ -137,16 +144,14 @@ export function BrowsePageContent() {
     return localizedResults;
   }, [searchQuery, selectedCategory, sortBy, locale]);
 
-  // Paginate results
   const totalPages = Math.ceil(
-    filteredAndSortedFortunes.length / ITEMS_PER_PAGE,
+    filteredAndSortedFortunes.length / ITEMS_PER_PAGE
   );
   const paginatedFortunes = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredAndSortedFortunes.slice(start, start + ITEMS_PER_PAGE);
   }, [filteredAndSortedFortunes, currentPage]);
 
-  // Build search params for pagination (preserve filters)
   const paginationParams: Record<string, string> = {};
   if (searchQuery) paginationParams.q = searchQuery;
   if (selectedCategory !== "all") paginationParams.category = selectedCategory;
@@ -196,52 +201,88 @@ export function BrowsePageContent() {
     t,
   ]);
 
+  const handleCopy = useCallback(
+    async (fortune: { id: string; message: string; luckyNumbers: number[] }) => {
+      const textToCopy = `"${fortune.message}"\n\nLucky Numbers: ${fortune.luckyNumbers.join(", ")}`;
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        setCopiedId(fortune.id);
+        setTimeout(() => setCopiedId(null), 2000);
+      } catch (err) {
+        console.error("Failed to copy:", err);
+      }
+    },
+    []
+  );
+
+  const handleResetFilters = useCallback(() => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+    setSortBy("popularity");
+  }, []);
+
   return (
-    <main className="min-h-screen w-full overflow-x-hidden relative">
+    <main className="min-h-screen w-full overflow-x-hidden relative bg-[#FAFAFA]">
       <DynamicBackgroundEffects />
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-8">
-          {/* Page Title */}
+          {/* Hero Section */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent mb-4">
-              {t("browse.title")}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#222222] mb-4">
+              {t("explore.title") !== "explore.title"
+                ? t("explore.title")
+                : "Explore Fortune Messages"}
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-              {t("browse.subtitle")}
+            <p className="text-lg md:text-xl text-[#555555] max-w-3xl mx-auto mb-8">
+              {t("explore.subtitle") !== "explore.subtitle"
+                ? t("explore.subtitle")
+                : "Discover hundreds of fortune cookie messages. Search, filter by category, and find the perfect fortune for any occasion."}
             </p>
 
             {/* Statistics */}
-            <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
-              <Badge className="bg-blue-100 text-blue-800 py-1.5 px-3">
-                {t("browse.stats.totalMessages", { count: stats.total })}
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
+              <Badge className="px-4 py-2 border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]">
+                <Sparkles className="mr-2 h-4 w-4" />
+                {stats.total}+ {t("explore.stats.messages") !== "explore.stats.messages" ? t("explore.stats.messages") : "Messages"}
               </Badge>
-              <Badge className="bg-green-100 text-green-800 py-1.5 px-3">
-                {t("browse.stats.categories", {
-                  count: Object.keys(stats.categories).length,
-                })}
+              <Badge className="px-4 py-2 border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]">
+                <Star className="mr-2 h-4 w-4" />
+                {Object.keys(stats.categories).length} {t("explore.stats.categories") !== "explore.stats.categories" ? t("explore.stats.categories") : "Categories"}
               </Badge>
-              <Badge className="bg-purple-100 text-purple-800 py-1.5 px-3">
-                {t("browse.stats.tags", { count: stats.tags })}
+              <Badge className="px-4 py-2 border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328]">
+                <TrendingUp className="mr-2 h-4 w-4" />
+                {t("explore.stats.aiAvailable") !== "explore.stats.aiAvailable" ? t("explore.stats.aiAvailable") : "AI Generator Available"}
               </Badge>
             </div>
 
-            {/* SEO Category Links - improved touch targets */}
-            <div className="flex flex-wrap justify-center gap-3 md:gap-2 mb-8 max-w-3xl mx-auto">
-              {Object.keys(stats.categories).map((category) => (
-                <Link
-                  key={category}
-                  href={`${getLocalizedHref("/browse")}?category=${encodeURIComponent(
-                    category,
-                  )}`}
-                >
-                  <Badge
-                    variant="outline"
-                    className="hover:bg-amber-50 cursor-pointer transition-colors py-2 px-4 min-h-[40px] text-sm flex items-center"
+            {/* Quick Category Links */}
+            <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+              {Object.keys(stats.categories).map((category) => {
+                const config = categoryConfig[category as FortuneCategory];
+                const Icon = config?.icon;
+                const isSelected = selectedCategory === category;
+                return (
+                  <button
+                    key={category}
+                    onClick={() =>
+                      setSelectedCategory(isSelected ? "all" : category)
+                    }
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 transition-all duration-200 ${
+                      isSelected
+                        ? "bg-[#E55328] text-white shadow-md"
+                        : "border border-[#FFD6C5] bg-[#FFE4D6] text-[#E55328] hover:bg-[#FFD6C5]"
+                    }`}
                   >
-                    {formatCategoryLabel(category)}
-                  </Badge>
-                </Link>
-              ))}
+                    {Icon && <Icon className="h-4 w-4" />}
+                    <span className="text-sm font-medium">
+                      {formatCategoryLabel(category)}
+                    </span>
+                    <span className="text-xs opacity-75">
+                      ({stats.categories[category]})
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -251,11 +292,19 @@ export function BrowsePageContent() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
-                  placeholder={t("messages.search.placeholder")}
+                  placeholder={
+                    t("messages.search.placeholder") !== "messages.search.placeholder"
+                      ? t("messages.search.placeholder")
+                      : "Search fortune messages..."
+                  }
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 min-h-[44px] focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                  aria-label={t("messages.search.ariaLabel")}
+                  aria-label={
+                    t("messages.search.ariaLabel") !== "messages.search.ariaLabel"
+                      ? t("messages.search.ariaLabel")
+                      : "Search fortune messages"
+                  }
                 />
               </div>
 
@@ -264,14 +313,26 @@ export function BrowsePageContent() {
                 onValueChange={setSelectedCategory}
               >
                 <SelectTrigger
-                  aria-label={t("messages.filterByCategory")}
+                  aria-label={
+                    t("messages.filterByCategory") !== "messages.filterByCategory"
+                      ? t("messages.filterByCategory")
+                      : "Filter by category"
+                  }
                   className="min-h-[44px]"
                 >
-                  <SelectValue placeholder={t("messages.allCategories")} />
+                  <SelectValue
+                    placeholder={
+                      t("messages.allCategories") !== "messages.allCategories"
+                        ? t("messages.allCategories")
+                        : "All Categories"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">
-                    {t("messages.allCategories")}
+                    {t("messages.allCategories") !== "messages.allCategories"
+                      ? t("messages.allCategories")
+                      : "All Categories"}
                   </SelectItem>
                   {Object.entries(stats.categories).map(([category, count]) => {
                     const config = categoryConfig[category as FortuneCategory];
@@ -291,13 +352,16 @@ export function BrowsePageContent() {
             </div>
           </Card>
 
-          {/* Filter Tabs and Results Count */}
+          {/* Sort Tabs and Results Count */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            {/* Quick Filter Tabs - 44px touch targets */}
             <div
               className="flex gap-2"
               role="tablist"
-              aria-label={t("browse.sortLabel")}
+              aria-label={
+                t("browse.sortLabel") !== "browse.sortLabel"
+                  ? t("browse.sortLabel")
+                  : "Sort options"
+              }
             >
               <Button
                 variant={sortBy === "popularity" ? "default" : "outline"}
@@ -309,10 +373,9 @@ export function BrowsePageContent() {
                 }`}
                 role="tab"
                 aria-selected={sortBy === "popularity"}
-                aria-label={t("common.popular")}
               >
                 <Flame className="w-4 h-4 mr-1.5" aria-hidden="true" />
-                {t("common.popular")}
+                {t("common.popular") !== "common.popular" ? t("common.popular") : "Popular"}
               </Button>
               <Button
                 variant={sortBy === "recent" ? "default" : "outline"}
@@ -324,10 +387,9 @@ export function BrowsePageContent() {
                 }`}
                 role="tab"
                 aria-selected={sortBy === "recent"}
-                aria-label={t("common.newest")}
               >
                 <Clock className="w-4 h-4 mr-1.5" aria-hidden="true" />
-                {t("common.newest")}
+                {t("common.newest") !== "common.newest" ? t("common.newest") : "Newest"}
               </Button>
               <Button
                 variant={sortBy === "alphabetical" ? "default" : "outline"}
@@ -339,14 +401,12 @@ export function BrowsePageContent() {
                 }`}
                 role="tab"
                 aria-selected={sortBy === "alphabetical"}
-                aria-label={t("common.alphabetical")}
               >
                 <SortAsc className="w-4 h-4 mr-1.5" aria-hidden="true" />
-                {t("common.alphabetical")}
+                {t("common.alphabetical") !== "common.alphabetical" ? t("common.alphabetical") : "A-Z"}
               </Button>
             </div>
 
-            {/* Results Count */}
             <p className="text-gray-600 text-sm">{resultsSummary}</p>
           </div>
 
@@ -363,20 +423,18 @@ export function BrowsePageContent() {
               return (
                 <Card
                   key={fortune.id}
-                  className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 hover:scale-105"
+                  className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <Link
-                      href={`${getLocalizedHref("/browse")}?category=${encodeURIComponent(
-                        fortune.category,
-                      )}`}
+                    <button
+                      onClick={() => setSelectedCategory(fortune.category)}
                       className="hover:opacity-80 transition-opacity"
                     >
                       <Badge className={colorClass}>
                         {Icon && <Icon className="w-3 h-3 mr-1" />}
                         {formatCategoryLabel(fortune.category)}
                       </Badge>
-                    </Link>
+                    </button>
                     <div className="flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-amber-500" />
                       <span className="text-xs text-gray-500">
@@ -392,7 +450,10 @@ export function BrowsePageContent() {
                   <div className="space-y-3">
                     <div>
                       <p className="text-xs text-gray-500 mb-1">
-                        {t("generator.luckyNumbers")}:
+                        {t("generator.luckyNumbers") !== "generator.luckyNumbers"
+                          ? t("generator.luckyNumbers")
+                          : "Lucky Numbers"}
+                        :
                       </p>
                       <div className="flex gap-1">
                         {fortune.luckyNumbers.map((number) => (
@@ -409,7 +470,10 @@ export function BrowsePageContent() {
                     {fortune.tags.length > 0 && (
                       <div>
                         <p className="text-xs text-gray-500 mb-1">
-                          {t("messages.tagsLabel")}:
+                          {t("messages.tagsLabel") !== "messages.tagsLabel"
+                            ? t("messages.tagsLabel")
+                            : "Tags"}
+                          :
                         </p>
                         <div className="flex flex-wrap gap-1.5">
                           {fortune.tags.slice(0, 3).map((tag) => (
@@ -432,6 +496,28 @@ export function BrowsePageContent() {
                         </div>
                       </div>
                     )}
+
+                    {/* Copy Button */}
+                    <div className="pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCopy(fortune)}
+                        className="w-full min-h-[40px] text-sm"
+                      >
+                        {copiedId === fortune.id ? (
+                          <>
+                            <Check className="w-4 h-4 mr-2 text-green-500" />
+                            {t("common.copied") !== "common.copied" ? t("common.copied") : "Copied!"}
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4 mr-2" />
+                            {t("common.copy") !== "common.copy" ? t("common.copy") : "Copy"}
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </Card>
               );
@@ -443,11 +529,24 @@ export function BrowsePageContent() {
             <div className="text-center py-12">
               <Sparkles className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-600 mb-2">
-                {t("messages.results.noResultsTitle")}
+                {t("messages.results.noResultsTitle") !== "messages.results.noResultsTitle"
+                  ? t("messages.results.noResultsTitle")
+                  : "No fortunes found"}
               </h3>
-              <p className="text-gray-500">
-                {t("messages.results.noResultsDescription")}
+              <p className="text-gray-500 mb-4">
+                {t("messages.results.noResultsDescription") !== "messages.results.noResultsDescription"
+                  ? t("messages.results.noResultsDescription")
+                  : "Try adjusting your search or filters"}
               </p>
+              <Button
+                variant="outline"
+                onClick={handleResetFilters}
+                className="min-h-[44px]"
+              >
+                {t("common.resetFilters") !== "common.resetFilters"
+                  ? t("common.resetFilters")
+                  : "Reset Filters"}
+              </Button>
             </div>
           )}
 
@@ -458,12 +557,41 @@ export function BrowsePageContent() {
               totalPages={totalPages}
               totalItems={filteredAndSortedFortunes.length}
               itemsPerPage={ITEMS_PER_PAGE}
-              basePath={getLocalizedHref("/browse")}
+              basePath={getLocalizedHref("/explore")}
               searchParams={paginationParams}
               showItemCount
               className="mt-8"
             />
           )}
+
+          {/* CTA Section */}
+          <Card className="mt-12 border border-[#FFD6C5] bg-gradient-to-r from-[#FFE4D6] to-[#FFF5F0]">
+            <div className="p-8 text-center">
+              <Sparkles className="mx-auto mb-4 h-12 w-12 text-[#E55328] opacity-90" />
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#222222]">
+                {t("explore.cta.title") !== "explore.cta.title"
+                  ? t("explore.cta.title")
+                  : "Want a Personalized Fortune?"}
+              </h2>
+              <p className="text-[#555555] mb-6 max-w-xl mx-auto">
+                {t("explore.cta.description") !== "explore.cta.description"
+                  ? t("explore.cta.description")
+                  : "Our AI can generate unique fortunes tailored to your preferences, mood, and occasion."}
+              </p>
+              <Button
+                asChild
+                size="lg"
+                className="bg-[#FF6B3D] text-white hover:bg-[#E55328] min-h-[48px]"
+              >
+                <Link href={getLocalizedHref("/generator")}>
+                  {t("explore.cta.button") !== "explore.cta.button"
+                    ? t("explore.cta.button")
+                    : "Generate AI Fortune"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </Card>
         </div>
       </div>
     </main>
