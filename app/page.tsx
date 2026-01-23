@@ -103,63 +103,63 @@ const StaggerItem = dynamic(
   { ssr: false, loading: () => null },
 );
 
-// Feature list with colorful icons and gradient backgrounds
+// Feature list with modern gradient backgrounds
 const features = [
   {
     icon: Sparkles,
     text: "Free online fortune cookie generator with AI",
-    color: "text-amber-600",
-    bgColor: "bg-amber-100",
-    borderColor: "border-amber-200",
+    gradient: "from-indigo-500 to-purple-500",
+    bgColor: "bg-indigo-50 dark:bg-indigo-950/30",
+    borderColor: "border-indigo-100 dark:border-indigo-800/50",
   },
   {
     icon: Heart,
     text: "Inspirational and motivational quotes",
-    color: "text-pink-600",
-    bgColor: "bg-pink-100",
-    borderColor: "border-pink-200",
+    gradient: "from-pink-500 to-rose-500",
+    bgColor: "bg-pink-50 dark:bg-pink-950/30",
+    borderColor: "border-pink-100 dark:border-pink-800/50",
   },
   {
     icon: Smile,
     text: "Funny fortune cookie messages",
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-100",
-    borderColor: "border-yellow-200",
+    gradient: "from-amber-500 to-orange-500",
+    bgColor: "bg-amber-50 dark:bg-amber-950/30",
+    borderColor: "border-amber-100 dark:border-amber-800/50",
   },
   {
     icon: Dice1,
     text: "Lucky numbers for each fortune",
-    color: "text-green-600",
-    bgColor: "bg-green-100",
-    borderColor: "border-green-200",
+    gradient: "from-emerald-500 to-teal-500",
+    bgColor: "bg-emerald-50 dark:bg-emerald-950/30",
+    borderColor: "border-emerald-100 dark:border-emerald-800/50",
   },
   {
     icon: Wand2,
     text: "Custom message creation",
-    color: "text-purple-600",
-    bgColor: "bg-purple-100",
-    borderColor: "border-purple-200",
+    gradient: "from-violet-500 to-purple-500",
+    bgColor: "bg-violet-50 dark:bg-violet-950/30",
+    borderColor: "border-violet-100 dark:border-violet-800/50",
   },
   {
     icon: Zap,
     text: "Beautiful animations and effects",
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
-    borderColor: "border-blue-200",
+    gradient: "from-blue-500 to-cyan-500",
+    bgColor: "bg-blue-50 dark:bg-blue-950/30",
+    borderColor: "border-blue-100 dark:border-blue-800/50",
   },
   {
     icon: Smartphone,
     text: "Mobile-friendly responsive design",
-    color: "text-cyan-600",
-    bgColor: "bg-cyan-100",
-    borderColor: "border-cyan-200",
+    gradient: "from-cyan-500 to-sky-500",
+    bgColor: "bg-cyan-50 dark:bg-cyan-950/30",
+    borderColor: "border-cyan-100 dark:border-cyan-800/50",
   },
   {
     icon: ShieldCheck,
     text: "No registration required",
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-100",
-    borderColor: "border-emerald-200",
+    gradient: "from-green-500 to-emerald-500",
+    bgColor: "bg-green-50 dark:bg-green-950/30",
+    borderColor: "border-green-100 dark:border-green-800/50",
   },
 ];
 
@@ -199,9 +199,9 @@ export default function HomePage() {
         </div>
 
         {/* Category Quick Links Section */}
-        <div className="relative z-10 bg-gradient-to-b from-amber-100/80 to-white">
+        <div className="relative z-10 bg-gradient-to-b from-indigo-50/80 via-white to-white dark:from-indigo-950/30 dark:via-slate-900 dark:to-slate-900">
           <WaveDivider
-            fillColor="fill-amber-100/80"
+            fillColor="fill-indigo-50/80 dark:fill-indigo-950/30"
             position="top"
             height={40}
           />
@@ -213,7 +213,7 @@ export default function HomePage() {
         </div>
 
         {/* Hot Fortune Carousel Section */}
-        <div className="relative z-10 bg-white">
+        <div className="relative z-10 bg-white dark:bg-slate-900">
           <Suspense fallback={null}>
             <DeferredMount delay={2000} useIdle={false}>
               <HotFortuneCarousel />
@@ -222,7 +222,7 @@ export default function HomePage() {
         </div>
 
         {/* Daily Fortune Section - For User Retention */}
-        <div className="relative z-10 bg-gradient-to-b from-white to-amber-50/50">
+        <div className="relative z-10 bg-gradient-to-b from-white to-indigo-50/50 dark:from-slate-900 dark:to-indigo-950/20">
           <div className="container mx-auto px-4 py-12">
             <Suspense fallback={null}>
               <DeferredMount delay={2200} useIdle={false}>
@@ -235,15 +235,15 @@ export default function HomePage() {
         </div>
 
         {/* SEO-optimized visible content */}
-        <div className="relative z-10 bg-gradient-to-b from-white to-orange-50/30 backdrop-blur-sm border-t border-amber-200/50 pt-12 pb-16">
+        <div className="relative z-10 bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-800/50 backdrop-blur-sm border-t border-indigo-100/50 dark:border-indigo-800/30 pt-12 pb-16">
           <div className="container mx-auto px-4">
             <Suspense fallback={null}>
               <ScrollReveal direction="up" delay={0.1}>
                 <div className="max-w-4xl mx-auto text-center mb-16">
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+                  <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-800 dark:text-white mb-6">
                     Fortune Cookie - Free Online AI Generator
                   </h1>
-                  <p className="text-lg text-gray-600 leading-relaxed">
+                  <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                     Welcome to the best free online AI-powered fortune cookie
                     generator! Create personalized inspirational messages, funny
                     quotes, and discover your lucky numbers. Our AI tool
@@ -258,7 +258,7 @@ export default function HomePage() {
               <section>
                 <Suspense fallback={null}>
                   <ScrollReveal direction="left" delay={0.2}>
-                    <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
+                    <h2 className="text-2xl font-heading font-semibold text-indigo-700 dark:text-indigo-300 mb-6 flex items-center gap-2">
                       <span className="text-3xl">✨</span> Why Use Our
                       Generator?
                     </h2>
@@ -269,17 +269,17 @@ export default function HomePage() {
                       return (
                         <StaggerItem key={index} direction="left">
                           <div
-                            className={`flex items-center gap-3 p-3 rounded-lg ${feature.bgColor} border ${feature.borderColor} transition-all duration-200 hover:scale-[1.02] hover:shadow-md`}
+                            className={`flex items-center gap-3 p-3 rounded-xl ${feature.bgColor} border ${feature.borderColor} transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10`}
                           >
                             <div
-                              className={`p-2 rounded-full bg-white/80 shadow-sm`}
+                              className={`p-2.5 rounded-xl bg-gradient-to-br ${feature.gradient} shadow-lg`}
                             >
                               <Icon
-                                className={`h-5 w-5 ${feature.color}`}
+                                className="h-5 w-5 text-white"
                                 aria-hidden="true"
                               />
                             </div>
-                            <span className="text-gray-700 font-medium">
+                            <span className="text-slate-700 dark:text-slate-200 font-medium">
                               {feature.text}
                             </span>
                           </div>
@@ -293,42 +293,48 @@ export default function HomePage() {
               <section>
                 <Suspense fallback={null}>
                   <ScrollReveal direction="right" delay={0.2}>
-                    <h2 className="text-2xl font-semibold text-amber-700 mb-6 flex items-center gap-2">
+                    <h2 className="text-2xl font-heading font-semibold text-indigo-700 dark:text-indigo-300 mb-6 flex items-center gap-2">
                       <span className="text-3xl">🥠</span> How to Use
                     </h2>
                   </ScrollReveal>
                   <ScrollReveal direction="right" delay={0.3}>
-                    <div className="prose prose-amber text-gray-600 bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-amber-200">
-                      <p className="mb-4">
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-lg shadow-indigo-500/5">
+                      <p className="mb-4 text-slate-600 dark:text-slate-300">
                         Simply click on the fortune cookie above to crack it
                         open and reveal your personalized message. Each fortune
                         comes with:
                       </p>
                       <ul className="list-none pl-0 space-y-3 mb-6">
-                        <li className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 text-sm font-bold">
+                        <li className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-sm font-bold shadow-lg">
                             1
                           </span>
-                          A unique wisdom or prediction
+                          <span className="text-slate-700 dark:text-slate-200">
+                            A unique wisdom or prediction
+                          </span>
                         </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 text-sm font-bold">
+                        <li className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shadow-lg">
                             2
                           </span>
-                          Your daily lucky numbers
+                          <span className="text-slate-700 dark:text-slate-200">
+                            Your daily lucky numbers
+                          </span>
                         </li>
-                        <li className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-amber-700 text-sm font-bold">
+                        <li className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-white text-sm font-bold shadow-lg">
                             3
                           </span>
-                          Shareable wisdom to brighten your day
+                          <span className="text-slate-700 dark:text-slate-200">
+                            Shareable wisdom to brighten your day
+                          </span>
                         </li>
                       </ul>
-                      <p>
+                      <p className="text-slate-600 dark:text-slate-300">
                         Want more specific fortunes? Try our{" "}
                         <a
                           href="/generator"
-                          className="text-amber-600 hover:underline font-medium"
+                          className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold transition-colors"
                         >
                           AI Generator
                         </a>{" "}
@@ -352,7 +358,7 @@ export default function HomePage() {
         </div>
 
         {/* Use Case Scenes Section */}
-        <div className="relative z-10 bg-gradient-to-b from-orange-50/30 to-pink-50/20">
+        <div className="relative z-10 bg-gradient-to-b from-slate-50/50 to-indigo-50/30 dark:from-slate-800/50 dark:to-indigo-950/20">
           <Suspense fallback={null}>
             <DeferredMount delay={2500} useIdle={false}>
               <UseCaseScenes />
@@ -362,14 +368,14 @@ export default function HomePage() {
 
         {/* Section Divider */}
         <WaveDivider
-          fillColor="fill-white/80"
+          fillColor="fill-white/80 dark:fill-slate-900/80"
           position="top"
           height={50}
-          className="relative z-10 bg-gradient-to-b from-pink-50/20 to-transparent"
+          className="relative z-10 bg-gradient-to-b from-indigo-50/30 to-transparent dark:from-indigo-950/20 dark:to-transparent"
         />
 
         {/* Testimonials Section */}
-        <div className="relative z-10 bg-gradient-to-b from-white/80 to-amber-50/30 backdrop-blur-sm pb-16">
+        <div className="relative z-10 bg-gradient-to-b from-white/80 to-indigo-50/30 dark:from-slate-900/80 dark:to-indigo-950/20 backdrop-blur-sm pb-16">
           <Testimonials limit={6} enableCarousel={true} />
         </div>
       </main>

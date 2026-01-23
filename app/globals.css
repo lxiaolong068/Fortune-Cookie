@@ -2,50 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Modern Font Import - Fredoka (headings) + Nunito (body) */
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap");
+
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
+        /* Font Variables */
+        --font-fredoka: "Fredoka", sans-serif;
+        --font-nunito: "Nunito", sans-serif;
+
+        /* Modern Light Theme - Indigo based */
+        --background: 240 100% 99%; /* Almost white with subtle blue */
+        --foreground: 243 75% 15%; /* Deep indigo text */
         --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
+        --card-foreground: 243 75% 15%;
         --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
-        --primary: 222.2 47.4% 11.2%;
+        --popover-foreground: 243 75% 15%;
+        --primary: 243 75% 59%; /* Indigo-600 */
         --primary-foreground: 210 40% 98%;
-        --secondary: 210 40% 96%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
-        --muted: 210 40% 96%;
-        --muted-foreground: 215.4 16.3% 46.9%;
-        --accent: 210 40% 96%;
-        --accent-foreground: 222.2 47.4% 11.2%;
+        --secondary: 243 54% 94%; /* Light indigo */
+        --secondary-foreground: 243 75% 25%;
+        --muted: 240 20% 96%;
+        --muted-foreground: 240 10% 40%;
+        --accent: 24 95% 53%; /* Orange-500 for CTAs */
+        --accent-foreground: 0 0% 100%;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 210 40% 98%;
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --ring: 222.2 84% 4.9%;
-        --radius: 0.5rem;
+        --border: 240 20% 90%;
+        --input: 240 20% 90%;
+        --ring: 243 75% 59%;
+        --radius: 0.75rem;
+
+        /* Brand Colors */
+        --brand-primary: 243 75% 59%; /* #4F46E5 */
+        --brand-secondary: 243 54% 73%; /* #818CF8 */
+        --brand-accent: 24 95% 53%; /* #F97316 */
+
+        /* Fortune Cookie Colors */
+        --fortune-gold: 38 92% 50%;
+        --fortune-cream: 48 96% 89%;
+        --fortune-paper: 48 100% 96%;
     }
 
     .dark {
-        --background: 222.2 84% 4.9%;
-        --foreground: 210 40% 98%;
-        --card: 222.2 84% 4.9%;
-        --card-foreground: 210 40% 98%;
-        --popover: 222.2 84% 4.9%;
-        --popover-foreground: 210 40% 98%;
-        --primary: 210 40% 98%;
-        --primary-foreground: 222.2 47.4% 11.2%;
-        --secondary: 217.2 32.6% 17.5%;
-        --secondary-foreground: 210 40% 98%;
-        --muted: 217.2 32.6% 17.5%;
-        --muted-foreground: 215 20.2% 65.1%;
-        --accent: 217.2 32.6% 17.5%;
-        --accent-foreground: 210 40% 98%;
-        --destructive: 0 62.8% 30.6%;
+        /* Modern Dark Theme */
+        --background: 243 47% 6%; /* Deep purple-black */
+        --foreground: 240 100% 94%; /* Light indigo text */
+        --card: 243 47% 9%;
+        --card-foreground: 240 100% 94%;
+        --popover: 243 47% 9%;
+        --popover-foreground: 240 100% 94%;
+        --primary: 243 75% 67%; /* Lighter indigo for dark mode */
+        --primary-foreground: 243 75% 10%;
+        --secondary: 243 30% 18%;
+        --secondary-foreground: 240 100% 94%;
+        --muted: 243 30% 15%;
+        --muted-foreground: 240 20% 65%;
+        --accent: 24 95% 58%;
+        --accent-foreground: 0 0% 100%;
+        --destructive: 0 62.8% 45%;
         --destructive-foreground: 210 40% 98%;
-        --border: 217.2 32.6% 17.5%;
-        --input: 217.2 32.6% 17.5%;
-        --ring: 212.7 26.8% 83.9%;
+        --border: 243 30% 18%;
+        --input: 243 30% 18%;
+        --ring: 243 75% 67%;
     }
 }
 
@@ -53,186 +72,262 @@
     * {
         @apply border-border;
     }
+    html {
+        font-family: var(--font-nunito), system-ui, sans-serif;
+        scroll-behavior: smooth;
+    }
     body {
         @apply bg-background text-foreground;
+        font-family: var(--font-nunito), system-ui, sans-serif;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-fredoka), system-ui, sans-serif;
+        @apply font-semibold tracking-tight;
     }
 }
 
-/* 深色模式特定样式 */
-.dark {
-    /* 渐变背景调整 */
-    .bg-gradient-to-br {
-        @apply from-gray-900 via-gray-800 to-gray-900;
-    }
+/* ===== Modern Background Effects ===== */
 
-    /* 卡片样式调整 */
-    .bg-white\/80 {
-        @apply bg-gray-800/80;
-    }
+/* Gradient mesh background */
+.bg-mesh {
+    background-image:
+        radial-gradient(
+            at 40% 20%,
+            hsla(243, 75%, 59%, 0.08) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            at 80% 0%,
+            hsla(24, 95%, 53%, 0.06) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            at 0% 50%,
+            hsla(243, 75%, 73%, 0.06) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            at 80% 50%,
+            hsla(24, 95%, 53%, 0.04) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            at 0% 100%,
+            hsla(243, 75%, 59%, 0.06) 0px,
+            transparent 50%
+        );
+}
 
-    .bg-white\/90 {
-        @apply bg-gray-800/90;
-    }
+.dark .bg-mesh {
+    background-image:
+        radial-gradient(
+            at 40% 20%,
+            hsla(243, 75%, 59%, 0.15) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            at 80% 0%,
+            hsla(24, 95%, 53%, 0.1) 0px,
+            transparent 50%
+        ),
+        radial-gradient(
+            at 0% 50%,
+            hsla(243, 75%, 73%, 0.1) 0px,
+            transparent 50%
+        );
+}
 
-    /* 文本颜色调整 */
-    .text-gray-900 {
-        @apply text-gray-100;
-    }
+/* Grid pattern overlay */
+.bg-grid {
+    background-image:
+        linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
+        linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
 
-    .text-gray-800 {
-        @apply text-gray-200;
-    }
+.bg-grid-fade {
+    -webkit-mask-image: radial-gradient(
+        ellipse at center,
+        black 20%,
+        transparent 70%
+    );
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+}
 
-    .text-gray-700 {
-        @apply text-gray-300;
-    }
+/* ===== Modern Card Styles ===== */
 
-    .text-gray-600 {
-        @apply text-gray-400;
-    }
+.card-modern {
+    @apply bg-white dark:bg-slate-800/50;
+    @apply border border-slate-100 dark:border-slate-700/50;
+    @apply rounded-2xl;
+    @apply shadow-soft;
+    @apply transition-all duration-300;
+}
 
-    /* 边框颜色调整 */
-    .border-gray-200 {
-        @apply border-gray-700;
-    }
+.card-modern:hover {
+    @apply shadow-card-hover;
+    @apply -translate-y-1;
+}
 
-    .border-gray-300 {
-        @apply border-gray-600;
-    }
+/* Glassmorphism effect */
+.glass {
+    @apply bg-white/70 dark:bg-slate-900/70;
+    @apply backdrop-blur-xl backdrop-saturate-150;
+    @apply border border-white/20 dark:border-slate-700/50;
+}
 
-    /* 背景颜色调整 */
-    .bg-gray-50 {
-        @apply bg-gray-800;
-    }
+.glass-strong {
+    @apply bg-white/80 dark:bg-slate-900/80;
+    @apply backdrop-blur-2xl backdrop-saturate-200;
+    @apply border border-white/30 dark:border-slate-700/50;
+}
 
-    .bg-gray-100 {
-        @apply bg-gray-700;
-    }
+/* ===== Animation Utilities ===== */
 
-    .bg-gray-200 {
-        @apply bg-gray-600;
+/* Blob animation for background */
+@keyframes blob {
+    0% {
+        transform: translate(0px, 0px) scale(1);
     }
-
-    /* 特殊组件样式 */
-    .fortune-card {
-        @apply bg-gray-800 border-gray-700;
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
     }
-
-    .fortune-card:hover {
-        @apply bg-gray-700 border-gray-600;
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
     }
 }
 
-/* 主题过渡动画 */
-* {
-    transition:
-        background-color 0.3s ease,
-        border-color 0.3s ease,
-        color 0.3s ease;
+.animate-blob {
+    animation: blob 7s infinite;
 }
 
-/* 防止主题切换时的闪烁 */
-html {
-    color-scheme: light;
+.animation-delay-2000 {
+    animation-delay: 2s;
 }
 
-html.dark {
-    color-scheme: dark;
+.animation-delay-4000 {
+    animation-delay: 4s;
 }
 
-/* 滚动条样式 */
+/* Cookie-specific animations */
+@keyframes cookie-float {
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-8px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(-12px) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-8px) rotate(-2deg);
+    }
+}
+
+@keyframes cookie-glow {
+    0%,
+    100% {
+        filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.4));
+    }
+    50% {
+        filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.6));
+    }
+}
+
+@keyframes paper-peek {
+    0%,
+    100% {
+        transform: translateX(0) rotate(0deg);
+    }
+    50% {
+        transform: translateX(4px) rotate(1deg);
+    }
+}
+
+@keyframes sparkle-float {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.2) rotate(180deg);
+    }
+}
+
+.animate-cookie-float {
+    animation: cookie-float 4s ease-in-out infinite;
+}
+
+.animate-cookie-glow {
+    animation: cookie-glow 3s ease-in-out infinite;
+}
+
+.animate-paper-peek {
+    animation: paper-peek 2.5s ease-in-out infinite;
+}
+
+.animate-sparkle-float {
+    animation: sparkle-float 2s ease-in-out infinite;
+}
+
+/* ===== Button Styles ===== */
+
+.btn-primary {
+    @apply bg-gradient-to-r from-indigo-600 to-indigo-500;
+    @apply hover:from-indigo-500 hover:to-indigo-400;
+    @apply text-white font-medium;
+    @apply px-6 py-3 rounded-xl;
+    @apply shadow-lg shadow-indigo-500/25;
+    @apply hover:shadow-xl hover:shadow-indigo-500/30;
+    @apply transition-all duration-200;
+    @apply hover:-translate-y-0.5;
+}
+
+.btn-accent {
+    @apply bg-gradient-to-r from-orange-500 to-amber-500;
+    @apply hover:from-orange-400 hover:to-amber-400;
+    @apply text-white font-medium;
+    @apply px-6 py-3 rounded-xl;
+    @apply shadow-lg shadow-orange-500/25;
+    @apply hover:shadow-xl hover:shadow-orange-500/30;
+    @apply transition-all duration-200;
+    @apply hover:-translate-y-0.5;
+}
+
+/* ===== Scrollbar Styles ===== */
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800;
+    @apply bg-slate-100 dark:bg-slate-800;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+    @apply bg-slate-300 dark:bg-slate-600 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-gray-500;
+    @apply bg-slate-400 dark:bg-slate-500;
 }
 
-/* 自定义动画和效果 */
-@layer utilities {
-    .animate-float {
-        animation: float 6s ease-in-out infinite;
-    }
+/* ===== Accessibility ===== */
 
-    .animate-glow {
-        animation: glow 2s ease-in-out infinite alternate;
-    }
-
-    .animate-sparkle {
-        animation: sparkle 1.5s ease-in-out infinite;
-    }
-}
-
-@keyframes float {
-    0%,
-    100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-@keyframes glow {
-    from {
-        box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-    }
-    to {
-        box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
-    }
-}
-
-@keyframes sparkle {
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.5;
-        transform: scale(1.2);
-    }
-}
-
-/* 响应式优化 */
-@media (max-width: 640px) {
-    .container {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-}
-
-/* 性能优化 */
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-/* 防止动画导致布局重排 (CLS) */
-.animate-element {
-    will-change: transform, opacity;
-    transform: translateZ(0); /* 强制硬件加速 */
-}
-
-/* 确保动画容器有稳定尺寸 */
-.stable-container {
-    contain: layout style paint;
-}
-
-/* 无障碍优化 */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -243,77 +338,25 @@ html {
     }
 }
 
-/* ===== WCAG AA Color Contrast Improvements ===== */
-
-/* Improve muted text contrast (4.5:1 minimum for WCAG AA) */
-.text-gray-500 {
-    @apply text-gray-600; /* Darker for better contrast */
-}
-
-.dark .text-gray-500 {
-    @apply text-gray-400; /* Lighter in dark mode for better contrast */
-}
-
-/* Placeholder text improvements */
-input::placeholder,
-textarea::placeholder {
-    @apply text-gray-500 dark:text-gray-400;
-    opacity: 1; /* Firefox fix */
-}
-
-/* Link contrast improvements */
-a:not([class]) {
-    @apply text-blue-700 dark:text-blue-400 underline;
-}
-
-a:not([class]):hover {
-    @apply text-blue-900 dark:text-blue-300;
-}
-
-/* ===== Keyboard Focus Indicators (WCAG 2.4.7) ===== */
-
-/* Custom focus ring for all interactive elements */
+/* Focus indicators */
 :focus-visible {
-    @apply outline-none ring-2 ring-amber-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900;
 }
 
-/* Remove default outline when using :focus-visible */
 :focus:not(:focus-visible) {
     outline: none;
 }
 
-/* Enhanced focus for buttons */
-button:focus-visible,
-[role="button"]:focus-visible {
-    @apply ring-2 ring-amber-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
-}
-
-/* Enhanced focus for form inputs */
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible,
-[contenteditable]:focus-visible {
-    @apply ring-2 ring-amber-500 ring-offset-0 border-amber-500;
-}
-
-/* Enhanced focus for links */
-a:focus-visible {
-    @apply ring-2 ring-amber-500 ring-offset-2 rounded-sm;
-}
-
-/* Enhanced focus for cards and interactive containers */
-[tabindex]:focus-visible {
-    @apply ring-2 ring-amber-500 ring-offset-2;
-}
-
-/* Skip link styling (Phase 1.2 enhancement) */
+/* Skip link */
 .skip-link {
     @apply sr-only;
 }
 
 .skip-link:focus,
 .skip-link:focus-visible {
-    @apply absolute top-4 left-4 z-[9999] px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg shadow-lg outline-none ring-2 ring-amber-400 ring-offset-2 ring-offset-white dark:ring-offset-zinc-900;
+    @apply absolute top-4 left-4 z-[9999] px-6 py-3;
+    @apply bg-indigo-600 text-white font-semibold rounded-lg;
+    @apply shadow-lg outline-none ring-2 ring-indigo-400 ring-offset-2;
     width: auto;
     height: auto;
     margin: 0;
@@ -323,22 +366,7 @@ a:focus-visible {
     clip-path: none;
 }
 
-/* ===== Enhanced Touch Targets (WCAG 2.5.5 - 44x44px minimum) ===== */
-
-/* Ensure minimum touch target size for interactive elements */
-@layer utilities {
-    .touch-target {
-        min-width: 44px;
-        min-height: 44px;
-    }
-
-    .touch-target-sm {
-        min-width: 36px;
-        min-height: 36px;
-    }
-}
-
-/* Apply touch target sizing to common interactive elements on mobile */
+/* Touch targets */
 @media (pointer: coarse) {
     button,
     [role="button"],
@@ -348,14 +376,9 @@ a:focus-visible {
     select {
         min-height: 44px;
     }
-
-    /* Ensure adequate spacing for touch */
-    .touch-spacing > * + * {
-        margin-top: 8px;
-    }
 }
 
-/* ===== High Contrast Mode Support ===== */
+/* High contrast mode */
 @media (prefers-contrast: high) {
     :root {
         --foreground: 0 0% 0%;
@@ -368,14 +391,64 @@ a:focus-visible {
         --background: 0 0% 0%;
         --border: 0 0% 100%;
     }
-
-    /* Ensure borders are visible */
-    * {
-        border-color: currentColor !important;
-    }
 }
 
-/* 打印样式 */
+/* ===== Legacy Support - Gradual Migration ===== */
+
+/* Override old amber styles to new indigo where needed */
+.text-amber-700 {
+    @apply text-indigo-700 dark:text-indigo-300;
+}
+
+.bg-amber-100 {
+    @apply bg-indigo-100 dark:bg-indigo-900/30;
+}
+
+.border-amber-200 {
+    @apply border-indigo-200 dark:border-indigo-700/50;
+}
+
+/* Keep fortune-specific amber/gold colors */
+.fortune-gold {
+    color: hsl(var(--fortune-gold));
+}
+
+.fortune-bg-gold {
+    background-color: hsl(var(--fortune-gold));
+}
+
+/* ===== Utility Classes ===== */
+
+/* Text gradient */
+.text-gradient {
+    @apply bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-600;
+    @apply bg-clip-text text-transparent;
+}
+
+.text-gradient-gold {
+    @apply bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-500;
+    @apply bg-clip-text text-transparent;
+}
+
+/* Smooth transitions for theme changes */
+* {
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.2s ease;
+}
+
+/* Performance optimizations */
+.animate-element {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+.stable-container {
+    contain: layout style paint;
+}
+
+/* Print styles */
 @media print {
     .no-print {
         display: none !important;
