@@ -19,6 +19,7 @@ import {
   FAQStructuredData,
 } from "@/components/StructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
 import {
   getFortunesByCategory,
   getDatabaseStats,
@@ -74,6 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     alternates: {
       canonical: "/messages",
+      languages: generateAlternateLanguages("/messages", baseUrl),
     },
   };
 }

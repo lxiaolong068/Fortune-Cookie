@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import { BreadcrumbStructuredData } from "@/components/StructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { GeneratorClient } from "./GeneratorClient";
 
 const baseUrl = getSiteUrl();
@@ -35,6 +36,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/generator",
+    languages: generateAlternateLanguages("/generator", baseUrl),
   },
 };
 

@@ -9,14 +9,20 @@ import {
 } from "@/components/StructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
 import { DailyFortuneCompact } from "@/components/DailyFortune";
-import { i18n, isValidLocale, type Locale } from "@/lib/i18n-config";
+import {
+  i18n,
+  isValidLocale,
+  generateAlternateLanguages,
+  type Locale,
+} from "@/lib/i18n-config";
 import { loadTranslations, getTranslation } from "@/lib/translations";
 
 const baseUrl = getSiteUrl();
 
 // Dynamic import for calendar component
 const FortuneCalendar = dynamic(
-  () => import("@/components/FortuneCalendar").then((mod) => mod.FortuneCalendar),
+  () =>
+    import("@/components/FortuneCalendar").then((mod) => mod.FortuneCalendar),
   {
     ssr: false,
     loading: () => (
@@ -29,11 +35,12 @@ const FortuneCalendar = dynamic(
         </div>
       </div>
     ),
-  }
+  },
 );
 
 export const metadata: Metadata = {
-  title: "Fortune Calendar - Daily Fortune Cookie Predictions | Fortune Cookie AI",
+  title:
+    "Fortune Calendar - Daily Fortune Cookie Predictions | Fortune Cookie AI",
   description:
     "Explore your daily fortune predictions with our interactive Fortune Calendar. View past, present, and future fortunes with lucky numbers, colors, and personalized advice.",
   keywords: [
@@ -71,7 +78,8 @@ export const metadata: Metadata = {
     creator: "@fortunecookieai",
   },
   alternates: {
-    canonical: `${baseUrl}/calendar`,
+    canonical: "/calendar",
+    languages: generateAlternateLanguages("/calendar", baseUrl),
   },
 };
 
@@ -153,33 +161,25 @@ export default async function CalendarPage() {
                       <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
                         1
                       </span>
-                      <span>
-                        {t("calendarPage.howToSteps.step1")}
-                      </span>
+                      <span>{t("calendarPage.howToSteps.step1")}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
                         2
                       </span>
-                      <span>
-                        {t("calendarPage.howToSteps.step2")}
-                      </span>
+                      <span>{t("calendarPage.howToSteps.step2")}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
                         3
                       </span>
-                      <span>
-                        {t("calendarPage.howToSteps.step3")}
-                      </span>
+                      <span>{t("calendarPage.howToSteps.step3")}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
                         4
                       </span>
-                      <span>
-                        {t("calendarPage.howToSteps.step4")}
-                      </span>
+                      <span>{t("calendarPage.howToSteps.step4")}</span>
                     </li>
                   </ul>
                 </div>
@@ -274,27 +274,40 @@ export default async function CalendarPage() {
                 <h3>{t("calendarPage.seoSections.dailyTitle")}</h3>
                 <ul>
                   <li>
-                    <strong>{t("calendarPage.seoSections.dailyItems.overallLabel")}:</strong>{" "}
+                    <strong>
+                      {t("calendarPage.seoSections.dailyItems.overallLabel")}:
+                    </strong>{" "}
                     {t("calendarPage.seoSections.dailyItems.overallText")}
                   </li>
                   <li>
-                    <strong>{t("calendarPage.seoSections.dailyItems.dimensionsLabel")}:</strong>{" "}
+                    <strong>
+                      {t("calendarPage.seoSections.dailyItems.dimensionsLabel")}
+                      :
+                    </strong>{" "}
                     {t("calendarPage.seoSections.dailyItems.dimensionsText")}
                   </li>
                   <li>
-                    <strong>{t("calendarPage.seoSections.dailyItems.messageLabel")}:</strong>{" "}
+                    <strong>
+                      {t("calendarPage.seoSections.dailyItems.messageLabel")}:
+                    </strong>{" "}
                     {t("calendarPage.seoSections.dailyItems.messageText")}
                   </li>
                   <li>
-                    <strong>{t("calendarPage.seoSections.dailyItems.numbersLabel")}:</strong>{" "}
+                    <strong>
+                      {t("calendarPage.seoSections.dailyItems.numbersLabel")}:
+                    </strong>{" "}
                     {t("calendarPage.seoSections.dailyItems.numbersText")}
                   </li>
                   <li>
-                    <strong>{t("calendarPage.seoSections.dailyItems.elementsLabel")}:</strong>{" "}
+                    <strong>
+                      {t("calendarPage.seoSections.dailyItems.elementsLabel")}:
+                    </strong>{" "}
                     {t("calendarPage.seoSections.dailyItems.elementsText")}
                   </li>
                   <li>
-                    <strong>{t("calendarPage.seoSections.dailyItems.adviceLabel")}:</strong>{" "}
+                    <strong>
+                      {t("calendarPage.seoSections.dailyItems.adviceLabel")}:
+                    </strong>{" "}
                     {t("calendarPage.seoSections.dailyItems.adviceText")}
                   </li>
                 </ul>

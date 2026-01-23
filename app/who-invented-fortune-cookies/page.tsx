@@ -13,6 +13,7 @@ import {
 } from "@/components/FAQStructuredData";
 
 import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
 
 const baseUrl = getSiteUrl();
 
@@ -49,6 +50,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/who-invented-fortune-cookies",
+    languages: generateAlternateLanguages(
+      "/who-invented-fortune-cookies",
+      baseUrl,
+    ),
   },
 };
 

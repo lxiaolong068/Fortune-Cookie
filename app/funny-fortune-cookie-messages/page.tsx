@@ -13,6 +13,7 @@ import {
 } from "@/components/FAQStructuredData";
 import { RelatedPages, messageRelatedPages } from "@/components/RelatedPages";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
 
 const baseUrl = getSiteUrl();
 
@@ -49,6 +50,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/funny-fortune-cookie-messages",
+    languages: generateAlternateLanguages(
+      "/funny-fortune-cookie-messages",
+      baseUrl,
+    ),
   },
 };
 

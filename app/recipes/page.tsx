@@ -10,6 +10,7 @@ import { FAQStructuredData, recipeFAQs } from "@/components/FAQStructuredData";
 import { InternalLink } from "@/components/InternalLinks";
 import { ExpandableRecipeCard } from "@/components/ExpandableRecipeCard";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { ChefHat, Sparkles, Heart } from "lucide-react";
 
 const baseUrl = getSiteUrl();
@@ -47,6 +48,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/recipes",
+    languages: generateAlternateLanguages("/recipes", baseUrl),
   },
 };
 

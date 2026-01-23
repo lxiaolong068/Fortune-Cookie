@@ -1,46 +1,86 @@
-import { Metadata } from 'next'
-import { getFullUrl, getImageUrl, getSiteMetadata } from '@/lib/site'
+import { Metadata } from "next";
+import { getFullUrl, getImageUrl, getSiteMetadata } from "@/lib/site";
+import { i18n, getAlternateLinks, getLanguageConfig } from "@/lib/i18n-config";
 
 interface SEOProps {
-  title?: string
-  description?: string
-  image?: string
-  url?: string
-  type?: 'website' | 'article'
-  publishedTime?: string
-  modifiedTime?: string
-  author?: string
-  section?: string
-  tags?: string[]
+  title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  section?: string;
+  tags?: string[];
+  /** Disable automatic multi-language alternates (for locale-specific pages that handle it themselves) */
+  noAlternates?: boolean;
 }
 
 export function generateSEOMetadata({
   title,
   description,
-  image = '/og-image.png',
+  image = "/og-image.png",
   url,
-  type = 'website',
+  type = "website",
   publishedTime,
   modifiedTime,
   author,
   section,
-  tags = []
+  tags = [],
+  noAlternates = false,
 }: SEOProps): Metadata {
-  const siteMetadata = getSiteMetadata()
-  const finalTitle = title || siteMetadata.title
-  const finalDescription = description || siteMetadata.description
-  const normalizedDescription = finalDescription.length > 160
-    ? finalDescription.slice(0, 157) + '...'
-    : finalDescription
-  const finalAuthor = author || siteMetadata.author
-  const baseUrl = siteMetadata.baseUrl
-  const fullUrl = url ? getFullUrl(url) : baseUrl
-  const fullImageUrl = getImageUrl(image)
+  const siteMetadata = getSiteMetadata();
+  const finalTitle = title || siteMetadata.title;
+  const finalDescription = description || siteMetadata.description;
+  const normalizedDescription =
+    finalDescription.length > 160
+      ? finalDescription.slice(0, 157) + "..."
+      : finalDescription;
+  const finalAuthor = author || siteMetadata.author;
+  const baseUrl = siteMetadata.baseUrl;
+  const fullUrl = url ? getFullUrl(url) : baseUrl;
+  const fullImageUrl = getImageUrl(image);
+
+  // Generate multi-language alternates for hreflang SEO
+  const canonicalPath = url
+    ? url === baseUrl
+      ? "/"
+      : url.replace(baseUrl, "")
+    : "/";
+  const alternateLanguages: Record<string, string> = {};
+
+  if (!noAlternates) {
+    // Get the path without any existing locale prefix
+    const pathWithoutLocale = canonicalPath
+      .replace(/^\/(zh|es|pt)\//, "/")
+      .replace(/^\/(zh|es|pt)$/, "/");
+
+    // Generate alternates for all supported locales
+    for (const locale of i18n.locales) {
+      const config = getLanguageConfig(locale);
+      if (locale === i18n.defaultLocale) {
+        // Default locale (en) uses root path
+        alternateLanguages[config.hreflang] =
+          `${baseUrl}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+      } else {
+        // Other locales use prefixed path
+        const localePath =
+          pathWithoutLocale === "/"
+            ? `/${locale}`
+            : `/${locale}${pathWithoutLocale}`;
+        alternateLanguages[config.hreflang] = `${baseUrl}${localePath}`;
+      }
+    }
+    // Add x-default pointing to English version
+    alternateLanguages["x-default"] =
+      `${baseUrl}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+  }
 
   return {
     title: {
       default: finalTitle,
-      template: '%s | Fortune Cookie AI'
+      template: "%s | Fortune Cookie AI",
     },
     description: normalizedDescription,
     authors: [{ name: finalAuthor }],
@@ -53,7 +93,10 @@ export function generateSEOMetadata({
     },
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: url ? (url === baseUrl ? '/' : url.replace(baseUrl, '')) : '/',
+      canonical: canonicalPath,
+      ...(Object.keys(alternateLanguages).length > 0 && {
+        languages: alternateLanguages,
+      }),
     },
     openGraph: {
       type,
@@ -77,11 +120,11 @@ export function generateSEOMetadata({
       ...(tags.length > 0 && { tags }),
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: finalTitle,
       description: finalDescription,
       images: [fullImageUrl],
-      creator: '@fortunecookieai',
+      creator: "@fortunecookieai",
     },
     robots: {
       index: true,
@@ -89,82 +132,82 @@ export function generateSEOMetadata({
       googleBot: {
         index: true,
         follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
     verification: {
       google: process.env.GOOGLE_VERIFICATION_CODE,
     },
-  }
+  };
 }
 
 // 结构化数据生成器
 export function generateJSONLD(data: {
-  type: 'WebSite' | 'WebApplication' | 'Article' | 'Organization'
-  name: string
-  description: string
-  url: string
-  image?: string
-  author?: string
-  datePublished?: string
-  dateModified?: string
-  keywords?: string[]
+  type: "WebSite" | "WebApplication" | "Article" | "Organization";
+  name: string;
+  description: string;
+  url: string;
+  image?: string;
+  author?: string;
+  datePublished?: string;
+  dateModified?: string;
+  keywords?: string[];
 }) {
   const baseStructure = {
-    '@context': 'https://schema.org',
-    '@type': data.type,
+    "@context": "https://schema.org",
+    "@type": data.type,
     name: data.name,
     description: data.description,
     url: data.url,
     ...(data.image && { image: data.image }),
-    ...(data.author && { author: { '@type': 'Person', name: data.author } }),
+    ...(data.author && { author: { "@type": "Person", name: data.author } }),
     ...(data.datePublished && { datePublished: data.datePublished }),
     ...(data.dateModified && { dateModified: data.dateModified }),
-    ...(data.keywords && { keywords: data.keywords.join(', ') }),
-  }
+    ...(data.keywords && { keywords: data.keywords.join(", ") }),
+  };
 
-  if (data.type === 'WebApplication') {
+  if (data.type === "WebApplication") {
     return {
       ...baseStructure,
-      applicationCategory: 'Entertainment',
-      operatingSystem: 'Any',
+      applicationCategory: "Entertainment",
+      operatingSystem: "Any",
       offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
       },
       aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.8',
-        ratingCount: '1250',
+        "@type": "AggregateRating",
+        ratingValue: "4.8",
+        ratingCount: "1250",
       },
-    }
+    };
   }
 
-  if (data.type === 'Organization') {
+  if (data.type === "Organization") {
     return {
       ...baseStructure,
       logo: data.image,
       sameAs: [
-        'https://twitter.com/fortunecookieai',
-        'https://github.com/fortune-cookie-ai',
+        "https://twitter.com/fortunecookieai",
+        "https://github.com/fortune-cookie-ai",
       ],
-    }
+    };
   }
 
-  return baseStructure
+  return baseStructure;
 }
 
 // SEO工具函数
 export const SEOUtils = {
   // 生成面包屑导航结构化数据
   generateBreadcrumbJSONLD: (items: Array<{ name: string; url: string }>) => ({
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       name: item.name,
       item: item.url,
@@ -173,36 +216,38 @@ export const SEOUtils = {
 
   // 生成FAQ结构化数据
   generateFAQJSONLD: (faqs: Array<{ question: string; answer: string }>) => ({
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map(faq => ({
-      '@type': 'Question',
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
       name: faq.question,
       acceptedAnswer: {
-        '@type': 'Answer',
+        "@type": "Answer",
         text: faq.answer,
       },
     })),
   }),
 
   // 生成评论结构化数据
-  generateReviewJSONLD: (reviews: Array<{
-    author: string
-    rating: number
-    reviewBody: string
-    datePublished: string
-  }>) => ({
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: 'Fortune Cookie AI Generator',
-    review: reviews.map(review => ({
-      '@type': 'Review',
+  generateReviewJSONLD: (
+    reviews: Array<{
+      author: string;
+      rating: number;
+      reviewBody: string;
+      datePublished: string;
+    }>,
+  ) => ({
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "Fortune Cookie AI Generator",
+    review: reviews.map((review) => ({
+      "@type": "Review",
       author: {
-        '@type': 'Person',
+        "@type": "Person",
         name: review.author,
       },
       reviewRating: {
-        '@type': 'Rating',
+        "@type": "Rating",
         ratingValue: review.rating,
         bestRating: 5,
       },
@@ -210,23 +255,22 @@ export const SEOUtils = {
       datePublished: review.datePublished,
     })),
   }),
-}
-
+};
 
 // 兼容性 SEO 组件（App Router 中建议使用 metadata/generateMetadata）
 // 该组件主要用于注入结构化数据，避免现有代码导入报错
 export type SEOPropsComponent = {
-  title?: string
-  description?: string
-  canonical?: string
-  noIndex?: boolean
-  openGraph?: Record<string, unknown>
-  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
-}
+  title?: string;
+  description?: string;
+  canonical?: string;
+  noIndex?: boolean;
+  openGraph?: Record<string, unknown>;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+};
 
 export function SEO({ jsonLd }: SEOPropsComponent) {
-  if (!jsonLd) return null
-  const json = Array.isArray(jsonLd) ? jsonLd : [jsonLd]
+  if (!jsonLd) return null;
+  const json = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
   return (
     <>
       {json.map((obj, idx) => (
@@ -237,5 +281,5 @@ export function SEO({ jsonLd }: SEOPropsComponent) {
         />
       ))}
     </>
-  )
+  );
 }

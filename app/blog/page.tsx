@@ -18,6 +18,7 @@ import { BlogCard, Pagination } from "@/components/blog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getSiteUrl, getImageUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { BreadcrumbStructuredData } from "@/components/StructuredData";
 
 const baseUrl = getSiteUrl();
@@ -73,6 +74,7 @@ export async function generateMetadata({
     },
     alternates: {
       canonical: canonicalUrl,
+      languages: generateAlternateLanguages(canonicalUrl, baseUrl),
     },
     robots: currentPage > 1 ? { index: true, follow: true } : undefined,
   };

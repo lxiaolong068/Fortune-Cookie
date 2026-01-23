@@ -9,6 +9,7 @@ import {
 } from "@/components/StructuredData";
 import { FAQStructuredData, historyFAQs } from "@/components/FAQStructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
 
 const baseUrl = getSiteUrl();
 
@@ -45,6 +46,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/history",
+    languages: generateAlternateLanguages("/history", baseUrl),
   },
 };
 

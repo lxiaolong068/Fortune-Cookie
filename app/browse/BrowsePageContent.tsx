@@ -37,9 +37,7 @@ export function BrowsePageContent() {
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const { t, getLocalizedHref, locale } = useLocale();
 
-  const [searchQuery, setSearchQuery] = useState(
-    searchParams.get("q") || "",
-  );
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [selectedCategory, setSelectedCategory] = useState<string>(
     searchParams.get("category") || "all",
   );
@@ -62,7 +60,30 @@ export function BrowsePageContent() {
       }
       return category.charAt(0).toUpperCase() + category.slice(1);
     },
-    [t]
+    [t],
+  );
+
+  const formatTagLabel = useCallback(
+    (tag: string) => {
+      // 尝试从 tags.length 翻译
+      const lengthKey = `tags.length.${tag}`;
+      const lengthTranslated = t(lengthKey);
+      if (lengthTranslated !== lengthKey) return lengthTranslated;
+
+      // 尝试从 tags.style 翻译
+      const styleKey = `tags.style.${tag}`;
+      const styleTranslated = t(styleKey);
+      if (styleTranslated !== styleKey) return styleTranslated;
+
+      // 尝试从 generator.themes 翻译
+      const themeKey = `generator.themes.${tag}`;
+      const themeTranslated = t(themeKey);
+      if (themeTranslated !== themeKey) return themeTranslated;
+
+      // 回退到首字母大写
+      return tag.charAt(0).toUpperCase() + tag.slice(1);
+    },
+    [t],
   );
 
   useEffect(() => {
@@ -326,9 +347,7 @@ export function BrowsePageContent() {
             </div>
 
             {/* Results Count */}
-            <p className="text-gray-600 text-sm">
-              {resultsSummary}
-            </p>
+            <p className="text-gray-600 text-sm">{resultsSummary}</p>
           </div>
 
           {/* Fortune List */}
@@ -399,7 +418,7 @@ export function BrowsePageContent() {
                               variant="outline"
                               className="text-xs py-1 px-2"
                             >
-                              {tag}
+                              {formatTagLabel(tag)}
                             </Badge>
                           ))}
                           {fortune.tags.length > 3 && (

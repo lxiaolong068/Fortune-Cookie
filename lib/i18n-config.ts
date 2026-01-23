@@ -314,6 +314,55 @@ export function getSEOConfig(locale: Locale | string): {
 }
 
 /**
+ * Generate multi-language alternates for Next.js Metadata
+ * Used for hreflang SEO optimization
+ *
+ * @param path - The canonical path (e.g., "/generator", "/browse")
+ * @param baseUrl - The site base URL (e.g., "https://fortunecookie.vip")
+ * @returns Object with languages mapping for metadata.alternates
+ *
+ * @example
+ * // In page metadata:
+ * export const metadata: Metadata = {
+ *   alternates: {
+ *     canonical: "/generator",
+ *     languages: generateAlternateLanguages("/generator", baseUrl),
+ *   },
+ * };
+ */
+export function generateAlternateLanguages(
+  path: string,
+  baseUrl: string,
+): Record<string, string> {
+  const alternates: Record<string, string> = {};
+
+  // Clean the path - remove any existing locale prefix
+  const cleanPath = path
+    .replace(/^\/(zh|es|pt)\//, "/")
+    .replace(/^\/(zh|es|pt)$/, "/");
+
+  for (const locale of i18n.locales) {
+    const config = getLanguageConfig(locale);
+
+    if (locale === i18n.defaultLocale) {
+      // Default locale (en) uses root path
+      alternates[config.hreflang] =
+        `${baseUrl}${cleanPath === "/" ? "" : cleanPath}`;
+    } else {
+      // Other locales use prefixed path
+      const localePath =
+        cleanPath === "/" ? `/${locale}` : `/${locale}${cleanPath}`;
+      alternates[config.hreflang] = `${baseUrl}${localePath}`;
+    }
+  }
+
+  // Add x-default pointing to English version
+  alternates["x-default"] = `${baseUrl}${cleanPath === "/" ? "" : cleanPath}`;
+
+  return alternates;
+}
+
+/**
  * Future implementation notes:
  *
  * 1. Translation files structure:

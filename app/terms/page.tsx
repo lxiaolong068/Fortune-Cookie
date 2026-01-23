@@ -1,196 +1,211 @@
-import { Metadata } from 'next'
-import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { FileText, Users, Shield, AlertTriangle, CheckCircle, Scale, Mail } from 'lucide-react'
-import { getImageUrl } from '@/lib/site'
+import { Metadata } from "next";
+import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  FileText,
+  Users,
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  Scale,
+  Mail,
+} from "lucide-react";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
+
+const baseUrl = getSiteUrl();
 
 // Static generation configuration
-export const dynamic = 'force-static'
-export const revalidate = 86400 // 24 hours
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - Fortune Cookie AI',
-  description: 'Terms of Service for Fortune Cookie AI. Learn the rules, rights, and responsibilities for using our service.',
+  title: "Terms of Service - Fortune Cookie AI",
+  description:
+    "Terms of Service for Fortune Cookie AI. Learn the rules, rights, and responsibilities for using our service.",
   openGraph: {
-    title: 'Terms of Service - Fortune Cookie AI',
-    description: 'Learn about the terms and conditions for using Fortune Cookie AI service.',
-    type: 'article',
-    url: 'https://www.fortune-cookie.cc/terms',
+    title: "Terms of Service - Fortune Cookie AI",
+    description:
+      "Learn about the terms and conditions for using Fortune Cookie AI service.",
+    type: "article",
+    url: "https://www.fortune-cookie.cc/terms",
     images: [
       {
-        url: getImageUrl('/og-image.png'),
+        url: getImageUrl("/og-image.png"),
         width: 1200,
         height: 630,
-        alt: 'Terms of Service - Fortune Cookie AI',
+        alt: "Terms of Service - Fortune Cookie AI",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Terms of Service - Fortune Cookie AI',
-    description: 'Learn about the terms and conditions for using Fortune Cookie AI service.',
-    images: [getImageUrl('/twitter-image.png')],
-    creator: '@fortunecookieai',
+    card: "summary_large_image",
+    title: "Terms of Service - Fortune Cookie AI",
+    description:
+      "Learn about the terms and conditions for using Fortune Cookie AI service.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
-    canonical: '/terms',
+    canonical: "/terms",
+    languages: generateAlternateLanguages("/terms", baseUrl),
   },
-  robots: 'index, follow',
-}
+  robots: "index, follow",
+};
 
 const termsSections = [
   {
-    id: 'acceptance',
-    title: 'Terms Acceptance',
+    id: "acceptance",
+    title: "Terms Acceptance",
     icon: CheckCircle,
     content: [
       {
-        subtitle: 'Agreement Effective',
+        subtitle: "Agreement Effective",
         items: [
-          'By accessing or using Fortune Cookie AI services, you agree to be bound by these Terms of Service',
-          'If you do not agree to these terms, please do not use our services',
-          'We reserve the right to modify these terms at any time, and modified terms will be published on the website'
-        ]
+          "By accessing or using Fortune Cookie AI services, you agree to be bound by these Terms of Service",
+          "If you do not agree to these terms, please do not use our services",
+          "We reserve the right to modify these terms at any time, and modified terms will be published on the website",
+        ],
       },
       {
-        subtitle: 'User Eligibility',
+        subtitle: "User Eligibility",
         items: [
-          'You must be at least 13 years old to use our services',
-          'If you are under 18, you need parental or guardian consent to use our services',
-          'You must provide accurate and complete information'
-        ]
-      }
-    ]
+          "You must be at least 13 years old to use our services",
+          "If you are under 18, you need parental or guardian consent to use our services",
+          "You must provide accurate and complete information",
+        ],
+      },
+    ],
   },
   {
-    id: 'service-description',
-    title: 'Service Description',
+    id: "service-description",
+    title: "Service Description",
     icon: FileText,
     content: [
       {
-        subtitle: 'Services We Provide',
+        subtitle: "Services We Provide",
         items: [
-          'AI-powered fortune cookie message generator',
-          'Browse preset fortune cookie message database',
-          'Personalized message creation and history management',
-          'Educational content and fortune cookie cultural information'
-        ]
+          "AI-powered fortune cookie message generator",
+          "Browse preset fortune cookie message database",
+          "Personalized message creation and history management",
+          "Educational content and fortune cookie cultural information",
+        ],
       },
       {
-        subtitle: 'Service Features',
+        subtitle: "Service Features",
         items: [
-          'Free to use, no registration required',
-          'Support for multiple themes and styles of message generation',
-          'Local data storage to protect user privacy',
-          'Responsive design supporting multiple devices'
-        ]
-      }
-    ]
+          "Free to use, no registration required",
+          "Support for multiple themes and styles of message generation",
+          "Local data storage to protect user privacy",
+          "Responsive design supporting multiple devices",
+        ],
+      },
+    ],
   },
   {
-    id: 'user-conduct',
-    title: 'User Conduct Guidelines',
+    id: "user-conduct",
+    title: "User Conduct Guidelines",
     icon: Users,
     content: [
       {
-        subtitle: 'Permitted Use',
+        subtitle: "Permitted Use",
         items: [
-          'Personal entertainment and inspirational purposes',
-          'Educational and cultural learning purposes',
-          'Sharing generated messages with friends and family',
-          'Reasonable commercial use (such as restaurants, events, etc.)'
-        ]
+          "Personal entertainment and inspirational purposes",
+          "Educational and cultural learning purposes",
+          "Sharing generated messages with friends and family",
+          "Reasonable commercial use (such as restaurants, events, etc.)",
+        ],
       },
       {
-        subtitle: 'Prohibited Behavior',
+        subtitle: "Prohibited Behavior",
         items: [
-          'Malicious use or abuse of service features',
-          'Attempting to damage, interfere with, or harm the service',
-          'Using automated tools to excessively request services',
-          'Spreading harmful, illegal, or inappropriate content'
-        ]
-      }
-    ]
+          "Malicious use or abuse of service features",
+          "Attempting to damage, interfere with, or harm the service",
+          "Using automated tools to excessively request services",
+          "Spreading harmful, illegal, or inappropriate content",
+        ],
+      },
+    ],
   },
   {
-    id: 'intellectual-property',
-    title: 'Intellectual Property',
+    id: "intellectual-property",
+    title: "Intellectual Property",
     icon: Shield,
     content: [
       {
-        subtitle: 'Our Rights',
+        subtitle: "Our Rights",
         items: [
-          'Fortune Cookie AI trademarks, logos, and brands belong to us',
-          'Website design, code, and functionality are protected by copyright',
-          'Editing and organizing work of preset message database is protected',
-          'We reserve all rights not expressly granted'
-        ]
+          "Fortune Cookie AI trademarks, logos, and brands belong to us",
+          "Website design, code, and functionality are protected by copyright",
+          "Editing and organizing work of preset message database is protected",
+          "We reserve all rights not expressly granted",
+        ],
       },
       {
-        subtitle: 'User Content',
+        subtitle: "User Content",
         items: [
-          'Custom messages you generate belong to you',
-          'You authorize us to store and process your usage data to improve services',
-          'You may not claim ownership of our intellectual property',
-          'You are free to use and share the messages you generate'
-        ]
-      }
-    ]
+          "Custom messages you generate belong to you",
+          "You authorize us to store and process your usage data to improve services",
+          "You may not claim ownership of our intellectual property",
+          "You are free to use and share the messages you generate",
+        ],
+      },
+    ],
   },
   {
-    id: 'disclaimers',
-    title: 'Disclaimers',
+    id: "disclaimers",
+    title: "Disclaimers",
     icon: AlertTriangle,
     content: [
       {
-        subtitle: 'Service Provision',
+        subtitle: "Service Provision",
         items: [
           'Services are provided "as is" without any express or implied warranties',
-          'We do not guarantee the continuity, accuracy, or reliability of the service',
-          'Generated messages are for entertainment only and do not constitute professional advice',
-          'We are not responsible for service interruptions or data loss'
-        ]
+          "We do not guarantee the continuity, accuracy, or reliability of the service",
+          "Generated messages are for entertainment only and do not constitute professional advice",
+          "We are not responsible for service interruptions or data loss",
+        ],
       },
       {
-        subtitle: 'Limitation of Liability',
+        subtitle: "Limitation of Liability",
         items: [
-          'To the maximum extent permitted by law, we exclude all liability',
-          'We are not liable for any indirect, incidental, or consequential damages',
-          'Our total liability does not exceed the fees you paid for using the service (if applicable)',
-          'Some jurisdictions may not allow liability limitations, in which case local laws shall prevail'
-        ]
-      }
-    ]
-  }
-]
+          "To the maximum extent permitted by law, we exclude all liability",
+          "We are not liable for any indirect, incidental, or consequential damages",
+          "Our total liability does not exceed the fees you paid for using the service (if applicable)",
+          "Some jurisdictions may not allow liability limitations, in which case local laws shall prevail",
+        ],
+      },
+    ],
+  },
+];
 
 const serviceFeatures = [
   {
-    feature: 'AI Message Generation',
-    description: 'Create personalized messages using advanced AI technology',
-    status: 'available',
-    limitations: 'Daily generation count may be limited'
+    feature: "AI Message Generation",
+    description: "Create personalized messages using advanced AI technology",
+    status: "available",
+    limitations: "Daily generation count may be limited",
   },
   {
-    feature: 'Message Database',
-    description: 'Browse 500+ carefully categorized fortune cookie messages',
-    status: 'available',
-    limitations: 'Content is regularly updated and maintained'
+    feature: "Message Database",
+    description: "Browse 500+ carefully categorized fortune cookie messages",
+    status: "available",
+    limitations: "Content is regularly updated and maintained",
   },
   {
-    feature: 'History Records',
-    description: 'Locally save your generation history and preference settings',
-    status: 'available',
-    limitations: 'Data is stored on your device'
+    feature: "History Records",
+    description: "Locally save your generation history and preference settings",
+    status: "available",
+    limitations: "Data is stored on your device",
   },
   {
-    feature: 'Offline Features',
-    description: 'Provide basic functionality when network is interrupted',
-    status: 'limited',
-    limitations: 'Limited functionality, AI generation unavailable'
-  }
-]
+    feature: "Offline Features",
+    description: "Provide basic functionality when network is interrupted",
+    status: "limited",
+    limitations: "Limited functionality, AI generation unavailable",
+  },
+];
 
 export default function TermsPage() {
   return (
@@ -208,7 +223,9 @@ export default function TermsPage() {
                 Terms of Service
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
-                Welcome to Fortune Cookie AI! Please read these Terms of Service carefully, as they govern your rights and obligations when using our services.
+                Welcome to Fortune Cookie AI! Please read these Terms of Service
+                carefully, as they govern your rights and obligations when using
+                our services.
               </p>
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <span>Last Updated: August 25, 2024</span>
@@ -226,8 +243,10 @@ export default function TermsPage() {
                       Important Notice
                     </h2>
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                      By using Fortune Cookie AI services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
-                      If you do not agree to any terms, please stop using our services immediately.
+                      By using Fortune Cookie AI services, you acknowledge that
+                      you have read, understood, and agree to be bound by these
+                      Terms of Service. If you do not agree to any terms, please
+                      stop using our services immediately.
                     </p>
                     <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
                       <div className="flex items-center gap-2">
@@ -265,7 +284,7 @@ export default function TermsPage() {
                         {section.title}
                       </h2>
                     </div>
-                    
+
                     <div className="space-y-6">
                       {section.content.map((item, index) => (
                         <div key={index}>
@@ -274,7 +293,10 @@ export default function TermsPage() {
                           </h3>
                           <ul className="space-y-2">
                             {item.items.map((listItem, itemIndex) => (
-                              <li key={itemIndex} className="flex items-start gap-3 text-gray-600">
+                              <li
+                                key={itemIndex}
+                                className="flex items-start gap-3 text-gray-600"
+                              >
                                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
                                 <span>{listItem}</span>
                               </li>
@@ -295,17 +317,22 @@ export default function TermsPage() {
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {serviceFeatures.map((item, index) => (
-                  <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm border-gray-200">
+                  <Card
+                    key={index}
+                    className="p-6 bg-white/90 backdrop-blur-sm border-gray-200"
+                  >
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-lg font-semibold text-gray-800">
                         {item.feature}
                       </h3>
-                      <Badge className={
-                        item.status === 'available' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }>
-                        {item.status === 'available' ? 'Available' : 'Limited'}
+                      <Badge
+                        className={
+                          item.status === "available"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }
+                      >
+                        {item.status === "available" ? "Available" : "Limited"}
                       </Badge>
                     </div>
                     <p className="text-gray-600 text-sm mb-3">
@@ -330,15 +357,19 @@ export default function TermsPage() {
                 <div className="space-y-3 text-sm text-gray-600">
                   <p>
                     <span className="font-medium">Applicable Law: </span>
-                    These Terms of Service are governed by the laws of the People’s Republic of China.
+                    These Terms of Service are governed by the laws of the
+                    People’s Republic of China.
                   </p>
                   <p>
                     <span className="font-medium">Dispute Resolution: </span>
-                    Any disputes should first be resolved through friendly negotiation. If negotiation fails, litigation may be brought to a competent people’s court.
+                    Any disputes should first be resolved through friendly
+                    negotiation. If negotiation fails, litigation may be brought
+                    to a competent people’s court.
                   </p>
                   <p>
                     <span className="font-medium">Severability: </span>
-                    If any part of these terms is deemed invalid or unenforceable, the remaining parts shall remain valid.
+                    If any part of these terms is deemed invalid or
+                    unenforceable, the remaining parts shall remain valid.
                   </p>
                 </div>
               </Card>
@@ -354,7 +385,8 @@ export default function TermsPage() {
                   </h2>
                 </div>
                 <p className="text-gray-600 mb-4">
-                  If you have any questions about these Terms of Service or need assistance, please contact us:
+                  If you have any questions about these Terms of Service or need
+                  assistance, please contact us:
                 </p>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
@@ -367,7 +399,9 @@ export default function TermsPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">Response Time: </span>
-                    <span>We will respond to your inquiry within 7 business days</span>
+                    <span>
+                      We will respond to your inquiry within 7 business days
+                    </span>
                   </div>
                 </div>
               </Card>
@@ -376,5 +410,5 @@ export default function TermsPage() {
         </div>
       </main>
     </>
-  )
+  );
 }

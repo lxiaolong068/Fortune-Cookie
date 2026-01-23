@@ -1,162 +1,177 @@
-import { Metadata } from 'next'
-import { DynamicBackgroundEffects } from '@/components/DynamicBackgroundEffects'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Shield, Eye, Database, Cookie, Lock, UserCheck, Mail } from 'lucide-react'
-import { getImageUrl } from '@/lib/site'
+import { Metadata } from "next";
+import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Shield,
+  Eye,
+  Database,
+  Cookie,
+  Lock,
+  UserCheck,
+  Mail,
+} from "lucide-react";
+import { getImageUrl, getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
+
+const baseUrl = getSiteUrl();
 
 // Static generation configuration
-export const dynamic = 'force-static'
-export const revalidate = 86400 // 24 hours
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Fortune Cookie AI',
-  description: 'Privacy Policy for Fortune Cookie AI. Learn how we collect, use, and protect your data. We prioritize your privacy and security.',
+  title: "Privacy Policy - Fortune Cookie AI",
+  description:
+    "Privacy Policy for Fortune Cookie AI. Learn how we collect, use, and protect your data. We prioritize your privacy and security.",
   openGraph: {
-    title: 'Privacy Policy - Fortune Cookie AI',
-    description: 'Learn how Fortune Cookie AI protects your privacy and personal data.',
-    type: 'article',
-    url: 'https://www.fortune-cookie.cc/privacy',
+    title: "Privacy Policy - Fortune Cookie AI",
+    description:
+      "Learn how Fortune Cookie AI protects your privacy and personal data.",
+    type: "article",
+    url: "https://www.fortune-cookie.cc/privacy",
     images: [
       {
-        url: getImageUrl('/og-image.png'),
+        url: getImageUrl("/og-image.png"),
         width: 1200,
         height: 630,
-        alt: 'Privacy Policy - Fortune Cookie AI',
+        alt: "Privacy Policy - Fortune Cookie AI",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Privacy Policy - Fortune Cookie AI',
-    description: 'Learn how Fortune Cookie AI protects your privacy and personal data.',
-    images: [getImageUrl('/twitter-image.png')],
-    creator: '@fortunecookieai',
+    card: "summary_large_image",
+    title: "Privacy Policy - Fortune Cookie AI",
+    description:
+      "Learn how Fortune Cookie AI protects your privacy and personal data.",
+    images: [getImageUrl("/twitter-image.png")],
+    creator: "@fortunecookieai",
   },
   alternates: {
-    canonical: '/privacy',
+    canonical: "/privacy",
+    languages: generateAlternateLanguages("/privacy", baseUrl),
   },
-  robots: 'index, follow',
-}
+  robots: "index, follow",
+};
 
 const privacySections = [
   {
-    id: 'information-collection',
-    title: 'Information Collection',
+    id: "information-collection",
+    title: "Information Collection",
     icon: Database,
     content: [
       {
-        subtitle: 'Types of Information We Collect',
+        subtitle: "Types of Information We Collect",
         items: [
-          'Usage data: access time, page views, feature usage',
-          'Device information: browser type, operating system, screen resolution',
-          'User preferences: theme selection, language settings, display preferences',
-          'Generation history: fortune cookie messages you create (stored locally only)'
-        ]
+          "Usage data: access time, page views, feature usage",
+          "Device information: browser type, operating system, screen resolution",
+          "User preferences: theme selection, language settings, display preferences",
+          "Generation history: fortune cookie messages you create (stored locally only)",
+        ],
       },
       {
-        subtitle: 'Information Collection Methods',
+        subtitle: "Information Collection Methods",
         items: [
-          'Automatic collection: through Cookies and local storage technology',
-          'User provided: through your active settings and preference choices',
-          'Analytics tools: using Google Analytics for anonymous statistical analysis'
-        ]
-      }
-    ]
+          "Automatic collection: through Cookies and local storage technology",
+          "User provided: through your active settings and preference choices",
+          "Analytics tools: using Google Analytics for anonymous statistical analysis",
+        ],
+      },
+    ],
   },
   {
-    id: 'information-use',
-    title: 'Information Use',
+    id: "information-use",
+    title: "Information Use",
     icon: Eye,
     content: [
       {
-        subtitle: 'How We Use Your Information',
+        subtitle: "How We Use Your Information",
         items: [
-          'Provide and improve service functionality',
-          'Personalize user experience and content recommendations',
-          'Analyze website usage and performance optimization',
-          'Ensure website security and prevent abuse'
-        ]
+          "Provide and improve service functionality",
+          "Personalize user experience and content recommendations",
+          "Analyze website usage and performance optimization",
+          "Ensure website security and prevent abuse",
+        ],
       },
       {
-        subtitle: 'Data Processing Principles',
+        subtitle: "Data Processing Principles",
         items: [
-          'Minimization principle: collect only necessary information',
-          'Transparency principle: clearly inform data usage purposes',
-          'Security principle: adopt appropriate technical and organizational measures to protect data'
-        ]
-      }
-    ]
+          "Minimization principle: collect only necessary information",
+          "Transparency principle: clearly inform data usage purposes",
+          "Security principle: adopt appropriate technical and organizational measures to protect data",
+        ],
+      },
+    ],
   },
   {
-    id: 'data-storage',
-    title: 'Data Storage',
+    id: "data-storage",
+    title: "Data Storage",
     icon: Lock,
     content: [
       {
-        subtitle: 'Storage Location and Methods',
+        subtitle: "Storage Location and Methods",
         items: [
-          'Local storage: user preferences and history stored on your device',
-          'Server storage: anonymous usage statistics stored on secure cloud servers',
-          'Third-party services: Google Analytics data processed according to their privacy policy'
-        ]
+          "Local storage: user preferences and history stored on your device",
+          "Server storage: anonymous usage statistics stored on secure cloud servers",
+          "Third-party services: Google Analytics data processed according to their privacy policy",
+        ],
       },
       {
-        subtitle: 'Data Retention Period',
+        subtitle: "Data Retention Period",
         items: [
-          'Local data: controlled by users, can be cleared at any time',
-          'Analytics data: automatically deleted after 26 months',
-          'Log data: automatically deleted after 90 days'
-        ]
-      }
-    ]
+          "Local data: controlled by users, can be cleared at any time",
+          "Analytics data: automatically deleted after 26 months",
+          "Log data: automatically deleted after 90 days",
+        ],
+      },
+    ],
   },
   {
-    id: 'user-rights',
-    title: 'User Rights',
+    id: "user-rights",
+    title: "User Rights",
     icon: UserCheck,
     content: [
       {
-        subtitle: 'Your Rights',
+        subtitle: "Your Rights",
         items: [
-          'Right to access: learn about information we collect about you',
-          'Right to rectification: request correction of inaccurate personal information',
-          'Right to erasure: request deletion of your personal information',
-          'Right to restrict processing: limit information processing in specific circumstances'
-        ]
+          "Right to access: learn about information we collect about you",
+          "Right to rectification: request correction of inaccurate personal information",
+          "Right to erasure: request deletion of your personal information",
+          "Right to restrict processing: limit information processing in specific circumstances",
+        ],
       },
       {
-        subtitle: 'How to Exercise Your Rights',
+        subtitle: "How to Exercise Your Rights",
         items: [
-          'Clear local data: clear Cookies and local storage through browser settings',
-          'Contact us: send email to privacy@fortune-cookie.cc',
-          'Opt out of analytics: use Google Analytics opt-out tools'
-        ]
-      }
-    ]
-  }
-]
+          "Clear local data: clear Cookies and local storage through browser settings",
+          "Contact us: send email to privacy@fortune-cookie.cc",
+          "Opt out of analytics: use Google Analytics opt-out tools",
+        ],
+      },
+    ],
+  },
+];
 
 const cookieTypes = [
   {
-    type: 'Essential Cookies',
-    purpose: 'Required for basic website functionality',
-    examples: 'Session management, security features',
-    canDisable: false
+    type: "Essential Cookies",
+    purpose: "Required for basic website functionality",
+    examples: "Session management, security features",
+    canDisable: false,
   },
   {
-    type: 'Analytics Cookies',
-    purpose: 'Help us understand how visitors use our website',
-    examples: 'Google Analytics, page view tracking',
-    canDisable: true
+    type: "Analytics Cookies",
+    purpose: "Help us understand how visitors use our website",
+    examples: "Google Analytics, page view tracking",
+    canDisable: true,
   },
   {
-    type: 'Functional Cookies',
-    purpose: 'Remember your preferences and settings',
-    examples: 'Theme selection, language preferences',
-    canDisable: true
-  }
-]
+    type: "Functional Cookies",
+    purpose: "Remember your preferences and settings",
+    examples: "Theme selection, language preferences",
+    canDisable: true,
+  },
+];
 
 export default function PrivacyPage() {
   return (
@@ -174,8 +189,9 @@ export default function PrivacyPage() {
                 Privacy Policy
               </h1>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
-                Welcome to Fortune Cookie AI! We are committed to protecting your privacy and personal data.
-                This policy explains how we collect, use, and safeguard your information.
+                Welcome to Fortune Cookie AI! We are committed to protecting
+                your privacy and personal data. This policy explains how we
+                collect, use, and safeguard your information.
               </p>
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <span>Last Updated: August 25, 2024</span>
@@ -193,8 +209,10 @@ export default function PrivacyPage() {
                       Privacy Commitment
                     </h2>
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                      Fortune Cookie AI is designed with privacy in mind. Most of your data is stored locally on your device,
-                      and we only collect minimal anonymous usage statistics to improve our service.
+                      Fortune Cookie AI is designed with privacy in mind. Most
+                      of your data is stored locally on your device, and we only
+                      collect minimal anonymous usage statistics to improve our
+                      service.
                     </p>
                     <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
                       <div className="flex items-center gap-2">
@@ -241,7 +259,10 @@ export default function PrivacyPage() {
                           </h3>
                           <ul className="space-y-2">
                             {item.items.map((listItem, itemIndex) => (
-                              <li key={itemIndex} className="flex items-start gap-3 text-gray-600">
+                              <li
+                                key={itemIndex}
+                                className="flex items-start gap-3 text-gray-600"
+                              >
                                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
                                 <span>{listItem}</span>
                               </li>
@@ -263,17 +284,22 @@ export default function PrivacyPage() {
               </h2>
               <div className="grid md:grid-cols-3 gap-6">
                 {cookieTypes.map((cookie, index) => (
-                  <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm border-gray-200">
+                  <Card
+                    key={index}
+                    className="p-6 bg-white/90 backdrop-blur-sm border-gray-200"
+                  >
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-lg font-semibold text-gray-800">
                         {cookie.type}
                       </h3>
-                      <Badge className={
-                        cookie.canDisable
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                      }>
-                        {cookie.canDisable ? 'Optional' : 'Required'}
+                      <Badge
+                        className={
+                          cookie.canDisable
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                        }
+                      >
+                        {cookie.canDisable ? "Optional" : "Required"}
                       </Badge>
                     </div>
                     <p className="text-gray-600 text-sm mb-3">
@@ -298,7 +324,8 @@ export default function PrivacyPage() {
                   </h2>
                 </div>
                 <p className="text-gray-600 mb-4">
-                  If you have any questions about this Privacy Policy or need assistance, please contact us:
+                  If you have any questions about this Privacy Policy or need
+                  assistance, please contact us:
                 </p>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
@@ -311,7 +338,9 @@ export default function PrivacyPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">Response Time: </span>
-                    <span>We will respond to your inquiry within 7 business days</span>
+                    <span>
+                      We will respond to your inquiry within 7 business days
+                    </span>
                   </div>
                 </div>
               </Card>
@@ -320,5 +349,5 @@ export default function PrivacyPage() {
         </div>
       </main>
     </>
-  )
+  );
 }

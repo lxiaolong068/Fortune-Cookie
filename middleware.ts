@@ -217,23 +217,25 @@ function handleLocaleDetection(
   // If path already has a locale prefix, check if it's valid
   if (pathnameHasLocale) {
     // Valid locale in path - continue with current locale
-    // Set locale cookie if not already set
-    const response = NextResponse.next();
+    // Set locale cookie if not already set or different from path locale
     if (!cookieLocale || cookieLocale !== firstSegment) {
+      const response = NextResponse.next();
       response.cookies.set(pathConfig.detection.cookieName, firstSegment, {
         path: "/",
         maxAge: pathConfig.detection.cookieMaxAge,
       });
+      addSecurityHeaders(response, nonce);
+      return response; // Return response with updated cookie
     }
-    return null; // Let the page caching handle it
+    return null; // Cookie already matches, let page caching handle it
   }
 
   // Path doesn't have a locale prefix
   // For default locale without showDefaultLocale, don't redirect
   if (preferredLocale === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
-    // Set cookie for default locale
-    const response = NextResponse.next();
+    // Set cookie for default locale if different
     if (cookieLocale !== i18n.defaultLocale) {
+      const response = NextResponse.next();
       response.cookies.set(
         pathConfig.detection.cookieName,
         i18n.defaultLocale,
@@ -242,6 +244,8 @@ function handleLocaleDetection(
           maxAge: pathConfig.detection.cookieMaxAge,
         },
       );
+      addSecurityHeaders(response, nonce);
+      return response; // Return response with updated cookie
     }
     return null; // Don't redirect, serve default locale content
   }
@@ -290,10 +294,7 @@ function handleStaticAssets(
   const pathname = request.nextUrl.pathname;
 
   // app-manifest.json 和 sw.js 使用短缓存，其他静态资源使用长期缓存
-  if (
-    pathname === "/app-manifest.json" ||
-    pathname === "/site.webmanifest"
-  ) {
+  if (pathname === "/app-manifest.json" || pathname === "/site.webmanifest") {
     // PWA manifest - 短缓存以便快速更新
     response.headers.set(
       "Cache-Control",

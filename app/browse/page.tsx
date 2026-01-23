@@ -1,6 +1,10 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { BrowsePageContent } from "./BrowsePageContent";
+import { getSiteUrl } from "@/lib/site";
+import { generateAlternateLanguages } from "@/lib/i18n-config";
+
+const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: "Browse Fortune Messages - Search & Filter",
@@ -21,6 +25,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/browse",
+    languages: generateAlternateLanguages("/browse", baseUrl),
   },
 };
 

@@ -1,0 +1,180 @@
+[fortune_1] Your future is created by what you do today, not tomorrow.
+[fortune_2] The best time to plant a tree was 20 years ago. The second best time is now.
+[fortune_3] Success is not final, failure is not fatal: it is the courage to continue that counts.
+[fortune_4] Believe you can and you're halfway there.
+[fortune_5] The only way to do great work is to love what you do.
+[fortune_6] It does not matter how slowly you go as long as you do not stop.
+[fortune_7] In the middle of difficulty lies opportunity.
+[fortune_8] The journey of a thousand miles begins with one step.
+[fortune_9] What lies behind us and what lies before us are tiny matters compared to what lies within us.
+[fortune_10] The mind is everything. What you think you become.
+[fortune_11] Every accomplishment starts with the decision to try.
+[fortune_12] You are never too old to set another goal or to dream a new dream.
+[fortune_13] The secret of getting ahead is getting started.
+[fortune_14] Your potential is endless. Go do what you were created to do.
+[fortune_15] Stars can't shine without darkness. Your struggles make you stronger.
+[fortune_16] The only limit to your impact is your imagination and commitment.
+[fortune_17] Today's preparation determines tomorrow's achievement.
+[fortune_18] Your life does not get better by chance, it gets better by change.
+[fortune_19] Dream big. Start small. Act now.
+[fortune_20] The harder you work for something, the greater you'll feel when you achieve it.
+[fortune_21] Don't wait for opportunity. Create it.
+[fortune_22] Courage is not the absence of fear, but the triumph over it.
+[fortune_23] Small daily improvements lead to stunning results.
+[fortune_24] Your attitude determines your direction.
+[fortune_25] The comeback is always stronger than the setback.
+[fortune_26] You will find happiness with a new love... probably your cat.
+[fortune_27] A closed mouth gathers no foot.
+[fortune_28] You will be hungry again in one hour.
+[fortune_29] Help! I'm being held prisoner in a fortune cookie factory!
+[fortune_30] The early bird might get the worm, but the second mouse gets the cheese.
+[fortune_31] You are not illiterate.
+[fortune_32] Ignore previous fortune.
+[fortune_33] You will receive a fortune cookie.
+[fortune_34] Beware of cookies bearing fortunes.
+[fortune_35] You are reading a fortune cookie.
+[fortune_36] Your future is as bright as your past is dark... which isn't saying much.
+[fortune_37] You will soon be hungry again. Order more Chinese food.
+[fortune_38] A wise man once said nothing. He was probably eating.
+[fortune_39] Your lucky numbers are: All of them. You'll need the luck.
+[fortune_40] Today you will make progress... toward your refrigerator.
+[fortune_41] The answer you seek is in another cookie.
+[fortune_42] Your socks will bring you great fortune... if you wear them.
+[fortune_43] You will soon meet a tall, dark stranger... in the mirror.
+[fortune_44] Error 404: Fortune not found.
+[fortune_45] This fortune intentionally left blank.
+[fortune_46] You will find what you're looking for in the last place you look. Obviously.
+[fortune_47] A journey of a thousand miles begins with a single step... and comfortable shoes.
+[fortune_48] Your pet goldfish is plotting against you.
+[fortune_49] Congratulations! You can read.
+[fortune_50] You have just wasted time reading this fortune.
+[fortune_51] Love is the bridge between two hearts.
+[fortune_52] The best love is the kind that awakens the soul.
+[fortune_53] True love stories never have endings.
+[fortune_54] Love is not about finding the right person, but being the right person.
+[fortune_55] In the arithmetic of love, one plus one equals everything.
+[fortune_56] Love recognizes no barriers.
+[fortune_57] The heart wants what it wants.
+[fortune_58] Love is friendship set on fire.
+[fortune_59] A loving heart is the truest wisdom.
+[fortune_60] Where there is love, there is life.
+[fortune_61] The greatest thing you'll ever learn is just to love and be loved in return.
+[fortune_62] Love isn't something you find. Love is something that finds you.
+[fortune_63] To love and be loved is to feel the sun from both sides.
+[fortune_64] Love is composed of a single soul inhabiting two bodies.
+[fortune_65] Keep love in your heart. A life without it is like a sunless garden.
+[fortune_66] Love is the master key that opens the gates of happiness.
+[fortune_67] Romance is thinking about your significant other when you should be thinking about something else.
+[fortune_68] A true love affair never ends.
+[fortune_69] The best thing to hold onto in life is each other.
+[fortune_70] You will soon find the love that has been seeking you.
+[fortune_71] Success is where preparation and opportunity meet.
+[fortune_72] The way to get started is to quit talking and begin doing.
+[fortune_73] Innovation distinguishes between a leader and a follower.
+[fortune_74] Don't be afraid to give up the good to go for the great.
+[fortune_75] Your limitation—it's only your imagination.
+[fortune_76] Success is not the key to happiness. Happiness is the key to success.
+[fortune_77] The only impossible journey is the one you never begin.
+[fortune_78] Great things never come from comfort zones.
+[fortune_79] The difference between ordinary and extraordinary is that little extra.
+[fortune_80] Success usually comes to those who are too busy to be looking for it.
+[fortune_81] Your career is about to take an unexpected and exciting turn.
+[fortune_82] A promotion or new opportunity is on the horizon.
+[fortune_83] Your hard work will soon pay off in ways you never expected.
+[fortune_84] The successful warrior is the average person with laser-like focus.
+[fortune_85] Success is walking from failure to failure with no loss of enthusiasm.
+[fortune_86] Your talent combined with hard work will open doors.
+[fortune_87] Winners are not people who never fail, but people who never quit.
+[fortune_88] The only place success comes before work is in the dictionary.
+[fortune_89] Your next chapter is going to be amazing.
+[fortune_90] Every expert was once a beginner. Keep learning.
+[fortune_91] Be yourself; everyone else is already taken.
+[fortune_92] Two roads diverged in a wood, and I took the one less traveled by, and that has made all the difference.
+[fortune_93] Yesterday is history, tomorrow is a mystery, today is a gift of God, which is why we call it the present.
+[fortune_94] Don't judge each day by the harvest you reap but by the seeds that you plant.
+[fortune_95] It is during our darkest moments that we must focus to see the light.
+[fortune_96] The greatest glory in living lies not in never falling, but in rising every time we fall.
+[fortune_97] Life is what happens when you're busy making other plans.
+[fortune_98] The only true wisdom is in knowing you know nothing.
+[fortune_99] In three words I can sum up everything I've learned about life: it goes on.
+[fortune_100] The unexamined life is not worth living.
+[fortune_101] Knowing yourself is the beginning of all wisdom.
+[fortune_102] The fool doth think he is wise, but the wise man knows himself to be a fool.
+[fortune_103] Patience is bitter, but its fruit is sweet.
+[fortune_104] A wise person learns more from their enemies than a fool from their friends.
+[fortune_105] The only thing we have to fear is fear itself.
+[fortune_106] To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.
+[fortune_107] It is not the mountain we conquer, but ourselves.
+[fortune_108] The mind that opens to a new idea never returns to its original size.
+[fortune_109] Silence is a true friend who never betrays.
+[fortune_110] Those who cannot change their minds cannot change anything.
+[fortune_111] A true friend is one soul in two bodies.
+[fortune_112] Friendship is born at that moment when one person says to another: 'What! You too?'
+[fortune_113] A friend is someone who knows all about you and still loves you.
+[fortune_114] Good friends are like stars. You don't always see them, but you know they're always there.
+[fortune_115] Friendship is the only cement that will ever hold the world together.
+[fortune_116] A sweet friendship refreshes the soul.
+[fortune_117] Friends are the family you choose.
+[fortune_118] A loyal friend laughs at your jokes when they're not so good, and sympathizes with your problems when they're not so bad.
+[fortune_119] Walking with a friend in the dark is better than walking alone in the light.
+[fortune_120] A real friend is one who walks in when the rest of the world walks out.
+[fortune_121] Friendship improves happiness and abates misery by the doubling of our joy and the dividing of our grief.
+[fortune_122] One of the most beautiful qualities of true friendship is to understand and to be understood.
+[fortune_123] A friend is what the heart needs all the time.
+[fortune_124] There is nothing I would not do for those who are really my friends.
+[fortune_125] New friends await you in unexpected places. Stay open.
+[fortune_126] The language of friendship is not words but meanings.
+[fortune_127] Be slow to fall into friendship, but when you are in, continue firm and constant.
+[fortune_128] Friendship is the golden thread that ties the heart of all the world.
+[fortune_129] True friends are never apart, maybe in distance but never in heart.
+[fortune_130] A day spent with friends is a day well spent.
+[fortune_131] This year, your birthday wishes will come true in unexpected ways.
+[fortune_132] A new age brings new adventures and wonderful surprises.
+[fortune_133] May your birthday mark the beginning of a wonderful period of time.
+[fortune_134] The coming year holds the keys to many doors of opportunity.
+[fortune_135] Age is merely the number of years the world has been enjoying you.
+[fortune_136] Your next year will be filled with laughter, love, and prosperity.
+[fortune_137] Every candle on your cake is a wish waiting to come true.
+[fortune_138] The best is yet to come. Happy birthday!
+[fortune_139] May this birthday bring you closer to all your dreams.
+[fortune_140] A birthday is not just a year older, but a year wiser.
+[fortune_141] Your birthday is nature's way of telling you to celebrate yourself.
+[fortune_142] This birthday begins a new chapter. Make it a bestseller.
+[fortune_143] Count your life by smiles, not tears. Count your age by friends, not years.
+[fortune_144] May your special day be the beginning of an extraordinary year.
+[fortune_145] Birthdays are a new start, a fresh beginning, and a time to pursue dreams.
+[fortune_146] Your birthday is the first day of another 365-day journey around the sun.
+[fortune_147] With age comes wisdom, and with wisdom comes great happiness.
+[fortune_148] Growing older is mandatory, but growing up is optional. Stay young at heart.
+[fortune_149] May today be the start of a wonderful, glorious, and joyful year!
+[fortune_150] Another year of life is another chance to achieve your dreams.
+[fortune_151] The more you study, the more you know. The more you know, the more you grow.
+[fortune_152] Success in exams comes to those who prepare with dedication.
+[fortune_153] Your next test will reveal the strength you didn't know you had.
+[fortune_154] Education is the passport to the future. Invest in it wisely.
+[fortune_155] The expert in anything was once a beginner. Keep studying.
+[fortune_156] Your brain is a muscle. The more you exercise it, the stronger it gets.
+[fortune_157] Every hour of studying is a step closer to your dreams.
+[fortune_158] The pain of studying is temporary. The pride of achievement is forever.
+[fortune_159] Good grades follow good study habits. Build yours today.
+[fortune_160] A mind that is stretched by new knowledge never returns to its old dimensions.
+[fortune_161] Your academic breakthrough is just around the corner. Keep pushing.
+[fortune_162] Study hard, for the well is deep, and our brains are shallow.
+[fortune_163] The only way to learn is to never stop studying.
+[fortune_164] Focus on your studies now, and your future self will thank you.
+[fortune_165] Knowledge is power. Empower yourself through education.
+[fortune_166] Your concentration and focus will lead to excellent exam results.
+[fortune_167] Learning is not a destination but a lifelong journey. Embrace it.
+[fortune_168] The seeds of knowledge you plant today will grow into forests of opportunity.
+[fortune_169] Stay curious, stay hungry for knowledge, and success will follow.
+[fortune_170] Your dedication to learning will open doors you never knew existed.
+[fortune_171] Good health is the greatest wealth you can possess.
+[fortune_172] A healthy outside starts from the inside.
+[fortune_173] Take care of your body. It's the only place you have to live.
+[fortune_174] Your body hears everything your mind says. Stay positive.
+[fortune_175] A moment of relaxation is worth a lifetime of stress.
+[fortune_176] Adventure awaits those who dare to explore.
+[fortune_177] The world is a book, and those who do not travel read only one page.
+[fortune_178] Your next journey will bring wisdom and joy.
+[fortune_179] Pack your bags. Destiny is calling you to new horizons.
+[fortune_180] Travel far, travel wide, and discover who you truly are.

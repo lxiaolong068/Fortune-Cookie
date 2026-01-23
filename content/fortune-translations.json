@@ -1,7 +1,7 @@
 {
   "zh": {
     "fortune_1": {
-      "message": "你的未来由你今天的行动创造，而不是明天。",
+      "message": "你的未来由今天的行动创造，而非明天。",
       "status": "machine"
     },
     "fortune_2": {
@@ -9,7 +9,7 @@
       "status": "machine"
     },
     "fortune_3": {
-      "message": "成功不是终点，失败也非终结：继续前行的勇气才重要。",
+      "message": "成功不是终点，失败也非终结：继续前行的勇气才最重要。",
       "status": "machine"
     },
     "fortune_4": {
@@ -19,6 +19,706 @@
     "fortune_5": {
       "message": "只有热爱所做之事，才能成就伟大的工作。",
       "status": "machine"
+    },
+    "fortune_6": {
+      "message": "走得多慢都没关系，只要你不停下来。",
+      "status": "machine"
+    },
+    "fortune_7": {
+      "message": "困难之中蕴藏着机遇。",
+      "status": "machine"
+    },
+    "fortune_8": {
+      "message": "千里之行，始于足下。",
+      "status": "machine"
+    },
+    "fortune_9": {
+      "message": "过去与未来都是小事，内心的力量才是一切。",
+      "status": "machine"
+    },
+    "fortune_10": {
+      "message": "心之所想，终将成为现实。",
+      "status": "machine"
+    },
+    "fortune_11": {
+      "message": "每一项成就都始于尝试的决定。",
+      "status": "machine"
+    },
+    "fortune_12": {
+      "message": "你永远不会太老，去设定新目标或追逐新梦想。",
+      "status": "machine"
+    },
+    "fortune_13": {
+      "message": "取得成功的秘诀是开始行动。",
+      "status": "machine"
+    },
+    "fortune_14": {
+      "message": "你的潜能无限，去做你注定要做的事。",
+      "status": "machine"
+    },
+    "fortune_15": {
+      "message": "没有黑暗，星星无法闪耀。你的挣扎使你更强大。",
+      "status": "machine"
+    },
+    "fortune_16": {
+      "message": "唯一限制你影响力的是你的想象力和决心。",
+      "status": "machine"
+    },
+    "fortune_17": {
+      "message": "今天的准备决定明天的成就。",
+      "status": "machine"
+    },
+    "fortune_18": {
+      "message": "生活不会因运气而变好，而是因改变而变好。",
+      "status": "machine"
+    },
+    "fortune_19": {
+      "message": "梦想要大，起步要小，行动要快。",
+      "status": "machine"
+    },
+    "fortune_20": {
+      "message": "为某事付出越多，实现时的感觉就越美好。",
+      "status": "machine"
+    },
+    "fortune_21": {
+      "message": "不要等待机会，要创造机会。",
+      "status": "machine"
+    },
+    "fortune_22": {
+      "message": "勇气不是没有恐惧，而是战胜恐惧。",
+      "status": "machine"
+    },
+    "fortune_23": {
+      "message": "每天的小进步会带来惊人的成果。",
+      "status": "machine"
+    },
+    "fortune_24": {
+      "message": "你的态度决定你的方向。",
+      "status": "machine"
+    },
+    "fortune_25": {
+      "message": "东山再起总比跌倒更有力量。",
+      "status": "machine"
+    },
+    "fortune_26": {
+      "message": "你会在新的爱情中找到幸福……大概是你的猫。",
+      "status": "machine"
+    },
+    "fortune_27": {
+      "message": "嘴巴闭紧，脚就不会插进去。",
+      "status": "machine"
+    },
+    "fortune_28": {
+      "message": "一小时后你又会饿了。",
+      "status": "machine"
+    },
+    "fortune_29": {
+      "message": "救命！我被困在幸运饼干工厂里了！",
+      "status": "machine"
+    },
+    "fortune_30": {
+      "message": "早起的鸟儿有虫吃，但第二只老鼠才能吃到奶酪。",
+      "status": "machine"
+    },
+    "fortune_31": {
+      "message": "你不是文盲。",
+      "status": "machine"
+    },
+    "fortune_32": {
+      "message": "请忽略上一条签语。",
+      "status": "machine"
+    },
+    "fortune_33": {
+      "message": "你将收到一块幸运饼干。",
+      "status": "machine"
+    },
+    "fortune_34": {
+      "message": "小心那些带有签语的饼干。",
+      "status": "machine"
+    },
+    "fortune_35": {
+      "message": "你正在阅读一条幸运签语。",
+      "status": "machine"
+    },
+    "fortune_36": {
+      "message": "你的未来和过去一样光明……这也没说多亮。",
+      "status": "machine"
+    },
+    "fortune_37": {
+      "message": "你很快又会饿了。再点些中餐吧。",
+      "status": "machine"
+    },
+    "fortune_38": {
+      "message": "智者曾经一言不发。他大概在吃东西。",
+      "status": "machine"
+    },
+    "fortune_39": {
+      "message": "你的幸运数字是：所有数字。你需要这份运气。",
+      "status": "machine"
+    },
+    "fortune_40": {
+      "message": "今天你会取得进步……走向冰箱的进步。",
+      "status": "machine"
+    },
+    "fortune_41": {
+      "message": "你寻找的答案在另一块饼干里。",
+      "status": "machine"
+    },
+    "fortune_42": {
+      "message": "你的袜子会给你带来好运……如果你穿上它们的话。",
+      "status": "machine"
+    },
+    "fortune_43": {
+      "message": "你很快会遇到一个高大、神秘的陌生人……在镜子里。",
+      "status": "machine"
+    },
+    "fortune_44": {
+      "message": "错误 404：签语未找到。",
+      "status": "machine"
+    },
+    "fortune_45": {
+      "message": "此签语故意留白。",
+      "status": "machine"
+    },
+    "fortune_46": {
+      "message": "你会在最后一个地方找到你要找的东西。显然。",
+      "status": "machine"
+    },
+    "fortune_47": {
+      "message": "千里之行始于足下……还有舒适的鞋子。",
+      "status": "machine"
+    },
+    "fortune_48": {
+      "message": "你的金鱼正在密谋对付你。",
+      "status": "machine"
+    },
+    "fortune_49": {
+      "message": "恭喜！你识字。",
+      "status": "machine"
+    },
+    "fortune_50": {
+      "message": "你刚刚浪费时间读了这条签语。",
+      "status": "machine"
+    },
+    "fortune_51": {
+      "message": "爱是连接两颗心的桥梁。",
+      "status": "machine"
+    },
+    "fortune_52": {
+      "message": "最好的爱是能唤醒灵魂的那种。",
+      "status": "machine"
+    },
+    "fortune_53": {
+      "message": "真正的爱情故事永远没有结局。",
+      "status": "machine"
+    },
+    "fortune_54": {
+      "message": "爱不是找到对的人，而是成为对的人。",
+      "status": "machine"
+    },
+    "fortune_55": {
+      "message": "在爱的算术里，一加一等于一切。",
+      "status": "machine"
+    },
+    "fortune_56": {
+      "message": "爱没有障碍。",
+      "status": "machine"
+    },
+    "fortune_57": {
+      "message": "心之所向，无法阻挡。",
+      "status": "machine"
+    },
+    "fortune_58": {
+      "message": "爱是燃烧的友谊。",
+      "status": "machine"
+    },
+    "fortune_59": {
+      "message": "爱的心是最真的智慧。",
+      "status": "machine"
+    },
+    "fortune_60": {
+      "message": "哪里有爱，哪里就有生命。",
+      "status": "machine"
+    },
+    "fortune_61": {
+      "message": "你能学到的最伟大的事是去爱和被爱。",
+      "status": "machine"
+    },
+    "fortune_62": {
+      "message": "爱不是你找到的，而是找到你的。",
+      "status": "machine"
+    },
+    "fortune_63": {
+      "message": "去爱和被爱，就像从两边感受阳光。",
+      "status": "machine"
+    },
+    "fortune_64": {
+      "message": "爱是一个灵魂栖息在两个身体里。",
+      "status": "machine"
+    },
+    "fortune_65": {
+      "message": "把爱留在心中。没有爱的生活如同没有阳光的花园。",
+      "status": "machine"
+    },
+    "fortune_66": {
+      "message": "爱是打开幸福之门的万能钥匙。",
+      "status": "machine"
+    },
+    "fortune_67": {
+      "message": "浪漫就是在该想别的时候却想着你的爱人。",
+      "status": "machine"
+    },
+    "fortune_68": {
+      "message": "真正的爱情永不落幕。",
+      "status": "machine"
+    },
+    "fortune_69": {
+      "message": "生命中最值得抓住的是彼此。",
+      "status": "machine"
+    },
+    "fortune_70": {
+      "message": "你很快会找到一直在寻找你的爱。",
+      "status": "machine"
+    },
+    "fortune_71": {
+      "message": "成功是准备与机遇相遇的地方。",
+      "status": "machine"
+    },
+    "fortune_72": {
+      "message": "开始做事的方法是停止说话，开始行动。",
+      "status": "machine"
+    },
+    "fortune_73": {
+      "message": "创新区分领导者和追随者。",
+      "status": "machine"
+    },
+    "fortune_74": {
+      "message": "不要害怕放弃好的去追求更好的。",
+      "status": "machine"
+    },
+    "fortune_75": {
+      "message": "你的局限只是你的想象力。",
+      "status": "machine"
+    },
+    "fortune_76": {
+      "message": "成功不是幸福的钥匙，幸福才是成功的钥匙。",
+      "status": "machine"
+    },
+    "fortune_77": {
+      "message": "唯一不可能的旅程是你从未开始的那个。",
+      "status": "machine"
+    },
+    "fortune_78": {
+      "message": "伟大的事情永远不会来自舒适区。",
+      "status": "machine"
+    },
+    "fortune_79": {
+      "message": "平凡与非凡的区别在于那一点额外的努力。",
+      "status": "machine"
+    },
+    "fortune_80": {
+      "message": "成功通常降临在那些忙得没空找它的人身上。",
+      "status": "machine"
+    },
+    "fortune_81": {
+      "message": "你的职业即将迎来意想不到的精彩转折。",
+      "status": "machine"
+    },
+    "fortune_82": {
+      "message": "晋升或新机会就在眼前。",
+      "status": "machine"
+    },
+    "fortune_83": {
+      "message": "你的努力很快会以意想不到的方式得到回报。",
+      "status": "machine"
+    },
+    "fortune_84": {
+      "message": "成功的战士是拥有激光般专注力的普通人。",
+      "status": "machine"
+    },
+    "fortune_85": {
+      "message": "成功是从失败走向失败却不失热情。",
+      "status": "machine"
+    },
+    "fortune_86": {
+      "message": "你的才华加上努力会为你打开大门。",
+      "status": "machine"
+    },
+    "fortune_87": {
+      "message": "赢家不是从不失败的人，而是从不放弃的人。",
+      "status": "machine"
+    },
+    "fortune_88": {
+      "message": "成功只有在字典里才会排在努力前面。",
+      "status": "machine"
+    },
+    "fortune_89": {
+      "message": "你的下一章将会精彩绝伦。",
+      "status": "machine"
+    },
+    "fortune_90": {
+      "message": "每个专家都曾是初学者。继续学习。",
+      "status": "machine"
+    },
+    "fortune_91": {
+      "message": "做你自己，因为别人都有人做了。",
+      "status": "machine"
+    },
+    "fortune_92": {
+      "message": "林中分出两条路，我选择了人迹罕至的那条，从此一切都不同了。",
+      "status": "machine"
+    },
+    "fortune_93": {
+      "message": "昨天是历史，明天是谜，今天是上天的礼物，所以叫做「当下」。",
+      "status": "machine"
+    },
+    "fortune_94": {
+      "message": "不要用收获来评判每一天，而要看你播下的种子。",
+      "status": "machine"
+    },
+    "fortune_95": {
+      "message": "在最黑暗的时刻，我们必须专注于寻找光明。",
+      "status": "machine"
+    },
+    "fortune_96": {
+      "message": "生命的荣耀不在于永不跌倒，而在于每次跌倒后都能爬起来。",
+      "status": "machine"
+    },
+    "fortune_97": {
+      "message": "生活就是在你忙于制定其他计划时发生的事。",
+      "status": "machine"
+    },
+    "fortune_98": {
+      "message": "唯一真正的智慧是知道自己一无所知。",
+      "status": "machine"
+    },
+    "fortune_99": {
+      "message": "用三个字总结我对生活的全部认识：它会继续。",
+      "status": "machine"
+    },
+    "fortune_100": {
+      "message": "未经审视的人生不值得过。",
+      "status": "machine"
+    },
+    "fortune_101": {
+      "message": "认识自己是一切智慧的开端。",
+      "status": "machine"
+    },
+    "fortune_102": {
+      "message": "愚者自以为聪明，智者知道自己是愚者。",
+      "status": "machine"
+    },
+    "fortune_103": {
+      "message": "耐心是苦涩的，但它的果实是甜蜜的。",
+      "status": "machine"
+    },
+    "fortune_104": {
+      "message": "智者从敌人那里学到的比愚者从朋友那里学到的更多。",
+      "status": "machine"
+    },
+    "fortune_105": {
+      "message": "我们唯一要恐惧的就是恐惧本身。",
+      "status": "machine"
+    },
+    "fortune_106": {
+      "message": "在一个不断试图让你变成别人的世界里，做自己是最大的成就。",
+      "status": "machine"
+    },
+    "fortune_107": {
+      "message": "我们征服的不是山峰，而是我们自己。",
+      "status": "machine"
+    },
+    "fortune_108": {
+      "message": "向新思想敞开的心灵永远不会回到原来的大小。",
+      "status": "machine"
+    },
+    "fortune_109": {
+      "message": "沉默是永不背叛的真朋友。",
+      "status": "machine"
+    },
+    "fortune_110": {
+      "message": "无法改变思想的人无法改变任何事。",
+      "status": "machine"
+    },
+    "fortune_111": {
+      "message": "真正的朋友是住在两个身体里的一个灵魂。",
+      "status": "machine"
+    },
+    "fortune_112": {
+      "message": "友谊诞生于一个人对另一个人说「什么！你也是？」的那一刻。",
+      "status": "machine"
+    },
+    "fortune_113": {
+      "message": "朋友是了解你一切却仍然爱你的人。",
+      "status": "machine"
+    },
+    "fortune_114": {
+      "message": "好朋友就像星星。你不总能看到他们，但你知道他们一直在那里。",
+      "status": "machine"
+    },
+    "fortune_115": {
+      "message": "友谊是唯一能将世界维系在一起的纽带。",
+      "status": "machine"
+    },
+    "fortune_116": {
+      "message": "甜蜜的友谊能滋润心灵。",
+      "status": "machine"
+    },
+    "fortune_117": {
+      "message": "朋友是你选择的家人。",
+      "status": "machine"
+    },
+    "fortune_118": {
+      "message": "忠诚的朋友会在你笑话不好笑时也笑，在你问题不严重时也同情你。",
+      "status": "machine"
+    },
+    "fortune_119": {
+      "message": "在黑暗中与朋友同行，胜过独自在光明中行走。",
+      "status": "machine"
+    },
+    "fortune_120": {
+      "message": "真正的朋友是当全世界都离开时走进来的人。",
+      "status": "machine"
+    },
+    "fortune_121": {
+      "message": "友谊通过分享快乐和分担悲伤来增进幸福、减轻痛苦。",
+      "status": "machine"
+    },
+    "fortune_122": {
+      "message": "真正友谊最美好的品质之一是理解与被理解。",
+      "status": "machine"
+    },
+    "fortune_123": {
+      "message": "朋友是心灵永远需要的。",
+      "status": "machine"
+    },
+    "fortune_124": {
+      "message": "为了真正的朋友，我愿意做任何事。",
+      "status": "machine"
+    },
+    "fortune_125": {
+      "message": "新朋友在意想不到的地方等着你。保持开放。",
+      "status": "machine"
+    },
+    "fortune_126": {
+      "message": "友谊的语言不是言语，而是意义。",
+      "status": "machine"
+    },
+    "fortune_127": {
+      "message": "慢慢交朋友，一旦成为朋友，就要坚定不移。",
+      "status": "machine"
+    },
+    "fortune_128": {
+      "message": "友谊是将全世界的心连在一起的金线。",
+      "status": "machine"
+    },
+    "fortune_129": {
+      "message": "真正的朋友永不分离，也许距离遥远，但心永远相连。",
+      "status": "machine"
+    },
+    "fortune_130": {
+      "message": "与朋友共度的一天是美好的一天。",
+      "status": "machine"
+    },
+    "fortune_131": {
+      "message": "今年，你的生日愿望会以意想不到的方式实现。",
+      "status": "machine"
+    },
+    "fortune_132": {
+      "message": "新的年龄带来新的冒险和美妙的惊喜。",
+      "status": "machine"
+    },
+    "fortune_133": {
+      "message": "愿你的生日成为美好时光的开始。",
+      "status": "machine"
+    },
+    "fortune_134": {
+      "message": "来年拥有打开许多机会之门的钥匙。",
+      "status": "machine"
+    },
+    "fortune_135": {
+      "message": "年龄只是世界享受你的年数。",
+      "status": "machine"
+    },
+    "fortune_136": {
+      "message": "你的下一年将充满欢笑、爱和繁荣。",
+      "status": "machine"
+    },
+    "fortune_137": {
+      "message": "蛋糕上的每根蜡烛都是一个等待实现的愿望。",
+      "status": "machine"
+    },
+    "fortune_138": {
+      "message": "最好的还在后头。生日快乐！",
+      "status": "machine"
+    },
+    "fortune_139": {
+      "message": "愿这个生日让你离所有梦想更近一步。",
+      "status": "machine"
+    },
+    "fortune_140": {
+      "message": "生日不只是又老了一岁，而是又聪明了一岁。",
+      "status": "machine"
+    },
+    "fortune_141": {
+      "message": "你的生日是大自然告诉你庆祝自己的方式。",
+      "status": "machine"
+    },
+    "fortune_142": {
+      "message": "这个生日开启新的篇章。让它成为畅销书。",
+      "status": "machine"
+    },
+    "fortune_143": {
+      "message": "用微笑而非泪水数你的生活，用朋友而非年龄数你的岁月。",
+      "status": "machine"
+    },
+    "fortune_144": {
+      "message": "愿你的特别日子成为非凡一年的开始。",
+      "status": "machine"
+    },
+    "fortune_145": {
+      "message": "生日是新的开始、新的起点和追逐梦想的时刻。",
+      "status": "machine"
+    },
+    "fortune_146": {
+      "message": "你的生日是围绕太阳的又一次365天旅程的第一天。",
+      "status": "machine"
+    },
+    "fortune_147": {
+      "message": "年龄越大越有智慧，智慧越多越幸福。",
+      "status": "machine"
+    },
+    "fortune_148": {
+      "message": "变老是必然的，但长大是可选的。保持年轻的心。",
+      "status": "machine"
+    },
+    "fortune_149": {
+      "message": "愿今天成为美好、光荣、快乐一年的开始！",
+      "status": "machine"
+    },
+    "fortune_150": {
+      "message": "又一年的生命是实现梦想的又一次机会。",
+      "status": "machine"
+    },
+    "fortune_151": {
+      "message": "学得越多，知道得越多。知道得越多，成长得越快。",
+      "status": "machine"
+    },
+    "fortune_152": {
+      "message": "考试成功属于那些用心准备的人。",
+      "status": "machine"
+    },
+    "fortune_153": {
+      "message": "下一次考试会展现你不知道自己拥有的力量。",
+      "status": "machine"
+    },
+    "fortune_154": {
+      "message": "教育是通向未来的护照。明智地投资它。",
+      "status": "machine"
+    },
+    "fortune_155": {
+      "message": "任何领域的专家都曾是初学者。继续学习。",
+      "status": "machine"
+    },
+    "fortune_156": {
+      "message": "大脑是肌肉。锻炼得越多，就越强壮。",
+      "status": "machine"
+    },
+    "fortune_157": {
+      "message": "每一小时的学习都是向梦想迈进的一步。",
+      "status": "machine"
+    },
+    "fortune_158": {
+      "message": "学习的痛苦是暂时的。成就的骄傲是永恒的。",
+      "status": "machine"
+    },
+    "fortune_159": {
+      "message": "好成绩来自好的学习习惯。今天就开始培养。",
+      "status": "machine"
+    },
+    "fortune_160": {
+      "message": "被新知识拓展的心灵永远不会回到原来的维度。",
+      "status": "machine"
+    },
+    "fortune_161": {
+      "message": "你的学业突破就在眼前。继续努力。",
+      "status": "machine"
+    },
+    "fortune_162": {
+      "message": "努力学习，因为井很深，而我们的脑子很浅。",
+      "status": "machine"
+    },
+    "fortune_163": {
+      "message": "学习的唯一方法是永不停止学习。",
+      "status": "machine"
+    },
+    "fortune_164": {
+      "message": "现在专注学习，未来的你会感谢自己。",
+      "status": "machine"
+    },
+    "fortune_165": {
+      "message": "知识就是力量。通过教育赋予自己力量。",
+      "status": "machine"
+    },
+    "fortune_166": {
+      "message": "你的专注和集中将带来优异的考试成绩。",
+      "status": "machine"
+    },
+    "fortune_167": {
+      "message": "学习不是终点，而是终身的旅程。拥抱它。",
+      "status": "machine"
+    },
+    "fortune_168": {
+      "message": "你今天播下的知识种子将长成机会的森林。",
+      "status": "machine"
+    },
+    "fortune_169": {
+      "message": "保持好奇，渴望知识，成功就会随之而来。",
+      "status": "machine"
+    },
+    "fortune_170": {
+      "message": "你对学习的执着会打开你从不知道存在的门。",
+      "status": "machine"
+    },
+    "fortune_171": {
+      "message": "健康是你能拥有的最大财富。",
+      "status": "machine"
+    },
+    "fortune_172": {
+      "message": "健康的外表始于健康的内心。",
+      "status": "machine"
+    },
+    "fortune_173": {
+      "message": "照顾好你的身体。它是你唯一要住的地方。",
+      "status": "machine"
+    },
+    "fortune_174": {
+      "message": "你的身体能听到你心里说的一切。保持积极。",
+      "status": "machine"
+    },
+    "fortune_175": {
+      "message": "片刻的放松胜过一生的压力。",
+      "status": "machine"
+    },
+    "fortune_176": {
+      "message": "冒险等待着那些敢于探索的人。",
+      "status": "machine"
+    },
+    "fortune_177": {
+      "message": "世界是一本书，不旅行的人只读了一页。",
+      "status": "machine"
+    },
+    "fortune_178": {
+      "message": "你的下一次旅程将带来智慧和快乐。",
+      "status": "machine"
+    },
+    "fortune_179": {
+      "message": "收拾行囊吧。命运在召唤你去新的地平线。",
+      "status": "machine"
+    },
+    "fortune_180": {
+      "message": "走得远，走得广，发现真正的自己。",
+      "status": "machine"
     }
   },
   "es": {
@@ -27,7 +727,7 @@
       "status": "machine"
     },
     "fortune_2": {
-      "message": "El mejor momento para plantar un árbol fue hace 20 años; el segundo mejor es ahora.",
+      "message": "El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor es ahora.",
       "status": "machine"
     },
     "fortune_3": {
@@ -41,6 +741,706 @@
     "fortune_5": {
       "message": "La única manera de hacer un gran trabajo es amar lo que haces.",
       "status": "machine"
+    },
+    "fortune_6": {
+      "message": "No importa lo lento que vayas, siempre y cuando no te detengas.",
+      "status": "machine"
+    },
+    "fortune_7": {
+      "message": "En medio de la dificultad yace la oportunidad.",
+      "status": "machine"
+    },
+    "fortune_8": {
+      "message": "Un viaje de mil millas comienza con un solo paso.",
+      "status": "machine"
+    },
+    "fortune_9": {
+      "message": "Lo que hay detrás y delante de nosotros es pequeño comparado con lo que hay dentro de nosotros.",
+      "status": "machine"
+    },
+    "fortune_10": {
+      "message": "La mente lo es todo. En lo que piensas te conviertes.",
+      "status": "machine"
+    },
+    "fortune_11": {
+      "message": "Cada logro comienza con la decisión de intentarlo.",
+      "status": "machine"
+    },
+    "fortune_12": {
+      "message": "Nunca eres demasiado viejo para fijarte otra meta o soñar un nuevo sueño.",
+      "status": "machine"
+    },
+    "fortune_13": {
+      "message": "El secreto para avanzar es empezar.",
+      "status": "machine"
+    },
+    "fortune_14": {
+      "message": "Tu potencial es infinito. Ve y haz lo que fuiste creado para hacer.",
+      "status": "machine"
+    },
+    "fortune_15": {
+      "message": "Las estrellas no pueden brillar sin oscuridad. Tus luchas te hacen más fuerte.",
+      "status": "machine"
+    },
+    "fortune_16": {
+      "message": "El único límite a tu impacto es tu imaginación y compromiso.",
+      "status": "machine"
+    },
+    "fortune_17": {
+      "message": "La preparación de hoy determina el logro de mañana.",
+      "status": "machine"
+    },
+    "fortune_18": {
+      "message": "Tu vida no mejora por casualidad, mejora por cambio.",
+      "status": "machine"
+    },
+    "fortune_19": {
+      "message": "Sueña en grande. Empieza pequeño. Actúa ahora.",
+      "status": "machine"
+    },
+    "fortune_20": {
+      "message": "Cuanto más trabajes por algo, mejor te sentirás cuando lo logres.",
+      "status": "machine"
+    },
+    "fortune_21": {
+      "message": "No esperes la oportunidad. Créala.",
+      "status": "machine"
+    },
+    "fortune_22": {
+      "message": "El valor no es la ausencia del miedo, sino el triunfo sobre él.",
+      "status": "machine"
+    },
+    "fortune_23": {
+      "message": "Pequeñas mejoras diarias llevan a resultados asombrosos.",
+      "status": "machine"
+    },
+    "fortune_24": {
+      "message": "Tu actitud determina tu dirección.",
+      "status": "machine"
+    },
+    "fortune_25": {
+      "message": "La remontada siempre es más fuerte que la caída.",
+      "status": "machine"
+    },
+    "fortune_26": {
+      "message": "Encontrarás la felicidad con un nuevo amor... probablemente tu gato.",
+      "status": "machine"
+    },
+    "fortune_27": {
+      "message": "Boca cerrada no mete la pata.",
+      "status": "machine"
+    },
+    "fortune_28": {
+      "message": "Volverás a tener hambre en una hora.",
+      "status": "machine"
+    },
+    "fortune_29": {
+      "message": "¡Socorro! ¡Estoy atrapado en una fábrica de galletas de la fortuna!",
+      "status": "machine"
+    },
+    "fortune_30": {
+      "message": "El pájaro madrugador consigue el gusano, pero el segundo ratón consigue el queso.",
+      "status": "machine"
+    },
+    "fortune_31": {
+      "message": "No eres analfabeto.",
+      "status": "machine"
+    },
+    "fortune_32": {
+      "message": "Ignora la fortuna anterior.",
+      "status": "machine"
+    },
+    "fortune_33": {
+      "message": "Recibirás una galleta de la fortuna.",
+      "status": "machine"
+    },
+    "fortune_34": {
+      "message": "Cuidado con las galletas que traen fortunas.",
+      "status": "machine"
+    },
+    "fortune_35": {
+      "message": "Estás leyendo una galleta de la fortuna.",
+      "status": "machine"
+    },
+    "fortune_36": {
+      "message": "Tu futuro es tan brillante como oscuro es tu pasado... lo cual no dice mucho.",
+      "status": "machine"
+    },
+    "fortune_37": {
+      "message": "Pronto volverás a tener hambre. Pide más comida china.",
+      "status": "machine"
+    },
+    "fortune_38": {
+      "message": "Un sabio una vez no dijo nada. Probablemente estaba comiendo.",
+      "status": "machine"
+    },
+    "fortune_39": {
+      "message": "Tus números de la suerte son: Todos. Necesitarás la suerte.",
+      "status": "machine"
+    },
+    "fortune_40": {
+      "message": "Hoy harás progreso... hacia tu refrigerador.",
+      "status": "machine"
+    },
+    "fortune_41": {
+      "message": "La respuesta que buscas está en otra galleta.",
+      "status": "machine"
+    },
+    "fortune_42": {
+      "message": "Tus calcetines te traerán gran fortuna... si te los pones.",
+      "status": "machine"
+    },
+    "fortune_43": {
+      "message": "Pronto conocerás a un extraño alto y misterioso... en el espejo.",
+      "status": "machine"
+    },
+    "fortune_44": {
+      "message": "Error 404: Fortuna no encontrada.",
+      "status": "machine"
+    },
+    "fortune_45": {
+      "message": "Esta fortuna se dejó en blanco intencionalmente.",
+      "status": "machine"
+    },
+    "fortune_46": {
+      "message": "Encontrarás lo que buscas en el último lugar donde mires. Obviamente.",
+      "status": "machine"
+    },
+    "fortune_47": {
+      "message": "Un viaje de mil millas comienza con un solo paso... y zapatos cómodos.",
+      "status": "machine"
+    },
+    "fortune_48": {
+      "message": "Tu pez dorado está conspirando contra ti.",
+      "status": "machine"
+    },
+    "fortune_49": {
+      "message": "¡Felicitaciones! Sabes leer.",
+      "status": "machine"
+    },
+    "fortune_50": {
+      "message": "Acabas de perder tiempo leyendo esta fortuna.",
+      "status": "machine"
+    },
+    "fortune_51": {
+      "message": "El amor es el puente entre dos corazones.",
+      "status": "machine"
+    },
+    "fortune_52": {
+      "message": "El mejor amor es el que despierta el alma.",
+      "status": "machine"
+    },
+    "fortune_53": {
+      "message": "Las verdaderas historias de amor nunca tienen final.",
+      "status": "machine"
+    },
+    "fortune_54": {
+      "message": "El amor no es encontrar a la persona correcta, sino ser la persona correcta.",
+      "status": "machine"
+    },
+    "fortune_55": {
+      "message": "En la aritmética del amor, uno más uno es igual a todo.",
+      "status": "machine"
+    },
+    "fortune_56": {
+      "message": "El amor no reconoce barreras.",
+      "status": "machine"
+    },
+    "fortune_57": {
+      "message": "El corazón quiere lo que quiere.",
+      "status": "machine"
+    },
+    "fortune_58": {
+      "message": "El amor es amistad en llamas.",
+      "status": "machine"
+    },
+    "fortune_59": {
+      "message": "Un corazón amoroso es la sabiduría más verdadera.",
+      "status": "machine"
+    },
+    "fortune_60": {
+      "message": "Donde hay amor, hay vida.",
+      "status": "machine"
+    },
+    "fortune_61": {
+      "message": "Lo más grande que aprenderás es amar y ser amado.",
+      "status": "machine"
+    },
+    "fortune_62": {
+      "message": "El amor no es algo que encuentras. El amor es algo que te encuentra.",
+      "status": "machine"
+    },
+    "fortune_63": {
+      "message": "Amar y ser amado es sentir el sol desde ambos lados.",
+      "status": "machine"
+    },
+    "fortune_64": {
+      "message": "El amor está compuesto por una sola alma habitando dos cuerpos.",
+      "status": "machine"
+    },
+    "fortune_65": {
+      "message": "Mantén el amor en tu corazón. Una vida sin él es como un jardín sin sol.",
+      "status": "machine"
+    },
+    "fortune_66": {
+      "message": "El amor es la llave maestra que abre las puertas de la felicidad.",
+      "status": "machine"
+    },
+    "fortune_67": {
+      "message": "El romance es pensar en tu pareja cuando deberías estar pensando en otra cosa.",
+      "status": "machine"
+    },
+    "fortune_68": {
+      "message": "Un verdadero romance nunca termina.",
+      "status": "machine"
+    },
+    "fortune_69": {
+      "message": "Lo mejor a lo que aferrarse en la vida es el uno al otro.",
+      "status": "machine"
+    },
+    "fortune_70": {
+      "message": "Pronto encontrarás el amor que te ha estado buscando.",
+      "status": "machine"
+    },
+    "fortune_71": {
+      "message": "El éxito es donde la preparación y la oportunidad se encuentran.",
+      "status": "machine"
+    },
+    "fortune_72": {
+      "message": "La forma de empezar es dejar de hablar y empezar a hacer.",
+      "status": "machine"
+    },
+    "fortune_73": {
+      "message": "La innovación distingue entre un líder y un seguidor.",
+      "status": "machine"
+    },
+    "fortune_74": {
+      "message": "No tengas miedo de dejar lo bueno para ir por lo grandioso.",
+      "status": "machine"
+    },
+    "fortune_75": {
+      "message": "Tu limitación es solo tu imaginación.",
+      "status": "machine"
+    },
+    "fortune_76": {
+      "message": "El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.",
+      "status": "machine"
+    },
+    "fortune_77": {
+      "message": "El único viaje imposible es el que nunca comienzas.",
+      "status": "machine"
+    },
+    "fortune_78": {
+      "message": "Las grandes cosas nunca vienen de las zonas de confort.",
+      "status": "machine"
+    },
+    "fortune_79": {
+      "message": "La diferencia entre lo ordinario y lo extraordinario es ese pequeño extra.",
+      "status": "machine"
+    },
+    "fortune_80": {
+      "message": "El éxito suele llegar a quienes están demasiado ocupados para buscarlo.",
+      "status": "machine"
+    },
+    "fortune_81": {
+      "message": "Tu carrera está a punto de dar un giro inesperado y emocionante.",
+      "status": "machine"
+    },
+    "fortune_82": {
+      "message": "Una promoción o nueva oportunidad está en el horizonte.",
+      "status": "machine"
+    },
+    "fortune_83": {
+      "message": "Tu arduo trabajo pronto dará frutos de maneras inesperadas.",
+      "status": "machine"
+    },
+    "fortune_84": {
+      "message": "El guerrero exitoso es la persona promedio con enfoque láser.",
+      "status": "machine"
+    },
+    "fortune_85": {
+      "message": "El éxito es caminar de fracaso en fracaso sin perder el entusiasmo.",
+      "status": "machine"
+    },
+    "fortune_86": {
+      "message": "Tu talento combinado con trabajo duro abrirá puertas.",
+      "status": "machine"
+    },
+    "fortune_87": {
+      "message": "Los ganadores no son personas que nunca fallan, sino que nunca se rinden.",
+      "status": "machine"
+    },
+    "fortune_88": {
+      "message": "El único lugar donde el éxito viene antes que el trabajo es en el diccionario.",
+      "status": "machine"
+    },
+    "fortune_89": {
+      "message": "Tu próximo capítulo será increíble.",
+      "status": "machine"
+    },
+    "fortune_90": {
+      "message": "Todo experto fue una vez principiante. Sigue aprendiendo.",
+      "status": "machine"
+    },
+    "fortune_91": {
+      "message": "Sé tú mismo; todos los demás ya están ocupados.",
+      "status": "machine"
+    },
+    "fortune_92": {
+      "message": "Dos caminos divergían en un bosque, y yo tomé el menos transitado, y eso ha hecho toda la diferencia.",
+      "status": "machine"
+    },
+    "fortune_93": {
+      "message": "El ayer es historia, el mañana es un misterio, el hoy es un regalo de Dios, por eso lo llamamos presente.",
+      "status": "machine"
+    },
+    "fortune_94": {
+      "message": "No juzgues cada día por la cosecha, sino por las semillas que plantas.",
+      "status": "machine"
+    },
+    "fortune_95": {
+      "message": "Es durante nuestros momentos más oscuros cuando debemos enfocarnos para ver la luz.",
+      "status": "machine"
+    },
+    "fortune_96": {
+      "message": "La mayor gloria de vivir no está en no caer nunca, sino en levantarse cada vez que caemos.",
+      "status": "machine"
+    },
+    "fortune_97": {
+      "message": "La vida es lo que pasa mientras estás ocupado haciendo otros planes.",
+      "status": "machine"
+    },
+    "fortune_98": {
+      "message": "La única sabiduría verdadera es saber que no sabes nada.",
+      "status": "machine"
+    },
+    "fortune_99": {
+      "message": "En tres palabras puedo resumir todo lo que he aprendido sobre la vida: sigue adelante.",
+      "status": "machine"
+    },
+    "fortune_100": {
+      "message": "Una vida sin examinar no vale la pena vivirla.",
+      "status": "machine"
+    },
+    "fortune_101": {
+      "message": "Conocerte a ti mismo es el principio de toda sabiduría.",
+      "status": "machine"
+    },
+    "fortune_102": {
+      "message": "El tonto se cree sabio, pero el sabio sabe que es tonto.",
+      "status": "machine"
+    },
+    "fortune_103": {
+      "message": "La paciencia es amarga, pero su fruto es dulce.",
+      "status": "machine"
+    },
+    "fortune_104": {
+      "message": "Los sabios aprenden más de los tontos que los tontos de los sabios.",
+      "status": "machine"
+    },
+    "fortune_105": {
+      "message": "Lo único que debemos temer es el miedo mismo.",
+      "status": "machine"
+    },
+    "fortune_106": {
+      "message": "Ser tú mismo en un mundo que constantemente intenta hacerte otra cosa es el mayor logro.",
+      "status": "machine"
+    },
+    "fortune_107": {
+      "message": "No es la montaña lo que conquistamos, sino a nosotros mismos.",
+      "status": "machine"
+    },
+    "fortune_108": {
+      "message": "La mente que se abre a una nueva idea nunca vuelve a su tamaño original.",
+      "status": "machine"
+    },
+    "fortune_109": {
+      "message": "El silencio es un verdadero amigo que nunca traiciona.",
+      "status": "machine"
+    },
+    "fortune_110": {
+      "message": "Los que no pueden cambiar de opinión no pueden cambiar nada.",
+      "status": "machine"
+    },
+    "fortune_111": {
+      "message": "Un verdadero amigo es un alma en dos cuerpos.",
+      "status": "machine"
+    },
+    "fortune_112": {
+      "message": "La amistad nace en el momento en que una persona le dice a otra: ¿Qué? ¿Tú también?",
+      "status": "machine"
+    },
+    "fortune_113": {
+      "message": "Un amigo es alguien que te conoce y te ama igual.",
+      "status": "machine"
+    },
+    "fortune_114": {
+      "message": "Los buenos amigos son como las estrellas. No siempre los ves, pero sabes que siempre están ahí.",
+      "status": "machine"
+    },
+    "fortune_115": {
+      "message": "La amistad es el único cemento que mantendrá unido al mundo.",
+      "status": "machine"
+    },
+    "fortune_116": {
+      "message": "La dulzura de la amistad refresca el alma.",
+      "status": "machine"
+    },
+    "fortune_117": {
+      "message": "Los amigos son la familia que eliges.",
+      "status": "machine"
+    },
+    "fortune_118": {
+      "message": "Un amigo leal se ríe de tus chistes aunque no sean graciosos, y se compadece de tus problemas aunque no sean serios.",
+      "status": "machine"
+    },
+    "fortune_119": {
+      "message": "Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.",
+      "status": "machine"
+    },
+    "fortune_120": {
+      "message": "Un verdadero amigo es el que entra cuando el resto del mundo sale.",
+      "status": "machine"
+    },
+    "fortune_121": {
+      "message": "La amistad duplica la alegría y divide el dolor.",
+      "status": "machine"
+    },
+    "fortune_122": {
+      "message": "Una de las cualidades más bellas de la verdadera amistad es entender y ser entendido.",
+      "status": "machine"
+    },
+    "fortune_123": {
+      "message": "Un amigo es lo que el corazón necesita siempre.",
+      "status": "machine"
+    },
+    "fortune_124": {
+      "message": "Preferiría caminar con un amigo en la oscuridad que caminar solo en la luz.",
+      "status": "machine"
+    },
+    "fortune_125": {
+      "message": "Nuevos amigos te esperan en lugares inesperados. Mantente abierto.",
+      "status": "machine"
+    },
+    "fortune_126": {
+      "message": "El lenguaje de la amistad no son palabras sino significados.",
+      "status": "machine"
+    },
+    "fortune_127": {
+      "message": "Sé lento en hacer amistades, pero cuando lo seas, mantente firme y constante.",
+      "status": "machine"
+    },
+    "fortune_128": {
+      "message": "La amistad es el hilo dorado que une los corazones de todo el mundo.",
+      "status": "machine"
+    },
+    "fortune_129": {
+      "message": "Los verdaderos amigos nunca están separados, tal vez en distancia pero nunca en el corazón.",
+      "status": "machine"
+    },
+    "fortune_130": {
+      "message": "Un día pasado con amigos siempre es un buen día.",
+      "status": "machine"
+    },
+    "fortune_131": {
+      "message": "Este año, tus deseos de cumpleaños se harán realidad de maneras inesperadas.",
+      "status": "machine"
+    },
+    "fortune_132": {
+      "message": "Una nueva edad trae nuevas aventuras y maravillosas sorpresas.",
+      "status": "machine"
+    },
+    "fortune_133": {
+      "message": "Que tu cumpleaños marque el comienzo de un período maravilloso.",
+      "status": "machine"
+    },
+    "fortune_134": {
+      "message": "El año que viene tiene las llaves de muchas puertas de oportunidad.",
+      "status": "machine"
+    },
+    "fortune_135": {
+      "message": "La edad es solo el número de años que el mundo ha disfrutado de ti.",
+      "status": "machine"
+    },
+    "fortune_136": {
+      "message": "Tu próximo año estará lleno de risas, amor y prosperidad.",
+      "status": "machine"
+    },
+    "fortune_137": {
+      "message": "Cada vela en tu pastel es un deseo esperando hacerse realidad.",
+      "status": "machine"
+    },
+    "fortune_138": {
+      "message": "Lo mejor está por venir. ¡Feliz cumpleaños!",
+      "status": "machine"
+    },
+    "fortune_139": {
+      "message": "Que este cumpleaños te acerque a todos tus sueños.",
+      "status": "machine"
+    },
+    "fortune_140": {
+      "message": "Un cumpleaños no es solo un año más viejo, sino un año más sabio.",
+      "status": "machine"
+    },
+    "fortune_141": {
+      "message": "Tu cumpleaños es la forma de la naturaleza de decirte que te celebres.",
+      "status": "machine"
+    },
+    "fortune_142": {
+      "message": "Este cumpleaños comienza un nuevo capítulo. Hazlo un éxito de ventas.",
+      "status": "machine"
+    },
+    "fortune_143": {
+      "message": "Cuenta tu vida por sonrisas, no por lágrimas. Cuenta tu edad por amigos, no por años.",
+      "status": "machine"
+    },
+    "fortune_144": {
+      "message": "Que tu día especial sea el comienzo de un año extraordinario.",
+      "status": "machine"
+    },
+    "fortune_145": {
+      "message": "Los cumpleaños son un nuevo comienzo, un inicio fresco y un momento para perseguir sueños.",
+      "status": "machine"
+    },
+    "fortune_146": {
+      "message": "Tu cumpleaños es el primer día de otro viaje de 365 días alrededor del sol.",
+      "status": "machine"
+    },
+    "fortune_147": {
+      "message": "Con la edad viene la sabiduría, y con la sabiduría viene la felicidad.",
+      "status": "machine"
+    },
+    "fortune_148": {
+      "message": "Envejecer es obligatorio, pero crecer es opcional. Mantén tu corazón joven.",
+      "status": "machine"
+    },
+    "fortune_149": {
+      "message": "¡Que hoy sea el comienzo de un año maravilloso, glorioso y alegre!",
+      "status": "machine"
+    },
+    "fortune_150": {
+      "message": "Otro año de vida es otra oportunidad de alcanzar tus sueños.",
+      "status": "machine"
+    },
+    "fortune_151": {
+      "message": "Cuanto más estudias, más sabes. Cuanto más sabes, más creces.",
+      "status": "machine"
+    },
+    "fortune_152": {
+      "message": "El éxito en los exámenes llega a quienes se preparan con dedicación.",
+      "status": "machine"
+    },
+    "fortune_153": {
+      "message": "Tu próximo examen revelará la fuerza que no sabías que tenías.",
+      "status": "machine"
+    },
+    "fortune_154": {
+      "message": "La educación es el pasaporte al futuro. Invierte en ella sabiamente.",
+      "status": "machine"
+    },
+    "fortune_155": {
+      "message": "El experto en cualquier cosa fue una vez principiante. Sigue estudiando.",
+      "status": "machine"
+    },
+    "fortune_156": {
+      "message": "Tu cerebro es un músculo. Cuanto más lo ejercitas, más fuerte se vuelve.",
+      "status": "machine"
+    },
+    "fortune_157": {
+      "message": "Cada hora de estudio es un paso más cerca de tus sueños.",
+      "status": "machine"
+    },
+    "fortune_158": {
+      "message": "El dolor de estudiar es temporal. El orgullo del logro es para siempre.",
+      "status": "machine"
+    },
+    "fortune_159": {
+      "message": "Las buenas notas siguen a los buenos hábitos de estudio. Construye los tuyos hoy.",
+      "status": "machine"
+    },
+    "fortune_160": {
+      "message": "Una mente expandida por nuevos conocimientos nunca vuelve a sus dimensiones originales.",
+      "status": "machine"
+    },
+    "fortune_161": {
+      "message": "Tu avance académico está a la vuelta de la esquina. Sigue esforzándote.",
+      "status": "machine"
+    },
+    "fortune_162": {
+      "message": "Estudia mucho, porque el pozo es profundo y nuestros cerebros son superficiales.",
+      "status": "machine"
+    },
+    "fortune_163": {
+      "message": "La única forma de aprender es nunca dejar de estudiar.",
+      "status": "machine"
+    },
+    "fortune_164": {
+      "message": "Concéntrate en tus estudios ahora, y tu yo futuro te lo agradecerá.",
+      "status": "machine"
+    },
+    "fortune_165": {
+      "message": "El conocimiento es poder. Empodérate a través de la educación.",
+      "status": "machine"
+    },
+    "fortune_166": {
+      "message": "Tu concentración y enfoque llevarán a excelentes resultados en los exámenes.",
+      "status": "machine"
+    },
+    "fortune_167": {
+      "message": "Aprender no es un destino sino un viaje de toda la vida. Abrázalo.",
+      "status": "machine"
+    },
+    "fortune_168": {
+      "message": "Las semillas de conocimiento que plantas hoy crecerán en bosques de oportunidad.",
+      "status": "machine"
+    },
+    "fortune_169": {
+      "message": "Mantente curioso, mantente hambriento de conocimiento, y el éxito seguirá.",
+      "status": "machine"
+    },
+    "fortune_170": {
+      "message": "Tu dedicación al aprendizaje abrirá puertas que no sabías que existían.",
+      "status": "machine"
+    },
+    "fortune_171": {
+      "message": "La buena salud es la mayor riqueza que puedes poseer.",
+      "status": "machine"
+    },
+    "fortune_172": {
+      "message": "Un exterior saludable comienza desde un interior saludable.",
+      "status": "machine"
+    },
+    "fortune_173": {
+      "message": "Cuida tu cuerpo. Es el único lugar donde tienes que vivir.",
+      "status": "machine"
+    },
+    "fortune_174": {
+      "message": "Tu cuerpo escucha todo lo que dice tu mente. Mantente positivo.",
+      "status": "machine"
+    },
+    "fortune_175": {
+      "message": "Un momento de relajación vale una vida de estrés.",
+      "status": "machine"
+    },
+    "fortune_176": {
+      "message": "La aventura espera a quienes se atreven a explorar.",
+      "status": "machine"
+    },
+    "fortune_177": {
+      "message": "El mundo es un libro, y quienes no viajan leen solo una página.",
+      "status": "machine"
+    },
+    "fortune_178": {
+      "message": "Tu próximo viaje traerá sabiduría y alegría.",
+      "status": "machine"
+    },
+    "fortune_179": {
+      "message": "Haz las maletas. El destino te llama a nuevos horizontes.",
+      "status": "machine"
+    },
+    "fortune_180": {
+      "message": "Viaja lejos, viaja amplio, y descubre quién eres realmente.",
+      "status": "machine"
     }
   },
   "pt": {
@@ -49,19 +1449,719 @@
       "status": "machine"
     },
     "fortune_2": {
-      "message": "O melhor momento para plantar uma árvore foi há 20 anos; o segundo melhor é agora.",
+      "message": "O melhor momento para plantar uma árvore foi há 20 anos. O segundo melhor é agora.",
       "status": "machine"
     },
     "fortune_3": {
-      "message": "O sucesso não é definitivo, o fracasso não é fatal: o que importa é a coragem de continuar.",
+      "message": "O sucesso não é definitivo, o fracasso não é fatal: o que conta é a coragem de continuar.",
       "status": "machine"
     },
     "fortune_4": {
-      "message": "Acredite que você consegue e já está no meio do caminho.",
+      "message": "Acredite que você pode e já está na metade do caminho.",
       "status": "machine"
     },
     "fortune_5": {
-      "message": "A única maneira de fazer um grande trabalho é amar o que você faz.",
+      "message": "A única maneira de fazer um ótimo trabalho é amar o que você faz.",
+      "status": "machine"
+    },
+    "fortune_6": {
+      "message": "Não importa quão devagar você vá, desde que não pare.",
+      "status": "machine"
+    },
+    "fortune_7": {
+      "message": "No meio da dificuldade está a oportunidade.",
+      "status": "machine"
+    },
+    "fortune_8": {
+      "message": "Uma jornada de mil milhas começa com um único passo.",
+      "status": "machine"
+    },
+    "fortune_9": {
+      "message": "O que está atrás e diante de nós são pequenas coisas comparadas ao que está dentro de nós.",
+      "status": "machine"
+    },
+    "fortune_10": {
+      "message": "A mente é tudo. No que você pensa, você se torna.",
+      "status": "machine"
+    },
+    "fortune_11": {
+      "message": "Toda conquista começa com a decisão de tentar.",
+      "status": "machine"
+    },
+    "fortune_12": {
+      "message": "Você nunca é velho demais para definir outra meta ou sonhar um novo sonho.",
+      "status": "machine"
+    },
+    "fortune_13": {
+      "message": "O segredo para avançar é começar.",
+      "status": "machine"
+    },
+    "fortune_14": {
+      "message": "Seu potencial é infinito. Vá fazer o que você foi criado para fazer.",
+      "status": "machine"
+    },
+    "fortune_15": {
+      "message": "As estrelas não podem brilhar sem escuridão. Suas lutas te tornam mais forte.",
+      "status": "machine"
+    },
+    "fortune_16": {
+      "message": "O único limite para seu impacto é sua imaginação e compromisso.",
+      "status": "machine"
+    },
+    "fortune_17": {
+      "message": "A preparação de hoje determina a conquista de amanhã.",
+      "status": "machine"
+    },
+    "fortune_18": {
+      "message": "Sua vida não melhora por acaso, melhora por mudança.",
+      "status": "machine"
+    },
+    "fortune_19": {
+      "message": "Sonhe grande. Comece pequeno. Aja agora.",
+      "status": "machine"
+    },
+    "fortune_20": {
+      "message": "Quanto mais você trabalhar por algo, melhor se sentirá quando conseguir.",
+      "status": "machine"
+    },
+    "fortune_21": {
+      "message": "Não espere pela oportunidade. Crie-a.",
+      "status": "machine"
+    },
+    "fortune_22": {
+      "message": "A coragem não é a ausência do medo, mas o triunfo sobre ele.",
+      "status": "machine"
+    },
+    "fortune_23": {
+      "message": "Pequenas melhorias diárias levam a resultados surpreendentes.",
+      "status": "machine"
+    },
+    "fortune_24": {
+      "message": "Sua atitude determina sua direção.",
+      "status": "machine"
+    },
+    "fortune_25": {
+      "message": "A volta por cima é sempre mais forte que a queda.",
+      "status": "machine"
+    },
+    "fortune_26": {
+      "message": "Você encontrará felicidade com um novo amor... provavelmente seu gato.",
+      "status": "machine"
+    },
+    "fortune_27": {
+      "message": "Boca fechada não entra mosca.",
+      "status": "machine"
+    },
+    "fortune_28": {
+      "message": "Você estará com fome novamente em uma hora.",
+      "status": "machine"
+    },
+    "fortune_29": {
+      "message": "Socorro! Estou preso em uma fábrica de biscoitos da sorte!",
+      "status": "machine"
+    },
+    "fortune_30": {
+      "message": "O pássaro madrugador pega a minhoca, mas o segundo rato pega o queijo.",
+      "status": "machine"
+    },
+    "fortune_31": {
+      "message": "Você não é analfabeto.",
+      "status": "machine"
+    },
+    "fortune_32": {
+      "message": "Ignore a fortuna anterior.",
+      "status": "machine"
+    },
+    "fortune_33": {
+      "message": "Você receberá um biscoito da sorte.",
+      "status": "machine"
+    },
+    "fortune_34": {
+      "message": "Cuidado com biscoitos que trazem fortunas.",
+      "status": "machine"
+    },
+    "fortune_35": {
+      "message": "Você está lendo um biscoito da sorte.",
+      "status": "machine"
+    },
+    "fortune_36": {
+      "message": "Seu futuro é tão brilhante quanto seu passado é escuro... o que não diz muito.",
+      "status": "machine"
+    },
+    "fortune_37": {
+      "message": "Logo você estará com fome de novo. Peça mais comida chinesa.",
+      "status": "machine"
+    },
+    "fortune_38": {
+      "message": "Um sábio uma vez não disse nada. Provavelmente estava comendo.",
+      "status": "machine"
+    },
+    "fortune_39": {
+      "message": "Seus números da sorte são: Todos. Você vai precisar da sorte.",
+      "status": "machine"
+    },
+    "fortune_40": {
+      "message": "Hoje você fará progresso... em direção à sua geladeira.",
+      "status": "machine"
+    },
+    "fortune_41": {
+      "message": "A resposta que você procura está em outro biscoito.",
+      "status": "machine"
+    },
+    "fortune_42": {
+      "message": "Suas meias trarão grande fortuna... se você usá-las.",
+      "status": "machine"
+    },
+    "fortune_43": {
+      "message": "Em breve você conhecerá um estranho alto e misterioso... no espelho.",
+      "status": "machine"
+    },
+    "fortune_44": {
+      "message": "Erro 404: Fortuna não encontrada.",
+      "status": "machine"
+    },
+    "fortune_45": {
+      "message": "Esta fortuna foi deixada em branco intencionalmente.",
+      "status": "machine"
+    },
+    "fortune_46": {
+      "message": "Você encontrará o que procura no último lugar que olhar. Obviamente.",
+      "status": "machine"
+    },
+    "fortune_47": {
+      "message": "Uma jornada de mil milhas começa com um único passo... e sapatos confortáveis.",
+      "status": "machine"
+    },
+    "fortune_48": {
+      "message": "Seu peixinho dourado está conspirando contra você.",
+      "status": "machine"
+    },
+    "fortune_49": {
+      "message": "Parabéns! Você sabe ler.",
+      "status": "machine"
+    },
+    "fortune_50": {
+      "message": "Você acabou de perder tempo lendo esta fortuna.",
+      "status": "machine"
+    },
+    "fortune_51": {
+      "message": "O amor é a ponte entre dois corações.",
+      "status": "machine"
+    },
+    "fortune_52": {
+      "message": "O melhor amor é aquele que desperta a alma.",
+      "status": "machine"
+    },
+    "fortune_53": {
+      "message": "Uma verdadeira história de amor nunca termina.",
+      "status": "machine"
+    },
+    "fortune_54": {
+      "message": "O amor não é encontrar a pessoa certa, mas ser a pessoa certa.",
+      "status": "machine"
+    },
+    "fortune_55": {
+      "message": "Na aritmética do amor, um mais um é igual a tudo.",
+      "status": "machine"
+    },
+    "fortune_56": {
+      "message": "O amor não reconhece barreiras.",
+      "status": "machine"
+    },
+    "fortune_57": {
+      "message": "O coração quer o que quer.",
+      "status": "machine"
+    },
+    "fortune_58": {
+      "message": "O amor é amizade em chamas.",
+      "status": "machine"
+    },
+    "fortune_59": {
+      "message": "Um coração amoroso é a sabedoria mais verdadeira.",
+      "status": "machine"
+    },
+    "fortune_60": {
+      "message": "Onde há amor, há vida.",
+      "status": "machine"
+    },
+    "fortune_61": {
+      "message": "A maior coisa que você aprenderá é amar e ser amado.",
+      "status": "machine"
+    },
+    "fortune_62": {
+      "message": "O amor não é algo que você encontra. O amor é algo que te encontra.",
+      "status": "machine"
+    },
+    "fortune_63": {
+      "message": "Amar e ser amado é sentir o sol dos dois lados.",
+      "status": "machine"
+    },
+    "fortune_64": {
+      "message": "O amor é composto por uma única alma habitando dois corpos.",
+      "status": "machine"
+    },
+    "fortune_65": {
+      "message": "Mantenha o amor em seu coração. Uma vida sem ele é como um jardim sem sol.",
+      "status": "machine"
+    },
+    "fortune_66": {
+      "message": "O amor é a chave mestra que abre as portas da felicidade.",
+      "status": "machine"
+    },
+    "fortune_67": {
+      "message": "Romance é pensar em seu amor quando deveria estar pensando em outra coisa.",
+      "status": "machine"
+    },
+    "fortune_68": {
+      "message": "Um verdadeiro romance nunca termina.",
+      "status": "machine"
+    },
+    "fortune_69": {
+      "message": "A melhor coisa a se segurar na vida é um ao outro.",
+      "status": "machine"
+    },
+    "fortune_70": {
+      "message": "Em breve você encontrará o amor que tem procurado por você.",
+      "status": "machine"
+    },
+    "fortune_71": {
+      "message": "O sucesso é onde a preparação e a oportunidade se encontram.",
+      "status": "machine"
+    },
+    "fortune_72": {
+      "message": "A maneira de começar é parar de falar e começar a fazer.",
+      "status": "machine"
+    },
+    "fortune_73": {
+      "message": "A inovação distingue um líder de um seguidor.",
+      "status": "machine"
+    },
+    "fortune_74": {
+      "message": "Não tenha medo de deixar o bom para ir atrás do ótimo.",
+      "status": "machine"
+    },
+    "fortune_75": {
+      "message": "Sua limitação é apenas sua imaginação.",
+      "status": "machine"
+    },
+    "fortune_76": {
+      "message": "O sucesso não é a chave para a felicidade. A felicidade é a chave para o sucesso.",
+      "status": "machine"
+    },
+    "fortune_77": {
+      "message": "A única jornada impossível é aquela que você nunca começa.",
+      "status": "machine"
+    },
+    "fortune_78": {
+      "message": "Grandes coisas nunca vêm de zonas de conforto.",
+      "status": "machine"
+    },
+    "fortune_79": {
+      "message": "A diferença entre o ordinário e o extraordinário é aquele pequeno extra.",
+      "status": "machine"
+    },
+    "fortune_80": {
+      "message": "O sucesso geralmente chega àqueles que estão ocupados demais para procurá-lo.",
+      "status": "machine"
+    },
+    "fortune_81": {
+      "message": "Sua carreira está prestes a dar uma virada inesperada e emocionante.",
+      "status": "machine"
+    },
+    "fortune_82": {
+      "message": "Uma promoção ou nova oportunidade está no horizonte.",
+      "status": "machine"
+    },
+    "fortune_83": {
+      "message": "Seu trabalho duro logo dará frutos de maneiras inesperadas.",
+      "status": "machine"
+    },
+    "fortune_84": {
+      "message": "O guerreiro bem-sucedido é a pessoa comum com foco de laser.",
+      "status": "machine"
+    },
+    "fortune_85": {
+      "message": "O sucesso é caminhar de fracasso em fracasso sem perder o entusiasmo.",
+      "status": "machine"
+    },
+    "fortune_86": {
+      "message": "Seu talento combinado com trabalho duro abrirá portas.",
+      "status": "machine"
+    },
+    "fortune_87": {
+      "message": "Vencedores não são pessoas que nunca falham, mas que nunca desistem.",
+      "status": "machine"
+    },
+    "fortune_88": {
+      "message": "O único lugar onde o sucesso vem antes do trabalho é no dicionário.",
+      "status": "machine"
+    },
+    "fortune_89": {
+      "message": "Seu próximo capítulo será incrível.",
+      "status": "machine"
+    },
+    "fortune_90": {
+      "message": "Todo especialista já foi um iniciante. Continue aprendendo.",
+      "status": "machine"
+    },
+    "fortune_91": {
+      "message": "Seja você mesmo; todos os outros já estão ocupados.",
+      "status": "machine"
+    },
+    "fortune_92": {
+      "message": "Dois caminhos divergiam em uma floresta, e eu peguei o menos percorrido, e isso fez toda a diferença.",
+      "status": "machine"
+    },
+    "fortune_93": {
+      "message": "Ontem é história, amanhã é um mistério, hoje é um presente de Deus, por isso o chamamos de presente.",
+      "status": "machine"
+    },
+    "fortune_94": {
+      "message": "Não julgue cada dia pela colheita, mas pelas sementes que você planta.",
+      "status": "machine"
+    },
+    "fortune_95": {
+      "message": "É durante nossos momentos mais sombrios que devemos nos concentrar para ver a luz.",
+      "status": "machine"
+    },
+    "fortune_96": {
+      "message": "A maior glória de viver não está em nunca cair, mas em se levantar cada vez que caímos.",
+      "status": "machine"
+    },
+    "fortune_97": {
+      "message": "A vida é o que acontece enquanto você está ocupado fazendo outros planos.",
+      "status": "machine"
+    },
+    "fortune_98": {
+      "message": "A única sabedoria verdadeira é saber que você não sabe nada.",
+      "status": "machine"
+    },
+    "fortune_99": {
+      "message": "Em três palavras posso resumir tudo o que aprendi sobre a vida: ela continua.",
+      "status": "machine"
+    },
+    "fortune_100": {
+      "message": "Uma vida não examinada não vale a pena ser vivida.",
+      "status": "machine"
+    },
+    "fortune_101": {
+      "message": "Conhecer a si mesmo é o começo de toda sabedoria.",
+      "status": "machine"
+    },
+    "fortune_102": {
+      "message": "O tolo pensa que é sábio, mas o sábio sabe que é tolo.",
+      "status": "machine"
+    },
+    "fortune_103": {
+      "message": "A paciência é amarga, mas seu fruto é doce.",
+      "status": "machine"
+    },
+    "fortune_104": {
+      "message": "Os sábios aprendem mais dos tolos do que os tolos dos sábios.",
+      "status": "machine"
+    },
+    "fortune_105": {
+      "message": "A única coisa que devemos temer é o próprio medo.",
+      "status": "machine"
+    },
+    "fortune_106": {
+      "message": "Ser você mesmo em um mundo que constantemente tenta te transformar em outra coisa é a maior conquista.",
+      "status": "machine"
+    },
+    "fortune_107": {
+      "message": "Não é a montanha que conquistamos, mas a nós mesmos.",
+      "status": "machine"
+    },
+    "fortune_108": {
+      "message": "A mente que se abre a uma nova ideia nunca retorna ao seu tamanho original.",
+      "status": "machine"
+    },
+    "fortune_109": {
+      "message": "O silêncio é um verdadeiro amigo que nunca trai.",
+      "status": "machine"
+    },
+    "fortune_110": {
+      "message": "Aqueles que não podem mudar suas mentes não podem mudar nada.",
+      "status": "machine"
+    },
+    "fortune_111": {
+      "message": "Um verdadeiro amigo é uma alma em dois corpos.",
+      "status": "machine"
+    },
+    "fortune_112": {
+      "message": "A amizade nasce no momento em que uma pessoa diz a outra: O quê? Você também?",
+      "status": "machine"
+    },
+    "fortune_113": {
+      "message": "Um amigo é alguém que te conhece e te ama do mesmo jeito.",
+      "status": "machine"
+    },
+    "fortune_114": {
+      "message": "Bons amigos são como estrelas. Você nem sempre os vê, mas sabe que estão sempre lá.",
+      "status": "machine"
+    },
+    "fortune_115": {
+      "message": "A amizade é o único cimento que manterá o mundo unido.",
+      "status": "machine"
+    },
+    "fortune_116": {
+      "message": "A doçura da amizade refresca a alma.",
+      "status": "machine"
+    },
+    "fortune_117": {
+      "message": "Amigos são a família que você escolhe.",
+      "status": "machine"
+    },
+    "fortune_118": {
+      "message": "Um amigo leal ri das suas piadas quando não são engraçadas, e simpatiza com seus problemas quando não são sérios.",
+      "status": "machine"
+    },
+    "fortune_119": {
+      "message": "Caminhar com um amigo no escuro é melhor do que caminhar sozinho na luz.",
+      "status": "machine"
+    },
+    "fortune_120": {
+      "message": "Um verdadeiro amigo é aquele que entra quando o resto do mundo sai.",
+      "status": "machine"
+    },
+    "fortune_121": {
+      "message": "A amizade duplica a alegria e divide a tristeza.",
+      "status": "machine"
+    },
+    "fortune_122": {
+      "message": "Uma das qualidades mais belas da verdadeira amizade é entender e ser entendido.",
+      "status": "machine"
+    },
+    "fortune_123": {
+      "message": "Um amigo é o que o coração precisa o tempo todo.",
+      "status": "machine"
+    },
+    "fortune_124": {
+      "message": "Eu preferiria caminhar com um amigo no escuro do que caminhar sozinho na luz.",
+      "status": "machine"
+    },
+    "fortune_125": {
+      "message": "Novos amigos te esperam em lugares inesperados. Mantenha-se aberto.",
+      "status": "machine"
+    },
+    "fortune_126": {
+      "message": "A linguagem da amizade não são palavras, mas significados.",
+      "status": "machine"
+    },
+    "fortune_127": {
+      "message": "Seja lento para fazer amizades, mas quando fizer, mantenha-se firme e constante.",
+      "status": "machine"
+    },
+    "fortune_128": {
+      "message": "A amizade é o fio dourado que une os corações de todo o mundo.",
+      "status": "machine"
+    },
+    "fortune_129": {
+      "message": "Verdadeiros amigos nunca estão separados, talvez em distância, mas nunca no coração.",
+      "status": "machine"
+    },
+    "fortune_130": {
+      "message": "Um dia passado com amigos é sempre um bom dia.",
+      "status": "machine"
+    },
+    "fortune_131": {
+      "message": "Este ano, seus desejos de aniversário se realizarão de maneiras inesperadas.",
+      "status": "machine"
+    },
+    "fortune_132": {
+      "message": "Uma nova idade traz novas aventuras e surpresas maravilhosas.",
+      "status": "machine"
+    },
+    "fortune_133": {
+      "message": "Que seu aniversário marque o início de um período maravilhoso.",
+      "status": "machine"
+    },
+    "fortune_134": {
+      "message": "O próximo ano tem as chaves de muitas portas de oportunidade.",
+      "status": "machine"
+    },
+    "fortune_135": {
+      "message": "A idade é apenas o número de anos que o mundo tem aproveitado você.",
+      "status": "machine"
+    },
+    "fortune_136": {
+      "message": "Seu próximo ano será cheio de risadas, amor e prosperidade.",
+      "status": "machine"
+    },
+    "fortune_137": {
+      "message": "Cada vela no seu bolo é um desejo esperando para se realizar.",
+      "status": "machine"
+    },
+    "fortune_138": {
+      "message": "O melhor ainda está por vir. Feliz aniversário!",
+      "status": "machine"
+    },
+    "fortune_139": {
+      "message": "Que este aniversário te aproxime de todos os seus sonhos.",
+      "status": "machine"
+    },
+    "fortune_140": {
+      "message": "Um aniversário não é apenas mais um ano, mas um ano mais sábio.",
+      "status": "machine"
+    },
+    "fortune_141": {
+      "message": "Seu aniversário é a forma da natureza de dizer para você se celebrar.",
+      "status": "machine"
+    },
+    "fortune_142": {
+      "message": "Este aniversário começa um novo capítulo. Faça dele um best-seller.",
+      "status": "machine"
+    },
+    "fortune_143": {
+      "message": "Conte sua vida por sorrisos, não por lágrimas. Conte sua idade por amigos, não por anos.",
+      "status": "machine"
+    },
+    "fortune_144": {
+      "message": "Que seu dia especial seja o início de um ano extraordinário.",
+      "status": "machine"
+    },
+    "fortune_145": {
+      "message": "Aniversários são um novo começo, um início fresco e um momento para perseguir sonhos.",
+      "status": "machine"
+    },
+    "fortune_146": {
+      "message": "Seu aniversário é o primeiro dia de outra jornada de 365 dias ao redor do sol.",
+      "status": "machine"
+    },
+    "fortune_147": {
+      "message": "Com a idade vem a sabedoria, e com a sabedoria vem a felicidade.",
+      "status": "machine"
+    },
+    "fortune_148": {
+      "message": "Envelhecer é obrigatório, mas crescer é opcional. Mantenha o coração jovem.",
+      "status": "machine"
+    },
+    "fortune_149": {
+      "message": "Que hoje seja o início de um ano maravilhoso, glorioso e alegre!",
+      "status": "machine"
+    },
+    "fortune_150": {
+      "message": "Outro ano de vida é outra chance de alcançar seus sonhos.",
+      "status": "machine"
+    },
+    "fortune_151": {
+      "message": "Quanto mais você estuda, mais você sabe. Quanto mais você sabe, mais você cresce.",
+      "status": "machine"
+    },
+    "fortune_152": {
+      "message": "O sucesso nos exames vem para aqueles que se preparam com dedicação.",
+      "status": "machine"
+    },
+    "fortune_153": {
+      "message": "Seu próximo teste revelará a força que você não sabia que tinha.",
+      "status": "machine"
+    },
+    "fortune_154": {
+      "message": "A educação é o passaporte para o futuro. Invista nela sabiamente.",
+      "status": "machine"
+    },
+    "fortune_155": {
+      "message": "O especialista em qualquer coisa já foi um iniciante. Continue estudando.",
+      "status": "machine"
+    },
+    "fortune_156": {
+      "message": "Seu cérebro é um músculo. Quanto mais você o exercita, mais forte ele fica.",
+      "status": "machine"
+    },
+    "fortune_157": {
+      "message": "Cada hora de estudo é um passo mais perto dos seus sonhos.",
+      "status": "machine"
+    },
+    "fortune_158": {
+      "message": "A dor de estudar é temporária. O orgulho da conquista é para sempre.",
+      "status": "machine"
+    },
+    "fortune_159": {
+      "message": "Boas notas seguem bons hábitos de estudo. Construa os seus hoje.",
+      "status": "machine"
+    },
+    "fortune_160": {
+      "message": "Uma mente expandida por novos conhecimentos nunca retorna às suas dimensões originais.",
+      "status": "machine"
+    },
+    "fortune_161": {
+      "message": "Sua descoberta acadêmica está logo ali. Continue se esforçando.",
+      "status": "machine"
+    },
+    "fortune_162": {
+      "message": "Estude muito, pois o poço é fundo e nossos cérebros são rasos.",
+      "status": "machine"
+    },
+    "fortune_163": {
+      "message": "A única forma de aprender é nunca parar de estudar.",
+      "status": "machine"
+    },
+    "fortune_164": {
+      "message": "Concentre-se nos seus estudos agora, e seu eu futuro agradecerá.",
+      "status": "machine"
+    },
+    "fortune_165": {
+      "message": "Conhecimento é poder. Empodere-se através da educação.",
+      "status": "machine"
+    },
+    "fortune_166": {
+      "message": "Sua concentração e foco levarão a excelentes resultados nos exames.",
+      "status": "machine"
+    },
+    "fortune_167": {
+      "message": "Aprender não é um destino, mas uma jornada para a vida toda. Abrace-a.",
+      "status": "machine"
+    },
+    "fortune_168": {
+      "message": "As sementes de conhecimento que você planta hoje crescerão em florestas de oportunidade.",
+      "status": "machine"
+    },
+    "fortune_169": {
+      "message": "Mantenha a curiosidade, mantenha a fome de conhecimento, e o sucesso seguirá.",
+      "status": "machine"
+    },
+    "fortune_170": {
+      "message": "Sua dedicação ao aprendizado abrirá portas que você não sabia que existiam.",
+      "status": "machine"
+    },
+    "fortune_171": {
+      "message": "A boa saúde é a maior riqueza que você pode possuir.",
+      "status": "machine"
+    },
+    "fortune_172": {
+      "message": "Um exterior saudável começa de dentro.",
+      "status": "machine"
+    },
+    "fortune_173": {
+      "message": "Cuide do seu corpo. É o único lugar onde você tem que viver.",
+      "status": "machine"
+    },
+    "fortune_174": {
+      "message": "Seu corpo ouve tudo o que sua mente diz. Mantenha-se positivo.",
+      "status": "machine"
+    },
+    "fortune_175": {
+      "message": "Um momento de relaxamento vale uma vida inteira de estresse.",
+      "status": "machine"
+    },
+    "fortune_176": {
+      "message": "A aventura aguarda aqueles que ousam explorar.",
+      "status": "machine"
+    },
+    "fortune_177": {
+      "message": "O mundo é um livro, e aqueles que não viajam leem apenas uma página.",
+      "status": "machine"
+    },
+    "fortune_178": {
+      "message": "Sua próxima jornada trará sabedoria e alegria.",
+      "status": "machine"
+    },
+    "fortune_179": {
+      "message": "Faça as malas. O destino está te chamando para novos horizontes.",
+      "status": "machine"
+    },
+    "fortune_180": {
+      "message": "Viaje longe, viaje amplo, e descubra quem você realmente é.",
       "status": "machine"
     }
   }

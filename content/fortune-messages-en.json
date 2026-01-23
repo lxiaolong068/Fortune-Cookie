@@ -1,0 +1,722 @@
+{
+  "fortune_1": {
+    "message": "Your future is created by what you do today, not tomorrow.",
+    "category": "inspirational"
+  },
+  "fortune_2": {
+    "message": "The best time to plant a tree was 20 years ago. The second best time is now.",
+    "category": "inspirational"
+  },
+  "fortune_3": {
+    "message": "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+    "category": "inspirational"
+  },
+  "fortune_4": {
+    "message": "Believe you can and you're halfway there.",
+    "category": "inspirational"
+  },
+  "fortune_5": {
+    "message": "The only way to do great work is to love what you do.",
+    "category": "inspirational"
+  },
+  "fortune_6": {
+    "message": "It does not matter how slowly you go as long as you do not stop.",
+    "category": "inspirational"
+  },
+  "fortune_7": {
+    "message": "In the middle of difficulty lies opportunity.",
+    "category": "inspirational"
+  },
+  "fortune_8": {
+    "message": "The journey of a thousand miles begins with one step.",
+    "category": "inspirational"
+  },
+  "fortune_9": {
+    "message": "What lies behind us and what lies before us are tiny matters compared to what lies within us.",
+    "category": "inspirational"
+  },
+  "fortune_10": {
+    "message": "The mind is everything. What you think you become.",
+    "category": "inspirational"
+  },
+  "fortune_11": {
+    "message": "Every accomplishment starts with the decision to try.",
+    "category": "inspirational"
+  },
+  "fortune_12": {
+    "message": "You are never too old to set another goal or to dream a new dream.",
+    "category": "inspirational"
+  },
+  "fortune_13": {
+    "message": "The secret of getting ahead is getting started.",
+    "category": "inspirational"
+  },
+  "fortune_14": {
+    "message": "Your potential is endless. Go do what you were created to do.",
+    "category": "inspirational"
+  },
+  "fortune_15": {
+    "message": "Stars can't shine without darkness. Your struggles make you stronger.",
+    "category": "inspirational"
+  },
+  "fortune_16": {
+    "message": "The only limit to your impact is your imagination and commitment.",
+    "category": "inspirational"
+  },
+  "fortune_17": {
+    "message": "Today's preparation determines tomorrow's achievement.",
+    "category": "inspirational"
+  },
+  "fortune_18": {
+    "message": "Your life does not get better by chance, it gets better by change.",
+    "category": "inspirational"
+  },
+  "fortune_19": {
+    "message": "Dream big. Start small. Act now.",
+    "category": "inspirational"
+  },
+  "fortune_20": {
+    "message": "The harder you work for something, the greater you'll feel when you achieve it.",
+    "category": "inspirational"
+  },
+  "fortune_21": {
+    "message": "Don't wait for opportunity. Create it.",
+    "category": "inspirational"
+  },
+  "fortune_22": {
+    "message": "Courage is not the absence of fear, but the triumph over it.",
+    "category": "inspirational"
+  },
+  "fortune_23": {
+    "message": "Small daily improvements lead to stunning results.",
+    "category": "inspirational"
+  },
+  "fortune_24": {
+    "message": "Your attitude determines your direction.",
+    "category": "inspirational"
+  },
+  "fortune_25": {
+    "message": "The comeback is always stronger than the setback.",
+    "category": "inspirational"
+  },
+  "fortune_26": {
+    "message": "You will find happiness with a new love... probably your cat.",
+    "category": "funny"
+  },
+  "fortune_27": {
+    "message": "A closed mouth gathers no foot.",
+    "category": "funny"
+  },
+  "fortune_28": {
+    "message": "You will be hungry again in one hour.",
+    "category": "funny"
+  },
+  "fortune_29": {
+    "message": "Help! I'm being held prisoner in a fortune cookie factory!",
+    "category": "funny"
+  },
+  "fortune_30": {
+    "message": "The early bird might get the worm, but the second mouse gets the cheese.",
+    "category": "funny"
+  },
+  "fortune_31": {
+    "message": "You are not illiterate.",
+    "category": "funny"
+  },
+  "fortune_32": {
+    "message": "Ignore previous fortune.",
+    "category": "funny"
+  },
+  "fortune_33": {
+    "message": "You will receive a fortune cookie.",
+    "category": "funny"
+  },
+  "fortune_34": {
+    "message": "Beware of cookies bearing fortunes.",
+    "category": "funny"
+  },
+  "fortune_35": {
+    "message": "You are reading a fortune cookie.",
+    "category": "funny"
+  },
+  "fortune_36": {
+    "message": "Your future is as bright as your past is dark... which isn't saying much.",
+    "category": "funny"
+  },
+  "fortune_37": {
+    "message": "You will soon be hungry again. Order more Chinese food.",
+    "category": "funny"
+  },
+  "fortune_38": {
+    "message": "A wise man once said nothing. He was probably eating.",
+    "category": "funny"
+  },
+  "fortune_39": {
+    "message": "Your lucky numbers are: All of them. You'll need the luck.",
+    "category": "funny"
+  },
+  "fortune_40": {
+    "message": "Today you will make progress... toward your refrigerator.",
+    "category": "funny"
+  },
+  "fortune_41": {
+    "message": "The answer you seek is in another cookie.",
+    "category": "funny"
+  },
+  "fortune_42": {
+    "message": "Your socks will bring you great fortune... if you wear them.",
+    "category": "funny"
+  },
+  "fortune_43": {
+    "message": "You will soon meet a tall, dark stranger... in the mirror.",
+    "category": "funny"
+  },
+  "fortune_44": {
+    "message": "Error 404: Fortune not found.",
+    "category": "funny"
+  },
+  "fortune_45": {
+    "message": "This fortune intentionally left blank.",
+    "category": "funny"
+  },
+  "fortune_46": {
+    "message": "You will find what you're looking for in the last place you look. Obviously.",
+    "category": "funny"
+  },
+  "fortune_47": {
+    "message": "A journey of a thousand miles begins with a single step... and comfortable shoes.",
+    "category": "funny"
+  },
+  "fortune_48": {
+    "message": "Your pet goldfish is plotting against you.",
+    "category": "funny"
+  },
+  "fortune_49": {
+    "message": "Congratulations! You can read.",
+    "category": "funny"
+  },
+  "fortune_50": {
+    "message": "You have just wasted time reading this fortune.",
+    "category": "funny"
+  },
+  "fortune_51": {
+    "message": "Love is the bridge between two hearts.",
+    "category": "love"
+  },
+  "fortune_52": {
+    "message": "The best love is the kind that awakens the soul.",
+    "category": "love"
+  },
+  "fortune_53": {
+    "message": "True love stories never have endings.",
+    "category": "love"
+  },
+  "fortune_54": {
+    "message": "Love is not about finding the right person, but being the right person.",
+    "category": "love"
+  },
+  "fortune_55": {
+    "message": "In the arithmetic of love, one plus one equals everything.",
+    "category": "love"
+  },
+  "fortune_56": {
+    "message": "Love recognizes no barriers.",
+    "category": "love"
+  },
+  "fortune_57": {
+    "message": "The heart wants what it wants.",
+    "category": "love"
+  },
+  "fortune_58": {
+    "message": "Love is friendship set on fire.",
+    "category": "love"
+  },
+  "fortune_59": {
+    "message": "A loving heart is the truest wisdom.",
+    "category": "love"
+  },
+  "fortune_60": {
+    "message": "Where there is love, there is life.",
+    "category": "love"
+  },
+  "fortune_61": {
+    "message": "The greatest thing you'll ever learn is just to love and be loved in return.",
+    "category": "love"
+  },
+  "fortune_62": {
+    "message": "Love isn't something you find. Love is something that finds you.",
+    "category": "love"
+  },
+  "fortune_63": {
+    "message": "To love and be loved is to feel the sun from both sides.",
+    "category": "love"
+  },
+  "fortune_64": {
+    "message": "Love is composed of a single soul inhabiting two bodies.",
+    "category": "love"
+  },
+  "fortune_65": {
+    "message": "Keep love in your heart. A life without it is like a sunless garden.",
+    "category": "love"
+  },
+  "fortune_66": {
+    "message": "Love is the master key that opens the gates of happiness.",
+    "category": "love"
+  },
+  "fortune_67": {
+    "message": "Romance is thinking about your significant other when you should be thinking about something else.",
+    "category": "love"
+  },
+  "fortune_68": {
+    "message": "A true love affair never ends.",
+    "category": "love"
+  },
+  "fortune_69": {
+    "message": "The best thing to hold onto in life is each other.",
+    "category": "love"
+  },
+  "fortune_70": {
+    "message": "You will soon find the love that has been seeking you.",
+    "category": "love"
+  },
+  "fortune_71": {
+    "message": "Success is where preparation and opportunity meet.",
+    "category": "success"
+  },
+  "fortune_72": {
+    "message": "The way to get started is to quit talking and begin doing.",
+    "category": "success"
+  },
+  "fortune_73": {
+    "message": "Innovation distinguishes between a leader and a follower.",
+    "category": "success"
+  },
+  "fortune_74": {
+    "message": "Don't be afraid to give up the good to go for the great.",
+    "category": "success"
+  },
+  "fortune_75": {
+    "message": "Your limitation—it's only your imagination.",
+    "category": "success"
+  },
+  "fortune_76": {
+    "message": "Success is not the key to happiness. Happiness is the key to success.",
+    "category": "success"
+  },
+  "fortune_77": {
+    "message": "The only impossible journey is the one you never begin.",
+    "category": "success"
+  },
+  "fortune_78": {
+    "message": "Great things never come from comfort zones.",
+    "category": "success"
+  },
+  "fortune_79": {
+    "message": "The difference between ordinary and extraordinary is that little extra.",
+    "category": "success"
+  },
+  "fortune_80": {
+    "message": "Success usually comes to those who are too busy to be looking for it.",
+    "category": "success"
+  },
+  "fortune_81": {
+    "message": "Your career is about to take an unexpected and exciting turn.",
+    "category": "success"
+  },
+  "fortune_82": {
+    "message": "A promotion or new opportunity is on the horizon.",
+    "category": "success"
+  },
+  "fortune_83": {
+    "message": "Your hard work will soon pay off in ways you never expected.",
+    "category": "success"
+  },
+  "fortune_84": {
+    "message": "The successful warrior is the average person with laser-like focus.",
+    "category": "success"
+  },
+  "fortune_85": {
+    "message": "Success is walking from failure to failure with no loss of enthusiasm.",
+    "category": "success"
+  },
+  "fortune_86": {
+    "message": "Your talent combined with hard work will open doors.",
+    "category": "success"
+  },
+  "fortune_87": {
+    "message": "Winners are not people who never fail, but people who never quit.",
+    "category": "success"
+  },
+  "fortune_88": {
+    "message": "The only place success comes before work is in the dictionary.",
+    "category": "success"
+  },
+  "fortune_89": {
+    "message": "Your next chapter is going to be amazing.",
+    "category": "success"
+  },
+  "fortune_90": {
+    "message": "Every expert was once a beginner. Keep learning.",
+    "category": "success"
+  },
+  "fortune_91": {
+    "message": "Be yourself; everyone else is already taken.",
+    "category": "wisdom"
+  },
+  "fortune_92": {
+    "message": "Two roads diverged in a wood, and I took the one less traveled by, and that has made all the difference.",
+    "category": "wisdom"
+  },
+  "fortune_93": {
+    "message": "Yesterday is history, tomorrow is a mystery, today is a gift of God, which is why we call it the present.",
+    "category": "wisdom"
+  },
+  "fortune_94": {
+    "message": "Don't judge each day by the harvest you reap but by the seeds that you plant.",
+    "category": "wisdom"
+  },
+  "fortune_95": {
+    "message": "It is during our darkest moments that we must focus to see the light.",
+    "category": "wisdom"
+  },
+  "fortune_96": {
+    "message": "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+    "category": "wisdom"
+  },
+  "fortune_97": {
+    "message": "Life is what happens when you're busy making other plans.",
+    "category": "wisdom"
+  },
+  "fortune_98": {
+    "message": "The only true wisdom is in knowing you know nothing.",
+    "category": "wisdom"
+  },
+  "fortune_99": {
+    "message": "In three words I can sum up everything I've learned about life: it goes on.",
+    "category": "wisdom"
+  },
+  "fortune_100": {
+    "message": "The unexamined life is not worth living.",
+    "category": "wisdom"
+  },
+  "fortune_101": {
+    "message": "Knowing yourself is the beginning of all wisdom.",
+    "category": "wisdom"
+  },
+  "fortune_102": {
+    "message": "The fool doth think he is wise, but the wise man knows himself to be a fool.",
+    "category": "wisdom"
+  },
+  "fortune_103": {
+    "message": "Patience is bitter, but its fruit is sweet.",
+    "category": "wisdom"
+  },
+  "fortune_104": {
+    "message": "A wise person learns more from their enemies than a fool from their friends.",
+    "category": "wisdom"
+  },
+  "fortune_105": {
+    "message": "The only thing we have to fear is fear itself.",
+    "category": "wisdom"
+  },
+  "fortune_106": {
+    "message": "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
+    "category": "wisdom"
+  },
+  "fortune_107": {
+    "message": "It is not the mountain we conquer, but ourselves.",
+    "category": "wisdom"
+  },
+  "fortune_108": {
+    "message": "The mind that opens to a new idea never returns to its original size.",
+    "category": "wisdom"
+  },
+  "fortune_109": {
+    "message": "Silence is a true friend who never betrays.",
+    "category": "wisdom"
+  },
+  "fortune_110": {
+    "message": "Those who cannot change their minds cannot change anything.",
+    "category": "wisdom"
+  },
+  "fortune_111": {
+    "message": "A true friend is one soul in two bodies.",
+    "category": "friendship"
+  },
+  "fortune_112": {
+    "message": "Friendship is born at that moment when one person says to another: 'What! You too?'",
+    "category": "friendship"
+  },
+  "fortune_113": {
+    "message": "A friend is someone who knows all about you and still loves you.",
+    "category": "friendship"
+  },
+  "fortune_114": {
+    "message": "Good friends are like stars. You don't always see them, but you know they're always there.",
+    "category": "friendship"
+  },
+  "fortune_115": {
+    "message": "Friendship is the only cement that will ever hold the world together.",
+    "category": "friendship"
+  },
+  "fortune_116": {
+    "message": "A sweet friendship refreshes the soul.",
+    "category": "friendship"
+  },
+  "fortune_117": {
+    "message": "Friends are the family you choose.",
+    "category": "friendship"
+  },
+  "fortune_118": {
+    "message": "A loyal friend laughs at your jokes when they're not so good, and sympathizes with your problems when they're not so bad.",
+    "category": "friendship"
+  },
+  "fortune_119": {
+    "message": "Walking with a friend in the dark is better than walking alone in the light.",
+    "category": "friendship"
+  },
+  "fortune_120": {
+    "message": "A real friend is one who walks in when the rest of the world walks out.",
+    "category": "friendship"
+  },
+  "fortune_121": {
+    "message": "Friendship improves happiness and abates misery by the doubling of our joy and the dividing of our grief.",
+    "category": "friendship"
+  },
+  "fortune_122": {
+    "message": "One of the most beautiful qualities of true friendship is to understand and to be understood.",
+    "category": "friendship"
+  },
+  "fortune_123": {
+    "message": "A friend is what the heart needs all the time.",
+    "category": "friendship"
+  },
+  "fortune_124": {
+    "message": "There is nothing I would not do for those who are really my friends.",
+    "category": "friendship"
+  },
+  "fortune_125": {
+    "message": "New friends await you in unexpected places. Stay open.",
+    "category": "friendship"
+  },
+  "fortune_126": {
+    "message": "The language of friendship is not words but meanings.",
+    "category": "friendship"
+  },
+  "fortune_127": {
+    "message": "Be slow to fall into friendship, but when you are in, continue firm and constant.",
+    "category": "friendship"
+  },
+  "fortune_128": {
+    "message": "Friendship is the golden thread that ties the heart of all the world.",
+    "category": "friendship"
+  },
+  "fortune_129": {
+    "message": "True friends are never apart, maybe in distance but never in heart.",
+    "category": "friendship"
+  },
+  "fortune_130": {
+    "message": "A day spent with friends is a day well spent.",
+    "category": "friendship"
+  },
+  "fortune_131": {
+    "message": "This year, your birthday wishes will come true in unexpected ways.",
+    "category": "birthday"
+  },
+  "fortune_132": {
+    "message": "A new age brings new adventures and wonderful surprises.",
+    "category": "birthday"
+  },
+  "fortune_133": {
+    "message": "May your birthday mark the beginning of a wonderful period of time.",
+    "category": "birthday"
+  },
+  "fortune_134": {
+    "message": "The coming year holds the keys to many doors of opportunity.",
+    "category": "birthday"
+  },
+  "fortune_135": {
+    "message": "Age is merely the number of years the world has been enjoying you.",
+    "category": "birthday"
+  },
+  "fortune_136": {
+    "message": "Your next year will be filled with laughter, love, and prosperity.",
+    "category": "birthday"
+  },
+  "fortune_137": {
+    "message": "Every candle on your cake is a wish waiting to come true.",
+    "category": "birthday"
+  },
+  "fortune_138": {
+    "message": "The best is yet to come. Happy birthday!",
+    "category": "birthday"
+  },
+  "fortune_139": {
+    "message": "May this birthday bring you closer to all your dreams.",
+    "category": "birthday"
+  },
+  "fortune_140": {
+    "message": "A birthday is not just a year older, but a year wiser.",
+    "category": "birthday"
+  },
+  "fortune_141": {
+    "message": "Your birthday is nature's way of telling you to celebrate yourself.",
+    "category": "birthday"
+  },
+  "fortune_142": {
+    "message": "This birthday begins a new chapter. Make it a bestseller.",
+    "category": "birthday"
+  },
+  "fortune_143": {
+    "message": "Count your life by smiles, not tears. Count your age by friends, not years.",
+    "category": "birthday"
+  },
+  "fortune_144": {
+    "message": "May your special day be the beginning of an extraordinary year.",
+    "category": "birthday"
+  },
+  "fortune_145": {
+    "message": "Birthdays are a new start, a fresh beginning, and a time to pursue dreams.",
+    "category": "birthday"
+  },
+  "fortune_146": {
+    "message": "Your birthday is the first day of another 365-day journey around the sun.",
+    "category": "birthday"
+  },
+  "fortune_147": {
+    "message": "With age comes wisdom, and with wisdom comes great happiness.",
+    "category": "birthday"
+  },
+  "fortune_148": {
+    "message": "Growing older is mandatory, but growing up is optional. Stay young at heart.",
+    "category": "birthday"
+  },
+  "fortune_149": {
+    "message": "May today be the start of a wonderful, glorious, and joyful year!",
+    "category": "birthday"
+  },
+  "fortune_150": {
+    "message": "Another year of life is another chance to achieve your dreams.",
+    "category": "birthday"
+  },
+  "fortune_151": {
+    "message": "The more you study, the more you know. The more you know, the more you grow.",
+    "category": "study"
+  },
+  "fortune_152": {
+    "message": "Success in exams comes to those who prepare with dedication.",
+    "category": "study"
+  },
+  "fortune_153": {
+    "message": "Your next test will reveal the strength you didn't know you had.",
+    "category": "study"
+  },
+  "fortune_154": {
+    "message": "Education is the passport to the future. Invest in it wisely.",
+    "category": "study"
+  },
+  "fortune_155": {
+    "message": "The expert in anything was once a beginner. Keep studying.",
+    "category": "study"
+  },
+  "fortune_156": {
+    "message": "Your brain is a muscle. The more you exercise it, the stronger it gets.",
+    "category": "study"
+  },
+  "fortune_157": {
+    "message": "Every hour of studying is a step closer to your dreams.",
+    "category": "study"
+  },
+  "fortune_158": {
+    "message": "The pain of studying is temporary. The pride of achievement is forever.",
+    "category": "study"
+  },
+  "fortune_159": {
+    "message": "Good grades follow good study habits. Build yours today.",
+    "category": "study"
+  },
+  "fortune_160": {
+    "message": "A mind that is stretched by new knowledge never returns to its old dimensions.",
+    "category": "study"
+  },
+  "fortune_161": {
+    "message": "Your academic breakthrough is just around the corner. Keep pushing.",
+    "category": "study"
+  },
+  "fortune_162": {
+    "message": "Study hard, for the well is deep, and our brains are shallow.",
+    "category": "study"
+  },
+  "fortune_163": {
+    "message": "The only way to learn is to never stop studying.",
+    "category": "study"
+  },
+  "fortune_164": {
+    "message": "Focus on your studies now, and your future self will thank you.",
+    "category": "study"
+  },
+  "fortune_165": {
+    "message": "Knowledge is power. Empower yourself through education.",
+    "category": "study"
+  },
+  "fortune_166": {
+    "message": "Your concentration and focus will lead to excellent exam results.",
+    "category": "study"
+  },
+  "fortune_167": {
+    "message": "Learning is not a destination but a lifelong journey. Embrace it.",
+    "category": "study"
+  },
+  "fortune_168": {
+    "message": "The seeds of knowledge you plant today will grow into forests of opportunity.",
+    "category": "study"
+  },
+  "fortune_169": {
+    "message": "Stay curious, stay hungry for knowledge, and success will follow.",
+    "category": "study"
+  },
+  "fortune_170": {
+    "message": "Your dedication to learning will open doors you never knew existed.",
+    "category": "study"
+  },
+  "fortune_171": {
+    "message": "Good health is the greatest wealth you can possess.",
+    "category": "health"
+  },
+  "fortune_172": {
+    "message": "A healthy outside starts from the inside.",
+    "category": "health"
+  },
+  "fortune_173": {
+    "message": "Take care of your body. It's the only place you have to live.",
+    "category": "health"
+  },
+  "fortune_174": {
+    "message": "Your body hears everything your mind says. Stay positive.",
+    "category": "health"
+  },
+  "fortune_175": {
+    "message": "A moment of relaxation is worth a lifetime of stress.",
+    "category": "health"
+  },
+  "fortune_176": {
+    "message": "Adventure awaits those who dare to explore.",
+    "category": "travel"
+  },
+  "fortune_177": {
+    "message": "The world is a book, and those who do not travel read only one page.",
+    "category": "travel"
+  },
+  "fortune_178": {
+    "message": "Your next journey will bring wisdom and joy.",
+    "category": "travel"
+  },
+  "fortune_179": {
+    "message": "Pack your bags. Destiny is calling you to new horizons.",
+    "category": "travel"
+  },
+  "fortune_180": {
+    "message": "Travel far, travel wide, and discover who you truly are.",
+    "category": "travel"
+  }
+}
