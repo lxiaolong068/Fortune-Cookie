@@ -160,15 +160,13 @@ export default async function LocaleBlogPostPage({
 
   const homeLabel = t.navigation?.home || "Home";
   const blogLabel = t.navigation?.blog || "Blog";
-  const backToBlogLabel =
-    t.blog?.backToBlog ||
-    (t.common?.back && blogLabel
-      ? `${t.common.back} ${blogLabel}`
-      : "Back to Blog");
-  const minReadLabel = t.blog?.minRead || "min read";
-  const relatedArticlesLabel = t.blog?.relatedArticles || "Related Articles";
-  const tryYourLuckLabel = t.blog?.tryYourLuck || "Try Your Luck!";
-  const openFortuneLabel = t.blog?.openFortune || "Open Fortune Cookie";
+  const backToBlogLabel = t.common?.back
+    ? `${t.common.back} ${blogLabel}`
+    : "Back to Blog";
+  const minReadLabel = "min read";
+  const relatedArticlesLabel = "Related Articles";
+  const tryYourLuckLabel = "Try Your Luck!";
+  const openFortuneLabel = "Open Fortune Cookie";
 
   const breadcrumbItems: Array<{ name: string; url: string }> = [
     { name: homeLabel, url: homePath },
