@@ -130,7 +130,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Back Link */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-amber-600 mb-8 transition-colors group font-medium"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 mb-8 transition-colors group font-medium underline-offset-4 hover:underline"
           >
             <div className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm group-hover:shadow-md transition-all border border-gray-100 dark:border-gray-700">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -147,7 +147,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`}>
                     <Badge
                       variant="secondary"
-                      className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-transparent px-3 py-1 text-sm transition-colors"
+                      className="bg-indigo-100 text-slate-900 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-slate-100 border-transparent px-3 py-1 text-sm font-medium transition-colors"
                     >
                       <Tag className="w-3 h-3 mr-1.5" />
                       {tag}
@@ -157,25 +157,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </div>
             )}
 
-            {/* Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-50 mb-6 leading-tight tracking-tight">
+            {/* Title - 改进行高至 1.2，增强呼吸感 */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 mb-6 leading-[1.2] tracking-tight">
               {post.title}
             </h1>
 
-            {/* Meta Info */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-gray-600 dark:text-gray-400 text-sm md:text-base">
+            {/* Meta Info - 提升次要信息对比度 */}
+            <div className="flex flex-wrap items-center justify-center gap-6 text-slate-600 dark:text-slate-400 text-sm md:text-base font-medium">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-gray-100 dark:bg-gray-800 rounded-full">
+                <div className="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-full">
                   <User className="w-4 h-4" />
                 </div>
-                <span className="font-medium">{post.author}</span>
+                <span>{post.author}</span>
               </div>
-              <div className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full" />
+              <div className="w-1 h-1 bg-slate-400 dark:bg-slate-600 rounded-full" />
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <time dateTime={post.date}>{formatDate(post.date)}</time>
               </div>
-              <div className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full" />
+              <div className="w-1 h-1 bg-slate-400 dark:bg-slate-600 rounded-full" />
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 <span>{post.readingTime} min read</span>
@@ -205,15 +205,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
           </div>
 
-          {/* Article Content */}
-          <article className="prose prose-lg prose-amber dark:prose-invert max-w-3xl mx-auto mb-16 prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-img:rounded-xl prose-img:shadow-lg prose-a:text-amber-600 hover:prose-a:text-amber-700 prose-blockquote:border-l-amber-500 prose-blockquote:bg-amber-50/50 dark:prose-blockquote:bg-amber-900/10 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic">
+          {/* Article Content - 优化 prose 配置以提升可读性 */}
+          <article className="blog-article-content prose prose-lg max-w-3xl mx-auto mb-16">
             <MDXRemote source={post.content} components={mdxComponents} />
           </article>
 
           {/* Related Posts */}
           {relatedPosts.length > 0 && (
-            <section className="border-t border-amber-200 pt-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            <section className="border-t border-slate-200 dark:border-slate-700 pt-8">
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">
                 Related Articles
               </h2>
               <div className="grid md:grid-cols-3 gap-6">
@@ -229,17 +229,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
 
           {/* CTA Section */}
-          <Card className="mt-12 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+          <Card className="mt-12 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 border-indigo-200 dark:border-indigo-800">
             <CardContent className="py-8 text-center">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
                 🥠 Try Your Luck!
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-slate-700 dark:text-slate-300 mb-4 font-medium">
                 Generate your own personalized fortune cookie message
               </p>
               <Link
                 href="/generator"
-                className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-lg hover:shadow-xl"
               >
                 Open Fortune Cookie
               </Link>

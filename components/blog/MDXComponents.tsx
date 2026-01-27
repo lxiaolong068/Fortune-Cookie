@@ -14,6 +14,7 @@ import { getImageUrl } from '@/lib/site'
 
 /**
  * Custom Link Component for internal/external links
+ * 增强链接对比度和可识别性
  */
 function CustomLink({
   href,
@@ -26,7 +27,7 @@ function CustomLink({
     return (
       <Link
         href={href || '#'}
-        className="text-amber-600 hover:text-amber-700 underline underline-offset-4 transition-colors"
+        className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline underline-offset-4 decoration-blue-300 hover:decoration-blue-500 dark:decoration-blue-600 dark:hover:decoration-blue-400 transition-colors font-medium"
         {...props}
       >
         {children}
@@ -39,7 +40,7 @@ function CustomLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-amber-600 hover:text-amber-700 underline underline-offset-4 transition-colors font-medium decoration-amber-300 hover:decoration-amber-500"
+      className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline underline-offset-4 decoration-blue-300 hover:decoration-blue-500 dark:decoration-blue-600 dark:hover:decoration-blue-400 transition-colors font-medium"
       {...props}
     >
       {children}
@@ -49,6 +50,7 @@ function CustomLink({
 
 /**
  * Custom Image Component with Next.js optimization
+ * 增强图注可读性
  */
 function CustomImage({
   src,
@@ -70,7 +72,7 @@ function CustomImage({
     const imageHeight = Number(height) || 450
     return (
       <figure className="my-10">
-        <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-gray-100 dark:border-gray-800">
+        <div className="relative w-full overflow-hidden rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
           <Image
             src={resolvedSrc}
             alt={alt || 'Blog image'}
@@ -82,7 +84,7 @@ function CustomImage({
           />
         </div>
         {alt && (
-          <figcaption className="mt-3 text-center text-sm text-gray-500 dark:text-gray-400 italic">
+          <figcaption className="mt-3 text-center text-[15px] leading-relaxed text-slate-600 dark:text-slate-400 italic px-4">
             {alt}
           </figcaption>
         )}
@@ -108,6 +110,7 @@ function CustomImage({
 
 /**
  * Callout/Note Component for highlighting important information
+ * 优化文字对比度
  */
 function Callout({
   children,
@@ -119,10 +122,10 @@ function Callout({
   title?: string
 }) {
   const styles = {
-    info: 'bg-blue-50 border-blue-200 text-blue-800',
-    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-    tip: 'bg-green-50 border-green-200 text-green-800',
-    note: 'bg-amber-50 border-amber-200 text-amber-800',
+    info: 'bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-950/30 dark:border-blue-800 dark:text-blue-100',
+    warning: 'bg-yellow-50 border-yellow-200 text-yellow-900 dark:bg-yellow-950/30 dark:border-yellow-800 dark:text-yellow-100',
+    tip: 'bg-green-50 border-green-200 text-green-900 dark:bg-green-950/30 dark:border-green-800 dark:text-green-100',
+    note: 'bg-indigo-50 border-indigo-200 text-indigo-900 dark:bg-indigo-950/30 dark:border-indigo-800 dark:text-indigo-100',
   }
 
   const icons = {
@@ -136,11 +139,11 @@ function Callout({
     <Card className={cn('my-6 border-l-4', styles[type])}>
       <CardContent className="py-4">
         {title && (
-          <p className="font-semibold mb-2">
+          <p className="font-semibold mb-2 text-[15px]">
             {icons[type]} {title}
           </p>
         )}
-        <div className="text-sm">{children}</div>
+        <div className="text-[15px] leading-relaxed">{children}</div>
       </CardContent>
     </Card>
   )
@@ -174,6 +177,7 @@ function CodeBlock({
 
 /**
  * Inline Code
+ * 提升内联代码对比度
  */
 function InlineCode({
   children,
@@ -181,7 +185,7 @@ function InlineCode({
 }: React.HTMLAttributes<HTMLElement>) {
   return (
     <code
-      className="bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded text-sm font-mono"
+      className="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 px-2 py-0.5 rounded text-[15px] font-mono border border-slate-200 dark:border-slate-700"
       {...props}
     >
       {children}
@@ -191,6 +195,7 @@ function InlineCode({
 
 /**
  * Blockquote styling
+ * 增强引用块可读性
  */
 function Blockquote({
   children,
@@ -198,7 +203,7 @@ function Blockquote({
 }: React.BlockquoteHTMLAttributes<HTMLQuoteElement>) {
   return (
     <blockquote
-      className="border-l-4 border-amber-500 bg-amber-50/50 dark:bg-amber-900/10 pl-6 py-4 my-8 italic text-gray-700 dark:text-gray-300 rounded-r-lg"
+      className="border-l-4 border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-400 pl-6 py-4 my-8 italic text-slate-700 dark:text-slate-300 rounded-r-lg text-[17px] leading-relaxed"
       {...props}
     >
       {children}
