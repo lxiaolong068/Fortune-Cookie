@@ -157,8 +157,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </div>
             )}
 
-            {/* Title - 改进行高至 1.2，增强呼吸感 */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 mb-6 leading-[1.2] tracking-tight">
+            {/* Title - 最深黑色确保最高对比度 */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-[1.2] tracking-tight" style={{ color: '#000000' }}>
               {post.title}
             </h1>
 
@@ -213,7 +213,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Related Posts */}
           {relatedPosts.length > 0 && (
             <section className="border-t border-slate-200 dark:border-slate-700 pt-8">
-              <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6" style={{ color: '#000000' }}>
                 Related Articles
               </h2>
               <div className="grid md:grid-cols-3 gap-6">
@@ -231,7 +231,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* CTA Section */}
           <Card className="mt-12 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 border-indigo-200 dark:border-indigo-800">
             <CardContent className="py-8 text-center">
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2" style={{ color: '#000000' }}>
                 🥠 Try Your Luck!
               </h3>
               <p className="text-slate-700 dark:text-slate-300 mb-4 font-medium">
