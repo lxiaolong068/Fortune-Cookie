@@ -1,9 +1,16 @@
 /**
- * Blog Data Layer
+ * Blog Data Layer (Multi-Language Support)
  *
  * Utilities for reading and parsing MDX blog posts from the file system.
  * This implements a "Local File-based CMS" approach for maximum performance
  * with static site generation (SSG).
+ *
+ * Directory Structure:
+ *   content/blog/
+ *   ├── en/   (English - default)
+ *   ├── zh/   (Chinese)
+ *   ├── es/   (Spanish)
+ *   └── pt/   (Portuguese)
  *
  * NOTE: This module uses Node.js fs/path and should only be imported in server components.
  */
@@ -11,6 +18,8 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+
+import { type Locale, i18n } from "./i18n-config";
 
 // Re-export types from the types file for convenience
 export type { BlogPostFrontmatter, BlogPost, BlogPostMeta } from "./blog-types";
@@ -27,31 +36,57 @@ export interface PaginatedBlogPosts {
   hasPrevPage: boolean;
 }
 
+/**
+ * Available translations for a blog post
+ */
+export interface BlogPostTranslations {
+  slug: string;
+  availableLocales: Locale[];
+  defaultLocale: Locale;
+}
+
 // Default posts per page
 export const POSTS_PER_PAGE = 9;
 
 // Import types for internal use
 import type { BlogPost, BlogPostMeta } from "./blog-types";
 
-// Blog posts directory
-const POSTS_DIRECTORY = path.join(process.cwd(), "content/blog");
+// Base blog posts directory
+const BLOG_BASE_DIRECTORY = path.join(process.cwd(), "content/blog");
+
+/**
+ * Get the posts directory for a specific locale
+ */
+function getPostsDirectory(locale: Locale = i18n.defaultLocale): string {
+  return path.join(BLOG_BASE_DIRECTORY, locale);
+}
 
 /**
  * Calculate reading time in minutes
+ * Adjusts for different languages (Chinese reads faster per character)
  */
-function calculateReadingTime(content: string): number {
-  const wordsPerMinute = 200;
+function calculateReadingTime(content: string, locale: Locale = "en"): number {
+  // Chinese has higher information density per character
+  const wordsPerMinute = locale === "zh" ? 500 : 200;
+
+  if (locale === "zh") {
+    // For Chinese, count characters instead of words
+    const characters = content.replace(/\s/g, "").length;
+    return Math.ceil(characters / wordsPerMinute);
+  }
+
   const words = content.trim().split(/\s+/).length;
   return Math.ceil(words / wordsPerMinute);
 }
 
 /**
- * Ensure posts directory exists
+ * Ensure posts directory exists for a locale
  */
-function ensurePostsDirectory(): boolean {
+function ensurePostsDirectory(locale: Locale = i18n.defaultLocale): boolean {
+  const dir = getPostsDirectory(locale);
   try {
-    if (!fs.existsSync(POSTS_DIRECTORY)) {
-      fs.mkdirSync(POSTS_DIRECTORY, { recursive: true });
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
     return true;
   } catch {
@@ -60,13 +95,29 @@ function ensurePostsDirectory(): boolean {
 }
 
 /**
- * Get all blog post slugs for static generation
+ * Check if a locale directory exists and has posts
  */
-export function getAllPostSlugs(): string[] {
-  ensurePostsDirectory();
+function localeHasPosts(locale: Locale): boolean {
+  const dir = getPostsDirectory(locale);
+  try {
+    if (!fs.existsSync(dir)) return false;
+    const files = fs.readdirSync(dir);
+    return files.some((file) => /\.(mdx?|md)$/.test(file));
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get all blog post slugs for static generation
+ * @param locale - The locale to get slugs for (defaults to default locale)
+ */
+export function getAllPostSlugs(locale: Locale = i18n.defaultLocale): string[] {
+  ensurePostsDirectory(locale);
 
   try {
-    const files = fs.readdirSync(POSTS_DIRECTORY);
+    const dir = getPostsDirectory(locale);
+    const files = fs.readdirSync(dir);
     return files
       .filter((file) => /\.(mdx?|md)$/.test(file))
       .map((file) => file.replace(/\.(mdx?|md)$/, ""));
@@ -76,26 +127,82 @@ export function getAllPostSlugs(): string[] {
 }
 
 /**
+ * Get all localized slugs for static generation
+ * Returns an array of { slug, locale } for generateStaticParams
+ */
+export function getAllLocalizedSlugs(): { slug: string; locale: Locale }[] {
+  const result: { slug: string; locale: Locale }[] = [];
+
+  for (const locale of i18n.locales) {
+    const slugs = getAllPostSlugs(locale);
+
+    for (const slug of slugs) {
+      result.push({ slug, locale });
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Get available translations for a specific post
+ * @param slug - The post slug to check translations for
+ */
+export function getAvailableTranslations(slug: string): BlogPostTranslations {
+  const availableLocales: Locale[] = [];
+
+  for (const locale of i18n.locales) {
+    const dir = getPostsDirectory(locale);
+    const extensions = [".mdx", ".md"];
+
+    for (const ext of extensions) {
+      const filePath = path.join(dir, `${slug}${ext}`);
+      if (fs.existsSync(filePath)) {
+        availableLocales.push(locale);
+        break;
+      }
+    }
+  }
+
+  return {
+    slug,
+    availableLocales,
+    defaultLocale: i18n.defaultLocale,
+  };
+}
+
+/**
  * Get all blog posts metadata (sorted by date, newest first)
+ * @param options.locale - The locale to get posts for (defaults to default locale)
+ * @param options.tag - Filter by tag
+ * @param options.limit - Limit number of results
+ * @param options.includeDrafts - Include draft posts
  */
 export function getBlogPosts(options?: {
+  locale?: Locale;
   tag?: string;
   limit?: number;
   includeDrafts?: boolean;
 }): BlogPostMeta[] {
-  ensurePostsDirectory();
+  const {
+    locale = i18n.defaultLocale,
+    tag,
+    limit,
+    includeDrafts = false,
+  } = options || {};
 
-  const { tag, limit, includeDrafts = false } = options || {};
+  ensurePostsDirectory(locale);
 
   try {
-    const files = fs.readdirSync(POSTS_DIRECTORY);
+    const dir = getPostsDirectory(locale);
+    const files = fs.readdirSync(dir);
     const posts: BlogPostMeta[] = [];
 
     for (const file of files) {
       if (!/\.(mdx?|md)$/.test(file)) continue;
 
       const slug = file.replace(/\.(mdx?|md)$/, "");
-      const filePath = path.join(POSTS_DIRECTORY, file);
+      const filePath = path.join(dir, file);
       const fileContent = fs.readFileSync(filePath, "utf-8");
       const { data, content } = matter(fileContent);
 
@@ -123,7 +230,7 @@ export function getBlogPosts(options?: {
         image: data.image,
         featured: data.featured || false,
         draft: data.draft || false,
-        readingTime: calculateReadingTime(content),
+        readingTime: calculateReadingTime(content, locale),
       });
     }
 
@@ -145,15 +252,20 @@ export function getBlogPosts(options?: {
 
 /**
  * Get a single blog post by slug
+ * @param slug - The post slug
+ * @param locale - The locale (defaults to default locale)
  */
-export function getPostBySlug(slug: string): BlogPost | null {
-  ensurePostsDirectory();
+export function getPostBySlug(
+  slug: string,
+  locale: Locale = i18n.defaultLocale,
+): BlogPost | null {
+  ensurePostsDirectory(locale);
 
-  // Try both .mdx and .md extensions
+  const dir = getPostsDirectory(locale);
   const extensions = [".mdx", ".md"];
 
   for (const ext of extensions) {
-    const filePath = path.join(POSTS_DIRECTORY, `${slug}${ext}`);
+    const filePath = path.join(dir, `${slug}${ext}`);
 
     if (fs.existsSync(filePath)) {
       try {
@@ -171,7 +283,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
           featured: data.featured || false,
           draft: data.draft || false,
           content,
-          readingTime: calculateReadingTime(content),
+          readingTime: calculateReadingTime(content, locale),
         };
       } catch {
         return null;
@@ -179,14 +291,22 @@ export function getPostBySlug(slug: string): BlogPost | null {
     }
   }
 
+  // Fallback: try to get from default locale if not found in requested locale
+  if (locale !== i18n.defaultLocale) {
+    return getPostBySlug(slug, i18n.defaultLocale);
+  }
+
   return null;
 }
 
 /**
  * Get all unique tags from all posts
+ * @param locale - The locale to get tags for (defaults to default locale)
  */
-export function getAllTags(): { tag: string; count: number }[] {
-  const posts = getBlogPosts({ includeDrafts: false });
+export function getAllTags(
+  locale: Locale = i18n.defaultLocale,
+): { tag: string; count: number }[] {
+  const posts = getBlogPosts({ locale, includeDrafts: false });
   const tagCounts = new Map<string, number>();
 
   for (const post of posts) {
@@ -202,22 +322,32 @@ export function getAllTags(): { tag: string; count: number }[] {
 
 /**
  * Get featured posts
+ * @param limit - Maximum number of posts to return
+ * @param locale - The locale (defaults to default locale)
  */
-export function getFeaturedPosts(limit = 3): BlogPostMeta[] {
-  return getBlogPosts({ includeDrafts: false })
+export function getFeaturedPosts(
+  limit = 3,
+  locale: Locale = i18n.defaultLocale,
+): BlogPostMeta[] {
+  return getBlogPosts({ locale, includeDrafts: false })
     .filter((post) => post.featured)
     .slice(0, limit);
 }
 
 /**
  * Get related posts by tags
+ * @param currentSlug - The current post slug to exclude
+ * @param tags - Tags to match against
+ * @param limit - Maximum number of posts to return
+ * @param locale - The locale (defaults to default locale)
  */
 export function getRelatedPosts(
   currentSlug: string,
   tags: string[],
   limit = 3,
+  locale: Locale = i18n.defaultLocale,
 ): BlogPostMeta[] {
-  const allPosts = getBlogPosts({ includeDrafts: false });
+  const allPosts = getBlogPosts({ locale, includeDrafts: false });
 
   return allPosts
     .filter((post) => post.slug !== currentSlug)
@@ -233,14 +363,15 @@ export function getRelatedPosts(
 
 /**
  * Get blog statistics
+ * @param locale - The locale (defaults to default locale)
  */
-export function getBlogStats(): {
+export function getBlogStats(locale: Locale = i18n.defaultLocale): {
   totalPosts: number;
   totalTags: number;
   latestPostDate: string | null;
 } {
-  const posts = getBlogPosts({ includeDrafts: false });
-  const tags = getAllTags();
+  const posts = getBlogPosts({ locale, includeDrafts: false });
+  const tags = getAllTags(locale);
 
   const firstPost = posts[0];
   return {
@@ -252,14 +383,21 @@ export function getBlogStats(): {
 
 /**
  * Get paginated blog posts (sorted by date, newest first)
+ * @param options.locale - The locale (defaults to default locale)
+ * @param options.tag - Filter by tag
+ * @param options.page - Page number (1-indexed)
+ * @param options.perPage - Posts per page
+ * @param options.includeDrafts - Include draft posts
  */
 export function getPaginatedBlogPosts(options?: {
+  locale?: Locale;
   tag?: string;
   page?: number;
   perPage?: number;
   includeDrafts?: boolean;
 }): PaginatedBlogPosts {
   const {
+    locale = i18n.defaultLocale,
     tag,
     page = 1,
     perPage = POSTS_PER_PAGE,
@@ -267,7 +405,7 @@ export function getPaginatedBlogPosts(options?: {
   } = options || {};
 
   // Get all posts (already sorted by date, newest first)
-  const allPosts = getBlogPosts({ tag, includeDrafts });
+  const allPosts = getBlogPosts({ locale, tag, includeDrafts });
 
   const totalPosts = allPosts.length;
   const totalPages = Math.ceil(totalPosts / perPage);
@@ -286,4 +424,24 @@ export function getPaginatedBlogPosts(options?: {
     hasNextPage: currentPage < totalPages,
     hasPrevPage: currentPage > 1,
   };
+}
+
+/**
+ * Get all available locales that have blog posts
+ */
+export function getAvailableBlogLocales(): Locale[] {
+  return i18n.locales.filter((locale) => localeHasPosts(locale));
+}
+
+/**
+ * Get post count per locale (useful for admin/stats)
+ */
+export function getBlogPostCountByLocale(): Record<Locale, number> {
+  const counts = {} as Record<Locale, number>;
+
+  for (const locale of i18n.locales) {
+    counts[locale] = getAllPostSlugs(locale).length;
+  }
+
+  return counts;
 }

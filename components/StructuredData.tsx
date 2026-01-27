@@ -175,6 +175,19 @@ export function BreadcrumbStructuredData({
  * Article 结构化数据组件
  * 用于文章类页面（如 History、How-to 等）
  */
+/**
+ * Map locale to BCP-47 language tag for structured data
+ */
+function getLanguageTag(locale?: string): string {
+  const languageMap: Record<string, string> = {
+    en: "en-US",
+    zh: "zh-CN",
+    es: "es-ES",
+    pt: "pt-BR",
+  };
+  return languageMap[locale || "en"] || "en-US";
+}
+
 export function ArticleStructuredData({
   headline,
   description,
@@ -184,6 +197,7 @@ export function ArticleStructuredData({
   dateModified,
   author = "Fortune Cookie AI Team",
   keywords = [],
+  locale,
   nonce,
 }: {
   headline: string;
@@ -194,6 +208,7 @@ export function ArticleStructuredData({
   dateModified?: string;
   author?: string;
   keywords?: string[];
+  locale?: string;
   nonce?: string | null;
 }) {
   const urls = getStructuredDataUrls();
@@ -233,7 +248,7 @@ export function ArticleStructuredData({
     },
     datePublished: datePublished || new Date().toISOString(),
     dateModified: dateModified || new Date().toISOString(),
-    inLanguage: "en-US",
+    inLanguage: getLanguageTag(locale),
     ...(keywords.length > 0 && { keywords: keywords.join(", ") }),
   };
 

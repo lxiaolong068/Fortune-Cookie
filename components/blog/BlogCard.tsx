@@ -17,12 +17,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { getBlobUrl } from "@/lib/blob-urls";
+import { type Locale, i18n } from "@/lib/i18n-config";
 import type { BlogPostMeta } from "@/lib/blog-types";
 
 interface BlogCardProps {
   post: BlogPostMeta;
   variant?: "default" | "featured" | "compact";
   className?: string;
+  locale?: Locale;
 }
 
 function formatDate(dateString: string): string {
@@ -38,12 +40,17 @@ export function BlogCard({
   post,
   variant = "default",
   className,
+  locale = i18n.defaultLocale,
 }: BlogCardProps) {
   const isFeatured = variant === "featured";
   const isCompact = variant === "compact";
 
+  // Build the correct href based on locale
+  const basePath = locale === i18n.defaultLocale ? "" : `/${locale}`;
+  const href = `${basePath}/blog/${post.slug}`;
+
   return (
-    <Link href={`/blog/${post.slug}`} className="block group">
+    <Link href={href} className="block group">
       <Card
         className={cn(
           "overflow-hidden transition-all duration-300 hover:shadow-lg",

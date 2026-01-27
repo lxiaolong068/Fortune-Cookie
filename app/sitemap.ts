@@ -2,7 +2,12 @@ import { MetadataRoute } from "next";
 import { getSiteUrl } from "@/lib/site";
 import { i18n, getLocalizedPath, getAlternateLinks } from "@/lib/i18n-config";
 import { getDatabaseStats } from "@/lib/fortune-database";
-import { getBlogPosts } from "@/lib/blog";
+import {
+  getBlogPosts,
+  getAvailableBlogLocales,
+  getAllLocalizedSlugs,
+} from "@/lib/blog";
+import type { Locale } from "@/lib/i18n-config";
 
 /**
  * Generate XML Sitemap for SEO
@@ -193,22 +198,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  // Add blog pages dynamically
-  pages.push({
-    path: "/blog",
-    priority: 0.8,
-    changeFrequency: "weekly" as const,
-    lastModified: weeklyContentDate,
+  // Add blog pages dynamically (multi-language support)
+  // Blog list pages for each available locale
+  const blogLocales = getAvailableBlogLocales();
+  blogLocales.forEach((locale) => {
+    const localePath =
+      locale === i18n.defaultLocale ? "/blog" : `/${locale}/blog`;
+    pages.push({
+      path: localePath,
+      priority: 0.8,
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate,
+    });
   });
 
-  // Add individual blog posts
-  const blogPosts = getBlogPosts();
-  blogPosts.forEach((post) => {
+  // Add individual blog posts for each locale
+  // Get all localized slugs to ensure we include posts for all available locales
+  const localizedSlugs = getAllLocalizedSlugs();
+  const blogPostsByLocale = new Map<Locale, ReturnType<typeof getBlogPosts>>();
+
+  // Cache blog posts by locale to get lastModified dates
+  blogLocales.forEach((locale) => {
+    blogPostsByLocale.set(locale, getBlogPosts({ locale }));
+  });
+
+  localizedSlugs.forEach(({ slug, locale }) => {
+    const posts = blogPostsByLocale.get(locale) || [];
+    const post = posts.find((p) => p.slug === slug);
+    const localePath =
+      locale === i18n.defaultLocale
+        ? `/blog/${slug}`
+        : `/${locale}/blog/${slug}`;
+
     pages.push({
-      path: `/blog/${post.slug}`,
+      path: localePath,
       priority: 0.7,
       changeFrequency: "monthly" as const,
-      lastModified: new Date(post.date),
+      lastModified: post ? new Date(post.date) : weeklyContentDate,
     });
   });
 

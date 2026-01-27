@@ -8,3 +8,4 @@
 
 export { BlogCard } from "./BlogCard";
 export { Pagination } from "./Pagination";
+export { BlogLanguageSwitcher } from "./BlogLanguageSwitcher";
