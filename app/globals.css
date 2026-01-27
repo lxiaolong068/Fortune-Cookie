@@ -498,6 +498,21 @@
   }
 }
 
+/* 博客文章标题区域 - 统一可读表面层 */
+.blog-header-card {
+    @apply bg-white dark:bg-slate-900;
+    @apply px-6 md:px-8 py-8 md:py-10;
+    @apply rounded-2xl;
+    @apply shadow-sm;
+    @apply border border-slate-100/80 dark:border-slate-700/60;
+}
+
+@media (max-width: 768px) {
+    .blog-header-card {
+        @apply px-4 py-6;
+    }
+}
+
 /* ===== Accessibility ===== */
 
 /* Reduced motion */

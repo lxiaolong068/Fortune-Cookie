@@ -158,57 +158,59 @@ export default async function LocaleBlogPostPage({
   const blogListPath = `${basePath}/blog`;
   const homePath = locale === i18n.defaultLocale ? "/" : `/${locale}`;
 
-  // Translations
-  const homeLabel = t.navigation?.home || "Home";
-  const blogLabel = t.navigation?.blog || "Blog";
-  const backToBlogLabel = t.common?.back || "Back to Blog";
-  const relatedArticlesLabel =
-    t.messages?.category?.relatedLabel || "Related Articles";
-  const tryYourLuckLabel = t.home?.ctaButton || "Try Your Luck!";
-  const openFortuneLabel = t.home?.tapToOpen || "Open Fortune Cookie";
-  const minReadLabel = "min read";
+          {/* Article Header */}
+          <div className="blog-header-card mb-12 max-w-3xl mx-auto">
+            <header className="text-center">
+              {/* Tags */}
+              {post.tags.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  {post.tags.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`${basePath}/blog?tag=${encodeURIComponent(tag)}`}
+                    >
+                      <Badge
+                        variant="secondary"
+                        className="bg-amber-100 text-slate-900 dark:text-slate-100 hover:bg-amber-200 border-transparent px-3 py-1 text-sm font-medium transition-colors"
+                      >
+                        <Tag className="w-3 h-3 mr-1.5" />
+                        {tag}
+                      </Badge>
+                    </Link>
+                  ))}
+                </div>
+              )}
 
-  return (
-    <main className="min-h-screen w-full overflow-x-hidden relative">
-      <DynamicBackgroundEffects />
+              {/* Title */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 mb-6 leading-tight">
+                {post.title}
+              </h1>
 
-      {/* Structured Data */}
-      <ArticleStructuredData
-        headline={post.title}
-        description={post.description}
-        url={`${basePath}/blog/${slug}`}
-        image={post.image}
-        datePublished={post.date}
-        dateModified={post.date}
-        author={post.author}
-        keywords={post.tags}
-        locale={locale}
-      />
-      <BreadcrumbStructuredData
-        items={[
-          { name: homeLabel, url: homePath },
-          { name: blogLabel, url: blogListPath },
-          { name: post.title, url: `${basePath}/blog/${slug}` },
-        ]}
-      />
-
-      <div className="relative z-10">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          {/* Back Link */}
-          <Link
-            href={blogListPath}
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-amber-600 mb-8 transition-colors group font-medium"
-          >
-            <div className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm group-hover:shadow-md transition-all border border-gray-100 dark:border-gray-700">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-            </div>
-            {backToBlogLabel}
-          </Link>
-
-          {/* Language Switcher for this article */}
-          {translations.availableLocales.length > 1 && (
-            <div className="mb-6">
-              <BlogLanguageSwitcher
+              {/* Meta Info */}
+              <div className="flex flex-wrap items-center justify-center gap-6 text-slate-600 dark:text-slate-400 text-sm md:text-base">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 bg-gray-100 dark:bg-gray-800 rounded-full">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <span className="font-medium">{post.author}</span>
+                </div>
+                <div className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full" />
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <time dateTime={post.date}>
+                    {formatDate(post.date, locale as Locale)}
+                  </time>
+                </div>
+                <div className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full" />
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span>
+                    {post.readingTime} {minReadLabel}
+                  </span>
+                </div>
+              </div>
+            </header>
+          </div>
                 currentLocale={locale as Locale}
                 availableLocales={translations.availableLocales}
                 basePath={`/blog/${slug}`}
@@ -296,7 +298,7 @@ export default async function LocaleBlogPostPage({
           </div>
 
           {/* Article Content */}
-          <article className="prose prose-lg prose-amber dark:prose-invert max-w-3xl mx-auto mb-16 prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-img:rounded-xl prose-img:shadow-lg prose-a:text-amber-600 hover:prose-a:text-amber-700 prose-blockquote:border-l-amber-500 prose-blockquote:bg-amber-50/50 dark:prose-blockquote:bg-amber-900/10 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic">
+          <article className="blog-article-content max-w-3xl mx-auto mb-16">
             <MDXRemote source={post.content} components={mdxComponents} />
           </article>
 

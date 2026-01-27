@@ -139,49 +139,51 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </Link>
 
           {/* Article Header */}
-          <header className="mb-12 text-center max-w-3xl mx-auto">
-            {/* Tags */}
-            {post.tags.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
-                {post.tags.map((tag) => (
-                  <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`}>
-                    <Badge
-                      variant="secondary"
-                      className="bg-indigo-100 text-slate-900 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-slate-100 border-transparent px-3 py-1 text-sm font-medium transition-colors"
-                    >
-                      <Tag className="w-3 h-3 mr-1.5" />
-                      {tag}
-                    </Badge>
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {/* Title - 恢复暗色模式可读性 */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 mb-6 leading-[1.2] tracking-tight">
-              {post.title}
-            </h1>
-
-            {/* Meta Info - 提升次要信息对比度 */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-slate-600 dark:text-slate-400 text-sm md:text-base font-medium">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-full">
-                  <User className="w-4 h-4" />
+          <div className="blog-header-card mb-12 max-w-3xl mx-auto">
+            <header className="text-center">
+              {/* Tags */}
+              {post.tags.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  {post.tags.map((tag) => (
+                    <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`}>
+                      <Badge
+                        variant="secondary"
+                        className="bg-indigo-100 text-slate-900 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-slate-100 border-transparent px-3 py-1 text-sm font-medium transition-colors"
+                      >
+                        <Tag className="w-3 h-3 mr-1.5" />
+                        {tag}
+                      </Badge>
+                    </Link>
+                  ))}
                 </div>
-                <span>{post.author}</span>
+              )}
+
+              {/* Title - 恢复暗色模式可读性 */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 mb-6 leading-[1.2] tracking-tight">
+                {post.title}
+              </h1>
+
+              {/* Meta Info - 提升次要信息对比度 */}
+              <div className="flex flex-wrap items-center justify-center gap-6 text-slate-600 dark:text-slate-400 text-sm md:text-base font-medium">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-full">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <span>{post.author}</span>
+                </div>
+                <div className="w-1 h-1 bg-slate-400 dark:bg-slate-600 rounded-full" />
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                </div>
+                <div className="w-1 h-1 bg-slate-400 dark:bg-slate-600 rounded-full" />
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span>{post.readingTime} min read</span>
+                </div>
               </div>
-              <div className="w-1 h-1 bg-slate-400 dark:bg-slate-600 rounded-full" />
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <time dateTime={post.date}>{formatDate(post.date)}</time>
-              </div>
-              <div className="w-1 h-1 bg-slate-400 dark:bg-slate-600 rounded-full" />
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span>{post.readingTime} min read</span>
-              </div>
-            </div>
-          </header>
+            </header>
+          </div>
 
           {/* Cover Image */}
           <div className="mb-12 max-w-3xl mx-auto">
