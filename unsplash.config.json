@@ -1,4 +1,7 @@
 {
-  "accessKey": "156rPM5VNl0EHoiyvxIEzksZwc10DYsUvziVjZV5sHc",
-  "imageDestination": "public/images"
+  "accessKeys": [
+    "156rPM5VNl0EHoiyvxIEzksZwc10DYsUvziVjZV5sHc",
+    "LIO-r4Pe7yg9k3lC2-2oqb5R-6HlJifLVWVu6fgTA_s",
+    "70VGnJGfP7fvbSZb9HBbBYioXGkcUyYeVBUscBP10Ro"
+  ]
 }
