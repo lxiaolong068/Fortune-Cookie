@@ -110,6 +110,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: weeklyContentDate, // Funny messages updated regularly
     },
     {
+      path: "/free-online-fortune-cookie",
+      priority: 0.8,
+      changeFrequency: "weekly" as const,
+      lastModified: weeklyContentDate, // Long-tail keyword landing page
+    },
+    {
       path: "/profile",
       priority: 0.5,
       changeFrequency: "weekly" as const,

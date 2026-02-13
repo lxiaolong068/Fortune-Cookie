@@ -19,13 +19,13 @@ export const dynamic = "force-static";
 export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: "How to Make Fortune Cookies at Home - Easy Step by Step",
+  title: "How to Make Fortune Cookies at Home | Easy Recipe in 30 Minutes",
   description:
-    "Easy step-by-step guide to make homemade fortune cookies. Perfect for beginners with tips, tricks, and custom message ideas.",
+    "Make fortune cookies at home in 30 minutes! Easy step-by-step recipe for beginners with custom message ideas, tips & tricks. Only 5 ingredients needed.",
   openGraph: {
-    title: "How to Make Fortune Cookies at Home - Easy Step by Step",
+    title: "How to Make Fortune Cookies at Home | Easy Recipe in 30 Minutes",
     description:
-      "Easy step-by-step guide to make homemade fortune cookies. Perfect for beginners with tips, tricks, and custom message ideas.",
+      "Make fortune cookies at home in 30 minutes! Easy step-by-step recipe for beginners with custom message ideas, tips & tricks. Only 5 ingredients needed.",
     type: "article",
     url: `${baseUrl}/how-to-make-fortune-cookies`,
     images: [
@@ -39,9 +39,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "How to Make Fortune Cookies at Home - Easy Step by Step",
+    title: "How to Make Fortune Cookies at Home | Easy Recipe in 30 Minutes",
     description:
-      "Easy step-by-step guide to make homemade fortune cookies. Perfect for beginners with tips, tricks, and custom message ideas.",
+      "Make fortune cookies at home in 30 minutes! Easy step-by-step recipe for beginners with custom message ideas & tips.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },

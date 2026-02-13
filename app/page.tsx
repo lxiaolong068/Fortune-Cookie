@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import { WebApplicationStructuredData } from "@/components/StructuredData";
+import { FAQStructuredData } from "@/components/FAQStructuredData";
 import { generateSEOMetadata } from "@/components/SEO";
 import { FortuneCookieStatic } from "@/components/FortuneCookieStatic";
 import { DeferredMount } from "@/components/DeferredMount";
@@ -164,9 +165,9 @@ const features = [
 ];
 
 export const metadata: Metadata = generateSEOMetadata({
-  title: "Fortune Cookie - Free Online AI Generator",
+  title: "Fortune Cookie AI - Free Online Fortune Cookie Generator",
   description:
-    "Free online AI-powered fortune cookie generator. Get personalized inspirational messages, funny quotes, and lucky numbers. Create custom cookies with our AI.",
+    "Crack open a virtual fortune cookie! Free AI-powered generator with 500+ unique messages. Get personalized fortune cookies, lucky numbers & daily wisdom instantly.",
   image: "/og-image.png",
   url: "/",
   type: "website",
@@ -177,6 +178,35 @@ export default function HomePage() {
     <>
       {/* Structured Data */}
       <WebApplicationStructuredData />
+      <FAQStructuredData
+        faqs={[
+          {
+            question: "What is a fortune cookie generator?",
+            answer:
+              "A fortune cookie generator is a free online tool that creates personalized fortune cookie messages using AI. You can choose themes like love, career, humor, and wisdom to get unique fortune messages with lucky numbers.",
+          },
+          {
+            question: "Is this fortune cookie generator free to use?",
+            answer:
+              "Yes! Our AI fortune cookie generator is completely free. You can generate up to 5 fortune cookies per day without signing up, or sign in for 20 daily fortunes.",
+          },
+          {
+            question: "How does the AI fortune cookie work?",
+            answer:
+              "Our generator uses advanced AI to create unique, personalized fortune messages based on your selected theme and mood. Each fortune comes with lucky numbers and can be shared on social media.",
+          },
+          {
+            question: "Can I get a fortune cookie online?",
+            answer:
+              "Absolutely! Just visit our website and click to crack open a virtual fortune cookie. You'll receive a unique message with lucky numbers instantly — no download required.",
+          },
+          {
+            question: "What themes are available for fortune cookies?",
+            answer:
+              "We offer 6 themes: Inspirational, Love & Romance, Funny, Career & Success, Wisdom, and Random. Each theme generates messages tailored to that category.",
+          },
+        ]}
+      />
 
       <main className="min-h-screen w-full overflow-x-hidden relative">
         {/* Background effects - static first, animated after idle */}
@@ -241,7 +271,7 @@ export default function HomePage() {
               <ScrollReveal direction="up" delay={0.1}>
                 <div className="max-w-4xl mx-auto text-center mb-16">
                   <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-800 dark:text-white mb-6">
-                    Fortune Cookie - Free Online AI Generator
+                    Fortune Cookie AI - Free Online Fortune Cookie Generator
                   </h1>
                   <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                     Welcome to the best free online AI-powered fortune cookie

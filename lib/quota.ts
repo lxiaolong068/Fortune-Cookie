@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server";
 import { db } from "@/lib/database";
 
-const DEFAULT_GUEST_DAILY_LIMIT = 1;
-const DEFAULT_AUTH_DAILY_LIMIT = 10;
+const DEFAULT_GUEST_DAILY_LIMIT = 5;
+const DEFAULT_AUTH_DAILY_LIMIT = 20;
 
 const parsedGuestLimit = Number.parseInt(
   process.env.GUEST_DAILY_LIMIT || `${DEFAULT_GUEST_DAILY_LIMIT}`,

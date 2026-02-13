@@ -55,6 +55,32 @@ const STATIC_FILE_PATTERNS = [
   "site.webmanifest",
 ];
 
+// 已知爬虫和自动化工具的 User-Agent 关键词
+const BOT_USER_AGENTS = [
+  "bot",
+  "spider",
+  "crawl",
+  "slurp",
+  "mediapartners",
+  "headlesschrome",
+  "puppeteer",
+  "phantom",
+  "selenium",
+  "lighthouse",
+  "pagespeed",
+  "gtmetrix",
+  "pingdom",
+  "uptimerobot",
+  "statuscake",
+  "sitechecker",
+];
+
+function isBot(userAgent: string | null): boolean {
+  if (!userAgent) return false;
+  const ua = userAgent.toLowerCase();
+  return BOT_USER_AGENTS.some((bot) => ua.includes(bot));
+}
+
 // 生成 CSP Nonce
 function generateNonce(): string {
   const array = new Uint8Array(16);
@@ -65,6 +91,14 @@ function generateNonce(): string {
 export function middleware(request: NextRequest) {
   const startTime = Date.now();
   const { pathname } = request.nextUrl;
+
+  // Bot 检测 — 对已知爬虫设置标记并跳过分析相关处理
+  const userAgent = request.headers.get("user-agent");
+  if (isBot(userAgent)) {
+    const response = NextResponse.next();
+    response.headers.set("X-Is-Bot", "true");
+    return response;
+  }
 
   // 生成 CSP Nonce
   const nonce = generateNonce();
@@ -358,8 +392,8 @@ function handleApiCaching(
       statusText: "Not Modified",
       headers: {
         ETag: etag,
-        "Cache-Control": "public, max-age=300, stale-while-revalidate=60",
-        "CDN-Cache-Control": "public, max-age=300",
+        "Cache-Control": "public, max-age=600, stale-while-revalidate=300",
+        "CDN-Cache-Control": "public, max-age=600",
       },
     });
     addServerTiming(response, startTime, "api-304");
@@ -372,28 +406,28 @@ function handleApiCaching(
   // 继续处理请求，添加缓存头
   const response = NextResponse.next();
 
-  // 根据 API 类型设置不同的缓存策略
+  // 根据 API 类型设置不同的缓存策略 (optimized for low-traffic)
   if (pathname.includes("/fortunes")) {
-    // 幸运饼干数据 - 中等缓存时间
+    // 幸运饼干数据 - 延长缓存以提高命中率
     response.headers.set(
       "Cache-Control",
-      "public, max-age=300, stale-while-revalidate=60",
+      "public, max-age=600, stale-while-revalidate=300",
+    );
+    response.headers.set("CDN-Cache-Control", "public, max-age=600");
+  } else if (pathname.includes("/analytics")) {
+    // 分析数据 - 适度延长
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=120, stale-while-revalidate=60",
+    );
+    response.headers.set("CDN-Cache-Control", "public, max-age=120");
+  } else {
+    // 默认 API 缓存 - 延长
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=300, stale-while-revalidate=120",
     );
     response.headers.set("CDN-Cache-Control", "public, max-age=300");
-  } else if (pathname.includes("/analytics")) {
-    // 分析数据 - 短缓存时间
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=60, stale-while-revalidate=30",
-    );
-    response.headers.set("CDN-Cache-Control", "public, max-age=60");
-  } else {
-    // 默认 API 缓存
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=180, stale-while-revalidate=60",
-    );
-    response.headers.set("CDN-Cache-Control", "public, max-age=180");
   }
 
   // 添加 ETag 和 Last-Modified
@@ -475,21 +509,21 @@ function handlePageCaching(
     ? "/" + segments.slice(1).join("/")
     : pathname;
 
-  // 为页面设置适当的缓存头部
+  // 为页面设置适当的缓存头部 (optimized for low-traffic: ~14 sessions/day)
   if (actualPath === "/" || actualPath === "") {
-    // 首页 - 短期缓存
-    response.headers.set("Cache-Control", "public, max-age=60, s-maxage=300");
+    // 首页 - 延长缓存以提高低流量下命中率
+    response.headers.set("Cache-Control", "public, max-age=120, s-maxage=600, stale-while-revalidate=300");
     addServerTiming(response, startTime, "page-home");
-  } else if (actualPath.startsWith("/messages")) {
-    // 消息页面 - 中期缓存
-    response.headers.set("Cache-Control", "public, max-age=300, s-maxage=600");
-    addServerTiming(response, startTime, "page-messages");
+  } else if (actualPath.startsWith("/explore") || actualPath.startsWith("/messages")) {
+    // 浏览/消息页面 - 中期缓存
+    response.headers.set("Cache-Control", "public, max-age=300, s-maxage=900, stale-while-revalidate=600");
+    addServerTiming(response, startTime, "page-explore");
   } else if (pathname.startsWith("/api/")) {
     // API路由
     addServerTiming(response, startTime, "page-api");
   } else {
-    // 其他页面 - 验证缓存
-    response.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+    // 其他页面 - 短缓存 + stale-while-revalidate 保证速度
+    response.headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
     addServerTiming(response, startTime, "page-other");
   }
 
