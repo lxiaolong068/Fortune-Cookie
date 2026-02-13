@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -159,6 +159,10 @@ export function AIFortuneCookie() {
   const [quotaStatus, setQuotaStatus] = useState<QuotaStatus | null>(null);
   const [isQuotaLoading, setIsQuotaLoading] = useState(false);
   const { status: authStatus } = useAuthSession();
+  const prefersReducedMotion = useReducedMotion();
+
+  // Simplified motion props for reduced-motion users
+  const noMotion = { initial: false, animate: {}, exit: {}, transition: { duration: 0 } };
 
   useEffect(() => {
     const loadQuota = async () => {
@@ -378,15 +382,14 @@ export function AIFortuneCookie() {
           {state === "unopened" && (
             <motion.div
               key="unopened"
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 20,
-                duration: 0.6,
-              }}
+              {...(prefersReducedMotion
+                ? noMotion
+                : {
+                    initial: { scale: 0, rotate: -180 },
+                    animate: { scale: 1, rotate: 0 },
+                    exit: { scale: 0.8, opacity: 0 },
+                    transition: { type: "spring", stiffness: 260, damping: 20, duration: 0.6 },
+                  })}
               className="flex flex-col items-center max-w-md w-full"
             >
               <Card className="w-full mb-4 bg-white/90 backdrop-blur-sm border-amber-200">
@@ -433,9 +436,9 @@ export function AIFortuneCookie() {
 
               {/* Theme Selection */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                {...(prefersReducedMotion
+                  ? noMotion
+                  : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.3 } })}
                 className="w-full mb-6"
               >
                 <Card className="p-4 bg-white/90 backdrop-blur-sm border-amber-200">
@@ -492,10 +495,9 @@ export function AIFortuneCookie() {
                   <AnimatePresence>
                     {showCustomization && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        {...(prefersReducedMotion
+                          ? noMotion
+                          : { initial: { height: 0, opacity: 0 }, animate: { height: "auto", opacity: 1 }, exit: { height: 0, opacity: 0 }, transition: { duration: 0.3 } })}
                         className="mt-3 overflow-hidden"
                       >
                         <Textarea
@@ -513,24 +515,17 @@ export function AIFortuneCookie() {
 
               {/* Fortune Cookie */}
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                animate={{
-                  y: [0, -10, 0],
-                  rotate: [0, 2, -2, 0],
-                }}
-                transition={{
-                  y: {
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  },
-                  rotate: {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  },
-                }}
+                {...(prefersReducedMotion
+                  ? {}
+                  : {
+                      whileHover: { scale: 1.05 },
+                      whileTap: { scale: 0.95 },
+                      animate: { y: [0, -10, 0], rotate: [0, 2, -2, 0] },
+                      transition: {
+                        y: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+                        rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                      },
+                    })}
                 onClick={generateFortune}
                 className={cn(
                   "cursor-pointer mb-8 relative",
@@ -563,26 +558,28 @@ export function AIFortuneCookie() {
                     </div>
 
                     {/* Sparkle effects */}
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                      className="absolute -top-2 -right-2"
-                    >
-                      <Sparkles className="w-6 h-6 text-yellow-400 drop-shadow-lg" />
-                    </motion.div>
+                    {prefersReducedMotion ? (
+                      <div className="absolute -top-2 -right-2">
+                        <Sparkles className="w-6 h-6 text-yellow-400 drop-shadow-lg" />
+                      </div>
+                    ) : (
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                        className="absolute -top-2 -right-2"
+                      >
+                        <Sparkles className="w-6 h-6 text-yellow-400 drop-shadow-lg" />
+                      </motion.div>
+                    )}
                   </div>
                 </div>
               </motion.div>
 
               {/* Instructions */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                {...(prefersReducedMotion
+                  ? noMotion
+                  : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.5 } })}
                 className="text-center"
               >
                 <span
@@ -656,25 +653,24 @@ export function AIFortuneCookie() {
           {state === "cracking" && (
             <motion.div
               key="cracking"
-              initial={{ scale: 1 }}
-              animate={{ scale: [1, 1.2, 0.8, 1.1] }}
-              transition={{ duration: 2, ease: "easeInOut" }}
+              {...(prefersReducedMotion
+                ? noMotion
+                : { initial: { scale: 1 }, animate: { scale: [1, 1.2, 0.8, 1.1] }, transition: { duration: 2, ease: "easeInOut" } })}
               className="flex flex-col items-center"
             >
               <motion.div
-                animate={{
-                  rotate: [0, 5, -5, 10, -10, 0],
-                  scale: [1, 1.1, 0.9, 1.05, 0.95, 1],
-                }}
-                transition={{ duration: 2, ease: "easeInOut" }}
+                {...(prefersReducedMotion
+                  ? {}
+                  : { animate: { rotate: [0, 5, -5, 10, -10, 0], scale: [1, 1.1, 0.9, 1.05, 0.95, 1] }, transition: { duration: 2, ease: "easeInOut" } })}
                 className="relative mb-8"
               >
                 {/* Cracking cookie with split effect */}
                 <div className="relative w-32 h-20">
                   {/* Left half */}
                   <motion.div
-                    animate={{ x: [-16, -24], rotate: [0, -15] }}
-                    transition={{ duration: 2, ease: "easeOut" }}
+                    {...(prefersReducedMotion
+                      ? { animate: { x: -24, rotate: -15 } }
+                      : { animate: { x: [-16, -24], rotate: [0, -15] }, transition: { duration: 2, ease: "easeOut" } })}
                     className="absolute left-0 w-16 h-20 bg-gradient-to-br from-yellow-200 to-amber-300 rounded-l-full border-2 border-amber-400 overflow-hidden"
                   >
                     <div className="absolute inset-1 border border-amber-500/30 rounded-l-full" />
@@ -682,8 +678,9 @@ export function AIFortuneCookie() {
 
                   {/* Right half */}
                   <motion.div
-                    animate={{ x: [16, 24], rotate: [0, 15] }}
-                    transition={{ duration: 2, ease: "easeOut" }}
+                    {...(prefersReducedMotion
+                      ? { animate: { x: 24, rotate: 15 } }
+                      : { animate: { x: [16, 24], rotate: [0, 15] }, transition: { duration: 2, ease: "easeOut" } })}
                     className="absolute right-0 w-16 h-20 bg-gradient-to-br from-yellow-200 to-amber-300 rounded-r-full border-2 border-amber-400 overflow-hidden"
                   >
                     <div className="absolute inset-1 border border-amber-500/30 rounded-r-full" />
@@ -702,9 +699,9 @@ export function AIFortuneCookie() {
               </motion.div>
 
               <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 1, 0.7, 1] }}
-                transition={{ duration: 2 }}
+                {...(prefersReducedMotion
+                  ? noMotion
+                  : { initial: { opacity: 0 }, animate: { opacity: [0, 1, 0.7, 1] }, transition: { duration: 2 } })}
                 className="text-amber-700 text-center"
               >
                 AI is crafting your personalized fortune...
@@ -715,21 +712,20 @@ export function AIFortuneCookie() {
           {state === "opened" && currentFortune && (
             <motion.div
               key="opened"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-                delay: 0.2,
-              }}
+              {...(prefersReducedMotion
+                ? noMotion
+                : {
+                    initial: { scale: 0, opacity: 0 },
+                    animate: { scale: 1, opacity: 1 },
+                    transition: { type: "spring", stiffness: 300, damping: 30, delay: 0.2 },
+                  })}
               className="w-full max-w-md"
             >
               <Card className="p-6 bg-white/90 backdrop-blur-sm border-amber-200 shadow-xl">
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 }}
+                  {...(prefersReducedMotion
+                    ? noMotion
+                    : { initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.4 } })}
                   className="text-center mb-6"
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -793,18 +789,18 @@ export function AIFortuneCookie() {
                 </motion.div>
 
                 <motion.blockquote
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.6 }}
+                  {...(prefersReducedMotion
+                    ? noMotion
+                    : { initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.6 } })}
                   className="text-center text-gray-700 mb-6 italic leading-relaxed text-lg"
                 >
                   &ldquo;{currentFortune.message}&rdquo;
                 </motion.blockquote>
 
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.8 }}
+                  {...(prefersReducedMotion
+                    ? noMotion
+                    : { initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.8 } })}
                   className="text-center mb-6"
                 >
                   <h3 className="text-sm text-amber-700 mb-3">
@@ -814,14 +810,13 @@ export function AIFortuneCookie() {
                     {currentFortune.luckyNumbers.map((number, index) => (
                       <motion.div
                         key={number}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{
-                          delay: 1 + index * 0.1,
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 25,
-                        }}
+                        {...(prefersReducedMotion
+                          ? noMotion
+                          : {
+                              initial: { scale: 0 },
+                              animate: { scale: 1 },
+                              transition: { delay: 1 + index * 0.1, type: "spring", stiffness: 500, damping: 25 },
+                            })}
                         className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-md"
                       >
                         <span className="text-white font-medium text-sm">
@@ -834,9 +829,9 @@ export function AIFortuneCookie() {
 
                 {/* Share Card with Visual Preview */}
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 1.2 }}
+                  {...(prefersReducedMotion
+                    ? noMotion
+                    : { initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 1.2 } })}
                   className="mb-6"
                 >
                   <FortuneShareCard
@@ -846,9 +841,9 @@ export function AIFortuneCookie() {
                 </motion.div>
 
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 1.5 }}
+                  {...(prefersReducedMotion
+                    ? noMotion
+                    : { initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 1.5 } })}
                   className="text-center"
                 >
                   <Button

@@ -43,10 +43,10 @@ const CACHE_PREFIXES = {
  */
 const CACHE_TTL = {
   FORTUNE: 60 * 60 * 24, // 24 hours
-  FORTUNE_LIST: 60 * 60, // 1 hour
-  ANALYTICS: 60 * 30, // 30 minutes
+  FORTUNE_LIST: 60 * 60 * 2, // 2 hours (was 1h — low traffic needs longer TTL)
+  ANALYTICS: 60 * 60, // 1 hour (was 30min)
   USER_SESSION: 60 * 60 * 24 * 7, // 7 days
-  API_RESPONSE: 60 * 5, // 5 minutes
+  API_RESPONSE: 60 * 30, // 30 minutes (was 5min — core optimization for low traffic)
 } as const;
 
 /**
