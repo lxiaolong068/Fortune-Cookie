@@ -6,8 +6,9 @@ import { useLocale } from "@/lib/locale-context";
 const navigationItems = [
   { key: "home", href: "/" },
   { key: "generator", href: "/generator" },
-  { key: "messages", href: "/messages" },
-  { key: "browse", href: "/browse" },
+  { key: "explore", href: "/explore" },
+  { key: "favorites", href: "/favorites" },
+  { key: "calendar", href: "/calendar" },
   { key: "history", href: "/history" },
   { key: "recipes", href: "/recipes" },
   { key: "blog", href: "/blog" },

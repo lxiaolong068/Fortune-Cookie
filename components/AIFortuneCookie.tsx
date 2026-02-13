@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { sessionManager } from "@/lib/session-manager";
 import { captureUserAction } from "@/lib/error-monitoring";
 import { startGoogleSignIn, useAuthSession } from "@/lib/auth-client";
-import { SocialShare } from "@/components/SocialShare";
+import { FortuneShareCard } from "@/components/FortuneShareCard";
 import { FavoriteButton } from "@/components/FavoriteButton";
 
 // Dynamic imports for Lucide icons (~10KB saved)
@@ -832,18 +832,16 @@ export function AIFortuneCookie() {
                   </div>
                 </motion.div>
 
-                {/* Share Actions */}
+                {/* Share Card with Visual Preview */}
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 1.2 }}
-                  className="flex flex-col items-center gap-4 mb-6"
+                  className="mb-6"
                 >
-                  <SocialShare
+                  <FortuneShareCard
                     message={currentFortune.message}
                     luckyNumbers={currentFortune.luckyNumbers}
-                    variant="inline"
-                    className="justify-center"
                   />
                 </motion.div>
 
