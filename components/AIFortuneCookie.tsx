@@ -191,10 +191,11 @@ export function AIFortuneCookie() {
     if (state !== "unopened" || isGenerating) return;
 
     if (quotaStatus && quotaStatus.remaining <= 0) {
-      const message = quotaStatus.isAuthenticated
-        ? "Daily limit reached. Please try again tomorrow (UTC)."
-        : "Guest limit reached. Sign in to generate more fortunes today.";
-      setGenerationError(message);
+      setGenerationError(
+        quotaStatus.isAuthenticated
+          ? "You've used all your fortune cookies for today! Come back tomorrow."
+          : "You've used all your free fortune cookies for today!",
+      );
       return;
     }
 
@@ -424,7 +425,7 @@ export function AIFortuneCookie() {
                       onClick={startGoogleSignIn}
                       aria-label="Sign in with Google"
                     >
-                      Sign in for 10/day
+                      Sign in for 20/day
                     </Button>
                   )}
                 </div>
@@ -594,11 +595,54 @@ export function AIFortuneCookie() {
                 <p className="text-amber-700 mb-4">
                   Tap the cookie to generate your personalized fortune!
                 </p>
-                {generationError && (
+                {generationError && quotaStatus && quotaStatus.remaining <= 0 ? (
+                  <div className="text-center space-y-3 p-4 bg-amber-50/80 rounded-xl border border-amber-200/50 mb-3">
+                    <p className="text-sm text-amber-700 font-medium">
+                      {generationError}
+                    </p>
+                    {!isAuthenticated && (
+                      <div className="space-y-1">
+                        <p className="text-xs text-gray-600">
+                          Sign in to get 20 fortune cookies per day (free!)
+                        </p>
+                        <Button
+                          onClick={startGoogleSignIn}
+                          variant="outline"
+                          size="sm"
+                          className="border-amber-300 text-amber-700 hover:bg-amber-100"
+                        >
+                          Sign in with Google
+                        </Button>
+                      </div>
+                    )}
+                    <div className="space-y-1">
+                      <p className="text-xs text-gray-500">
+                        Or explore our collection of 500+ fortune messages:
+                      </p>
+                      <div className="flex gap-2 justify-center flex-wrap">
+                        <a
+                          href="/explore"
+                          className="text-xs text-amber-600 hover:text-amber-800 underline"
+                        >
+                          Browse Fortunes
+                        </a>
+                        <a
+                          href="/funny-fortune-cookie-messages"
+                          className="text-xs text-amber-600 hover:text-amber-800 underline"
+                        >
+                          Funny Messages
+                        </a>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-400">
+                      Resets at: {quotaResetLabel}
+                    </p>
+                  </div>
+                ) : generationError ? (
                   <p className="text-xs text-amber-600 mb-3">
                     {generationError}
                   </p>
-                )}
+                ) : null}
                 <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-50/80 to-yellow-50/80 backdrop-blur-sm border border-amber-200/50">
                   <Sparkles className="w-4 h-4 text-amber-500" />
                   <span className="text-sm text-amber-700 font-medium">

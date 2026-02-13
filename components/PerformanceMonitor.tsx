@@ -338,9 +338,27 @@ export function PerformanceMonitor() {
   return null;
 }
 
+// Bot User-Agent keywords (shared with middleware.ts)
+const BOT_UA_KEYWORDS = [
+  "bot", "spider", "crawl", "slurp", "headlesschrome",
+  "puppeteer", "phantom", "selenium", "lighthouse",
+  "pagespeed", "gtmetrix", "pingdom", "uptimerobot",
+];
+
+function isBotUserAgent(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent.toLowerCase();
+  return BOT_UA_KEYWORDS.some((bot) => ua.includes(bot));
+}
+
 // Google Analytics 4 component
 export function GoogleAnalytics({ measurementId }: { measurementId: string }) {
   if (!measurementId || process.env.NODE_ENV !== "production") {
+    return null;
+  }
+
+  // Skip GA for known bots to prevent polluting analytics data
+  if (isBotUserAgent()) {
     return null;
   }
 

@@ -55,6 +55,32 @@ const STATIC_FILE_PATTERNS = [
   "site.webmanifest",
 ];
 
+// 已知爬虫和自动化工具的 User-Agent 关键词
+const BOT_USER_AGENTS = [
+  "bot",
+  "spider",
+  "crawl",
+  "slurp",
+  "mediapartners",
+  "headlesschrome",
+  "puppeteer",
+  "phantom",
+  "selenium",
+  "lighthouse",
+  "pagespeed",
+  "gtmetrix",
+  "pingdom",
+  "uptimerobot",
+  "statuscake",
+  "sitechecker",
+];
+
+function isBot(userAgent: string | null): boolean {
+  if (!userAgent) return false;
+  const ua = userAgent.toLowerCase();
+  return BOT_USER_AGENTS.some((bot) => ua.includes(bot));
+}
+
 // 生成 CSP Nonce
 function generateNonce(): string {
   const array = new Uint8Array(16);
@@ -65,6 +91,14 @@ function generateNonce(): string {
 export function middleware(request: NextRequest) {
   const startTime = Date.now();
   const { pathname } = request.nextUrl;
+
+  // Bot 检测 — 对已知爬虫设置标记并跳过分析相关处理
+  const userAgent = request.headers.get("user-agent");
+  if (isBot(userAgent)) {
+    const response = NextResponse.next();
+    response.headers.set("X-Is-Bot", "true");
+    return response;
+  }
 
   // 生成 CSP Nonce
   const nonce = generateNonce();
