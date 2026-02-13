@@ -18,8 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const totalCount = stats.total;
   const categoryCount = Object.keys(stats.categories).length;
 
-  const title = "Explore Fortune Cookie Messages – Browse, Search & Filter";
-  const description = `Explore ${totalCount}+ fortune cookie messages across ${categoryCount} categories. Search, filter by category or tag, sort by popularity, and find the perfect fortune for any occasion. Free to copy and share.`;
+  const title = `Browse ${totalCount}+ Fortune Cookie Messages | Find Your Perfect Fortune`;
+  const description = `Explore ${totalCount}+ fortune cookie messages across ${categoryCount} categories. Search by keyword, filter by mood, sort by popularity. Find the perfect fortune for any occasion - free to copy & share!`;
 
   return {
     title,

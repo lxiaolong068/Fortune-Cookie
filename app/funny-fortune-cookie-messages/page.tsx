@@ -18,13 +18,15 @@ export const dynamic = "force-static";
 export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: "Funny Fortune Cookie Messages - Hilarious Sayings & Jokes",
+  title:
+    "100+ Funny Fortune Cookie Messages | Hilarious Sayings for Parties",
   description:
-    "Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties and pranks. Browse our collection of witty, humorous fortunes.",
+    "Laugh out loud with 100+ funny fortune cookie messages! Hilarious sayings, witty jokes & clever fortunes perfect for parties, gifts & pranks. Free to copy & share!",
   openGraph: {
-    title: "Funny Fortune Cookie Messages - Hilarious Sayings & Jokes",
+    title:
+      "100+ Funny Fortune Cookie Messages | Hilarious Sayings for Parties",
     description:
-      "Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties and pranks. Browse our collection of witty, humorous fortunes.",
+      "Laugh out loud with 100+ funny fortune cookie messages! Hilarious sayings, witty jokes & clever fortunes perfect for parties, gifts & pranks.",
     type: "article",
     url: `${baseUrl}/funny-fortune-cookie-messages`,
     images: [
@@ -38,9 +40,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Funny Fortune Cookie Messages - Hilarious Sayings & Jokes",
+    title:
+      "100+ Funny Fortune Cookie Messages | Hilarious Sayings for Parties",
     description:
-      "Discover the funniest fortune cookie messages and hilarious sayings! Perfect for parties and pranks.",
+      "Laugh out loud with 100+ funny fortune cookie messages! Hilarious sayings & clever fortunes perfect for parties.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },
