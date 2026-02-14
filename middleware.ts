@@ -30,6 +30,7 @@ const STATIC_PATHS = [
 
 // 不需要处理的路径
 const SKIP_PATHS = ["/_next", "/api/cache", "/__nextjs_original-stack-frame"];
+const LEGACY_LOCALES = new Set(["es", "pt"]);
 
 // 不进行语言重定向的路径
 const LOCALE_SKIP_PATHS = [
@@ -91,6 +92,22 @@ function generateNonce(): string {
 export function middleware(request: NextRequest) {
   const startTime = Date.now();
   const { pathname } = request.nextUrl;
+  const segments = pathname.split("/").filter(Boolean);
+  const firstSegment = segments[0] ?? "";
+
+  // Legacy locale cleanup: permanently redirect /es and /pt routes to English.
+  if (LEGACY_LOCALES.has(firstSegment)) {
+    const redirectUrl = new URL(request.url);
+    const redirectedPath = "/" + segments.slice(1).join("/");
+    redirectUrl.pathname = redirectedPath === "/" ? "/" : redirectedPath;
+
+    const response = NextResponse.redirect(redirectUrl, 301);
+    response.cookies.set(pathConfig.detection.cookieName, i18n.defaultLocale, {
+      path: "/",
+      maxAge: pathConfig.detection.cookieMaxAge,
+    });
+    return response;
+  }
 
   // Bot 检测 — 对已知爬虫设置标记并跳过分析相关处理
   const userAgent = request.headers.get("user-agent");
@@ -111,7 +128,6 @@ export function middleware(request: NextRequest) {
 
   // 检查是否是带语言前缀的静态文件请求（如 /zh/app-manifest.json）
   // 需要重定向到根路径
-  const segments = pathname.split("/").filter(Boolean);
   if (segments.length >= 2) {
     const lastSegment = segments[segments.length - 1];
     if (

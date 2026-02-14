@@ -5,7 +5,7 @@
 
 export const i18n = {
   defaultLocale: "en",
-  locales: ["en", "zh", "es", "pt"],
+  locales: ["en", "zh"],
 } as const;
 
 export type Locale = (typeof i18n)["locales"][number];
@@ -34,28 +34,6 @@ export const languages = {
     region: "CN",
     currency: "CNY",
     dateFormat: "yyyy/MM/dd",
-    timeFormat: "24h",
-  },
-  es: {
-    name: "Spanish",
-    nativeName: "Español",
-    flag: "🇪🇸",
-    dir: "ltr",
-    hreflang: "es",
-    region: "ES",
-    currency: "EUR",
-    dateFormat: "dd/MM/yyyy",
-    timeFormat: "24h",
-  },
-  pt: {
-    name: "Portuguese",
-    nativeName: "Português",
-    flag: "🇧🇷",
-    dir: "ltr",
-    hreflang: "pt-BR",
-    region: "BR",
-    currency: "BRL",
-    dateFormat: "dd/MM/yyyy",
     timeFormat: "24h",
   },
 } as const;
@@ -157,6 +135,22 @@ export function getLocaleFromPath(path: string): {
 }
 
 /**
+ * Remove locale prefix from a path dynamically based on active locale config.
+ */
+export function stripLocalePrefix(path: string): string {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const segments = normalizedPath.split("/").filter(Boolean);
+  const firstSegment = segments[0];
+
+  if (firstSegment && isValidLocale(firstSegment)) {
+    const strippedPath = "/" + segments.slice(1).join("/");
+    return strippedPath === "/" ? "/" : strippedPath;
+  }
+
+  return normalizedPath;
+}
+
+/**
  * Generate alternate language links for SEO
  */
 export function getAlternateLinks(currentPath: string) {
@@ -242,42 +236,6 @@ export const seoConfig = {
     ogDescription:
       "使用AI创建个性化幸运饼干。立即获取励志消息、搞笑语录和幸运数字。与朋友分享智慧和乐趣。",
   },
-  es: {
-    title: "Galleta de la Fortuna - Generador AI Gratis Online",
-    description:
-      "Generador de galletas de la fortuna con IA gratis online. Obtén mensajes inspiradores personalizados, frases graciosas y números de la suerte. Crea galletas de la fortuna personalizadas con nuestra herramienta de IA. Perfecto para motivación diaria, fiestas y compartir en redes sociales.",
-    keywords: [
-      "galleta de la fortuna",
-      "generador de galletas de la fortuna gratis",
-      "creador de mensajes de galleta de la fortuna",
-      "app de frases de galleta de la fortuna con IA",
-      "frases inspiradoras de galleta de la fortuna",
-      "mensajes graciosos de galleta de la fortuna",
-      "generador de números de la suerte",
-      "galletas de la fortuna personalizadas",
-    ],
-    ogTitle: "Galleta de la Fortuna AI - Generador Gratis Online",
-    ogDescription:
-      "Crea galletas de la fortuna personalizadas con IA. Obtén mensajes inspiradores, frases graciosas y números de la suerte al instante. Comparte sabiduría y diversión con amigos.",
-  },
-  pt: {
-    title: "Biscoito da Sorte - Gerador AI Grátis Online",
-    description:
-      "Gerador de biscoitos da sorte com IA grátis online. Obtenha mensagens inspiradoras personalizadas, frases engraçadas e números da sorte. Crie biscoitos da sorte personalizados com nossa ferramenta de IA. Perfeito para motivação diária, festas e compartilhamento nas redes sociais.",
-    keywords: [
-      "biscoito da sorte",
-      "gerador de biscoito da sorte grátis",
-      "criador de mensagens de biscoito da sorte",
-      "app de frases de biscoito da sorte com IA",
-      "frases inspiradoras de biscoito da sorte",
-      "mensagens engraçadas de biscoito da sorte",
-      "gerador de números da sorte",
-      "biscoitos da sorte personalizados",
-    ],
-    ogTitle: "Biscoito da Sorte AI - Gerador Grátis Online",
-    ogDescription:
-      "Crie biscoitos da sorte personalizados com IA. Obtenha mensagens inspiradoras, frases engraçadas e números da sorte instantaneamente. Compartilhe sabedoria e diversão com amigos.",
-  },
 } as const;
 
 /**
@@ -336,10 +294,8 @@ export function generateAlternateLanguages(
 ): Record<string, string> {
   const alternates: Record<string, string> = {};
 
-  // Clean the path - remove any existing locale prefix
-  const cleanPath = path
-    .replace(/^\/(zh|es|pt)\//, "/")
-    .replace(/^\/(zh|es|pt)$/, "/");
+  // Clean the path - remove any existing locale prefix dynamically
+  const cleanPath = stripLocalePrefix(path);
 
   for (const locale of i18n.locales) {
     const config = getLanguageConfig(locale);

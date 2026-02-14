@@ -600,14 +600,6 @@ export async function loadTranslations(
         translations = (await import("@/locales/zh.json"))
           .default as TranslationFile;
         break;
-      case "es":
-        translations = (await import("@/locales/es.json"))
-          .default as TranslationFile;
-        break;
-      case "pt":
-        translations = (await import("@/locales/pt.json"))
-          .default as TranslationFile;
-        break;
       default:
         // Fallback to English
         translations = (await import("@/locales/en.json"))

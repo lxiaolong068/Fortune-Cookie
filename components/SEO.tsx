@@ -1,6 +1,10 @@
 import { Metadata } from "next";
 import { getFullUrl, getImageUrl, getSiteMetadata } from "@/lib/site";
-import { i18n, getAlternateLinks, getLanguageConfig } from "@/lib/i18n-config";
+import {
+  i18n,
+  getLanguageConfig,
+  stripLocalePrefix,
+} from "@/lib/i18n-config";
 
 interface SEOProps {
   title?: string;
@@ -52,9 +56,7 @@ export function generateSEOMetadata({
 
   if (!noAlternates) {
     // Get the path without any existing locale prefix
-    const pathWithoutLocale = canonicalPath
-      .replace(/^\/(zh|es|pt)\//, "/")
-      .replace(/^\/(zh|es|pt)$/, "/");
+    const pathWithoutLocale = stripLocalePrefix(canonicalPath);
 
     // Generate alternates for all supported locales
     for (const locale of i18n.locales) {
