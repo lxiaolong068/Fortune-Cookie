@@ -57,21 +57,6 @@ export function HeroSection({
         Create personalized fortune cookie messages and lucky numbers in seconds.
       </motion.p>
 
-      {/* Social Proof */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-        className="flex justify-center mb-6"
-      >
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-50/80 to-yellow-50/80 backdrop-blur-sm border border-amber-200/50">
-          <span className="text-amber-500">⭐</span>
-          <span className="text-sm text-amber-700 font-medium">
-            4.8/5 · 10,000+ fortunes generated
-          </span>
-        </div>
-      </motion.div>
-
       {/* Quota Display Card */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}

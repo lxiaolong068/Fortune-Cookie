@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import Script from 'next/script'
+import { useEffect, useRef, useState } from 'react'
 import { capturePerformanceIssue } from '@/lib/error-monitoring'
 
 interface AdSenseFacadeProps {
@@ -25,19 +24,21 @@ interface AdSenseFacadeProps {
 
 /**
  * AdSense Facade Component
- * 
+ *
  * Optimizes Google AdSense loading to improve LCP and reduce main thread blocking.
- * 
+ * Uses raw DOM script injection instead of Next.js Script component to avoid
+ * the `data-nscript` attribute that causes "AdSense head tag doesn't support data-ns" warning.
+ *
  * Loading Strategy:
  * 1. Wait for user interaction (scroll, click, touch) OR
  * 2. Wait for browser idle time (requestIdleCallback) OR
  * 3. Wait for specified delay (default 3s)
- * 
+ *
  * This prevents AdSense from blocking critical rendering path and improves:
  * - LCP (Largest Contentful Paint)
  * - TBT (Total Blocking Time)
  * - Main thread availability
- * 
+ *
  * Performance Impact:
  * - Reduces initial bundle by ~443 KiB
  * - Reduces main thread blocking by ~99ms
@@ -49,8 +50,7 @@ export function AdSenseFacade({
   loadOnInteraction = true,
   loadOnIdle = true,
 }: AdSenseFacadeProps) {
-  const [shouldLoad, setShouldLoad] = useState(false)
-  const [loadTrigger, setLoadTrigger] = useState<'interaction' | 'idle' | 'timeout' | null>(null)
+  const loadedRef = useRef(false)
 
   useEffect(() => {
     // Don't load in development or if no client ID
@@ -62,25 +62,49 @@ export function AdSenseFacade({
     let idleCallbackId: number | null = null
     let interactionListenersAdded = false
 
-    // Function to trigger AdSense loading
-    const triggerLoad = (trigger: 'interaction' | 'idle' | 'timeout') => {
-      if (shouldLoad) return // Already loading
+    // Inject AdSense script via raw DOM to avoid Next.js data-nscript attribute
+    const injectAdSenseScript = (trigger: 'interaction' | 'idle' | 'timeout') => {
+      if (loadedRef.current) return
+      loadedRef.current = true
 
-      setLoadTrigger(trigger)
-      setShouldLoad(true)
+      cleanup()
 
-      // Log performance event
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[AdSense Facade] Loading triggered by: ${trigger}`)
+      const script = document.createElement('script')
+      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`
+      script.async = true
+      script.crossOrigin = 'anonymous'
+
+      script.onload = () => {
+        capturePerformanceIssue(
+          'adsense_loaded',
+          0,
+          0,
+          {
+            component: 'adsense-facade',
+            additionalData: { trigger, clientId }
+          }
+        )
       }
 
-      // Cleanup
-      cleanup()
+      script.onerror = () => {
+        console.error('[AdSense Facade] Failed to load script')
+        capturePerformanceIssue(
+          'adsense_script_error',
+          1,
+          0,
+          {
+            component: 'adsense-facade',
+            additionalData: { trigger, clientId }
+          }
+        )
+      }
+
+      document.head.appendChild(script)
     }
 
-    // Interaction handlers
+    // Interaction handler
     const handleInteraction = () => {
-      triggerLoad('interaction')
+      injectAdSenseScript('interaction')
     }
 
     // Setup interaction listeners
@@ -104,7 +128,6 @@ export function AdSenseFacade({
         window.cancelIdleCallback(idleCallbackId)
         idleCallbackId = null
       }
-      // Event listeners are automatically removed with { once: true }
     }
 
     // Strategy 1: Load on user interaction
@@ -116,77 +139,25 @@ export function AdSenseFacade({
     if (loadOnIdle && 'requestIdleCallback' in window) {
       idleCallbackId = window.requestIdleCallback(
         () => {
-          triggerLoad('idle')
+          injectAdSenseScript('idle')
         },
-        { timeout: delay } // Fallback timeout
+        { timeout: delay }
       )
     }
 
     // Strategy 3: Fallback timeout
     if (!loadOnIdle || !('requestIdleCallback' in window)) {
       timeoutId = setTimeout(() => {
-        triggerLoad('timeout')
+        injectAdSenseScript('timeout')
       }, delay)
     }
 
     // Cleanup on unmount
     return cleanup
-  }, [clientId, delay, loadOnInteraction, loadOnIdle, shouldLoad])
+  }, [clientId, delay, loadOnInteraction, loadOnIdle])
 
-  // Don't render anything in development or if no client ID
-  if (!clientId || process.env.NODE_ENV !== 'production') {
-    return null
-  }
-
-  // Don't load until triggered
-  if (!shouldLoad) {
-    return null
-  }
-
-  return (
-    <Script
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
-      strategy="lazyOnload"
-      crossOrigin="anonymous"
-      onLoad={() => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[AdSense Facade] Script loaded successfully (trigger: ${loadTrigger})`)
-        }
-
-        // Track successful load
-        capturePerformanceIssue(
-          'adsense_loaded',
-          0,
-          0,
-          {
-            component: 'adsense-facade',
-            additionalData: {
-              trigger: loadTrigger,
-              clientId,
-            }
-          }
-        )
-      }}
-      onError={(error) => {
-        console.error('[AdSense Facade] Failed to load script:', error)
-        
-        // Track error
-        capturePerformanceIssue(
-          'adsense_script_error',
-          1,
-          0,
-          {
-            component: 'adsense-facade',
-            additionalData: {
-              trigger: loadTrigger,
-              clientId,
-              error: error.message
-            }
-          }
-        )
-      }}
-    />
-  )
+  // This component doesn't render any DOM — script injection is handled in useEffect
+  return null
 }
 
 /**

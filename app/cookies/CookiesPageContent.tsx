@@ -135,6 +135,42 @@ const cookieCategories = [
       },
     ],
   },
+  {
+    id: "advertising",
+    name: "Advertising Cookies",
+    icon: Eye,
+    gradient: { from: "from-rose-500", to: "to-orange-500" },
+    required: false,
+    description:
+      "Used by Google AdSense and advertising partners to serve relevant ads and measure ad performance.",
+    cookies: [
+      {
+        name: "__gads",
+        purpose: "Google advertising cookie for ad serving",
+        duration: "13 months",
+      },
+      {
+        name: "__gpi",
+        purpose: "Google Publisher Identifier for ad personalization",
+        duration: "13 months",
+      },
+      {
+        name: "DSID",
+        purpose: "Used to identify signed-in users for ad preferences",
+        duration: "2 weeks",
+      },
+      {
+        name: "IDE",
+        purpose: "DoubleClick/Google ad targeting and measurement",
+        duration: "13 months",
+      },
+      {
+        name: "NID",
+        purpose: "Google preference cookie for ad customization",
+        duration: "6 months",
+      },
+    ],
+  },
 ];
 
 const storageTypes = [
@@ -194,7 +230,7 @@ export function CookiesPageContent() {
         description="Learn about the cookies we use, why we use them, and how you can manage your preferences."
         icon={Cookie}
         breadcrumbs={breadcrumbItems}
-        badge={<HeroBadge icon={Clock}>Last Updated: January 2025</HeroBadge>}
+        badge={<HeroBadge icon={Clock}>Last Updated: February 2026</HeroBadge>}
       />
 
       <div className="container mx-auto px-4 py-12">

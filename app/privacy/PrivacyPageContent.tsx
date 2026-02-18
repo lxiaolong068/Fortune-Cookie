@@ -83,6 +83,30 @@ const privacySections = [
     ],
   },
   {
+    id: "third-party-advertising",
+    title: "Third-Party Advertising",
+    icon: Eye,
+    gradient: { from: "from-rose-500", to: "to-orange-500" },
+    content: [
+      {
+        subtitle: "Google AdSense",
+        items: [
+          "We use Google AdSense to display advertisements on our website",
+          "Google and its advertising partners may use cookies (such as the DART cookie) to serve ads based on your visits to this site and other websites on the Internet",
+          "These cookies allow Google to display ads that may be relevant to you based on your browsing history",
+        ],
+      },
+      {
+        subtitle: "How to Opt Out",
+        items: [
+          "You can opt out of personalized advertising by visiting Google Ads Settings (https://adssettings.google.com)",
+          "You can opt out of third-party vendor cookies at the Network Advertising Initiative opt-out page (https://optout.networkadvertising.org)",
+          "For more information on how Google uses your data, visit Google's Privacy Policy (https://policies.google.com/privacy)",
+        ],
+      },
+    ],
+  },
+  {
     id: "data-sharing",
     title: "Information Sharing",
     icon: UserCheck,
@@ -92,6 +116,7 @@ const privacySections = [
         subtitle: "We may share your information with:",
         items: [
           "Service providers who help operate our platform",
+          "Advertising partners such as Google AdSense (via cookies for ad personalization)",
           "Analytics partners (in anonymized form)",
           "Legal authorities when required by law",
         ],
@@ -99,8 +124,7 @@ const privacySections = [
       {
         subtitle: "We never:",
         items: [
-          "Sell your personal information",
-          "Share your data for third-party advertising",
+          "Sell your personal information directly to third parties",
           "Disclose your identity without consent",
         ],
       },
@@ -175,7 +199,7 @@ export function PrivacyPageContent() {
         icon={Shield}
         breadcrumbs={breadcrumbItems}
         badge={
-          <HeroBadge icon={FileText}>Last Updated: January 2025</HeroBadge>
+          <HeroBadge icon={FileText}>Last Updated: February 2026</HeroBadge>
         }
       />
 
@@ -388,7 +412,7 @@ export function PrivacyPageContent() {
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <AlertCircle className="w-4 h-4" />
             <span>
-              This policy is effective as of January 2025 and applies to all
+              This policy is effective as of February 2026 and applies to all
               users of Fortune Cookie AI.
             </span>
           </div>

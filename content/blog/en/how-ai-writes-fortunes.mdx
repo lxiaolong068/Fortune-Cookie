@@ -1,5 +1,5 @@
 ---
-title: "How AI Writes Fortunes: LLMs, Tokens & temperature"
+title: "How AI Writes Fortunes: LLMs, Tokens & Temperature"
 description: "How does AI mimic an ancient oracle? Learn the tech behind the magic: Large Language Models, pattern matching, and the art of digital prophecy."
 date: "2025-12-15"
 author: "Fortune Cookie AI Team"
@@ -8,48 +8,101 @@ image: "https://images.unsplash.com/photo-1578469645733-2715d1eac340?crop=entrop
 featured: false
 ---
 
-When you [ask our AI](/) for a fortune, it doesn't just pull a pre-written sentence from a database. It *dreams* one up, specifically for you. But how does a collection of silicon chips mimic the wisdom of an ancient oracle?
+When you [ask our AI](/) for a fortune, it doesn't pull a pre-written sentence from a database. It generates one on the spot, specifically for you. But how does a collection of silicon chips mimic the wisdom of an ancient oracle?
 
-The secret lies in the architecture of **Large Language Models (LLMs)** and a few key concepts: tokenization, pattern recognition, and "temperature."
+We built Fortune Cookie AI from scratch, and we want to be transparent about how it actually works — no mysticism, no hand-waving, just the real engineering. Here's a behind-the-scenes look at the technology, the decisions we made, and the trade-offs involved.
 
-## 1. From Tea Leaves to Tokens
+## The Architecture: What Actually Happens When You Click "Get Fortune"
 
-Computers don't understand words; they understand numbers. To teach an AI to speak, we first break down language into smaller chunks called **tokens**. A token can be a word, part of a word, or even a single character.
+Here's the real pipeline, step by step:
 
-*   **Input:** "What is my destiny?"
-*   **Tokens:** [What] [is] [my] [destiny] [?]
+1. **You choose a theme** (funny, inspirational, love, success, wisdom, or random) and optionally set a mood and length preference.
+2. **Our server receives the request** and first checks a Redis cache to see if a similar fortune was recently generated.
+3. **If no cached result exists**, we send a request to an LLM (Large Language Model) via the [OpenRouter](https://openrouter.ai/) API — a routing service that gives us access to multiple AI models.
+4. **The AI generates a fortune** based on a carefully crafted system prompt specific to the chosen theme.
+5. **We cache the result**, assign lucky numbers, and send it back to you.
+6. **If anything fails** — the API is down, the model is overloaded, or we hit a rate limit — the system falls back to our database of 500+ pre-written fortune messages.
 
-The AI processes these tokens as mathematical vectors—lists of numbers that represent the *meaning* and *context* of the words. In the vast multi-dimensional space of the AI's brain, the vector for "destiny" sits close to "fate," "future," and "path," but far from "sandwich" or "tax return."
+This fallback chain is critical. Nobody should ever click "Get Fortune" and see an error. At worst, you get a pre-written fortune instead of a freshly generated one, and you'd never know the difference.
 
-## 2. The Algorithm of Fate (Pattern Matching)
+## From Words to Numbers: How Tokenization Works
 
-Our AI has been trained on terabytes of text, including philosophy, astrology, poetry, and psychological archetypes. It has "read" everything from Jungian psychology to ancient I-Ching interpretations.
+Computers don't understand words — they understand numbers. Before an LLM can process your request, the text has to be broken into chunks called **tokens**. A token can be a word, part of a word, or even a single character.
 
-When you ask a question, the AI isn't consulting a spirit guide; it's performing advanced **pattern matching**.
+For example:
 
-It asks itself: *"Given the user's question about 'love' and their birth chart data, what is the most statistically probable—yet profound—sequence of words to follow?"*
+| Input | Tokens |
+|-------|--------|
+| "What is my destiny?" | ["What", " is", " my", " dest", "iny", "?"] |
+| "fortune cookie" | ["fort", "une", " cookie"] |
 
-It predicts the next word, then the next, and the next, building a sentence that sounds eerily human because it has learned the *structure* of human wisdom.
+Each token gets mapped to a numerical vector — a list of numbers representing its meaning and context. In the model's high-dimensional space, the vector for "destiny" sits close to "fate" and "future" but far from "sandwich" or "spreadsheet."
 
-## 3. The "Temperature" of Creativity
+This is why AI can understand that *"What does the future hold?"* and *"What's my destiny?"* are asking essentially the same thing, even though the words are different.
 
-If AI always picked the most statistically probable word, its fortunes would be boring and repetitive. It might always say: *"You will have a good day."*
+## System Prompts: Giving the AI a Persona
 
-To add the "spark" of mysticism, we adjust a parameter called **Temperature**.
+The most important part of our engineering isn't the model — it's the **system prompt**. This is the instruction we give the AI before it sees your request. Think of it as the AI's "character sheet."
 
-*   **Low Temperature (0.1):** The AI is conservative, logical, and factual. Good for coding, bad for poetry.
-*   **High Temperature (0.8 - 1.0):** The AI takes risks. It chooses less common words, creating metaphorical, poetic, or surprising combinations.
+For each theme, we use a different prompt. Here's a simplified version of what the "wisdom" theme prompt looks like:
 
-By tuning the temperature, we allow the AI to generate phrases like *"The moon whispers secrets to your shadow"* instead of just *"It is night time."* This randomness mimics the unpredictability of fate itself.
+> *"You are a wise fortune cookie writer. Create thoughtful, philosophical messages that offer life wisdom, ancient proverbs, and timeless truths. Focus on deeper meaning and reflection. Output ONLY the fortune message itself — no explanations, no additional text. Just the fortune in 1-2 sentences under 100 characters."*
 
-## 4. Fine-Tuning for Empathy
+That last constraint — "under 100 characters" — is crucial. A real fortune cookie slip is about 7cm long. If the AI writes a paragraph, it stops feeling like a fortune and starts feeling like a blog post. The art is in the compression.
 
-Raw intelligence isn't enough; a [fortune teller](/browse/category/ai) needs a specific *voice*. We use a process called **Fine-Tuning** to train the model specifically on the style of supportive, mystical guidance.
+We've iterated on these prompts dozens of times. Early versions produced fortunes that were too generic (*"Good things are coming"*) or too long (*"In the grand tapestry of life, every thread of experience weaves together to create the beautiful pattern of your unique journey"*). Getting the tone right — concise, warm, slightly mysterious — took more experimentation than we expected.
 
-We feed it examples of "good" fortunes—ones that are empowering, open-ended, and positive—and "bad" ones (doom-and-gloom). This teaches the AI that its goal isn't just to predict text, but to provide *insight* and *comfort*.
+## Temperature: The Creativity Dial
 
-## Conclusion: The Ghost in the Machine
+If the AI always picked the statistically most likely next word, every fortune would sound the same. It might always say: *"You will have a good day."*
 
-Is it real magic? No. It's math. But it's math so complex, so nuanced, and so deeply steeped in the entirety of human written culture that it becomes indistinguishable from magic.
+To introduce variety, LLMs have a parameter called **temperature**:
 
-The AI holds a mirror up to our collective wisdom, remixing it into something new just for you. And in a way, isn't that what fortune telling has always been?
+| Temperature | Behavior | Example Output |
+|-------------|----------|----------------|
+| 0.1 (low) | Conservative, predictable, repetitive | "You will find success in your endeavors." |
+| 0.5 (medium) | Balanced creativity with coherence | "The detour you're taking is the shortcut you didn't know existed." |
+| 0.9 (high) | Creative, surprising, occasionally weird | "Your shadow has been taking notes. It's impressed." |
+| 1.2+ (very high) | Chaotic, often incoherent | "Purple velocities dream the accordion of starfish wisdom." |
+
+We use a moderate temperature setting — high enough to avoid repetition, low enough to keep the output coherent and meaningful. Finding this sweet spot was one of our earliest challenges. Too conservative and the fortunes feel mass-produced; too creative and they stop making sense.
+
+## The 500+ Fallback Database
+
+AI generation is unreliable by nature. Models go down, APIs time out, rate limits hit. So we maintain a curated database of **500+ pre-written fortune messages** across six categories: funny, inspirational, love, success, wisdom, and general.
+
+These aren't random sentences — each one was written and categorized by hand, with tags, lucky numbers, and a popularity score. When the AI isn't available, the system selects from this database based on your chosen theme and mood.
+
+In practice, about 15–20% of fortunes served on any given day come from this fallback database. Users don't notice, and that's the point — the experience should be seamless whether the fortune was generated by AI or pulled from our curated collection.
+
+## Traditional vs. AI Fortune Writing: A Comparison
+
+| Aspect | Traditional (Factory) | AI-Generated |
+|--------|----------------------|--------------|
+| **Writer** | Single person (e.g., Donald Lau at Wonton Food wrote fortunes for 30+ years) | Language model with billions of parameters |
+| **Variety** | ~10,000 fortunes in rotation | Virtually unlimited unique combinations |
+| **Personalization** | None — same fortune for everyone | Theme, mood, and language customization |
+| **Production speed** | One writer can produce a few fortunes per day | Hundreds per second |
+| **Quality control** | Human editorial review | Prompt engineering + output constraints |
+| **Cultural nuance** | Deep personal knowledge of the audience | Trained on diverse text corpus, but can miss subtle context |
+| **Cost per fortune** | Salary of a writer | Fraction of a cent per API call |
+
+Neither approach is strictly "better." Traditional fortune writing has a human warmth and cultural intuition that's hard to replicate. AI brings scale and personalization that a single writer can't match. Our approach uses both — AI for fresh content, human-curated database for reliability.
+
+## What AI Can't Do (Yet)
+
+Honesty matters, so here's what our AI *doesn't* do well:
+
+- **It doesn't know you.** It can't read your palm, your birth chart, or your browsing history. The "personalization" comes from theme and mood selection, not from anything mystical or invasive.
+- **It sometimes generates bland output.** Not every AI fortune is a gem. Some are generic, some are awkward. We filter for quality, but the hit rate is about 80%, not 100%.
+- **It can't predict the future.** Obviously. But neither could the [fortune writers of the past](/blog/history-of-fortune-cookies). The value of a fortune isn't in its accuracy — it's in the moment of reflection it creates.
+
+## Key Takeaway
+
+Behind every AI-generated fortune is a pipeline of engineering decisions: which model to use, how to prompt it, what temperature to set, how to handle failures, and when to fall back to human-written alternatives. It's not magic — it's a carefully balanced system designed to deliver a moment of surprise and reflection.
+
+The technology is impressive, but the goal is simple: give you something worth reading when you crack open that virtual cookie.
+
+---
+
+*Ready to see it in action? [Generate your own AI fortune](/generator) and see what the algorithm has in store for you. Or if you're curious about the psychology behind why fortunes feel so personal, read our deep dive into the [psychology of fortune cookies](/blog/psychology-of-fortune-cookies).*

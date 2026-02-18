@@ -69,7 +69,23 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const token = extractBearerToken(request);
 
     if (token) {
-      const result = await validateMobileSession(token);
+      let result;
+      try {
+        result = await validateMobileSession(token);
+      } catch (dbError) {
+        captureApiError(
+          dbError instanceof Error ? dbError : new Error("Mobile session validation failed"),
+          "/api/auth/session",
+          "GET",
+          503,
+          Date.now() - startTime,
+        );
+        const errorResponse: MobileAuthErrorResponse = {
+          error: "server_error",
+          message: "Session service is temporarily unavailable.",
+        };
+        return withCors(NextResponse.json(errorResponse, { status: 503 }));
+      }
 
       if (!result) {
         const errorResponse: MobileAuthErrorResponse = {
@@ -92,7 +108,26 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return withCors(NextResponse.json(response, { status: 200 }));
     }
 
-    const session = await getServerSession(authOptions);
+    let session;
+    try {
+      session = await getServerSession(authOptions);
+    } catch (authError) {
+      captureApiError(
+        authError instanceof Error ? authError : new Error("Web session validation failed"),
+        "/api/auth/session",
+        "GET",
+        503,
+        Date.now() - startTime,
+      );
+      // Return 401 instead of 500 when session service is unavailable —
+      // the client can treat this as "not authenticated" and continue gracefully
+      const errorResponse: MobileAuthErrorResponse = {
+        error: "unauthorized",
+        message: "Session validation is temporarily unavailable.",
+      };
+      return withCors(NextResponse.json(errorResponse, { status: 401 }));
+    }
+
     if (session?.user) {
       return withCors(NextResponse.json(session, { status: 200 }));
     }

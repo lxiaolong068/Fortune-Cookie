@@ -327,6 +327,12 @@ export async function Footer() {
               {/* Legal links with proper touch targets */}
               <div className="flex items-center gap-4 md:gap-6 text-sm text-gray-600">
                 <Link
+                  href="/about"
+                  className="hover:text-amber-600 transition-colors py-2 min-h-[44px] flex items-center"
+                >
+                  {t("footer.about")}
+                </Link>
+                <Link
                   href="/privacy"
                   className="hover:text-amber-600 transition-colors py-2 min-h-[44px] flex items-center"
                 >

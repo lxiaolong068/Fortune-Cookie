@@ -1,9 +1,4 @@
 import { getStructuredDataUrls, getImageUrl } from "@/lib/site";
-import {
-  getAverageRating,
-  getTestimonialCount,
-  getTestimonials,
-} from "@/lib/testimonials";
 export { FAQStructuredData } from "./FAQStructuredData";
 
 interface StructuredDataProps {
@@ -61,9 +56,6 @@ export function WebsiteStructuredData({
 
 export function WebApplicationStructuredData() {
   const urls = getStructuredDataUrls();
-  const reviews = getTestimonials(6);
-  const averageRating = getAverageRating();
-  const reviewCount = getTestimonialCount();
 
   const data = {
     "@context": "https://schema.org",
@@ -81,29 +73,6 @@ export function WebApplicationStructuredData() {
       price: "0",
       priceCurrency: "USD",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: averageRating,
-      reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    ...(reviews.length > 0 && {
-      review: reviews.map((review) => ({
-        "@type": "Review",
-        author: {
-          "@type": "Person",
-          name: review.name,
-        },
-        reviewRating: {
-          "@type": "Rating",
-          ratingValue: review.rating,
-          bestRating: 5,
-          worstRating: 1,
-        },
-        reviewBody: review.quote,
-      })),
-    }),
     author: {
       "@type": "Organization",
       name: "Fortune Cookie AI Team",
@@ -443,15 +412,7 @@ export function RecipeStructuredData({
           sugarContent: "5g",
           proteinContent: "1g",
         },
-        ...(recipe.rating && {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: recipe.rating,
-            ratingCount: 100,
-            bestRating: 5,
-            worstRating: 1,
-          },
-        }),
+        // aggregateRating removed — no real user ratings to report
         recipeCategory: "Dessert",
         recipeCuisine: "Asian-American",
         keywords: "fortune cookies, homemade cookies, dessert recipe, baking",

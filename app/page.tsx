@@ -17,8 +17,8 @@ import { FAQStructuredData } from "@/components/FAQStructuredData";
 import { generateSEOMetadata } from "@/components/SEO";
 import { FortuneCookieStatic } from "@/components/FortuneCookieStatic";
 import { DeferredMount } from "@/components/DeferredMount";
-import { SocialProof } from "@/components/SocialProof";
-import { Testimonials } from "@/components/Testimonials";
+// SocialProof and Testimonials removed — contained unverifiable data (fake ratings, fictional reviews)
+// Re-enable when backed by real user data
 import { WaveDivider } from "@/components/homepage/SectionDivider";
 
 // Optimize for Edge Runtime - faster TTFB
@@ -376,14 +376,7 @@ export default function HomePage() {
               </section>
             </div>
 
-            {/* Social Proof Section */}
-            <Suspense fallback={null}>
-              <ScrollReveal direction="up" delay={0.2}>
-                <div className="mt-16">
-                  <SocialProof variant="hero" />
-                </div>
-              </ScrollReveal>
-            </Suspense>
+            {/* Social Proof Section removed — re-enable when backed by real data */}
           </div>
         </div>
 
@@ -404,10 +397,7 @@ export default function HomePage() {
           className="relative z-10 bg-gradient-to-b from-indigo-50/30 to-transparent dark:from-indigo-950/20 dark:to-transparent"
         />
 
-        {/* Testimonials Section */}
-        <div className="relative z-10 bg-gradient-to-b from-white/80 to-indigo-50/30 dark:from-slate-900/80 dark:to-indigo-950/20 backdrop-blur-sm pb-16">
-          <Testimonials limit={6} enableCarousel={true} />
-        </div>
+        {/* Testimonials Section removed — contained fictional reviews */}
       </main>
     </>
   );

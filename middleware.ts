@@ -264,20 +264,30 @@ function handleLocaleDetection(
   const preferredLocale =
     cookieLocale && isValidLocale(cookieLocale) ? cookieLocale : headerLocale;
 
-  // If path already has a locale prefix, check if it's valid
+  // If path already has a locale prefix, rewrite to root path
+  // e.g. /zh/privacy → rewrite to /privacy (Next.js routes live under app/, not app/[locale]/)
   if (pathnameHasLocale) {
-    // Valid locale in path - continue with current locale
-    // Set locale cookie if not already set or different from path locale
+    const rewriteUrl = new URL(request.url);
+    const pathWithoutLocale = "/" + segments.slice(1).join("/");
+    rewriteUrl.pathname = pathWithoutLocale || "/";
+
+    // Forward locale info via request headers so pages can detect it
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-locale", firstSegment);
+
+    const response = NextResponse.rewrite(rewriteUrl, {
+      request: { headers: requestHeaders },
+    });
+
+    // Set locale cookie if not already matching
     if (!cookieLocale || cookieLocale !== firstSegment) {
-      const response = NextResponse.next();
       response.cookies.set(pathConfig.detection.cookieName, firstSegment, {
         path: "/",
         maxAge: pathConfig.detection.cookieMaxAge,
       });
-      addSecurityHeaders(response, nonce);
-      return response; // Return response with updated cookie
     }
-    return null; // Cookie already matches, let page caching handle it
+    addSecurityHeaders(response, nonce);
+    return response;
   }
 
   // Path doesn't have a locale prefix

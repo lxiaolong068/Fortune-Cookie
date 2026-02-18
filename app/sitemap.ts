@@ -67,6 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/faq", priority: 0.7, changeFrequency: "monthly", lastModified: staticContentDate },
     { path: "/cookies", priority: 0.4, changeFrequency: "monthly", lastModified: legalPagesDate },
     { path: "/offline", priority: 0.2, changeFrequency: "yearly", lastModified: staticContentDate },
+    { path: "/about", priority: 0.5, changeFrequency: "monthly", lastModified: staticContentDate },
     { path: "/privacy", priority: 0.3, changeFrequency: "yearly", lastModified: legalPagesDate },
     { path: "/terms", priority: 0.3, changeFrequency: "yearly", lastModified: legalPagesDate },
   ];
