@@ -443,18 +443,6 @@ export function RecipeStructuredData({
           sugarContent: "5g",
           proteinContent: "1g",
         },
-        // video 信息（Google 推荐字段）
-        // 使用占位视频信息，表明没有视频但符合结构
-        video: {
-          "@type": "VideoObject",
-          name: `How to Make ${recipe.title}`,
-          description: `Step-by-step video tutorial for making ${recipe.title}`,
-          thumbnailUrl: getImageUrl("/og-image.png"),
-          contentUrl: `${urls.website}/recipes#${recipe.id}`,
-          embedUrl: `${urls.website}/recipes#${recipe.id}`,
-          uploadDate: "2024-01-15",
-          duration: parseTimeToISO8601(recipe.time),
-        },
         ...(recipe.rating && {
           aggregateRating: {
             "@type": "AggregateRating",
