@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
+import Script from "next/script";
 import dynamic from "next/dynamic";
 import { headers } from "next/headers";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -201,6 +202,14 @@ export default async function RootLayout({
         {/* Global structured data for Google Rich Results */}
         <WebsiteStructuredData nonce={nonce} />
         <OrganizationStructuredData nonce={nonce} />
+
+        {/* Google AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6958408841088360"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
 
         {/* Preconnect to critical origins for faster resource loading */}
         <link
