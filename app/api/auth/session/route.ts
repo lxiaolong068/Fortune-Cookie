@@ -6,6 +6,7 @@
  * Supports:
  * - Authorization: Bearer {mobile_session_token}
  * - NextAuth cookie session (web)
+ * - Web unauthenticated state returns HTTP 200 with { authenticated: false, user: null, expires: null }
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -14,6 +15,12 @@ import { authOptions } from "@/lib/auth";
 import { validateMobileSession } from "@/lib/mobile-auth";
 import { captureApiError } from "@/lib/error-monitoring";
 import { type MobileUser, type MobileAuthErrorResponse } from "@/types/api";
+
+interface WebUnauthenticatedSessionResponse {
+  authenticated: false;
+  user: null;
+  expires: null;
+}
 
 function getCorsHeaders(): Record<string, string> {
   return {
@@ -132,11 +139,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return withCors(NextResponse.json(session, { status: 200 }));
     }
 
-    const errorResponse: MobileAuthErrorResponse = {
-      error: "unauthorized",
-      message: "Missing or invalid Authorization header. Use: Bearer {token}",
+    const unauthenticatedResponse: WebUnauthenticatedSessionResponse = {
+      authenticated: false,
+      user: null,
+      expires: null,
     };
-    return withCors(NextResponse.json(errorResponse, { status: 401 }));
+    return withCors(NextResponse.json(unauthenticatedResponse, { status: 200 }));
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
