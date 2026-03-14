@@ -13,6 +13,10 @@ import {
   getAllLocalizedSlugs,
   getAvailableTranslations,
 } from "@/lib/blog";
+import { getAllOccasionSlugs } from "@/lib/pseo/occasions";
+import { getAllQuoteSlugs } from "@/lib/pseo/quotes";
+import { getAllAudienceSlugs } from "@/lib/pseo/audiences";
+import { getAllActivitySlugs } from "@/lib/pseo/activities";
 
 type ChangeFrequency = NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
 
@@ -109,6 +113,62 @@ export default function sitemap(): MetadataRoute.Sitemap {
       path: `/tag/${encodeURIComponent(tag)}`,
       priority: 0.6,
       changeFrequency: "weekly",
+      lastModified: weeklyContentDate,
+    });
+  }
+
+  // pSEO Hub pages
+  const pSEOHubs = [
+    "/fortune-cookie-messages",
+    "/fortune-cookie-quotes",
+    "/fortune-cookie-messages-for",
+    "/fortune-cookie-ideas",
+  ];
+  for (const hubPath of pSEOHubs) {
+    pages.push({
+      path: hubPath,
+      priority: 0.8,
+      changeFrequency: "weekly",
+      lastModified: weeklyContentDate,
+    });
+  }
+
+  // pSEO spoke pages — Template A (occasions)
+  for (const slug of getAllOccasionSlugs()) {
+    pages.push({
+      path: `/fortune-cookie-messages/${slug}`,
+      priority: 0.7,
+      changeFrequency: "monthly",
+      lastModified: weeklyContentDate,
+    });
+  }
+
+  // pSEO spoke pages — Template B (quotes)
+  for (const slug of getAllQuoteSlugs()) {
+    pages.push({
+      path: `/fortune-cookie-quotes/${slug}`,
+      priority: 0.7,
+      changeFrequency: "monthly",
+      lastModified: weeklyContentDate,
+    });
+  }
+
+  // pSEO spoke pages — Template C (audiences)
+  for (const slug of getAllAudienceSlugs()) {
+    pages.push({
+      path: `/fortune-cookie-messages-for/${slug}`,
+      priority: 0.6,
+      changeFrequency: "monthly",
+      lastModified: weeklyContentDate,
+    });
+  }
+
+  // pSEO spoke pages — Template D (activities)
+  for (const slug of getAllActivitySlugs()) {
+    pages.push({
+      path: `/fortune-cookie-ideas/${slug}`,
+      priority: 0.6,
+      changeFrequency: "monthly",
       lastModified: weeklyContentDate,
     });
   }

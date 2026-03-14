@@ -67,6 +67,14 @@ const CategoryQuickLinks = dynamic(
   { ssr: false, loading: () => null },
 );
 
+const PSEOHubLinks = dynamic(
+  () =>
+    import("@/components/homepage/PSEOHubLinks").then(
+      (mod) => mod.PSEOHubLinks,
+    ),
+  { ssr: false, loading: () => null },
+);
+
 const HotFortuneCarousel = dynamic(
   () =>
     import("@/components/homepage/HotFortuneCarousel").then(
@@ -238,6 +246,15 @@ export default function HomePage() {
           <Suspense fallback={null}>
             <DeferredMount delay={1500} useIdle={false}>
               <CategoryQuickLinks />
+            </DeferredMount>
+          </Suspense>
+        </div>
+
+        {/* pSEO Hub Links Section */}
+        <div className="relative z-10 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+          <Suspense fallback={null}>
+            <DeferredMount delay={1800} useIdle={false}>
+              <PSEOHubLinks />
             </DeferredMount>
           </Suspense>
         </div>

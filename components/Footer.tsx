@@ -114,12 +114,24 @@ export async function Footer() {
                         title: t("footer.allMessages"),
                       },
                       {
-                        href: "/funny-fortune-cookie-messages",
-                        title: t("footer.funnyMessages"),
+                        href: "/fortune-cookie-messages",
+                        title: "Messages by Occasion",
                       },
                       {
-                        href: "/how-to-make-fortune-cookies",
-                        title: t("footer.howToMake"),
+                        href: "/fortune-cookie-quotes",
+                        title: "Quotes by Theme",
+                      },
+                      {
+                        href: "/fortune-cookie-messages-for",
+                        title: "Messages for Everyone",
+                      },
+                      {
+                        href: "/fortune-cookie-ideas",
+                        title: "Fortune Cookie Ideas",
+                      },
+                      {
+                        href: "/funny-fortune-cookie-messages",
+                        title: t("footer.funnyMessages"),
                       },
                     ],
                   },
@@ -271,40 +283,40 @@ export async function Footer() {
 
               <div>
                 <h4 className="font-semibold text-gray-800 mb-4">
-                  {t("footer.resources")}
+                  Fortune Collections
                 </h4>
                 <ul className="space-y-3 text-gray-600">
                   <li>
                     <Link
-                      href={getLocalizedHref("/favorites")}
+                      href="/fortune-cookie-messages"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.myFavorites")}
+                      🥠 Messages by Occasion
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/api/fortunes?action=stats"
+                      href="/fortune-cookie-quotes"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.fortuneDatabase")}
+                      💫 Quotes by Theme
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/sitemap.xml"
+                      href="/fortune-cookie-messages-for"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.sitemap")}
+                      🎁 Messages for Everyone
                     </Link>
                   </li>
                   <li>
-                    <a
-                      href="mailto:hello@fortune-cookie-ai.com"
+                    <Link
+                      href="/fortune-cookie-ideas"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.contactUs")}
-                    </a>
+                      💡 Fortune Cookie Ideas
+                    </Link>
                   </li>
                 </ul>
               </div>
