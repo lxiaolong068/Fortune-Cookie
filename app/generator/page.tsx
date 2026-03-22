@@ -5,6 +5,7 @@ import { FAQStructuredData } from "@/components/FAQStructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
 import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { GeneratorClient } from "./GeneratorClient";
+import { AdUnit } from "@/components/AdUnit";
 
 const baseUrl = getSiteUrl();
 
@@ -79,6 +80,9 @@ export default function GeneratorPage() {
         <DynamicBackgroundEffects />
         <div className="relative z-10">
           <GeneratorClient />
+          <div className="py-4 flex justify-center">
+            <AdUnit slot="8173598207" />
+          </div>
         </div>
       </main>
     </>

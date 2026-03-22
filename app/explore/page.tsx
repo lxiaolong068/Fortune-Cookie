@@ -9,6 +9,7 @@ import {
   BreadcrumbStructuredData,
   FAQStructuredData,
 } from "@/components/StructuredData";
+import { AdUnit } from "@/components/AdUnit";
 
 const baseUrl = getSiteUrl();
 
@@ -154,6 +155,9 @@ export default function ExplorePage() {
         }))}
       />
       <FAQStructuredData faqs={exploreFAQs} />
+      <div className="py-4 flex justify-center">
+        <AdUnit slot="2217029096" format="fluid" layoutKey="-fb+5w+4e-db+86" />
+      </div>
       <Suspense fallback={<ExploreLoadingFallback />}>
         <ExplorePageContent />
       </Suspense>

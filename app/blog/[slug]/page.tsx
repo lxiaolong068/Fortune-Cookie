@@ -23,6 +23,7 @@ import {
   BreadcrumbStructuredData,
 } from "@/components/StructuredData";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
+import { AdUnit } from "@/components/AdUnit";
 
 const baseUrl = getSiteUrl();
 
@@ -211,6 +212,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <article className="blog-article-content prose prose-lg max-w-3xl mx-auto mb-16">
             <MDXRemote source={post.content} components={mdxComponents} />
           </article>
+
+          <div className="my-8 flex justify-center">
+            <AdUnit slot="4166337331" format="fluid" layout="in-article" />
+          </div>
 
           {/* Related Posts */}
           {relatedPosts.length > 0 && (

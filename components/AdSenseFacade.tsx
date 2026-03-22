@@ -180,8 +180,8 @@ export function NetworkAwareAdSenseFacade(props: AdSenseFacadeProps) {
       const connection = (navigator as NavigatorWithConnection).connection
       const effectiveType = connection?.effectiveType
 
-      // Only load on 4G or better
-      if (effectiveType && !['4g', 'unknown'].includes(effectiveType)) {
+      // Skip only on confirmed slow connections (2G/3G); load on 4G, unknown, or missing
+      if (effectiveType && ['2g', '3g', 'slow-2g'].includes(effectiveType)) {
         console.log(`[AdSense Facade] Skipping load on slow connection: ${effectiveType}`)
         setShouldRender(false)
         return
@@ -198,8 +198,8 @@ export function NetworkAwareAdSenseFacade(props: AdSenseFacadeProps) {
     // Check device memory (if available)
     if ('deviceMemory' in navigator) {
       const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory
-      // Skip on low-memory devices (< 4GB)
-      if (memory && memory < 4) {
+      // Skip only on very low-memory devices (< 1GB); most crawlers won't report a value
+      if (memory && memory < 1) {
         console.log(`[AdSense Facade] Skipping load on low-memory device: ${memory}GB`)
         setShouldRender(false)
         return

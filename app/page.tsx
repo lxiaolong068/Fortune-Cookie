@@ -20,6 +20,7 @@ import { DeferredMount } from "@/components/DeferredMount";
 // SocialProof and Testimonials removed — contained unverifiable data (fake ratings, fictional reviews)
 // Re-enable when backed by real user data
 import { WaveDivider } from "@/components/homepage/SectionDivider";
+import { AdUnit } from "@/components/AdUnit";
 
 // Optimize for Edge Runtime - faster TTFB
 export const runtime = "edge";
@@ -234,6 +235,11 @@ export default function HomePage() {
               <FortuneCookieInteractive />
             </DeferredMount>
           </Suspense>
+        </div>
+
+        {/* Ad Unit - between fortune cookie and category links */}
+        <div className="relative z-10 bg-white dark:bg-slate-900 py-4 flex justify-center">
+          <AdUnit slot="3178756975" />
         </div>
 
         {/* Category Quick Links Section */}

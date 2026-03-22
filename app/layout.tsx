@@ -138,6 +138,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.baseUrl),
   alternates: {
     canonical: "/",
+    languages: {
+      "en": "/",
+      "zh": "/zh",
+      "es": "/es",
+      "pt": "/pt",
+    },
   },
   openGraph: {
     type: "website",
@@ -202,14 +208,6 @@ export default async function RootLayout({
         {/* Global structured data for Google Rich Results */}
         <WebsiteStructuredData nonce={nonce} />
         <OrganizationStructuredData nonce={nonce} />
-
-        {/* Google AdSense */}
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6958408841088360"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
 
         {/* Preconnect to critical origins for faster resource loading */}
         <link
