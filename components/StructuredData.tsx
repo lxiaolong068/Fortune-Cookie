@@ -325,6 +325,7 @@ function parseTimeToISO8601(timeStr: string): string {
  */
 export function RecipeStructuredData({
   recipes,
+  video,
   nonce,
 }: {
   recipes: Array<{
@@ -341,6 +342,15 @@ export function RecipeStructuredData({
     cookTime?: string;
     calories?: string;
   }>;
+  video?: {
+    name: string;
+    description: string;
+    thumbnailUrl: string;
+    uploadDate: string;
+    embedUrl: string;
+    contentUrl: string;
+    duration?: string;
+  };
   nonce?: string | null;
 }) {
   const urls = getStructuredDataUrls();
@@ -413,6 +423,18 @@ export function RecipeStructuredData({
           proteinContent: "1g",
         },
         // aggregateRating removed — no real user ratings to report
+        ...(video && {
+          video: {
+            "@type": "VideoObject",
+            name: video.name,
+            description: video.description,
+            thumbnailUrl: video.thumbnailUrl,
+            uploadDate: video.uploadDate,
+            embedUrl: video.embedUrl,
+            contentUrl: video.contentUrl,
+            ...(video.duration && { duration: video.duration }),
+          },
+        }),
         recipeCategory: "Dessert",
         recipeCuisine: "Asian-American",
         keywords: "fortune cookies, homemade cookies, dessert recipe, baking",

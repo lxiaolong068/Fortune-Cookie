@@ -146,10 +146,20 @@ const recipes = [
   },
 ];
 
+const recipeVideo = {
+  name: "Homemade Fortune Cookie Recipe",
+  description:
+    "Learn how to make homemade fortune cookies step-by-step with this easy recipe. Perfect for parties, Valentine's Day, and special occasions.",
+  thumbnailUrl: "https://img.youtube.com/vi/8UlFxiLQZIk/maxresdefault.jpg",
+  uploadDate: "2015-02-05",
+  embedUrl: "https://www.youtube.com/embed/8UlFxiLQZIk",
+  contentUrl: "https://www.youtube.com/watch?v=8UlFxiLQZIk",
+};
+
 export default function RecipesPage() {
   return (
     <>
-      <RecipeStructuredData recipes={recipes} />
+      <RecipeStructuredData recipes={recipes} video={recipeVideo} />
       <BreadcrumbStructuredData
         items={[
           { name: "Home", url: "/" },

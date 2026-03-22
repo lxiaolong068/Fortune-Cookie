@@ -251,6 +251,47 @@ export function RecipesPageContent() {
         </div>
       </PageSection>
 
+      {/* Video Tutorial Section */}
+      <PageSection padding="lg" bg="transparent">
+        <div className="flex items-center gap-3 mb-6">
+          <ModernCardIcon
+            gradientFrom="from-red-500"
+            gradientTo="to-rose-500"
+            size="sm"
+          >
+            <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </ModernCardIcon>
+          <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white">
+            Watch: How to Make Fortune Cookies
+          </h2>
+        </div>
+        <div className="max-w-3xl mx-auto">
+          <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-lg">
+            <iframe
+              src="https://www.youtube.com/embed/8UlFxiLQZIk"
+              title="Homemade Fortune Cookie Recipe – Step-by-Step Tutorial"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
+          <p className="mt-4 text-sm text-slate-500 dark:text-slate-400 text-center">
+            Video by{" "}
+            <a
+              href="https://www.youtube.com/watch?v=8UlFxiLQZIk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-amber-600"
+            >
+              Bigger Bolder Baking with Gemma Stafford
+            </a>
+          </p>
+        </div>
+      </PageSection>
+
       {/* Recipe Cards Grid */}
       <PageSection padding="lg" bg="transparent">
         <div className="flex items-center gap-3 mb-8">
