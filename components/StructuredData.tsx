@@ -151,6 +151,8 @@ function getLanguageTag(locale?: string): string {
   const languageMap: Record<string, string> = {
     en: "en-US",
     zh: "zh-CN",
+    es: "es-ES",
+    pt: "pt-BR",
   };
   return languageMap[locale || "en"] || "en-US";
 }

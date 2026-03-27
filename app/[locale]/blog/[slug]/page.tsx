@@ -123,6 +123,8 @@ function formatDate(dateString: string, locale: Locale): string {
   const localeMap: Record<Locale, string> = {
     en: "en-US",
     zh: "zh-CN",
+    es: "es-ES",
+    pt: "pt-BR",
   };
 
   return new Intl.DateTimeFormat(localeMap[locale], {
