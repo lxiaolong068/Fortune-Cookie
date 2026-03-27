@@ -192,6 +192,115 @@ const nextConfig = {
           // 如果需要这些功能，请在生产环境的 CDN/反向代理层配置
         ],
       },
+      // ============================================================
+      // PSEO 动态路由页面 - 与 ISR revalidate=86400 保持一致
+      // s-maxage=86400: CDN 缓存 24 小时
+      // stale-while-revalidate=3600: 后台刷新期间继续提供旧缓存（1小时）
+      // ============================================================
+      {
+        source: "/fortune-cookie-messages-for/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400, stale-while-revalidate=3600",
+          },
+        ],
+      },
+      {
+        source: "/fortune-cookie-messages/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400, stale-while-revalidate=3600",
+          },
+        ],
+      },
+      {
+        source: "/fortune-cookie-quotes/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400, stale-while-revalidate=3600",
+          },
+        ],
+      },
+      {
+        source: "/fortune-cookie-ideas/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400, stale-while-revalidate=3600",
+          },
+        ],
+      },
+      // ============================================================
+      // 博客页面 - 与 ISR revalidate=604800 保持一致
+      // s-maxage=604800: CDN 缓存 7 天
+      // stale-while-revalidate=86400: 后台刷新期间继续提供旧缓存（1天）
+      // ============================================================
+      {
+        source: "/blog/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=604800, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      // ============================================================
+      // 高流量 SEO 落地页 - 与 ISR revalidate=86400 保持一致
+      // ============================================================
+      {
+        source: "/:path(funny-fortune-cookie-messages|how-to-make-fortune-cookies|who-invented-fortune-cookies|history|recipes|faq|generator|explore)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400, stale-while-revalidate=3600",
+          },
+        ],
+      },
+      // ============================================================
+      // API 路由分级缓存策略
+      // ============================================================
+      // 公共只读 API（fortune 数据库查询）- 可缓存
+      {
+        source: "/api/fortunes",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=3600, stale-while-revalidate=300",
+          },
+        ],
+      },
+      // AI 生成 API（每次请求唯一）- 不缓存
+      {
+        source: "/api/fortune",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, no-cache, must-revalidate",
+          },
+        ],
+      },
+      // 用户数据 API（认证相关）- 不缓存
+      {
+        source: "/api/auth/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, no-cache, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/api/favorites/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, no-cache, must-revalidate",
+          },
+        ],
+      },
       // API路由的CORS配置
       {
         source: "/api/(.*)",

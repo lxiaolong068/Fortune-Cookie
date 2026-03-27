@@ -10,6 +10,11 @@ import { CalendarPageContent } from "./CalendarPageContent";
 
 const baseUrl = getSiteUrl();
 
+// ISR: force-static + revalidate every 24 hours
+// Calendar page shell is static; all date-based fortune logic runs client-side.
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
+
 export const metadata: Metadata = {
   title:
     "Fortune Calendar - Daily Fortune Cookie Predictions | Fortune Cookie AI",

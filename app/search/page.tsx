@@ -11,6 +11,11 @@ import { searchSite } from "@/lib/siteSearch";
 
 const baseUrl = getSiteUrl();
 
+// ISR: revalidate every 12 hours
+// Search page uses searchParams (?q=), so force-static is not applicable.
+// The page shell and search index are stable; 12h revalidation is sufficient.
+export const revalidate = 43200; // 12 hours
+
 export const metadata: Metadata = {
   title: "Search",
   description:

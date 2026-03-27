@@ -26,7 +26,9 @@ import { loadTranslations, getTranslation } from "@/lib/translations";
 export const runtime = "edge";
 
 // Enable static generation with revalidation for optimal performance
-export const revalidate = 3600; // Revalidate every hour
+// Increased from 1h to 6h: i18n homepage content is stable.
+// Matches root homepage revalidation period for consistency.
+export const revalidate = 21600; // 6 hours (was 1 hour)
 
 // Generate static params for all locales
 export function generateStaticParams() {

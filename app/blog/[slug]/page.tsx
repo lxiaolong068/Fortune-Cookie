@@ -29,6 +29,13 @@ import { AdUnit } from "@/components/AdUnit";
 
 const baseUrl = getSiteUrl();
 
+// ISR: force-static + revalidate every 7 days
+// Blog posts are MDX files committed to the repo; content rarely changes.
+// generateStaticParams pre-builds all known slugs at deploy time.
+// On-demand revalidation via /api/revalidate can be triggered after edits.
+export const dynamic = "force-static";
+export const revalidate = 604800; // 7 days
+
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }

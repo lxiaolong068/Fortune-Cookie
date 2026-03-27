@@ -9,6 +9,13 @@ import { AdUnit } from "@/components/AdUnit";
 
 const baseUrl = getSiteUrl();
 
+// ISR: force-static + revalidate every 24 hours
+// The generator page shell is static (metadata, layout, FAQ schema).
+// All interactive AI generation happens client-side via GeneratorClient.
+// Caching the shell eliminates unnecessary SSR on every visit.
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
+
 export const metadata: Metadata = {
   title: "Fortune Cookie Generator — Free AI-Powered, Instant & Personalized",
   description:

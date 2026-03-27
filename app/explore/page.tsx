@@ -13,6 +13,12 @@ import { AdUnit } from "@/components/AdUnit";
 
 const baseUrl = getSiteUrl();
 
+// ISR: force-static + revalidate every 6 hours
+// Explore page shell is static; all filtering/search runs client-side.
+// 6h revalidation refreshes the fortune count in metadata when DB grows.
+export const dynamic = "force-static";
+export const revalidate = 21600; // 6 hours
+
 // Dynamic metadata with actual message count from database
 export async function generateMetadata(): Promise<Metadata> {
   const stats = getDatabaseStats();

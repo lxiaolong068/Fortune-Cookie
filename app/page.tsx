@@ -26,7 +26,9 @@ import { AdUnit } from "@/components/AdUnit";
 export const runtime = "edge";
 
 // Enable static generation with revalidation for optimal performance
-export const revalidate = 3600; // Revalidate every hour
+// Increased from 1h to 6h: homepage content is stable (hero copy, hub links,
+// category cards). 6h reduces ISR rebuild frequency by 6x with no UX impact.
+export const revalidate = 21600; // 6 hours (was 1 hour)
 
 /**
  * Progressive Enhancement Strategy:

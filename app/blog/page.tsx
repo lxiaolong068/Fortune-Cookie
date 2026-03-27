@@ -18,6 +18,11 @@ import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { BreadcrumbStructuredData } from "@/components/StructuredData";
 import { BlogPageContent } from "./BlogPageContent";
 
+// ISR: revalidate every 12 hours
+// Blog list changes infrequently; 12h balances freshness with server load.
+// Cannot use force-static because page uses searchParams (tag/page filters).
+export const revalidate = 43200;
+
 const baseUrl = getSiteUrl();
 
 interface MetadataProps {
