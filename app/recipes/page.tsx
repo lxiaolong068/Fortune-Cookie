@@ -15,13 +15,13 @@ export const dynamic = "force-static";
 export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free",
+  title: "Fortune Cookie Recipe — Classic, Chocolate & Gluten-Free (Easy Step-by-Step)",
   description:
-    "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions and baking tips. Perfect for parties and special occasions.",
+    "Learn how to make fortune cookies at home with our easy recipes. Classic vanilla, chocolate-dipped, and gluten-free versions with step-by-step instructions, baking tips, and printable fortune slips. Perfect for parties and gifts.",
   openGraph: {
-    title: "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free",
+    title: "Fortune Cookie Recipe — Classic, Chocolate & Gluten-Free (Easy Step-by-Step)",
     description:
-      "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions and baking tips. Perfect for parties and special occasions.",
+      "Easy fortune cookie recipes: classic vanilla, chocolate-dipped, and gluten-free. Step-by-step instructions, baking tips, and printable fortune slips.",
     type: "article",
     url: `${baseUrl}/recipes`,
     images: [
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fortune Cookie Recipes - Classic, Chocolate & Gluten-Free",
+    title: "Fortune Cookie Recipe — Classic, Chocolate & Gluten-Free (Easy Step-by-Step)",
     description:
-      "Classic, chocolate, and gluten-free fortune cookie recipes with step-by-step instructions and baking tips.",
+      "Easy fortune cookie recipes: classic vanilla, chocolate-dipped, and gluten-free. Step-by-step instructions and baking tips.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },

@@ -15,13 +15,13 @@ export const dynamic = "force-static";
 export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: "History of Fortune Cookies - Origins and Cultural Evolution",
+  title: "History of Fortune Cookies — Origins, Invention & Cultural Journey",
   description:
-    "Explore the fascinating history of fortune cookies from Japanese roots in Kyoto to American invention in California. Discover the true story of Makoto Hagiwara and the evolution of this beloved treat.",
+    "Who invented fortune cookies? Explore the fascinating history from Japanese roots in Kyoto to American invention in California. Discover Makoto Hagiwara, the 1906 earthquake connection, and how fortune cookies became a global icon.",
   openGraph: {
-    title: "History of Fortune Cookies - Origins and Cultural Evolution",
+    title: "History of Fortune Cookies — Origins, Invention & Cultural Journey",
     description:
-      "Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about Makoto Hagiwara and the cultural journey of this iconic cookie.",
+      "Who invented fortune cookies? Discover the fascinating history from Japanese roots to American invention, Makoto Hagiwara, and the cultural journey of this iconic treat.",
     type: "article",
     url: `${baseUrl}/history`,
     images: [
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "History of Fortune Cookies - Origins and Cultural Evolution",
+    title: "History of Fortune Cookies — Origins, Invention & Cultural Journey",
     description:
-      "Explore the fascinating history of fortune cookies from Japanese roots in Kyoto to American invention in California.",
+      "Who invented fortune cookies? Explore their Japanese roots, American invention, and cultural evolution from Kyoto to California.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },
@@ -51,7 +51,7 @@ export default function HistoryPage() {
   return (
     <>
       <ArticleStructuredData
-        headline="History of Fortune Cookies - Origins and Cultural Evolution"
+        headline="History of Fortune Cookies — Origins, Invention & Cultural Journey"
         description="Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about the cultural evolution and origins of this beloved treat."
         url="/history"
         datePublished="2024-01-01"

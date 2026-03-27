@@ -174,9 +174,9 @@ const features = [
 ];
 
 export const metadata: Metadata = generateSEOMetadata({
-  title: "Fortune Cookie AI - Free Online Fortune Cookie Generator",
+  title: "Fortune Cookie AI — Free Online Fortune Cookie Generator",
   description:
-    "Crack open a virtual fortune cookie! Free AI-powered generator with 500+ unique messages. Get personalized fortune cookies, lucky numbers & daily wisdom instantly.",
+    "Crack open a free AI fortune cookie online! Get personalized fortune cookie messages, lucky numbers & daily wisdom in seconds. 500+ unique fortunes, 6 themes, no signup needed.",
   image: "/og-image.png",
   url: "/",
   type: "website",

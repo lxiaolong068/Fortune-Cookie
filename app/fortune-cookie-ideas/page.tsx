@@ -81,7 +81,7 @@ export default function FortuneIdeasHub() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/ai-generator"
+              href="/generator"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg"
             >
               Generate Custom Fortune
@@ -140,7 +140,7 @@ export default function FortuneIdeasHub() {
               for any use case, event, or creative project.
             </p>
             <Link
-              href="/ai-generator"
+              href="/generator"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-emerald-600 font-semibold hover:bg-white/90 transition-colors shadow-lg"
             >
               Try AI Generator <ArrowRight className="w-4 h-4" />

@@ -313,7 +313,7 @@ export function FunnyFortunePageContent() {
                   unlimited custom funny fortunes for any occasion.
                 </p>
                 <Link
-                  href="/ai-generator"
+                  href="/generator"
                   className={cn(
                     "inline-flex items-center gap-2 px-6 py-3 rounded-full",
                     "bg-white text-indigo-600 font-semibold",

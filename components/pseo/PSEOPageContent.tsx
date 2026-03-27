@@ -306,7 +306,7 @@ export function PSEOPageContent({
                   personalized messages for any occasion, mood, or person.
                 </p>
                 <Link
-                  href="/ai-generator"
+                  href="/generator"
                   className={cn(
                     "inline-flex items-center gap-2 px-6 py-3 rounded-full",
                     "bg-white text-amber-600 font-semibold",

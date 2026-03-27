@@ -83,7 +83,7 @@ export default function FortuneMessagesForHub() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              href="/ai-generator"
+              href="/generator"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg"
             >
               Generate Personal Fortune
@@ -142,7 +142,7 @@ export default function FortuneMessagesForHub() {
               specifically for someone you care about.
             </p>
             <Link
-              href="/ai-generator"
+              href="/generator"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-purple-600 font-semibold hover:bg-white/90 transition-colors shadow-lg"
             >
               Try AI Generator <ArrowRight className="w-4 h-4" />

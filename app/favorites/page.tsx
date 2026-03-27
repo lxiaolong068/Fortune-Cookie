@@ -4,9 +4,9 @@ import { BreadcrumbStructuredData } from "@/components/StructuredData";
 import { FavoritesPageContent } from "./FavoritesPageContent";
 
 export const metadata: Metadata = generateSEOMetadata({
-  title: "My Favorites - Saved Fortune Cookies",
+  title: "Saved Fortune Cookies — My Favorites Collection",
   description:
-    "View and manage your saved fortune cookies. Access your favorite inspirational messages, lucky numbers, and wisdom anytime.",
+    "View and manage your saved fortune cookie messages. Revisit your favorite AI-generated fortunes, inspirational quotes, and lucky numbers anytime. Sign in to sync across devices.",
   url: "/favorites",
   type: "website",
 });
