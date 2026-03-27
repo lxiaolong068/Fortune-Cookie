@@ -26,6 +26,7 @@ import { ResultLayout } from "@/components/generator/GenerationResult";
 import { HistoryTabsContainer } from "@/components/generator/HistoryTabs";
 import { SEOContent } from "@/components/generator/SEOContent";
 import { RelatedPagesSection } from "@/components/generator/RelatedPagesSection";
+import { PushNotificationPrompt } from "@/components/PushNotificationPrompt";
 
 // Fortune API response type
 interface FortuneApiResponse {
@@ -365,6 +366,13 @@ export function GeneratorClient() {
           />
         </div>
       </div>
+
+      {/* Push Notification Prompt - shown after user generates a fortune */}
+      {currentFortune && (
+        <div className="container mx-auto px-4 mb-8 max-w-2xl">
+          <PushNotificationPrompt variant="card" />
+        </div>
+      )}
 
       {/* SEO Content */}
       <SEOContent />

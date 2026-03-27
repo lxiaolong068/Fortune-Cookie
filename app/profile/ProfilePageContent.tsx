@@ -8,6 +8,7 @@ import { UserStats } from "@/components/UserStats";
 import { PageLayout, PageSection } from "@/components/PageLayout";
 import { PageHero, HeroBadge } from "@/components/PageHero";
 import { ModernCard, ModernCardIcon } from "@/components/ui/modern-card";
+import { DailyCheckIn } from "@/components/DailyCheckIn";
 
 export function ProfilePageContent() {
   return (
@@ -59,6 +60,7 @@ export function ProfilePageContent() {
                   <UserHistory showControls={true} />
                 </div>
                 <div className="space-y-6">
+                  <DailyCheckIn />
                   <UserStats />
                 </div>
               </div>

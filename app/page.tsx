@@ -97,6 +97,15 @@ const UseCaseScenes = dynamic(
   { ssr: false, loading: () => null },
 );
 
+// Push notification prompt - loaded after LCP, shown after user interacts
+const PushNotificationPrompt = dynamic(
+  () =>
+    import("@/components/PushNotificationPrompt").then(
+      (mod) => mod.PushNotificationPrompt,
+    ),
+  { ssr: false, loading: () => null },
+);
+
 // Scroll reveal component - loaded dynamically for non-critical sections
 const ScrollReveal = dynamic(
   () => import("@/components/ScrollReveal").then((mod) => mod.ScrollReveal),
@@ -286,6 +295,13 @@ export default function HomePage() {
             </Suspense>
           </div>
         </div>
+
+        {/* Push Notification Prompt - shown after user has interacted with the page */}
+        <Suspense fallback={null}>
+          <DeferredMount delay={5000} useIdle={true}>
+            <PushNotificationPrompt variant="banner" />
+          </DeferredMount>
+        </Suspense>
 
         {/* SEO-optimized visible content */}
         <div className="relative z-10 bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-800/50 backdrop-blur-sm border-t border-indigo-100/50 dark:border-indigo-800/30 pt-12 pb-16">

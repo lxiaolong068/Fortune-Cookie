@@ -158,6 +158,7 @@ model User {
   fortuneQuota   FortuneQuota[]
   fortuneUsage   FortuneUsage[]
   favorites      Favorite[]
+  checkIns       DailyCheckIn[]
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -279,6 +280,22 @@ model Favorite {
   @@index([createdAt])
   @@unique([userId, message])
   @@map("favorites")
+}
+
+// 每日签到记录
+model DailyCheckIn {
+  id          String   @id @default(cuid())
+  userId      String
+  dateKey     String   // YYYY-MM-DD format
+  streakCount Int      @default(1)  // consecutive days streak
+  bonusQuota  Int      @default(0)  // extra fortune quota earned
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dateKey])
+  @@index([userId])
+  @@index([dateKey])
+  @@map("daily_checkins")
 }
 
 // 推送通知订阅
