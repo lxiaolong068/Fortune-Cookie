@@ -15,6 +15,7 @@ import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects"
 import { WebApplicationStructuredData } from "@/components/StructuredData";
 import { FAQStructuredData } from "@/components/FAQStructuredData";
 import { generateSEOMetadata } from "@/components/SEO";
+import { getSiteUrl } from "@/lib/site";
 import { FortuneCookieStatic } from "@/components/FortuneCookieStatic";
 import { DeferredMount } from "@/components/DeferredMount";
 // SocialProof and Testimonials removed — contained unverifiable data (fake ratings, fictional reviews)
@@ -29,6 +30,8 @@ export const runtime = "edge";
 // Increased from 1h to 6h: homepage content is stable (hero copy, hub links,
 // category cards). 6h reduces ISR rebuild frequency by 6x with no UX impact.
 export const revalidate = 21600; // 6 hours (was 1 hour)
+
+const _baseUrl = getSiteUrl();
 
 /**
  * Progressive Enhancement Strategy:
@@ -184,14 +187,39 @@ const features = [
   },
 ];
 
-export const metadata: Metadata = generateSEOMetadata({
-  title: "Fortune Cookie AI — Free Online Fortune Cookie Generator",
-  description:
-    "Crack open a free AI fortune cookie online! Get personalized fortune cookie messages, lucky numbers & daily wisdom in seconds. 500+ unique fortunes, 6 themes, no signup needed.",
-  image: "/og-image.png",
-  url: "/",
-  type: "website",
-});
+export const metadata: Metadata = {
+  ...generateSEOMetadata({
+    title: "Fortune Cookie AI — Free Online Fortune Cookie Generator",
+    description:
+      "Crack open a free AI fortune cookie online! Get personalized fortune cookie messages, lucky numbers & daily wisdom in seconds. 500+ unique fortunes, 6 themes, no signup needed.",
+    image: "/og-image.png",
+    url: "/",
+    type: "website",
+  }),
+  openGraph: {
+    title: "Fortune Cookie AI — Free Online Fortune Cookie Generator",
+    description:
+      "Crack open a free AI fortune cookie online! Get personalized fortune cookie messages, lucky numbers & daily wisdom in seconds. 500+ unique fortunes, 6 themes, no signup needed.",
+    type: "website",
+    url: _baseUrl,
+    images: [
+      {
+        url: `${_baseUrl}/api/og?type=pseo&title=${encodeURIComponent("Fortune Cookie AI")}&emoji=${encodeURIComponent("🥠")}&badge=${encodeURIComponent("Free AI Generator")}&description=${encodeURIComponent("Generate personalized fortune cookie messages for any occasion. Free, instant, and powered by AI.")}&gradient=default`,
+        width: 1200,
+        height: 630,
+        alt: "Fortune Cookie AI — Free Online Fortune Cookie Generator",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fortune Cookie AI — Free Online Fortune Cookie Generator",
+    description:
+      "Crack open a free AI fortune cookie online! Get personalized fortune cookie messages, lucky numbers & daily wisdom in seconds.",
+    images: [`${_baseUrl}/api/og?type=pseo&title=${encodeURIComponent("Fortune Cookie AI")}&emoji=${encodeURIComponent("🥠")}&badge=${encodeURIComponent("Free AI Generator")}&description=${encodeURIComponent("Generate personalized fortune cookie messages for any occasion. Free, instant, and powered by AI.")}&gradient=default`],
+    creator: "@fortunecookieai",
+  },
+};
 
 export default function HomePage() {
   return (

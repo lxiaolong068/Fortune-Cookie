@@ -73,8 +73,15 @@ export async function generateMetadata({
       type: "article",
       url: `${baseUrl}/blog/${slug}`,
       images: post.image
-        ? [{ url: getImageUrl(post.image) }]
-        : [{ url: getImageUrl("/og-image.png") }],
+        ? [{ url: getImageUrl(post.image), width: 1200, height: 630 }]
+        : [
+            {
+              url: `${baseUrl}/api/og?type=blog&title=${encodeURIComponent(post.title)}&description=${encodeURIComponent((post.description || "").slice(0, 120))}&tag=${encodeURIComponent(post.tags?.[0] ?? "")}&date=${encodeURIComponent(post.date?.slice(0, 10) ?? "")}`,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ],
       publishedTime: post.date,
       authors: [post.author],
       tags: post.tags,
@@ -85,7 +92,7 @@ export async function generateMetadata({
       description: post.description,
       images: post.image
         ? [getImageUrl(post.image)]
-        : [getImageUrl("/twitter-image.png")],
+        : [`${baseUrl}/api/og?type=blog&title=${encodeURIComponent(post.title)}&description=${encodeURIComponent((post.description || "").slice(0, 120))}&tag=${encodeURIComponent(post.tags?.[0] ?? "")}&date=${encodeURIComponent(post.date?.slice(0, 10) ?? "")}`],
       creator: "@fortunecookieai",
     },
     alternates: {

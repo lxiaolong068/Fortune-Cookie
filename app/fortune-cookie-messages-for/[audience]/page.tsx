@@ -44,7 +44,7 @@ export async function generateMetadata({
       url: `${baseUrl}/fortune-cookie-messages-for/${audience}`,
       images: [
         {
-          url: getImageUrl("/og-image.png"),
+          url: `${baseUrl}/api/og?type=pseo&title=${encodeURIComponent(data.title)}&emoji=${encodeURIComponent(data.emoji)}&badge=${encodeURIComponent(data.badge)}&description=${encodeURIComponent(data.description.slice(0, 120))}&gradient=purple`,
           width: 1200,
           height: 630,
           alt: data.title,
@@ -55,7 +55,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: data.metaTitle,
       description: data.metaDescription,
-      images: [getImageUrl("/twitter-image.png")],
+      images: [`${baseUrl}/api/og?type=pseo&title=${encodeURIComponent(data.title)}&emoji=${encodeURIComponent(data.emoji)}&badge=${encodeURIComponent(data.badge)}&description=${encodeURIComponent(data.description.slice(0, 120))}&gradient=purple`],
       creator: "@fortunecookieai",
     },
     alternates: {
