@@ -5,6 +5,10 @@ import {
   PSEOPageContent,
   PSEORelatedLink,
 } from "@/components/pseo/PSEOPageContent";
+import {
+  quoteBlogRecommendations,
+  quoteIntroContent,
+} from "@/lib/pseo/blog-recommendations";
 
 interface Props {
   data: QuoteData;
@@ -12,6 +16,9 @@ interface Props {
 }
 
 export function QuotePageContent({ data, relatedLinks }: Props) {
+  const relatedBlogPosts = quoteBlogRecommendations[data.slug] ?? [];
+  const introContent = quoteIntroContent[data.slug];
+
   return (
     <PSEOPageContent
       title={`${data.title} Fortune Cookie Quotes`}
@@ -33,6 +40,8 @@ export function QuotePageContent({ data, relatedLinks }: Props) {
       ]}
       hubPath="/fortune-cookie-quotes"
       hubLabel="quote categories"
+      introContent={introContent}
+      relatedBlogPosts={relatedBlogPosts}
     />
   );
 }

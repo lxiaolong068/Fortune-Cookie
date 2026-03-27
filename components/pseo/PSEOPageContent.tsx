@@ -47,6 +47,13 @@ export interface PSEOFAQ {
   answer: string;
 }
 
+export interface PSEOBlogPost {
+  slug: string;
+  title: string;
+  description: string;
+  emoji: string;
+}
+
 export interface PSEORelatedLink {
   slug: string;
   title: string;
@@ -68,6 +75,10 @@ export interface PSEOPageContentProps {
   breadcrumbs: { label: string; href?: string }[];
   hubPath: string;
   hubLabel: string;
+  /** Optional intro paragraph for content depth */
+  introContent?: string;
+  /** Related blog posts for cross-linking */
+  relatedBlogPosts?: PSEOBlogPost[];
 }
 
 import type { LucideIcon } from "lucide-react";
@@ -152,6 +163,8 @@ export function PSEOPageContent({
   breadcrumbs,
   hubPath,
   hubLabel,
+  introContent,
+  relatedBlogPosts,
 }: PSEOPageContentProps) {
   return (
     <PageLayout gradient={gradient}>
@@ -167,6 +180,29 @@ export function PSEOPageContent({
         description={description}
         breadcrumbs={breadcrumbs}
       />
+
+      {/* ── Intro Content (SEO depth) ── */}
+      {introContent && (
+        <section className="py-8 md:py-12">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="max-w-3xl mx-auto"
+            >
+              <ModernCard variant="glass">
+                <div className="p-6 md:p-8">
+                  <p className="text-slate-700 dark:text-slate-200 leading-relaxed text-base md:text-lg">
+                    {introContent}
+                  </p>
+                </div>
+              </ModernCard>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* ── Message Subcategories ── */}
       <section className="py-16 md:py-24">
@@ -452,6 +488,82 @@ export function PSEOPageContent({
           </motion.div>
         </div>
       </section>
+      {/* ── Related Blog Posts ── */}
+      {relatedBlogPosts && relatedBlogPosts.length > 0 && (
+        <section className="py-16 md:py-20 bg-gradient-to-b from-transparent via-indigo-50/20 to-transparent dark:via-indigo-950/10">
+          <div className="container mx-auto px-4">
+            <motion.div
+              variants={staggerContainerNormal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="text-center mb-10"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className="flex items-center justify-center gap-2 mb-4"
+              >
+                <BookOpen className="w-6 h-6 text-indigo-500" />
+                <span className="text-indigo-600 dark:text-indigo-400 font-semibold">
+                  Related Articles
+                </span>
+              </motion.div>
+              <motion.h2
+                variants={fadeInUp}
+                className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white font-display"
+              >
+                Learn More &amp;{" "}
+                <span className="text-gradient-primary">Get Inspired</span>
+              </motion.h2>
+              <motion.p
+                variants={fadeInUp}
+                className="text-slate-600 dark:text-slate-300 mt-3 max-w-xl mx-auto"
+              >
+                Dive deeper with our expert guides and creative ideas
+              </motion.p>
+            </motion.div>
+
+            <motion.div
+              variants={staggerContainerNormal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {relatedBlogPosts.map((post) => (
+                <motion.div key={post.slug} variants={staggerItem}>
+                  <Link href={`/blog/${post.slug}`}>
+                    <ModernCard
+                      variant="default"
+                      hoverable
+                      className="h-full cursor-pointer"
+                    >
+                      <div className="p-5">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-2xl">{post.emoji}</span>
+                          <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wide">
+                            Article
+                          </span>
+                        </div>
+                        <h3 className="font-semibold text-slate-800 dark:text-white mb-2 leading-snug">
+                          {post.title}
+                        </h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">
+                          {post.description}
+                        </p>
+                        <div className="flex items-center gap-1 mt-3 text-amber-600 dark:text-amber-400 text-sm font-medium">
+                          Read more
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    </ModernCard>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
     </PageLayout>
   );
 }

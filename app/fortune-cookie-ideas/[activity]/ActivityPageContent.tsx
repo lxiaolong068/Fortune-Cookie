@@ -5,6 +5,10 @@ import {
   PSEOPageContent,
   PSEORelatedLink,
 } from "@/components/pseo/PSEOPageContent";
+import {
+  activityBlogRecommendations,
+  activityIntroContent,
+} from "@/lib/pseo/blog-recommendations";
 
 interface Props {
   data: ActivityData;
@@ -12,6 +16,9 @@ interface Props {
 }
 
 export function ActivityPageContent({ data, relatedLinks }: Props) {
+  const relatedBlogPosts = activityBlogRecommendations[data.slug] ?? [];
+  const introContent = activityIntroContent[data.slug];
+
   return (
     <PSEOPageContent
       title={`Fortune Cookie Ideas for ${data.title}`}
@@ -33,6 +40,8 @@ export function ActivityPageContent({ data, relatedLinks }: Props) {
       ]}
       hubPath="/fortune-cookie-ideas"
       hubLabel="activity ideas"
+      introContent={introContent}
+      relatedBlogPosts={relatedBlogPosts}
     />
   );
 }

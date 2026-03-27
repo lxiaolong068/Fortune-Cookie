@@ -5,6 +5,10 @@ import {
   PSEOPageContent,
   PSEORelatedLink,
 } from "@/components/pseo/PSEOPageContent";
+import {
+  occasionBlogRecommendations,
+  occasionIntroContent,
+} from "@/lib/pseo/blog-recommendations";
 
 interface Props {
   data: OccasionData;
@@ -12,6 +16,9 @@ interface Props {
 }
 
 export function OccasionPageContent({ data, relatedLinks }: Props) {
+  const relatedBlogPosts = occasionBlogRecommendations[data.slug] ?? [];
+  const introContent = occasionIntroContent[data.slug];
+
   return (
     <PSEOPageContent
       title={`${data.title} Fortune Cookie Messages`}
@@ -33,6 +40,8 @@ export function OccasionPageContent({ data, relatedLinks }: Props) {
       ]}
       hubPath="/fortune-cookie-messages"
       hubLabel="occasion messages"
+      introContent={introContent}
+      relatedBlogPosts={relatedBlogPosts}
     />
   );
 }

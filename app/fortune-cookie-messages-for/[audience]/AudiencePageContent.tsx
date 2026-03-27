@@ -5,6 +5,10 @@ import {
   PSEOPageContent,
   PSEORelatedLink,
 } from "@/components/pseo/PSEOPageContent";
+import {
+  audienceBlogRecommendations,
+  audienceIntroContent,
+} from "@/lib/pseo/blog-recommendations";
 
 interface Props {
   data: AudienceData;
@@ -12,6 +16,9 @@ interface Props {
 }
 
 export function AudiencePageContent({ data, relatedLinks }: Props) {
+  const relatedBlogPosts = audienceBlogRecommendations[data.slug] ?? [];
+  const introContent = audienceIntroContent[data.slug];
+
   return (
     <PSEOPageContent
       title={`Fortune Cookie Messages for ${data.title}`}
@@ -33,6 +40,8 @@ export function AudiencePageContent({ data, relatedLinks }: Props) {
       ]}
       hubPath="/fortune-cookie-messages-for"
       hubLabel="audience messages"
+      introContent={introContent}
+      relatedBlogPosts={relatedBlogPosts}
     />
   );
 }
