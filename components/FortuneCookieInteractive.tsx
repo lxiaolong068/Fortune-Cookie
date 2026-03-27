@@ -101,11 +101,11 @@ export function FortuneCookieInteractive() {
           <div className="w-full max-w-2xl min-h-[600px] flex flex-col items-center justify-center">
             <button
               onClick={crackCookie}
-              className="w-32 h-32 cursor-pointer focus:outline-none focus:ring-4 focus:ring-amber-400/50 rounded-full transition-transform hover:scale-105 active:scale-95"
-              aria-label="Crack open the fortune cookie to reveal your fortune"
-              style={{ background: "transparent" }}
+              className="w-40 h-40 sm:w-32 sm:h-32 cursor-pointer focus:outline-none focus:ring-4 focus:ring-amber-400/50 rounded-full transition-transform hover:scale-105 active:scale-90 touch-manipulation select-none"
+              aria-label="Tap to crack open the fortune cookie and reveal your fortune"
+              style={{ background: "transparent", WebkitTapHighlightColor: "transparent" }}
             >
-              <span className="sr-only">Click to crack open the fortune cookie</span>
+              <span className="sr-only">Tap to crack open the fortune cookie</span>
             </button>
           </div>
         </div>
@@ -303,7 +303,8 @@ export function FortuneCookieInteractive() {
                 >
                   <Button
                     onClick={getNewCookie}
-                    className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-6 py-2 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105"
+                    className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-8 py-3 sm:px-6 sm:py-2 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95 touch-manipulation select-none text-base sm:text-sm min-h-[48px] sm:min-h-0"
+                    style={{ WebkitTapHighlightColor: "transparent" }}
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Get Another Fortune

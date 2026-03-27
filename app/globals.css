@@ -75,10 +75,23 @@
     html {
         font-family: var(--font-nunito), system-ui, sans-serif;
         scroll-behavior: smooth;
+        /* Prevent horizontal overflow on mobile */
+        overflow-x: hidden;
+        /* Improve text rendering on mobile */
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
     }
     body {
         @apply bg-background text-foreground;
         font-family: var(--font-nunito), system-ui, sans-serif;
+        /* Prevent horizontal overflow on mobile */
+        overflow-x: hidden;
+        /* Improve scroll performance on iOS */
+        -webkit-overflow-scrolling: touch;
+    }
+    /* Remove tap highlight on interactive elements for cleaner mobile UX */
+    a, button, [role="button"] {
+        -webkit-tap-highlight-color: transparent;
     }
     h1,
     h2,

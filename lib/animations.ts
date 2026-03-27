@@ -417,3 +417,108 @@ export function getAccessibleVariants(
   }
   return variants;
 }
+
+// ============================================================================
+// MOBILE-OPTIMIZED ANIMATION VARIANTS
+// ============================================================================
+
+/**
+ * Lighter animation variants for mobile devices.
+ * Reduces distance and duration to improve performance on lower-end devices.
+ */
+export const mobileOptimizedVariants = {
+  fadeInUp: {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.25, ease: easings.smooth },
+    },
+  } as Variants,
+
+  fadeIn: {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.2, ease: easings.smooth },
+    },
+  } as Variants,
+
+  staggerContainer: {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0,
+      },
+    },
+  } as Variants,
+
+  staggerItem: {
+    hidden: { opacity: 0, y: 8 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.2, ease: easings.smooth },
+    },
+  } as Variants,
+};
+
+/**
+ * Get animation variants based on device type and motion preference.
+ * Automatically returns lighter animations for mobile or reduced-motion users.
+ *
+ * @param desktopVariants - Full animation variants for desktop
+ * @param isMobile - Whether the user is on a mobile device
+ * @param prefersReducedMotion - Whether the user prefers reduced motion
+ */
+export function getResponsiveVariants(
+  desktopVariants: Variants,
+  isMobile: boolean,
+  prefersReducedMotion: boolean | null,
+): Variants {
+  if (prefersReducedMotion) {
+    return reducedMotionVariants;
+  }
+  if (isMobile) {
+    // Return a lighter version: same structure but reduced distance and duration
+    const mobileVariants: Variants = {};
+    for (const [key, value] of Object.entries(desktopVariants)) {
+      if (typeof value === "object" && value !== null) {
+        const v = value as Record<string, unknown>;
+        const transition = v.transition as Record<string, unknown> | undefined;
+        mobileVariants[key] = {
+          ...v,
+          ...(v.y !== undefined ? { y: typeof v.y === "number" ? v.y * 0.5 : v.y } : {}),
+          ...(v.x !== undefined ? { x: typeof v.x === "number" ? v.x * 0.5 : v.x } : {}),
+          transition: transition
+            ? {
+                ...transition,
+                duration:
+                  typeof transition.duration === "number"
+                    ? Math.min(transition.duration * 0.6, 0.3)
+                    : transition.duration,
+              }
+            : undefined,
+        };
+      } else {
+        mobileVariants[key] = value;
+      }
+    }
+    return mobileVariants;
+  }
+  return desktopVariants;
+}
+
+/**
+ * Viewport settings optimized for mobile (triggers animation earlier)
+ */
+export const mobileViewport = { once: true, margin: "-50px" };
+export const desktopViewport = { once: true, margin: "-100px" };
+
+/**
+ * Get viewport settings based on device type
+ */
+export function getViewportSettings(isMobile: boolean) {
+  return isMobile ? mobileViewport : desktopViewport;
+}

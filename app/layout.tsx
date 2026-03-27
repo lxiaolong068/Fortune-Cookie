@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
@@ -120,6 +120,18 @@ const inter = Inter({
 const siteMetadata = getSiteMetadata();
 const ogImage = getOGImageConfig();
 const twitterImage = getTwitterImageConfig();
+
+// Viewport configuration for optimal mobile experience
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5, // Allow user zoom for accessibility
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fffbeb" }, // amber-50
+    { media: "(prefers-color-scheme: dark)", color: "#1e1b4b" }, // indigo-950
+  ],
+  colorScheme: "light dark",
+};
 
 export const metadata: Metadata = {
   title: {
