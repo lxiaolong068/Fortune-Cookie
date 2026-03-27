@@ -18,6 +18,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getSiteUrl, getImageUrl } from "@/lib/site";
 import { getBlobUrl } from "@/lib/blob-urls";
+import { getAvailableTranslations } from "@/lib/blog";
+import { languages, i18n } from "@/lib/i18n-config";
 import {
   ArticleStructuredData,
   BreadcrumbStructuredData,
@@ -81,6 +83,23 @@ export async function generateMetadata({
     },
     alternates: {
       canonical: `/blog/${slug}`,
+      languages: (() => {
+        const translations = getAvailableTranslations(slug);
+        const langs: Record<string, string> = {};
+        // Default locale (en) is canonical
+        langs[languages[i18n.defaultLocale].hreflang] = `${baseUrl}/blog/${slug}`;
+        langs["x-default"] = `${baseUrl}/blog/${slug}`;
+        // Add alternate language versions for all available locales
+        for (const locale of translations.availableLocales) {
+          if (locale !== i18n.defaultLocale) {
+            const localeKey = locale as keyof typeof languages;
+            if (languages[localeKey]) {
+              langs[languages[localeKey].hreflang] = `${baseUrl}/${locale}/blog/${slug}`;
+            }
+          }
+        }
+        return langs;
+      })(),
     },
   };
 }
