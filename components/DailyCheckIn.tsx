@@ -148,7 +148,7 @@ export function DailyCheckIn({ className, compact = false, onCheckIn }: DailyChe
           currentStreak: result.currentStreak,
           totalCheckIns: result.totalCheckIns,
           todayBonus: result.bonusQuota,
-          lastCheckIn: new Date().toISOString().split("T")[0],
+          lastCheckIn: new Date().toISOString().split("T")[0] ?? new Date().toISOString().slice(0, 10),
         }));
         onCheckIn?.(result);
 

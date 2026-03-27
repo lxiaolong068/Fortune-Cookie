@@ -4,6 +4,26 @@ import { authOptions } from "@/lib/auth";
 import { DatabaseManager } from "@/lib/database";
 
 /**
+ * Get today's date key in YYYY-MM-DD format (always returns a string)
+ */
+function getTodayKey(): string {
+  const iso = new Date().toISOString();
+  const parts = iso.split("T");
+  return parts[0] ?? iso.slice(0, 10);
+}
+
+/**
+ * Get yesterday's date key in YYYY-MM-DD format (always returns a string)
+ */
+function getYesterdayKey(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  const iso = d.toISOString();
+  const parts = iso.split("T");
+  return parts[0] ?? iso.slice(0, 10);
+}
+
+/**
  * GET /api/checkin
  * Get current user's check-in status (today's status + streak)
  */
@@ -17,14 +37,15 @@ export async function GET() {
       );
     }
 
+    const userId: string = session.user.id;
     const prisma = DatabaseManager.getInstance();
-    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const today = getTodayKey();
 
     // Get today's check-in
     const todayCheckIn = await prisma.dailyCheckIn.findUnique({
       where: {
         userId_dateKey: {
-          userId: session.user.id,
+          userId,
           dateKey: today,
         },
       },
@@ -32,21 +53,26 @@ export async function GET() {
 
     // Get recent check-ins to calculate streak
     const recentCheckIns = await prisma.dailyCheckIn.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
       orderBy: { dateKey: "desc" },
       take: 30,
     });
 
     // Calculate current streak
-    let currentStreak = 0;
-    if (recentCheckIns.length > 0) {
-      currentStreak = recentCheckIns[0].streakCount;
-    }
+    const currentStreak =
+      recentCheckIns.length > 0 && recentCheckIns[0] != null
+        ? recentCheckIns[0].streakCount
+        : 0;
 
     // Calculate total check-ins
     const totalCheckIns = await prisma.dailyCheckIn.count({
-      where: { userId: session.user.id },
+      where: { userId },
     });
+
+    const lastCheckIn =
+      recentCheckIns.length > 0 && recentCheckIns[0] != null
+        ? recentCheckIns[0].dateKey
+        : null;
 
     return NextResponse.json({
       success: true,
@@ -55,7 +81,7 @@ export async function GET() {
         currentStreak,
         totalCheckIns,
         todayBonus: todayCheckIn?.bonusQuota ?? 0,
-        lastCheckIn: recentCheckIns[0]?.dateKey ?? null,
+        lastCheckIn,
       },
     });
   } catch (error) {
@@ -82,8 +108,9 @@ export async function POST(_request: NextRequest) {
     }
 
     const prisma = DatabaseManager.getInstance();
-    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-    const userId = session.user.id;
+    const today = getTodayKey();
+    const yesterdayKey = getYesterdayKey();
+    const userId: string = session.user.id;
 
     // Check if already checked in today
     const existingCheckIn = await prisma.dailyCheckIn.findUnique({
@@ -110,10 +137,6 @@ export async function POST(_request: NextRequest) {
     }
 
     // Calculate streak: check yesterday's check-in
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayKey = yesterday.toISOString().split("T")[0];
-
     const yesterdayCheckIn = await prisma.dailyCheckIn.findUnique({
       where: {
         userId_dateKey: {
@@ -137,7 +160,7 @@ export async function POST(_request: NextRequest) {
     else if (newStreak >= 3) bonusQuota = 2;
 
     // Create check-in record
-    const checkIn = await prisma.dailyCheckIn.create({
+    await prisma.dailyCheckIn.create({
       data: {
         userId,
         dateKey: today,
@@ -147,7 +170,6 @@ export async function POST(_request: NextRequest) {
     });
 
     // Grant bonus quota to user's today's fortune quota
-    // Update or create today's quota record with bonus
     const existingQuota = await prisma.fortuneQuota.findUnique({
       where: {
         userId_dateKey: {
