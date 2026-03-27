@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { generateSEOMetadata } from "@/components/SEO";
 import { BreadcrumbStructuredData } from "@/components/StructuredData";
+import { FAQStructuredData, favoritesFAQs } from "@/components/FAQStructuredData";
 import { FavoritesPageContent } from "./FavoritesPageContent";
 
 export const metadata: Metadata = generateSEOMetadata({
@@ -20,6 +21,7 @@ export default function FavoritesPage() {
           { name: "Favorites", url: "/favorites" },
         ]}
       />
+      <FAQStructuredData faqs={favoritesFAQs} />
       <FavoritesPageContent />
     </>
   );

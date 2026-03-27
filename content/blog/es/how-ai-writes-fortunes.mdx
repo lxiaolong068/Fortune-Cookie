@@ -1,0 +1,92 @@
+---
+title: "Cómo la IA escribe fortunas: LLMs, Tokens y Temperatura"
+description: "¿Cómo imita la IA a un antiguo oráculo? Descubre la tecnología detrás de la magia: Large Language Models, reconocimiento de patrones y el arte de la profecía digital."
+date: "2025-12-15"
+author: "Fortune Cookie AI Team"
+tags: ["tecnología", "ia", "cómo-funciona"]
+image: "https://images.unsplash.com/photo-1578469645733-2715d1eac340?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4MDg0OTh8MHwxfHNlYXJjaHwxfHxIb3clMjBBSSUyMFdyaXRlcyUyMEZvcnR1bmVzJTNBJTIwTExNcyUyQyUyMFRva2VucyUyMCUyNiUyMHRlbXBlcmF0dXJlJTIwSG93JTIwZG9lcyUyMEFJJTIwbWltaWMlMjBhbiUyMGFuY2llbnQlMjBvcmFjbGUlM0YlMjBMZWFybiUyMHRoZSUyMHRlY2glMjBiZWhpbmQlMjB0aGUlMjBtYWdpYyUzQSUyMExhcmdlJTIwTGFuZ3VhZ2UlMjBNb2RlbHMlMkMlMjBwYXR0ZXJuJTIwbWF0Y2hpbmclMkMlMjBhbmQlMjB0aGUlMjBhcnQlMjBvZiUyMGRpZ2l0YWwlMjBwcm9waGVjeS58ZW58MHwwfHx8MTc2NzI3NDMwN3ww&ixlib=rb-4.1.0&q=80&w=1080"
+featured: false
+---
+
+Cuando [le pides una fortuna a nuestra IA](/), no saca una frase preescrita de una base de datos. La genera en el momento, específicamente para ti. Pero, ¿cómo puede un conjunto de chips de silicio imitar la sabiduría de un antiguo oráculo?
+
+Construimos Fortune Cookie AI desde cero, y queremos ser transparentes sobre cómo funciona realmente — sin misticismo, sin trucos, solo ingeniería real. Aquí tienes un vistazo detrás de cámaras a la tecnología, las decisiones que tomamos y los compromisos involucrados.
+
+## La arquitectura: qué sucede realmente cuando haces clic en "Obtener fortuna"
+
+Aquí está el proceso real, paso a paso:
+
+1. **Eliges un tema** (divertido, inspirador, amor, éxito, sabiduría o aleatorio) y opcionalmente estableces un estado de ánimo y preferencia de longitud.
+2. **Nuestro servidor recibe la solicitud** y primero revisa una caché Redis para ver si una fortuna similar fue generada recientemente.
+3. **Si no existe un resultado en caché**, enviamos una petición a un LLM (Large Language Model) a través de la API de [OpenRouter](https://openrouter.ai/) — un servicio de enrutamiento que nos da acceso a múltiples modelos de IA.
+4. **La IA genera una fortuna** basada en un prompt de sistema cuidadosamente diseñado y específico para el tema elegido.
+5. **Guardamos el resultado en caché**, asignamos números de la suerte y te lo enviamos.
+6. **Si algo falla** — la API está caída, el modelo está saturado o alcanzamos un límite de tasa — el sistema recurre a nuestra base de datos de más de 500 mensajes de fortuna preescritos.
+
+Esta cadena de respaldo es crítica. Nadie debería hacer clic en "Obtener fortuna" y ver un error. En el peor de los casos, recibes una fortuna preescrita en lugar de una generada al momento, y nunca notarías la diferencia.
+
+## De palabras a números: cómo funciona la tokenización
+
+Las computadoras no entienden palabras — entienden números. Antes de que un LLM pueda procesar tu solicitud, el texto debe dividirse en fragmentos llamados **tokens**. Un token puede ser una palabra, parte de una palabra o incluso un solo carácter.
+
+Por ejemplo:
+
+| Entrada | Tokens |
+|---------|--------|
+| "¿Cuál es mi destino?" | ["¿Cuál", " es", " mi", " destino", "?"] |
+| "fortune cookie" | ["fort", "une", " cookie"] |
+
+Cada token se mapea a un vector numérico — una lista de números que representa su significado y contexto. En el espacio de alta dimensión del modelo, el vector para "destino" está cerca de "futuro" y "suerte" pero lejos de "sándwich" o "hoja de cálculo".
+
+Por eso la IA puede entender que *"¿Qué depara el futuro?"* y *"¿Cuál es mi destino?"* están preguntando esencialmente lo mismo, aunque las palabras sean diferentes.
+
+## Prompts de sistema: darle una personalidad a la IA
+
+La parte más importante de nuestra ingeniería no es el modelo — es el **prompt de sistema**. Esta es la instrucción que le damos a la IA antes de que vea tu solicitud. Piénsalo como la "ficha de personaje" de la IA.
+
+Para cada tema, usamos un prompt diferente. Aquí tienes una versión simplificada del prompt para el tema "sabiduría":
+
+> *"Eres un sabio escritor de galletas de la fortuna. Crea mensajes reflexivos y filosóficos que ofrezcan sabiduría de vida, proverbios antiguos y verdades atemporales. Enfócate en un significado profundo y la reflexión. Devuelve SOLO el mensaje de la fortuna — sin explicaciones ni texto adicional. Solo la fortuna en 1-2 frases y menos de 100 caracteres."*
+
+Esa última restricción — "menos de 100 caracteres" — es crucial. Un papelito real de galleta de la fortuna mide unos 7 cm de largo. Si la IA escribe un párrafo, deja de sentirse como una fortuna y empieza a parecer un post de blog. El arte está en la compresión.
+
+Hemos iterado estos prompts docenas de veces. Las versiones iniciales producían fortunas demasiado genéricas (*"Cosas buenas vienen"*) o demasiado largas (*"En el gran tapiz de la vida, cada hilo de experiencia se entrelaza para crear el hermoso patrón de tu viaje único"*). Conseguir el tono correcto — conciso, cálido, ligeramente misterioso — requirió más experimentación de la esperada.
+
+## Temperatura: el dial de la creatividad
+
+Si la IA siempre eligiera la palabra siguiente estadísticamente más probable, cada fortuna sonaría igual. Podría decir siempre: *"Tendrás un buen día."*
+
+Para introducir variedad, los LLMs tienen un parámetro llamado **temperature**:
+
+| Temperatura | Comportamiento | Ejemplo de salida |
+|-------------|----------------|-------------------|
+| 0.1 (baja) | Conservador, predecible, repetitivo | "Encontrarás éxito en tus esfuerzos." |
+| 0.5 (media) | Creatividad equilibrada con coherencia | "El desvío que tomas es el atajo que no sabías que existía." |
+| 0.9 (alta) | Creativo, sorprendente, a veces extraño | "Tu sombra ha estado tomando notas. Está impresionada." |
+| 1.2+ (muy alta) | Caótico, a menudo incoherente | "Velocidades púrpuras sueñan el acordeón de la sabiduría de estrellas de mar." |
+
+Usamos un ajuste de temperatura moderado — lo suficientemente alto para evitar repeticiones, lo suficientemente bajo para mantener la salida coherente y significativa. Encontrar este punto óptimo fue uno de nuestros primeros desafíos. Demasiado conservador y las fortunas parecen producidas en masa; demasiado creativo y dejan de tener sentido.
+
+## La base de datos de respaldo con más de 500 fortunas
+
+La generación de IA es inherentemente poco confiable. Los modelos se caen, las APIs se agotan, los límites de tasa se alcanzan. Por eso mantenemos una base de datos curada de **más de 500 mensajes de fortuna preescritos** en seis categorías: divertido, inspirador, amor, éxito, sabiduría y general.
+
+No son frases aleatorias — cada una fue escrita y categorizada a mano, con etiquetas, números de la suerte y una puntuación de popularidad. Cuando la IA no está disponible, el sistema selecciona de esta base según el tema y el estado de ánimo que elegiste.
+
+En la práctica, alrededor del 15–20% de las fortunas servidas en un día cualquiera provienen de esta base de respaldo. Los usuarios no lo notan, y ese es el objetivo — la experiencia debe ser fluida, ya sea que la fortuna haya sido generada por IA o sacada de nuestra colección curada.
+
+## Escritura tradicional vs. generación por IA: una comparación
+
+| Aspecto | Tradicional (Fábrica) | Generada por IA |
+|---------|-----------------------|-----------------|
+| **Escritor** | Persona única (por ejemplo, Donald Lau en Wonton Food escribió fortunas por más de 30 años) | Modelo de lenguaje con miles de millones de parámetros |
+| **Variedad** | ~10,000 fortunas en rotación | Combinaciones únicas virtualmente ilimitadas |
+| **Personalización** | Ninguna — misma fortuna para todos | Personalización por tema, estado de ánimo y lenguaje |
+| **Velocidad de producción** | Un escritor puede producir unas pocas fortunas al día | Cientos por segundo |
+| **Control de calidad** | Revisión editorial humana | Ingeniería de prompts + restricciones de salida |
+| **Matices culturales** | Conocimiento profundo y personal de la audiencia | Entrenado en corpus diverso, pero puede perder contexto sutil |
+| **Costo por fortuna** | Salario de un escritor | Fracción de centavo por llamada API |
+
+Ningún enfoque es estrictamente "mejor". La escritura tradicional tiene una calidez humana y
+
+*[El artículo continúa...]*

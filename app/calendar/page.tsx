@@ -3,6 +3,7 @@ import {
   BreadcrumbStructuredData,
   WebApplicationStructuredData,
 } from "@/components/StructuredData";
+import { FAQStructuredData, calendarFAQs } from "@/components/FAQStructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
 import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { CalendarPageContent } from "./CalendarPageContent";
@@ -64,6 +65,7 @@ export default function CalendarPage() {
         ]}
       />
       <WebApplicationStructuredData />
+      <FAQStructuredData faqs={calendarFAQs} />
       <CalendarPageContent />
     </>
   );
