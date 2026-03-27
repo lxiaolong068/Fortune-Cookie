@@ -61,7 +61,7 @@ function FortuneCookieCard({
   luckyNumbers?: string;
 }) {
   const gradientKey = CATEGORY_GRADIENTS[category] ?? "default";
-  const { from, to, accent } = GRADIENTS[gradientKey];
+  const { from, to, accent } = GRADIENTS[gradientKey] ?? GRADIENTS.default;
 
   return (
     <div
