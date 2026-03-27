@@ -481,31 +481,9 @@ export function getResponsiveVariants(
     return reducedMotionVariants;
   }
   if (isMobile) {
-    // Return a lighter version: same structure but reduced distance and duration
-    const mobileVariants: Variants = {};
-    for (const [key, value] of Object.entries(desktopVariants)) {
-      if (typeof value === "object" && value !== null) {
-        const v = value as Record<string, unknown>;
-        const transition = v.transition as Record<string, unknown> | undefined;
-        mobileVariants[key] = {
-          ...v,
-          ...(v.y !== undefined ? { y: typeof v.y === "number" ? v.y * 0.5 : v.y } : {}),
-          ...(v.x !== undefined ? { x: typeof v.x === "number" ? v.x * 0.5 : v.x } : {}),
-          transition: transition
-            ? {
-                ...transition,
-                duration:
-                  typeof transition.duration === "number"
-                    ? Math.min(transition.duration * 0.6, 0.3)
-                    : transition.duration,
-              }
-            : undefined,
-        };
-      } else {
-        mobileVariants[key] = value;
-      }
-    }
-    return mobileVariants;
+    // On mobile, return the pre-built lightweight variants that match the structure
+    // We avoid dynamic object spreading to prevent TypeScript type inference issues
+    return mobileOptimizedVariants.fadeInUp;
   }
   return desktopVariants;
 }
