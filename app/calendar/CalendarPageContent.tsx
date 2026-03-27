@@ -224,39 +224,128 @@ export function CalendarPageContent() {
 
       {/* SEO Content Section */}
       <PageSection padding="lg" bg="white">
-        <div className="max-w-4xl mx-auto prose prose-slate dark:prose-invert prose-headings:font-heading">
-          <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white mb-4">
-            {t("calendarPage.seoTitle") !== "calendarPage.seoTitle"
-              ? t("calendarPage.seoTitle")
-              : "About Fortune Calendar"}
-          </h2>
-          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-            {t("calendarPage.seoIntro") !== "calendarPage.seoIntro"
-              ? t("calendarPage.seoIntro")
-              : "Our Fortune Calendar provides daily fortune predictions based on ancient wisdom combined with modern AI. Each day features a unique fortune, lucky numbers, and personalized guidance to help you navigate life's opportunities."}
-          </p>
-          <h3 className="text-xl font-heading font-semibold text-slate-800 dark:text-white mb-3">
-            Daily Fortune Features
-          </h3>
-          <ul className="text-slate-600 dark:text-slate-300 space-y-2">
-            <li>
-              <strong>Overall Fortune Score:</strong> A comprehensive rating for
-              your day
-            </li>
-            <li>
-              <strong>Life Dimensions:</strong> Insights on love, career,
-              health, and wealth
-            </li>
-            <li>
-              <strong>Daily Message:</strong> Personalized wisdom for guidance
-            </li>
-            <li>
-              <strong>Lucky Numbers:</strong> Numbers that may bring you fortune
-            </li>
-            <li>
-              <strong>Lucky Elements:</strong> Colors, directions, and more
-            </li>
-          </ul>
+        <div className="max-w-4xl mx-auto space-y-12">
+          {/* About section */}
+          <div className="prose prose-slate dark:prose-invert prose-headings:font-heading max-w-none">
+            <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white mb-4">
+              What is a Fortune Cookie Calendar?
+            </h2>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+              A <strong>fortune cookie calendar</strong> is an interactive daily planner that pairs each day of the year with a unique fortune cookie message, lucky numbers, and life-dimension scores. Our AI-powered Fortune Calendar goes beyond a simple random fortune — it assigns each date a consistent, deterministic fortune so you can plan ahead, look back at past days, and track how your luck evolves over time.
+            </p>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+              Each daily fortune includes an <strong>overall fortune score</strong> (1–5 stars), individual ratings for Love, Career, Health, and Wealth, a personalized wisdom message, lucky numbers, and lucky colors. Click any date on the calendar to reveal its full fortune profile.
+            </p>
+
+            {/* Features grid */}
+            <h3 className="text-xl font-heading font-semibold text-slate-800 dark:text-white mb-3">
+              Daily Fortune Features
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4 not-prose mb-6">
+              {[
+                { icon: "⭐", title: "Overall Fortune Score", desc: "A 1–5 star rating that summarizes the energy of the day at a glance." },
+                { icon: "💕", title: "Love & Relationship", desc: "Insights into romantic connections, friendships, and social harmony." },
+                { icon: "💼", title: "Career & Wealth", desc: "Guidance on professional opportunities, financial decisions, and ambition." },
+                { icon: "🌿", title: "Health & Vitality", desc: "Advice on physical energy, mental clarity, and overall well-being." },
+                { icon: "🔢", title: "Lucky Numbers", desc: "AI-generated numbers associated with each day — perfect for lottery picks or meaningful dates." },
+                { icon: "🎨", title: "Lucky Colors & Elements", desc: "Colors and natural elements that resonate with the day's fortune energy." },
+              ].map((f) => (
+                <div key={f.title} className="flex items-start gap-3 p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-800/30">
+                  <span className="text-2xl flex-shrink-0">{f.icon}</span>
+                  <div>
+                    <p className="font-semibold text-slate-800 dark:text-white text-sm mb-1">{f.title}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Use cases */}
+          <div>
+            <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white mb-4">
+              How people use the Fortune Calendar
+            </h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {[
+                { icon: "🌅", title: "Morning Ritual", desc: "Start each day by checking your fortune score and daily message for a mindful, intentional morning." },
+                { icon: "📅", title: "Event Planning", desc: "Choose auspicious dates for weddings, job interviews, launches, or important decisions by comparing fortune scores." },
+                { icon: "🎁", title: "Birthday Fortunes", desc: "Look up a friend's birthday to discover their fortune for that day — a unique and personal gift idea." },
+                { icon: "📓", title: "Journaling Prompt", desc: "Use the daily wisdom message as a journaling prompt or meditation focus to deepen self-reflection." },
+                { icon: "🏫", title: "Classroom Activity", desc: "Teachers use the calendar to introduce students to cultural traditions and creative writing exercises." },
+                { icon: "🎉", title: "Party Icebreaker", desc: "Share fortune scores with guests at parties or team meetings to spark fun conversations." },
+              ].map((u) => (
+                <div key={u.title} className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <span className="text-2xl block mb-2">{u.icon}</span>
+                  <p className="font-semibold text-slate-800 dark:text-white text-sm mb-1">{u.title}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">{u.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* FAQ */}
+          <div>
+            <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white mb-6">
+              Frequently asked questions about fortune cookie calendars
+            </h2>
+            <div className="space-y-4">
+              {[
+                {
+                  q: "How is each day's fortune determined?",
+                  a: "Each date's fortune is generated by our AI using a deterministic algorithm seeded by the date itself. This means the same date always produces the same fortune — so you can plan ahead or revisit past days consistently.",
+                },
+                {
+                  q: "Can I view fortunes for past or future dates?",
+                  a: "Yes! Simply click any date on the calendar — past, present, or future — to reveal its full fortune profile including score, lucky numbers, and daily message.",
+                },
+                {
+                  q: "What is a fortune score?",
+                  a: "The fortune score is a 1–5 star rating that summarizes the overall energy of a given day across love, career, health, and wealth dimensions. A score of 5 (Excellent) suggests a highly auspicious day; a score of 2 (Challenging) suggests a day to proceed with extra care.",
+                },
+                {
+                  q: "How is the fortune calendar different from a horoscope?",
+                  a: "Unlike horoscopes, which are based on astrological signs, our fortune calendar is inspired by the tradition of fortune cookies — offering universal daily wisdom rather than sign-specific predictions. It's designed for fun, reflection, and inspiration rather than astrological guidance.",
+                },
+                {
+                  q: "Can I get a personalized fortune instead of a calendar fortune?",
+                  a: "Absolutely! The calendar shows a universal daily fortune. For a personalized AI-generated fortune based on your chosen theme and mood, try our AI Fortune Cookie Generator.",
+                },
+              ].map((faq) => (
+                <div key={faq.q} className="p-5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <p className="font-semibold text-slate-800 dark:text-white mb-2 text-sm">{faq.q}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Internal links */}
+          <div>
+            <h2 className="text-xl font-heading font-semibold text-slate-800 dark:text-white mb-3">
+              Explore more fortune cookie tools
+            </h2>
+            <div className="grid md:grid-cols-2 gap-3">
+              {[
+                { icon: "🤖", title: "AI Fortune Cookie Generator", href: "/generator" },
+                { icon: "🎊", title: "Fortune Cookie Messages by Occasion", href: "/fortune-cookie-messages" },
+                { icon: "😂", title: "Funny Fortune Cookie Messages", href: "/funny-fortune-cookie-messages" },
+                { icon: "💬", title: "Fortune Cookie Quotes", href: "/fortune-cookie-quotes" },
+                { icon: "📚", title: "History of Fortune Cookies", href: "/history" },
+                { icon: "🍪", title: "Fortune Cookie Recipes", href: "/recipes" },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-600 hover:shadow-sm transition-all text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-400 group"
+                >
+                  <span className="text-lg flex-shrink-0">{link.icon}</span>
+                  <span className="flex-1">{link.title}</span>
+                  <span className="text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </PageSection>
     </PageLayout>

@@ -417,66 +417,111 @@ export function RecipesPageContent() {
 
       {/* SEO Content Section */}
       <PageSection padding="lg" bg="white">
-        <div className="max-w-4xl mx-auto prose prose-slate dark:prose-invert prose-headings:font-heading">
-          <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white mb-4">
-            Making Fortune Cookies at Home
-          </h2>
-          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-            Creating <strong>homemade fortune cookie recipes</strong> is a
-            delightful way to add a personal touch to any gathering. These
-            crispy, sweet treats are perfect for parties, special occasions, or
-            simply as a fun family activity. The key to success lies in working
-            quickly while the cookies are still warm and pliable, allowing you
-            to achieve that characteristic curved shape. For a detailed guide,
-            check out our{" "}
-            <Link
-              href="/how-to-make-fortune-cookies"
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
-            >
-              how to make fortune cookies
-            </Link>{" "}
-            tutorial.
-          </p>
-          <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-            Our recipes range from the{" "}
-            <strong>classic, chocolate, and gluten-free</strong> options to suit
-            every taste and dietary need. Each recipe has been tested to ensure
-            consistent results, whether you&apos;re a beginner baker or an
-            experienced chef looking to try something new. Learn more about the
-            fascinating{" "}
-            <Link
-              href="/history"
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
-            >
-              history of fortune cookies
-            </Link>{" "}
-            and discover{" "}
-            <Link
-              href="/who-invented-fortune-cookies"
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
-            >
-              who invented fortune cookies
-            </Link>
-            .
-          </p>
-          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Once your cookies are baked and cooled, don&apos;t forget to fill
-            them with meaningful messages! Try our{" "}
-            <Link
-              href="/generator"
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
-            >
-              AI fortune generator
-            </Link>{" "}
-            to create personalized fortunes, or browse our collection of{" "}
-            <Link
-              href="/funny-fortune-cookie-messages"
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
-            >
-              funny fortune cookie messages
-            </Link>{" "}
-            for inspiration.
-          </p>
+        <div className="max-w-4xl mx-auto space-y-12">
+
+          {/* Main prose */}
+          <div className="prose prose-slate dark:prose-invert prose-headings:font-heading max-w-none">
+            <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white mb-4">
+              Making Fortune Cookies at Home: Everything You Need to Know
+            </h2>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+              Creating <strong>homemade fortune cookies</strong> is a delightful way to add a personal touch to any gathering. These crispy, sweet treats are perfect for parties, weddings, baby showers, or simply as a fun family activity. The key to success lies in working quickly while the cookies are still warm and pliable — you have about 30 seconds after they come out of the oven to fold them into their signature shape before they harden.
+            </p>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+              Our three recipes cover the most popular variations: the <strong>classic vanilla fortune cookie</strong> (light, crispy, and buttery), the <strong>chocolate-dipped version</strong> (for an indulgent twist), and a <strong>gluten-free alternative</strong> using rice flour and almond flour for guests with dietary restrictions. Each recipe has been tested to ensure consistent results, whether you&apos;re a beginner baker or an experienced chef. For a full walkthrough, see our{" "}
+              <Link href="/how-to-make-fortune-cookies" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
+                how to make fortune cookies
+              </Link>{" "}
+              guide.
+            </p>
+            <h3 className="text-xl font-heading font-semibold text-slate-800 dark:text-white mb-3">
+              Pro Tips for Perfect Fortune Cookies
+            </h3>
+          </div>
+
+          {/* Tips grid */}
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              { icon: "⏱️", title: "Work fast", desc: "You have 20–30 seconds to fold each cookie after removing from the oven. Prepare your folding station before baking." },
+              { icon: "🧁", title: "Thin batter is key", desc: "Spread the batter very thin — about 3–4 inches in diameter. Thick batter produces chewy cookies instead of crispy ones." },
+              { icon: "🌡️", title: "Consistent oven temp", desc: "Bake at exactly 325°F (165°C). Too hot and they burn; too cool and they won't crisp up properly." },
+              { icon: "📝", title: "Fortune slip size", desc: "Cut fortune slips to about 3.5 × 0.5 inches. Too large and they're hard to fold in; too small and they fall out." },
+              { icon: "🧤", title: "Non-stick is essential", desc: "Use a silicone baking mat or well-greased parchment. Fortune cookies stick aggressively to ungreased surfaces." },
+              { icon: "🥚", title: "Bake in small batches", desc: "Bake only 2–3 cookies at a time. By the time you fold the third, the first is already too hard to shape." },
+            ].map((tip) => (
+              <div key={tip.title} className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-800/30">
+                <span className="text-2xl flex-shrink-0">{tip.icon}</span>
+                <div>
+                  <p className="font-semibold text-slate-800 dark:text-white text-sm mb-1">{tip.title}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">{tip.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* FAQ */}
+          <div>
+            <h2 className="text-2xl font-heading font-semibold text-slate-800 dark:text-white mb-6">
+              Frequently asked questions about fortune cookie recipes
+            </h2>
+            <div className="space-y-4">
+              {[
+                {
+                  q: "How long do homemade fortune cookies stay fresh?",
+                  a: "Homemade fortune cookies stay crispy for 3–5 days when stored in an airtight container at room temperature. Avoid refrigerating them as moisture will make them soft. For longer storage, freeze the unfilled, unfolded baked discs and fold them after reheating.",
+                },
+                {
+                  q: "Can I make fortune cookies without eggs?",
+                  a: "Yes! You can substitute each egg white with 2 tablespoons of aquafaba (the liquid from canned chickpeas). The texture will be slightly different but still crispy. Our gluten-free recipe also works well with this substitution.",
+                },
+                {
+                  q: "What can I write on fortune cookie slips?",
+                  a: "You can write anything — traditional proverbs, funny jokes, personalized messages, or event-specific notes. For weddings, try romantic quotes; for birthdays, use the guest of honor's inside jokes. Our AI Fortune Cookie Generator can create custom fortunes for any occasion in seconds.",
+                },
+                {
+                  q: "Why are my fortune cookies soft instead of crispy?",
+                  a: "Soft fortune cookies are usually caused by one of three issues: (1) the batter was spread too thick, (2) the oven temperature was too low, or (3) they were stored in a humid environment. Make sure to bake until the edges are golden brown, not just set.",
+                },
+                {
+                  q: "Can I make fortune cookies ahead of time for a party?",
+                  a: "Absolutely. Bake and fold the cookies up to 3 days in advance, but insert the fortune slips on the day of the event to prevent the paper from absorbing moisture. Store in an airtight tin at room temperature.",
+                },
+              ].map((faq) => (
+                <div key={faq.q} className="p-5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <p className="font-semibold text-slate-800 dark:text-white mb-2 text-sm">{faq.q}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Internal links */}
+          <div>
+            <h2 className="text-xl font-heading font-semibold text-slate-800 dark:text-white mb-3">
+              More fortune cookie resources
+            </h2>
+            <div className="grid md:grid-cols-2 gap-3">
+              {[
+                { icon: "🔧", title: "How to Make Fortune Cookies (Step-by-Step)", href: "/how-to-make-fortune-cookies" },
+                { icon: "🤖", title: "AI Fortune Cookie Generator", href: "/generator" },
+                { icon: "😂", title: "Funny Fortune Cookie Messages", href: "/funny-fortune-cookie-messages" },
+                { icon: "🎊", title: "Fortune Cookie Messages by Occasion", href: "/fortune-cookie-messages" },
+                { icon: "📚", title: "History of Fortune Cookies", href: "/history" },
+                { icon: "🤔", title: "Who Invented Fortune Cookies?", href: "/who-invented-fortune-cookies" },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-600 hover:shadow-sm transition-all text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-amber-700 dark:hover:text-amber-400 group"
+                >
+                  <span className="text-lg flex-shrink-0">{link.icon}</span>
+                  <span className="flex-1">{link.title}</span>
+                  <span className="text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
         </div>
       </PageSection>
     </PageLayout>
