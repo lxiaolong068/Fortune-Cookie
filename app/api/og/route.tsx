@@ -22,15 +22,22 @@ export const runtime = "edge";
 
 // ─── Colour palettes ────────────────────────────────────────────────────────
 
-const GRADIENTS: Record<string, { from: string; to: string; accent: string }> =
-  {
-    purple: { from: "#1e1b4b", to: "#312e81", accent: "#a78bfa" },
-    amber: { from: "#1c1208", to: "#292010", accent: "#fbbf24" },
-    indigo: { from: "#0f172a", to: "#1e1b4b", accent: "#818cf8" },
-    green: { from: "#052e16", to: "#14532d", accent: "#4ade80" },
-    rose: { from: "#1c0a0a", to: "#2d1010", accent: "#fb7185" },
-    default: { from: "#0f172a", to: "#1e1b4b", accent: "#f59e0b" },
-  };
+type GradientTheme = { from: string; to: string; accent: string };
+
+const DEFAULT_GRADIENT: GradientTheme = { from: "#0f172a", to: "#1e1b4b", accent: "#f59e0b" };
+
+const GRADIENTS: Record<string, GradientTheme> = {
+  purple: { from: "#1e1b4b", to: "#312e81", accent: "#a78bfa" },
+  amber: { from: "#1c1208", to: "#292010", accent: "#fbbf24" },
+  indigo: { from: "#0f172a", to: "#1e1b4b", accent: "#818cf8" },
+  green: { from: "#052e16", to: "#14532d", accent: "#4ade80" },
+  rose: { from: "#1c0a0a", to: "#2d1010", accent: "#fb7185" },
+  default: DEFAULT_GRADIENT,
+};
+
+function getGradient(key: string): GradientTheme {
+  return GRADIENTS[key] ?? DEFAULT_GRADIENT;
+}
 
 const CATEGORY_GRADIENTS: Record<string, string> = {
   inspirational: "purple",
@@ -61,7 +68,7 @@ function FortuneCookieCard({
   luckyNumbers?: string;
 }) {
   const gradientKey = CATEGORY_GRADIENTS[category] ?? "default";
-  const { from, to, accent } = GRADIENTS[gradientKey] ?? GRADIENTS.default;
+  const { from, to, accent } = getGradient(gradientKey);
 
   return (
     <div
@@ -243,7 +250,7 @@ function PSEOCard({
   description: string;
   gradient: string;
 }) {
-  const { from, to, accent } = GRADIENTS[gradient] ?? GRADIENTS.default;
+  const { from, to, accent } = getGradient(gradient);
 
   return (
     <div
@@ -395,7 +402,7 @@ function BlogCard({
   tag?: string;
   date?: string;
 }) {
-  const { from, to, accent } = GRADIENTS.default;
+  const { from, to, accent } = DEFAULT_GRADIENT;
 
   return (
     <div
