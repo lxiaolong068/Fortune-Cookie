@@ -1,19 +1,19 @@
 // Fortune Cookie AI - Service Worker
 // 提供离线支持和缓存管理
 
-const CACHE_NAME = "fortune-cookie-ai-v2";
-const STATIC_CACHE_NAME = "fortune-static-v2";
-const DYNAMIC_CACHE_NAME = "fortune-dynamic-v2";
-const API_CACHE_NAME = "fortune-api-v2";
+const CACHE_NAME = "fortune-cookie-ai-v3";
+const STATIC_CACHE_NAME = "fortune-static-v3";
+const DYNAMIC_CACHE_NAME = "fortune-dynamic-v3";
+const API_CACHE_NAME = "fortune-api-v3";
 
 // 需要预缓存的关键静态资源（仅限关键资源，避免HTML路由）
+// 注意：不包含 /offline（该路由不存在），避免 caches.addAll() 因 404 失败
 const STATIC_ASSETS = [
   "/app-manifest.json",
   "/favicon.ico",
   "/apple-touch-icon.png",
   "/favicon-32x32.png",
   "/favicon-16x16.png",
-  "/offline", // 离线页面是必需的
   // 不再预缓存HTML路由，避免过时内容问题
 ];
 
@@ -37,8 +37,8 @@ const SHORT_CACHE_ROUTES = [
 // 需要缓存的API端点
 const CACHEABLE_APIS = ["/api/fortunes", "/api/fortune"];
 
-// 离线时的回退页面
-const OFFLINE_PAGE = "/offline";
+// 离线时的回退页面（使用内联 HTML，/offline 路由不存在）
+const OFFLINE_PAGE = null;
 const OFFLINE_API_RESPONSE = {
   success: false,
   error: "Offline mode - please check your internet connection",
@@ -375,12 +375,7 @@ async function handlePageRequest(request) {
 
 // 获取离线页面的辅助函数
 async function getOfflinePage() {
-  const offlineResponse = await caches.match(OFFLINE_PAGE);
-  if (offlineResponse) {
-    return offlineResponse;
-  }
-
-  // 最后的回退 - 返回基本的离线页面
+  // 直接返回内联离线页面（/offline 路由不存在）
   return new Response(
     `
     <!DOCTYPE html>
@@ -415,11 +410,14 @@ async function getOfflinePage() {
 }
 
 // 工具函数：检查是否为静态资源
+// 注意：/_next/static/ 由 Vercel CDN 处理（immutable cache-control），
+// 不在 SW 层缓存，避免新部署后 chunk 版本冲突导致 ERR_FAILED
 function isStaticAsset(pathname) {
   return (
-    pathname.startsWith("/_next/") ||
     pathname.startsWith("/static/") ||
-    (pathname.includes(".") && !pathname.includes("/api/"))
+    (pathname.includes(".") &&
+      !pathname.includes("/api/") &&
+      !pathname.startsWith("/_next/"))
   );
 }
 
