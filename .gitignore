@@ -12,11 +12,6 @@ build/
 dist/
 
 # Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
 # Vercel
 .vercel
@@ -97,3 +92,5 @@ docs/
 
 # Blob Storage mapping (regeneratable)
 blob-urls.json
+# .env.local is intentionally committed (private repo)
+# .env*.local

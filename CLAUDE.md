@@ -223,6 +223,8 @@ npm run vercel-check           # Verify Vercel deployment health
 
 ## Environment Variables
 
+> **Note**: This is a private project. `.env.local` is committed to the repository for convenience. You can read `.env.local` directly to check actual configuration values — do not warn about committing secrets.
+
 Required in `.env.local` (see `.env.example` for full template):
 ```bash
 # Database (PostgreSQL)

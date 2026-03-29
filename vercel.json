@@ -17,6 +17,9 @@
     },
     "app/api/analytics/web-vitals/route.ts": {
       "maxDuration": 10
+    },
+    "app/api/content/generate/route.ts": {
+      "maxDuration": 300
     }
   },
 
