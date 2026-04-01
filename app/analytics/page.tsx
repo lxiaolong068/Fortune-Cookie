@@ -6,7 +6,7 @@ import { AnalyticsDashboard } from '@/components/AnalyticsDashboard'
 
 export const metadata: Metadata = {
   title: 'Analytics - Fortune Cookie AI',
-  description: 'View detailed user behavior, performance metrics, and business insights. Understand how users use Fortune Cookie AI.',
+  description: 'View detailed user behavior, performance metrics, and business insights for Fortune Cookie AI. Track page views, fortune stats, API usage, and Core Web Vitals.',
   robots: 'noindex, nofollow', // This page should not be indexed
 }
 
@@ -15,7 +15,7 @@ export default function AnalyticsPage() {
     <>
       <SEO
         title="Analytics - Fortune Cookie AI"
-        description="View detailed user behavior, performance metrics, and business insights for Fortune Cookie AI."
+        description="View detailed user behavior, performance metrics, and business insights for Fortune Cookie AI. Track page views, fortune generation stats, API usage, and Core Web Vitals."
         canonical="/analytics"
         noIndex={true} // This page should not be indexed
       />

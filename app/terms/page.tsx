@@ -12,13 +12,13 @@ export const revalidate = 86400; // 24 hours
 export const metadata: Metadata = {
   title: "Terms of Service - Fortune Cookie AI",
   description:
-    "Terms of Service for Fortune Cookie AI. Learn the rules, rights, and responsibilities for using our service.",
+    "Read Fortune Cookie AI's Terms of Service — learn about usage rights, content policies, liability limitations, and account rules. Contact us with any questions.",
   openGraph: {
     title: "Terms of Service - Fortune Cookie AI",
     description:
-      "Learn about the terms and conditions for using Fortune Cookie AI service.",
+      "Read Fortune Cookie AI's Terms of Service — understand usage rights, content policies, limitations of liability, account rules, and how to contact us with questions.",
     type: "article",
-    url: "https://www.fortune-cookie.cc/terms",
+    url: `${baseUrl}/terms`,
     images: [
       {
         url: getImageUrl("/og-image.png"),
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Terms of Service - Fortune Cookie AI",
     description:
-      "Learn about the terms and conditions for using Fortune Cookie AI service.",
+      "Read Fortune Cookie AI's Terms of Service — understand usage rights, content policies, limitations of liability, account rules, and how to contact us with questions.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },

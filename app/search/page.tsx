@@ -19,14 +19,14 @@ export const revalidate = 43200; // 12 hours
 export const metadata: Metadata = {
   title: "Search",
   description:
-    "Search Fortune Cookie AI for fortune messages, blog posts, and guides.",
+    "Search Fortune Cookie AI for fortune messages, blog posts, and guides. Find the perfect fortune by keyword across 500+ messages and articles. Fast and free.",
   alternates: {
     canonical: "/search",
   },
   openGraph: {
     title: "Search - Fortune Cookie AI",
     description:
-      "Search Fortune Cookie AI for fortune messages, blog posts, and guides.",
+      "Search Fortune Cookie AI for fortune messages, blog posts, and guides. Find the perfect fortune by keyword across 500+ messages and articles. Fast and free.",
     type: "website",
     url: `${baseUrl}/search`,
     images: [
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Search - Fortune Cookie AI",
     description:
-      "Search Fortune Cookie AI for fortune messages, blog posts, and guides.",
+      "Search Fortune Cookie AI for fortune messages, blog posts, and guides. Find the perfect fortune by keyword across 500+ messages and articles. Fast and free.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },

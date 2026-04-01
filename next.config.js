@@ -340,6 +340,10 @@ const nextConfig = {
           source: "/robots.txt",
           destination: "/robots.txt",
         },
+        {
+          source: "/4f58cae8b6004a7a88e13474e58418e1.txt",
+          destination: "/4f58cae8b6004a7a88e13474e58418e1.txt",
+        },
       ],
     };
   },

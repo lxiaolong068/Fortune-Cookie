@@ -7,11 +7,11 @@ const baseUrl = getSiteUrl();
 export const metadata: Metadata = {
   title: "Profile - Fortune Cookie AI",
   description:
-    "Manage your fortune cookie history, preferences, and usage stats.",
+    "Manage your Fortune Cookie AI profile: view fortune history, check daily quota, update preferences, and access saved favorites. Sign in to sync across devices.",
   openGraph: {
     title: "Profile - Fortune Cookie AI",
     description:
-      "Manage your fortune cookie history, preferences, and usage stats.",
+      "Manage your Fortune Cookie AI profile: view fortune history, check daily quota, update preferences, and access saved favorites. Sign in to sync across devices.",
     type: "website",
     url: `${baseUrl}/profile`,
     images: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Profile - Fortune Cookie AI",
     description:
-      "Manage your fortune cookie history, preferences, and usage stats.",
+      "Manage your Fortune Cookie AI profile: view fortune history, check daily quota, update preferences, and access saved favorites. Sign in to sync across devices.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },
