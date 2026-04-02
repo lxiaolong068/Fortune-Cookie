@@ -394,11 +394,31 @@ Follow the outline and guidelines exactly. Return only the MDX content.`;
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080";
 
+async function validateImageUrl(url: string): Promise<boolean> {
+  try {
+    const response = await fetch(url, {
+      method: "HEAD",
+      redirect: "follow",
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const contentType = response.headers.get("content-type") ?? "";
+    return contentType.startsWith("image/");
+  } catch {
+    return false;
+  }
+}
+
 async function fetchUnsplashImage(query: string): Promise<string> {
   const accessKeys = getUnsplashAccessKeys();
   if (accessKeys.length === 0) {
     return FALLBACK_IMAGE;
   }
+
+  const fallbackValid = await validateImageUrl(FALLBACK_IMAGE);
 
   // 随机轮换 access key
   const key = accessKeys[Math.floor(Math.random() * accessKeys.length)]!;
@@ -412,22 +432,28 @@ async function fetchUnsplashImage(query: string): Promise<string> {
       throw new Error(`Unsplash API error: ${response.status}`);
     }
 
-    const data = await response.json() as { results?: { id: string; urls?: { regular?: string } }[] };
+    const data = await response.json() as { results?: { urls?: { regular?: string; raw?: string; full?: string } }[] };
     const photos = data.results ?? [];
 
     if (photos.length === 0) {
-      return FALLBACK_IMAGE;
+      return fallbackValid ? FALLBACK_IMAGE : "";
     }
 
-    // 随机从前 3 张中选一张，增加多样性
-    const pick = photos[Math.floor(Math.random() * Math.min(3, photos.length))]!;
-    const photoId = pick.id;
+    const candidates = photos
+      .slice(0, 3)
+      .map((photo) => photo.urls?.regular ?? photo.urls?.raw ?? photo.urls?.full ?? "")
+      .filter((photoUrl): photoUrl is string => photoUrl.length > 0);
 
-    // 构建 Unsplash CDN hotlink URL（与现有博客文章格式一致）
-    return `https://images.unsplash.com/photo-${photoId}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080`;
+    for (const candidate of candidates) {
+      if (await validateImageUrl(candidate)) {
+        return candidate;
+      }
+    }
+
+    return fallbackValid ? FALLBACK_IMAGE : "";
   } catch (err) {
     console.warn(`[Unsplash] Image fetch failed: ${err instanceof Error ? err.message : err}`);
-    return FALLBACK_IMAGE;
+    return fallbackValid ? FALLBACK_IMAGE : "";
   }
 }
 
