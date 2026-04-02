@@ -248,18 +248,12 @@ function handleLocaleDetection(
   const preferredLocale =
     cookieLocale && isValidLocale(cookieLocale) ? cookieLocale : headerLocale;
 
-  // If path already has a locale prefix, rewrite to root path
-  // e.g. /zh/privacy → rewrite to /privacy (Next.js routes live under app/, not app/[locale]/)
+  // If path already has a locale prefix, preserve it and just forward locale context.
   if (pathnameHasLocale) {
-    const rewriteUrl = new URL(request.url);
-    const pathWithoutLocale = "/" + segments.slice(1).join("/");
-    rewriteUrl.pathname = pathWithoutLocale || "/";
-
-    // Forward locale info via request headers so pages can detect it
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-locale", firstSegment);
 
-    const response = NextResponse.rewrite(rewriteUrl, {
+    const response = NextResponse.next({
       request: { headers: requestHeaders },
     });
 

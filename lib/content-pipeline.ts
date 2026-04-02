@@ -459,6 +459,31 @@ async function fetchUnsplashImage(query: string): Promise<string> {
 
 // ─── Stage 6: 保存 MDX 文件 ───────────────────────────────────────────────────
 
+function sanitizeGeneratedContent(content: string): string {
+  const lines = content.split(/
+?
+/);
+  const cleaned: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!;
+    if (/^!\[[^\]]*\]\([^)]*\)$/.test(line.trim())) {
+      const next = lines[i + 1]?.trim() ?? "";
+      if (/^\*[^*].*\*$/.test(next)) {
+        i += 1;
+      }
+      continue;
+    }
+    cleaned.push(line);
+  }
+
+  return cleaned.join("
+").replace(/
+{3,}/g, "
+
+").trim();
+}
+
 function saveMdxFile(topic: TopicDecision, content: string, imageUrl: string): string {
   const enDir = path.join(BLOG_DIR, "en");
   if (!fs.existsSync(enDir)) {
@@ -656,7 +681,9 @@ export async function runContentGeneration(
   {
     const t = Date.now();
     try {
-      generatedContent = await generateContentWithAI(topicDecision, model);
+      generatedContent = sanitizeGeneratedContent(
+        await generateContentWithAI(topicDecision, model),
+      );
       const wordCount = generatedContent.split(/\s+/).length;
       log("ContentGeneration", true, `Generated ~${wordCount} words`, Date.now() - t);
     } catch (err) {
