@@ -1,10 +1,10 @@
 // Fortune Cookie AI - Service Worker
 // 提供离线支持和缓存管理
 
-const CACHE_NAME = "fortune-cookie-ai-v3";
-const STATIC_CACHE_NAME = "fortune-static-v3";
-const DYNAMIC_CACHE_NAME = "fortune-dynamic-v3";
-const API_CACHE_NAME = "fortune-api-v3";
+const CACHE_NAME = "fortune-cookie-ai-v4";
+const STATIC_CACHE_NAME = "fortune-static-v4";
+const DYNAMIC_CACHE_NAME = "fortune-dynamic-v4";
+const API_CACHE_NAME = "fortune-api-v4";
 
 // 需要预缓存的关键静态资源（仅限关键资源，避免HTML路由）
 // 注意：不包含 /offline（该路由不存在），避免 caches.addAll() 因 404 失败
@@ -306,7 +306,11 @@ async function handlePageRequest(request) {
 
   try {
     // 尝试网络请求
-    const networkResponse = await fetch(request);
+    // 注意：不能直接用 fetch(request) 传递 navigate 模式的请求对象。
+    // navigate 模式下 redirect 默认为 'manual'，服务器的语言重定向（如 / → /zh）
+    // 会返回 307 响应且 response.ok=false，导致 SW 误判为网络故障并展示离线页面。
+    // 改用 fetch(request.url) 发起新请求，默认 redirect:'follow'，正确跟随重定向。
+    const networkResponse = await fetch(request.url);
 
     if (networkResponse.ok) {
       // 只缓存允许的页面，并设置较短的TTL
