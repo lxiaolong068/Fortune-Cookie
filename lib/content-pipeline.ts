@@ -460,9 +460,7 @@ async function fetchUnsplashImage(query: string): Promise<string> {
 // ─── Stage 6: 保存 MDX 文件 ───────────────────────────────────────────────────
 
 function sanitizeGeneratedContent(content: string): string {
-  const lines = content.split(/
-?
-/);
+  const lines = content.split(/\r?\n/);
   const cleaned: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -477,11 +475,7 @@ function sanitizeGeneratedContent(content: string): string {
     cleaned.push(line);
   }
 
-  return cleaned.join("
-").replace(/
-{3,}/g, "
-
-").trim();
+  return cleaned.join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 function saveMdxFile(topic: TopicDecision, content: string, imageUrl: string): string {
