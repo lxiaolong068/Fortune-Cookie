@@ -257,8 +257,11 @@ function handleLocaleDetection(
       request: { headers: requestHeaders },
     });
 
-    // Set locale cookie if not already matching
-    if (!cookieLocale || cookieLocale !== firstSegment) {
+    // Only set locale cookie if no valid preference exists.
+    // Do NOT overwrite a user's explicit choice (e.g. they picked "en" while
+    // viewing an /es/ URL — we must honour that cookie so the next navigation
+    // lands on the correct locale instead of reverting to Spanish).
+    if (!cookieLocale || !isValidLocale(cookieLocale)) {
       response.cookies.set(pathConfig.detection.cookieName, firstSegment, {
         path: "/",
         maxAge: pathConfig.detection.cookieMaxAge,

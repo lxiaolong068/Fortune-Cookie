@@ -306,11 +306,21 @@ async function handlePageRequest(request) {
 
   try {
     // 尝试网络请求
-    // 注意：不能直接用 fetch(request) 传递 navigate 模式的请求对象。
-    // navigate 模式下 redirect 默认为 'manual'，服务器的语言重定向（如 / → /zh）
-    // 会返回 307 响应且 response.ok=false，导致 SW 误判为网络故障并展示离线页面。
-    // 改用 fetch(request.url) 发起新请求，默认 redirect:'follow'，正确跟随重定向。
-    const networkResponse = await fetch(request.url);
+    // For 'navigate' requests (full page loads) we must NOT pass the original
+    // request object because the browser sets redirect:'manual' in that mode.
+    // A server-side language redirect (e.g. / → /es) would then return a 307
+    // with response.ok=false and we'd wrongly show the offline page.
+    // Using fetch(request.url) issues a fresh request with redirect:'follow'.
+    //
+    // For all other modes (RSC soft-navigation, prefetch, etc.) we MUST pass
+    // the original request so that Next.js App Router headers are preserved:
+    //   RSC: 1 / Next-Router-State-Tree / Next-Router-Prefetch
+    // Without them the server returns full HTML instead of an RSC payload,
+    // which can cause Next.js to fall back to a hard navigation and trigger
+    // the language-cookie reset bug in middleware.
+    const networkResponse = request.mode === 'navigate'
+      ? await fetch(request.url)
+      : await fetch(request);
 
     if (networkResponse.ok) {
       // 只缓存允许的页面，并设置较短的TTL
