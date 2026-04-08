@@ -78,12 +78,15 @@ function getLocalizedCategoryLabel(
 
 export async function generateStaticParams() {
   const tags = getAllTags();
-  return i18n.locales.flatMap((locale) =>
-    tags.map((tag) => ({
-      locale,
-      tag: encodeURIComponent(tag),
-    })),
-  );
+  // Exclude default locale ('en') — English tag pages are at /tag/[tag], not /en/tag/[tag]
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .flatMap((locale) =>
+      tags.map((tag) => ({
+        locale,
+        tag: encodeURIComponent(tag),
+      })),
+    );
 }
 
 export async function generateMetadata({

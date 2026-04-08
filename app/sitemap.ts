@@ -51,10 +51,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getSiteUrl();
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  const staticContentDate = new Date("2025-01-15");
-  const legalPagesDate = new Date("2025-01-01");
-  const dynamicContentDate = new Date("2025-10-01");
-  const weeklyContentDate = new Date("2025-10-01");
+  const now = new Date();
+  const staticContentDate = new Date("2025-10-01");
+  const legalPagesDate = new Date("2025-10-01");
+  const dynamicContentDate = now; // user-generated content, always "fresh"
+  const weeklyContentDate = now; // regularly updated pages
 
   const pages: PageConfig[] = [
     { path: "/", priority: 1.0, changeFrequency: "daily", lastModified: weeklyContentDate },
@@ -76,10 +77,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/terms", priority: 0.3, changeFrequency: "yearly", lastModified: legalPagesDate },
   ];
 
+  // Use /browse/category/[category] static pages instead of /explore?category=xxx query params.
+  // URL parameters are generally ignored by Google and waste crawl budget.
   const stats = getDatabaseStats();
   for (const category of Object.keys(stats.categories)) {
     pages.push({
-      path: `/explore?category=${category}`,
+      path: `/browse/category/${category}`,
       priority: 0.7,
       changeFrequency: "weekly",
       lastModified: weeklyContentDate,

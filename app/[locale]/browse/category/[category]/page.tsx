@@ -105,12 +105,15 @@ function resolveCategoryDescription(
 }
 
 export function generateStaticParams() {
-  return i18n.locales.flatMap((locale) =>
-    categoryKeys.map((category) => ({
-      locale,
-      category,
-    })),
-  );
+  // Exclude default locale ('en') — English category pages are at /browse/category/[category], not /en/browse/...
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .flatMap((locale) =>
+      categoryKeys.map((category) => ({
+        locale,
+        category,
+      })),
+    );
 }
 
 export async function generateMetadata({

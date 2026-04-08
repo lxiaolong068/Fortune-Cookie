@@ -8,11 +8,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-// Generate static params for all locales
+// Generate static params for non-default locales only (exclude 'en' to avoid duplicate routes)
 export function generateStaticParams() {
-  return i18n.locales.map((locale) => ({
-    locale,
-  }));
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .map((locale) => ({ locale }));
 }
 
 interface MessagesPageProps {

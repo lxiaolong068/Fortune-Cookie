@@ -44,14 +44,17 @@ interface BlogPostPageProps {
 }
 
 /**
- * Generate static params for all blog posts in all locales
+ * Generate static params for all blog posts in non-default locales only
+ * Exclude 'en' — English blog posts are served at /blog/[slug] (root), not /en/blog/[slug]
  */
 export async function generateStaticParams() {
   const localizedSlugs = getAllLocalizedSlugs();
-  return localizedSlugs.map(({ slug, locale }) => ({
-    locale,
-    slug,
-  }));
+  return localizedSlugs
+    .filter(({ locale }) => locale !== i18n.defaultLocale)
+    .map(({ slug, locale }) => ({
+      locale,
+      slug,
+    }));
 }
 
 /**

@@ -10,11 +10,12 @@ import { LocaleProvider } from "@/lib/locale-context";
 
 const baseUrl = getSiteUrl();
 
-// Generate static params for all locales
+// Generate static params for non-default locales only
+// English is served at /generator (root), not /en/generator — exclude 'en' to avoid duplicate routes
 export function generateStaticParams() {
-  return i18n.locales.map((locale) => ({
-    locale,
-  }));
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .map((locale) => ({ locale }));
 }
 
 // Generate metadata for each locale

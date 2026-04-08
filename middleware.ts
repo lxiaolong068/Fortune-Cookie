@@ -94,8 +94,20 @@ export function middleware(request: NextRequest) {
   const firstSegment = segments[0] ?? "";
 
   // Bot 检测 — 对已知爬虫设置标记并跳过分析相关处理
+  // NOTE: Bots still need canonical redirects (e.g. /en/* → /*), so we only
+  // skip locale-preference detection for bots, NOT the canonical redirect logic.
   const userAgent = request.headers.get("user-agent");
-  if (isBot(userAgent)) {
+  const isKnownBot = isBot(userAgent);
+
+  if (isKnownBot) {
+    // If bot accesses /en/* path, redirect to canonical /* path first
+    const botSegments = pathname.split("/").filter(Boolean);
+    const botFirstSegment = botSegments[0] ?? "";
+    if (botFirstSegment === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
+      const canonicalUrl = new URL(request.url);
+      canonicalUrl.pathname = pathname.replace(`/${i18n.defaultLocale}`, "") || "/";
+      return NextResponse.redirect(canonicalUrl, 301);
+    }
     const response = NextResponse.next();
     response.headers.set("X-Is-Bot", "true");
     return response;
@@ -248,8 +260,17 @@ function handleLocaleDetection(
   const preferredLocale =
     cookieLocale && isValidLocale(cookieLocale) ? cookieLocale : headerLocale;
 
-  // If path already has a locale prefix, preserve it and just forward locale context.
+  // If path already has a locale prefix, check if it's the default locale.
   if (pathnameHasLocale) {
+    // If the path starts with the default locale (e.g. /en/generator) and we don't show
+    // the default locale prefix, redirect to the canonical path without prefix.
+    if (firstSegment === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
+      const canonicalUrl = new URL(request.url);
+      // Strip the /en prefix from the pathname
+      canonicalUrl.pathname = pathname.replace(`/${i18n.defaultLocale}`, "") || "/";
+      return NextResponse.redirect(canonicalUrl, 301);
+    }
+
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-locale", firstSegment);
 

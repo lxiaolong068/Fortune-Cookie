@@ -14,7 +14,12 @@ import { LocaleProvider } from "@/lib/locale-context";
  * Generate static params for all supported locales
  */
 export function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ locale }));
+  // Exclude the default locale ('en') — English is served at the root path (e.g. /generator),
+  // not under a locale prefix (/en/generator). Including 'en' here creates duplicate routes
+  // that confuse Google and waste crawl budget.
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .map((locale) => ({ locale }));
 }
 
 /**

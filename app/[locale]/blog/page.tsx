@@ -109,10 +109,13 @@ export async function generateMetadata({
 }
 
 /**
- * Generate static params for all locales
+ * Generate static params for non-default locales only
+ * Exclude 'en' — English blog is served at /blog (root), not /en/blog
  */
 export function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ locale }));
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .map((locale) => ({ locale }));
 }
 
 interface BlogPageProps {

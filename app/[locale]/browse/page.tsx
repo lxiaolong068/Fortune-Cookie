@@ -1,11 +1,11 @@
 import { permanentRedirect } from "next/navigation";
 import { i18n, isValidLocale } from "@/lib/i18n-config";
 
-// Generate static params for all locales
+// Generate static params for non-default locales only (exclude 'en' to avoid duplicate routes)
 export function generateStaticParams() {
-  return i18n.locales.map((locale) => ({
-    locale,
-  }));
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .map((locale) => ({ locale }));
 }
 
 interface BrowsePageProps {

@@ -32,9 +32,11 @@ export const revalidate = 21600; // 6 hours (was 1 hour)
 
 // Generate static params for all locales
 export function generateStaticParams() {
-  return i18n.locales.map((locale) => ({
-    locale,
-  }));
+  // Exclude the default locale ('en') — English is served at the root path (/),
+  // not under /en/. Including 'en' creates a duplicate route that wastes crawl budget.
+  return i18n.locales
+    .filter((locale) => locale !== i18n.defaultLocale)
+    .map((locale) => ({ locale }));
 }
 
 // Generate metadata for each locale

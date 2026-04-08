@@ -110,6 +110,11 @@
   ],
   "redirects": [
     {
+      "source": "/en/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    },
+    {
       "source": "/fortune-cookies",
       "destination": "/generator",
       "permanent": true
