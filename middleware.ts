@@ -313,11 +313,13 @@ function handleLocaleDetection(
   }
 
   // Redirect to localized path for non-default locales
+  // Use 302 (Found) not 307 — 307 preserves HTTP method (for POST/PUT), but this is
+  // a GET browser navigation based on user preference, so 302 is semantically correct.
   if (preferredLocale !== i18n.defaultLocale) {
     const localizedUrl = new URL(request.url);
     localizedUrl.pathname = `/${preferredLocale}${pathname === "/" ? "" : pathname}`;
 
-    const response = NextResponse.redirect(localizedUrl, 307);
+    const response = NextResponse.redirect(localizedUrl, 302);
     response.cookies.set(pathConfig.detection.cookieName, preferredLocale, {
       path: "/",
       maxAge: pathConfig.detection.cookieMaxAge,

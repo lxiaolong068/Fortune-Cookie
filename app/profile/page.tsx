@@ -34,6 +34,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/profile",
   },
+  // Profile page requires authentication — exclude from Google index to avoid
+  // soft-404 / low-quality page signals from unauthenticated crawls.
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function ProfilePage() {
