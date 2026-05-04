@@ -8,7 +8,7 @@ import { getAllQuoteSlugs } from "../lib/pseo/quotes";
 import { getAllAudienceSlugs } from "../lib/pseo/audiences";
 import { getAllActivitySlugs } from "../lib/pseo/activities";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://www.fortune-cookie-ai.com";
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://www.fortunecookie.vip";
 const INDEXNOW_KEY = "4f58cae8b6004a7a88e13474e58418e1";
 const INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow";
 
