@@ -12,11 +12,11 @@ export const revalidate = 86400; // 24 hours
 export const metadata: Metadata = {
   title: "Privacy Policy - Fortune Cookie AI",
   description:
-    "Privacy Policy for Fortune Cookie AI. Learn how we collect, use, and protect your data. We prioritize your privacy and security.",
+    "Privacy Policy for Fortune Cookie AI. Learn what data we collect when you use our AI fortune cookie generator, how we protect it, and your rights as a user.",
   openGraph: {
     title: "Privacy Policy - Fortune Cookie AI",
     description:
-      "Learn how Fortune Cookie AI protects your privacy and personal data.",
+      "Read how Fortune Cookie AI handles your data: what we collect from the AI fortune cookie generator, how we protect your privacy, and your rights.",
     type: "article",
     url: `${baseUrl}/privacy`,
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Privacy Policy - Fortune Cookie AI",
     description:
-      "Learn how Fortune Cookie AI protects your privacy and personal data.",
+      "Read how Fortune Cookie AI handles your data: what we collect from the AI fortune cookie generator, how we protect your privacy, and your rights.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },

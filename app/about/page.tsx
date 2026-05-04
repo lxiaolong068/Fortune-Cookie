@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
 import { generateAlternateLanguages } from "@/lib/i18n-config";
+import { BreadcrumbStructuredData } from "@/components/StructuredData";
 import { AboutPageContent } from "./AboutPageContent";
 
 const baseUrl = getSiteUrl();
@@ -44,5 +45,15 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return <AboutPageContent />;
+  return (
+    <>
+      <BreadcrumbStructuredData
+        items={[
+          { name: "Home", url: "/" },
+          { name: "About", url: "/about" },
+        ]}
+      />
+      <AboutPageContent />
+    </>
+  );
 }
