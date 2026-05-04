@@ -336,22 +336,17 @@ export default function HomePage() {
         {/* SEO-optimized visible content */}
         <div className="relative z-10 bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-800/50 backdrop-blur-sm border-t border-indigo-100/50 dark:border-indigo-800/30 pt-12 pb-16">
           <div className="container mx-auto px-4">
-            <Suspense fallback={null}>
-              <ScrollReveal direction="up" delay={0.1}>
-                <div className="max-w-4xl mx-auto text-center mb-16">
-                  <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-800 dark:text-white mb-6">
-                    Fortune Cookie AI - Free Online Fortune Cookie Generator
-                  </h1>
-                  <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Welcome to the best free online AI-powered fortune cookie
-                    generator! Create personalized inspirational messages, funny
-                    quotes, and discover your lucky numbers. Our AI tool
-                    generates unique fortune cookies for entertainment,
-                    motivation, and fun.
-                  </p>
-                </div>
-              </ScrollReveal>
-            </Suspense>
+            <div className="max-w-4xl mx-auto text-center mb-16">
+              <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-800 dark:text-white mb-6">
+                Fortune Cookie AI - Free Online Fortune Cookie Generator
+              </h1>
+              <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                Welcome to the best free online AI-powered fortune cookie
+                generator! Create personalized inspirational messages, funny
+                quotes, and discover your lucky numbers. Our AI tool generates
+                unique fortune cookies for entertainment, motivation, and fun.
+              </p>
+            </div>
 
             <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
               <section>

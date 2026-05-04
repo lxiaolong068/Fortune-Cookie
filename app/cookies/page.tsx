@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     description:
       "Learn how Fortune Cookie AI uses cookies and local storage technologies.",
     type: "article",
-    url: "https://www.fortune-cookie.cc/cookies",
+    url: `${baseUrl}/cookies`,
     images: [
       {
         url: getImageUrl("/og-image.png"),

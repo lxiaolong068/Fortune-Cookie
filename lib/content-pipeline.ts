@@ -193,7 +193,7 @@ async function decideTopicWithAI(
     ? `The user has requested a specific topic: "${manualTopic}". Generate a blog post idea based on this topic.`
     : `Based on the web search results above and current trends, select the most SEO-valuable and reader-engaging topic.`;
 
-  const systemPrompt = `You are a senior content strategist for Fortune Cookie AI (fortune-cookie.cc), a website with an AI-powered fortune cookie generator.
+  const systemPrompt = `You are a senior content strategist for Fortune Cookie AI (fortunecookie.vip), a website with an AI-powered fortune cookie generator.
 
 The blog covers these content pillars:
 - AI & Technology (highest priority)
@@ -299,7 +299,7 @@ async function generateContentWithAI(
     .map((l) => `- [${l.anchor}](${l.path}) — ${l.context}`)
     .join("\n");
 
-  const systemPrompt = `You are a professional content writer for Fortune Cookie AI (fortune-cookie.cc).
+  const systemPrompt = `You are a professional content writer for Fortune Cookie AI (fortunecookie.vip).
 
 Write a complete, high-quality blog post in MDX format. Follow these requirements:
 

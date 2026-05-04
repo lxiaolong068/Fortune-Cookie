@@ -117,7 +117,7 @@ export const DEFAULT_CONTENT_MODEL =
 
 export const OPENROUTER_CONFIG = {
   baseUrl: "https://openrouter.ai/api/v1",
-  referer: "https://fortune-cookie.cc",
+  referer: "https://fortunecookie.vip",
   title: "Fortune Cookie Blog Generator",
 } as const;
 
