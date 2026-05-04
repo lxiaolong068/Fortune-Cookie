@@ -336,6 +336,12 @@ export function getFeaturedPosts(
 
 /**
  * Get related posts by tags
+ *
+ * Primary ranking is by tag overlap (most overlap first). If fewer than `limit`
+ * posts share any tag with the current post, the result is padded with the most
+ * recent posts so every article links out to siblings (improves topic-cluster
+ * internal linking for SEO and reduces the chance of an orphaned post).
+ *
  * @param currentSlug - The current post slug to exclude
  * @param tags - Tags to match against
  * @param limit - Maximum number of posts to return
@@ -347,18 +353,26 @@ export function getRelatedPosts(
   limit = 3,
   locale: Locale = i18n.defaultLocale,
 ): BlogPostMeta[] {
-  const allPosts = getBlogPosts({ locale, includeDrafts: false });
+  const allPosts = getBlogPosts({ locale, includeDrafts: false }).filter(
+    (post) => post.slug !== currentSlug,
+  );
 
-  return allPosts
-    .filter((post) => post.slug !== currentSlug)
+  const tagMatches = allPosts
     .map((post) => ({
       post,
       relevance: post.tags.filter((tag) => tags.includes(tag)).length,
     }))
     .filter((item) => item.relevance > 0)
     .sort((a, b) => b.relevance - a.relevance)
-    .slice(0, limit)
     .map((item) => item.post);
+
+  if (tagMatches.length >= limit) {
+    return tagMatches.slice(0, limit);
+  }
+
+  const seen = new Set(tagMatches.map((p) => p.slug));
+  const fallback = allPosts.filter((p) => !seen.has(p.slug));
+  return [...tagMatches, ...fallback].slice(0, limit);
 }
 
 /**

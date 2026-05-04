@@ -24,7 +24,7 @@
     "test:e2e:debug": "playwright test --debug",
     "analyze": "ANALYZE=true npm run build",
     "vercel-build": "npm run type-check && npm run build",
-    "postbuild": "echo 'Build completed successfully!'",
+    "postbuild": "tsx scripts/post-deploy-indexnow.ts",
     "vercel-check": "node scripts/vercel-deployment-check.js",
     "deploy-check": "npm run vercel-check",
     "db:generate": "prisma generate",

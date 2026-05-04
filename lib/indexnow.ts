@@ -5,10 +5,14 @@
  */
 
 // IndexNow 配置
+// Canonical host is www.fortunecookie.vip; the apex (fortunecookie.vip) 307-redirects
+// to www, and the IndexNow key file is only directly served on www. Submitting
+// non-canonical URLs causes IndexNow to either reject or follow redirects, so we
+// default to the canonical host here.
 export const INDEXNOW_CONFIG = {
   apiKey: "4f58cae8b6004a7a88e13474e58418e1",
-  host: process.env.INDEXNOW_HOST || "fortunecookie.vip",
-  keyLocation: `https://${process.env.INDEXNOW_HOST || "fortunecookie.vip"}/4f58cae8b6004a7a88e13474e58418e1.txt`,
+  host: process.env.INDEXNOW_HOST || "www.fortunecookie.vip",
+  keyLocation: `https://${process.env.INDEXNOW_HOST || "www.fortunecookie.vip"}/4f58cae8b6004a7a88e13474e58418e1.txt`,
   // 支持的搜索引擎端点
   endpoints: [
     "https://api.indexnow.org/indexnow",
