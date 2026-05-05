@@ -374,7 +374,7 @@ export function AboutPageContent() {
               hear from you. Our team reads every message.
             </p>
             <a
-              href="mailto:hello@fortune-cookie-ai.com"
+              href="mailto:lxiaolong068@gmail.com"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl
                        bg-white text-indigo-600 font-semibold
                        hover:bg-white/90 transition-all duration-300

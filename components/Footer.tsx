@@ -59,7 +59,7 @@ export async function Footer() {
                   <Github className="w-5 h-5 text-gray-600" />
                 </a>
                 <a
-                  href="mailto:hello@fortune-cookie-ai.com"
+                  href="mailto:lxiaolong068@gmail.com"
                   className="p-3 bg-white rounded-lg border border-amber-200 hover:bg-amber-50 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                   aria-label={t("footer.contactEmail")}
                 >
