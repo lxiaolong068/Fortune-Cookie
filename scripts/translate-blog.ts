@@ -42,6 +42,9 @@ const LOCALE_CONFIG: Record<
 - Maintain the original formatting (markdown, headers, lists)
 - Preserve all links, images, and code blocks unchanged
 - Use appropriate Chinese punctuation (。，！？：；）
+- AVOID em-dashes (— or ——). Prefer comma (，), colon (：), or period (。)
+  for breaks. Em-dash overuse is a strong AI-writing signal.
+- Avoid AI-flavored clichés like "想象一下..."、"让我们来 geek out"、"未来的你感谢你"
 - Keep the tone engaging and accessible`,
   },
   es: {
@@ -53,6 +56,10 @@ const LOCALE_CONFIG: Record<
 - Maintain the original formatting (markdown, headers, lists)
 - Preserve all links, images, and code blocks unchanged
 - Use appropriate Spanish punctuation and accents
+- AVOID em-dashes (—). Prefer commas, colons, parentheses, or periods.
+  Em-dash overuse is a strong AI-writing signal.
+- Avoid AI-flavored clichés like "Imagina abrir...", "Vamos a ponernos geeks",
+  "Tu yo futuro te agradece", "la estrella del show", "boom—..."
 - Keep the tone engaging and accessible`,
   },
   pt: {
@@ -64,6 +71,10 @@ const LOCALE_CONFIG: Record<
 - Maintain the original formatting (markdown, headers, lists)
 - Preserve all links, images, and code blocks unchanged
 - Use appropriate Portuguese punctuation and accents
+- AVOID em-dashes (—). Prefer commas, colons, parentheses, or periods.
+  Em-dash overuse is a strong AI-writing signal.
+- Avoid AI-flavored clichés like "Imagine abrir...", "Vamos geekar",
+  "Seu eu do futuro agradece", "a estrela do show", "boom—..."
 - Keep the tone engaging and accessible`,
   },
 };
