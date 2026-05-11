@@ -150,7 +150,12 @@ export function PageHero({
         <motion.div
           className={cn("flex flex-col", alignStyles[align])}
           variants={staggerContainer(0.1, 0)}
-          initial="hidden"
+          // initial={false} skips the `hidden` state during SSR/first paint so
+          // above-the-fold copy (title, description, H1) renders immediately
+          // visible — the previous initial="hidden" emitted opacity:0 inline
+          // styles in the SSR HTML, deferring LCP behind Framer hydration and
+          // causing search engines + slow connections to see a blank hero.
+          initial={false}
           animate="visible"
         >
           {/* Breadcrumbs */}

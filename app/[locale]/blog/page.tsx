@@ -100,11 +100,20 @@ export async function generateMetadata({
     },
     alternates: {
       canonical: canonicalUrl,
-      languages: generateAlternateLanguages(
-        canonicalQuery ? `/blog?${canonicalQuery}` : "/blog",
-        baseUrl,
-      ),
+      // Tags are locale-specific (EN "wisdom" vs ES "sabiduría" vs PT "sabedoria").
+      // Emitting hreflang on a `?tag=X` URL fans out to sibling locales where that
+      // exact tag string does not exist, producing empty pages that Google flags
+      // as Soft 404. Skip language alternates whenever a tag filter is active.
+      languages: selectedTag
+        ? undefined
+        : generateAlternateLanguages(
+            canonicalQuery ? `/blog?${canonicalQuery}` : "/blog",
+            baseUrl,
+          ),
     },
+    // Tag-filtered views duplicate the canonical /tag/[tag] hub and add no
+    // unique content — noindex them to free crawl budget for hub + articles.
+    robots: selectedTag ? { index: false, follow: true } : undefined,
   };
 }
 

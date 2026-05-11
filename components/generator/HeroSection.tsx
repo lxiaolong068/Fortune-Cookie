@@ -37,25 +37,20 @@ export function HeroSection({
 
   return (
     <div className="text-center mb-8">
-      {/* H1 Title */}
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      {/* H1 Title — render immediately visible for LCP / SEO. The previous
+          initial={{ opacity: 0 }} emitted an opacity:0 inline style in the SSR
+          HTML, deferring LCP behind Framer hydration and showing crawlers an
+          invisible hero. */}
+      <h1
         className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent mb-4"
       >
         AI Fortune Cookie Generator
-      </motion.h1>
+      </h1>
 
-      {/* Subtitle */}
-      <motion.p
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="text-lg text-gray-600 max-w-2xl mx-auto mb-4"
-      >
+      {/* Subtitle — same reasoning: keep visible from first paint. */}
+      <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-4">
         Create personalized fortune cookie messages and lucky numbers in seconds.
-      </motion.p>
+      </p>
 
       {/* Quota Display Card */}
       <motion.div
