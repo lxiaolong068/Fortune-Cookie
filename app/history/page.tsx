@@ -14,14 +14,23 @@ const baseUrl = getSiteUrl();
 export const dynamic = "force-static";
 export const revalidate = 86400; // 24 hours
 
+// CTR optimization (GSC: 325 imp, pos 8.1, CTR 0.3% — far below the ~4%
+// baseline expected at this position). The old title started with "History
+// of…" which buries the actual high-intent "who invented fortune cookies"
+// query the page ranks for, and the 231-char description was getting cut
+// off long before the most clickable detail. Lead with the question form
+// and keep every description variant under 160 chars.
+const historyTitle =
+  "Who Invented Fortune Cookies? The Surprising True History";
+
 export const metadata: Metadata = {
-  title: "History of Fortune Cookies — Origins, Invention & Cultural Journey",
+  title: historyTitle,
   description:
-    "Who invented fortune cookies? Explore the fascinating history from Japanese roots in Kyoto to American invention in California. Discover Makoto Hagiwara, the 1906 earthquake connection, and how fortune cookies became a global icon.",
+    "Who really invented fortune cookies? Japanese roots in Kyoto, San Francisco origins, Makoto Hagiwara, and the 1980s court case that decided it.",
   openGraph: {
-    title: "History of Fortune Cookies — Origins, Invention & Cultural Journey",
+    title: historyTitle,
     description:
-      "Who invented fortune cookies? Discover the fascinating history from Japanese roots to American invention, Makoto Hagiwara, and the cultural journey of this iconic treat.",
+      "Who really invented fortune cookies? Japanese roots, San Francisco origins, Makoto Hagiwara, and the 1980s court case that decided it.",
     type: "article",
     url: `${baseUrl}/history`,
     images: [
@@ -35,9 +44,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "History of Fortune Cookies — Origins, Invention & Cultural Journey",
+    title: historyTitle,
     description:
-      "Who invented fortune cookies? Explore their Japanese roots, American invention, and cultural evolution from Kyoto to California.",
+      "Who really invented fortune cookies? Japanese roots, San Francisco origins, and the cultural journey of this iconic treat.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },
@@ -51,7 +60,7 @@ export default function HistoryPage() {
   return (
     <>
       <ArticleStructuredData
-        headline="History of Fortune Cookies — Origins, Invention & Cultural Journey"
+        headline={historyTitle}
         description="Discover the fascinating history of fortune cookies, from their Japanese roots to American invention. Learn about the cultural evolution and origins of this beloved treat."
         url="/history"
         datePublished="2024-01-01"

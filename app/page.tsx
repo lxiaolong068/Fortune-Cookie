@@ -337,8 +337,12 @@ export default function HomePage() {
         <div className="relative z-10 bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-800/50 backdrop-blur-sm border-t border-indigo-100/50 dark:border-indigo-800/30 pt-12 pb-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center mb-16">
+              {/* H1 leads with the GSC #1 query "fortune cookie online"
+                  (3,345 imp/mo @ pos 7.8) plus #3 "fortune cookie online free".
+                  Brand name lives in the <title> tag, OG image, logo, and
+                  WebApplication schema — it does not need to anchor the H1. */}
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-800 dark:text-white mb-6">
-                Fortune Cookie AI - Free Online Fortune Cookie Generator
+                Free Online Fortune Cookie Generator — AI-Powered & Instant
               </h1>
               <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                 Welcome to the best free online AI-powered fortune cookie

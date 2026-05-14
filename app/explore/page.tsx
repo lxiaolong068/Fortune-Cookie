@@ -25,8 +25,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const totalCount = stats.total;
   const categoryCount = Object.keys(stats.categories).length;
 
-  const title = `Browse ${totalCount}+ Fortune Cookie Messages | Find Your Perfect Fortune`;
-  const description = `Explore ${totalCount}+ fortune cookie messages across ${categoryCount} categories. Search by keyword, filter by mood, sort by popularity. Find the perfect fortune for any occasion - free to copy & share!`;
+  // CTR optimization (GSC: 502 imp, pos 9.0, CTR 0.2% = ~20 clicks left on
+  // the table each month). The old title buried "Fortune Cookie Messages"
+  // behind "Browse" and the 184-char description was getting truncated. Lead
+  // with the searched keyword, put "Free" up front (high-CTR signal), and
+  // keep the description under 160 chars so it renders in full on mobile.
+  const title = `${totalCount}+ Free Fortune Cookie Messages — Browse by Category & Mood`;
+  const description = `Browse ${totalCount}+ free fortune cookie messages across ${categoryCount} categories. Filter by mood, search by keyword, copy & share — no signup needed.`;
 
   return {
     title,

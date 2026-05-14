@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "personalized fortune cookie",
   ],
   openGraph: {
-    title: "Fortune Cookie Generator — Free AI-Powered, Instant & Personalized",
+    title: "Free AI Fortune Cookie Generator — Instant & Personalized",
     description:
       "Generate a free AI fortune cookie in seconds. Choose from 6 themes, get lucky numbers, and share instantly. No signup needed.",
     type: "website",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fortune Cookie Generator — Free AI-Powered, Instant & Personalized",
+    title: "Free AI Fortune Cookie Generator — Instant & Personalized",
     description:
       "Generate a free AI fortune cookie in seconds. Choose from 6 themes, get lucky numbers, and share instantly. No signup needed.",
     images: [getImageUrl("/twitter-image.png")],
