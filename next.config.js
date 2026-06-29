@@ -39,53 +39,53 @@ const nextConfig = {
   },
 
   // ============================================
-  // SEO 重定向配置
-  // 将旧入口 /messages 和 /browse 永久重定向到统一入口 /explore
-  // 使用 permanent: true 返回 308 状态码（SEO 等效于 301）
+  // SEO 重定向配置（v2 纯工具站重构）
+  // 已砍版块的旧 URL 永久重定向到保留入口，回收 SEO 权重。
+  // 使用 permanent: true 返回 308 状态码（SEO 等效于 301）。
   // ============================================
   async redirects() {
+    // 内容类版块 → 首页
+    const toHome = [
+      "/blog",
+      "/history",
+      "/recipes",
+      "/calendar",
+      "/faq",
+      "/favorites",
+      "/search",
+      "/tag",
+      "/who-invented-fortune-cookies",
+      "/how-to-make-fortune-cookies",
+      "/funny-fortune-cookie-messages",
+      "/free-online-fortune-cookie",
+    ];
+    // 浏览库 / 消息 / pSEO 落地页 → 生成器
+    const toGenerator = [
+      "/explore",
+      "/browse",
+      "/messages",
+      "/fortune-cookie-messages",
+      "/fortune-cookie-quotes",
+      "/fortune-cookie-messages-for",
+      "/fortune-cookie-ideas",
+    ];
+    // 历史多语言前缀（含旧默认 en 前缀）→ 剥离前缀回到英文路径；
+    // 若剥离后仍是已砍路由，会再被上面的规则接力重定向。
+    const legacyLocales = ["en", "zh", "es", "pt"];
+
     return [
-      // 主入口重定向：/messages 和 /browse → /explore
-      { source: "/messages", destination: "/explore", permanent: true },
-      { source: "/browse", destination: "/explore", permanent: true },
-
-      // 分类重定向：/messages/:category → /explore?category=
-      // 注意：funny 有专属 SEO 页面，需优先匹配
-      {
-        source: "/messages/funny",
-        destination: "/funny-fortune-cookie-messages",
-        permanent: true,
-      },
-      {
-        source: "/messages/:category",
-        destination: "/explore?category=:category",
-        permanent: true,
-      },
-
-      // browse 子路径
-      { source: "/browse/:path*", destination: "/explore", permanent: true },
-
-      // 多语言重定向（zh, es, pt - 不含默认语言 en）
-      {
-        source: "/:locale(zh|es|pt)/messages",
-        destination: "/:locale/explore",
-        permanent: true,
-      },
-      {
-        source: "/:locale(zh|es|pt)/messages/:category",
-        destination: "/:locale/explore?category=:category",
-        permanent: true,
-      },
-      {
-        source: "/:locale(zh|es|pt)/browse",
-        destination: "/:locale/explore",
-        permanent: true,
-      },
-      {
-        source: "/:locale(zh|es|pt)/browse/:path*",
-        destination: "/:locale/explore",
-        permanent: true,
-      },
+      ...toHome.flatMap((path) => [
+        { source: path, destination: "/", permanent: true },
+        { source: `${path}/:rest*`, destination: "/", permanent: true },
+      ]),
+      ...toGenerator.flatMap((path) => [
+        { source: path, destination: "/generator", permanent: true },
+        { source: `${path}/:rest*`, destination: "/generator", permanent: true },
+      ]),
+      ...legacyLocales.flatMap((locale) => [
+        { source: `/${locale}`, destination: "/", permanent: true },
+        { source: `/${locale}/:path*`, destination: "/:path*", permanent: true },
+      ]),
     ];
   },
 
