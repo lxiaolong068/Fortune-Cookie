@@ -4,21 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Menu,
-  X,
-  Home,
-  Sparkles,
-  Clock,
-  ChefHat,
-  Search,
-  User,
-  BookOpen,
-  Heart,
-  LogIn,
-  LogOut,
-  CalendarDays,
-} from "lucide-react";
+import { Menu, X, Home, Sparkles, User, LogIn, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { OfflineIndicator } from "./OfflineIndicator";
@@ -29,68 +15,37 @@ import {
   useAuthSession,
 } from "@/lib/auth-client";
 
-const navigationItems = [
+const baseNavigationItems = [
   {
     href: "/",
     icon: Home,
     label: "Home",
-    description: "Generate fortune cookies",
+    description: "Draw a fortune cookie",
   },
   {
     href: "/generator",
     icon: Sparkles,
-    label: "AI Generator",
-    description: "AI-powered generator",
-  },
-  {
-    href: "/explore",
-    icon: Search,
-    label: "Explore",
-    description: "Browse & search fortunes",
-  },
-  {
-    href: "/favorites",
-    icon: Heart,
-    label: "Favorites",
-    description: "Your saved fortunes",
-  },
-  {
-    href: "/calendar",
-    icon: CalendarDays,
-    label: "Calendar",
-    description: "Daily fortune calendar",
-  },
-  {
-    href: "/history",
-    icon: Clock,
-    label: "History",
-    description: "Learn the origins",
-  },
-  {
-    href: "/recipes",
-    icon: ChefHat,
-    label: "Recipes",
-    description: "Make your own",
-  },
-  {
-    href: "/blog",
-    icon: BookOpen,
-    label: "Blog",
-    description: "Articles & insights",
-  },
-  {
-    href: "/profile",
-    icon: User,
-    label: "Profile",
-    description: "Personal center",
+    label: "Generator",
+    description: "Craft custom fortunes",
   },
 ];
+
+const profileNavigationItem = {
+  href: "/profile",
+  icon: User,
+  label: "Profile",
+  description: "Your favorites & history",
+};
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { status } = useAuthSession();
   const isAuthenticated = status === "authenticated";
+
+  const navigationItems = isAuthenticated
+    ? [...baseNavigationItems, profileNavigationItem]
+    : baseNavigationItems;
 
   return (
     <>
@@ -164,7 +119,7 @@ export function Navigation() {
             {/* Divider */}
             <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-3" />
 
-            {/* Theme toggle, language switcher and actions */}
+            {/* Theme toggle and auth actions */}
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
@@ -332,6 +287,11 @@ export function Navigation() {
 
                 {/* Mobile bottom section */}
                 <div className="absolute bottom-6 left-6 right-6">
+                  {/* Theme toggle */}
+                  <div className="mb-4 flex justify-center">
+                    <ThemeToggle />
+                  </div>
+
                   {/* Auth button */}
                   <div className="mb-6">
                     <Button

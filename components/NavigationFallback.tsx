@@ -4,14 +4,7 @@ import Link from "next/link";
 
 const navigationItems = [
   { label: "Home", href: "/" },
-  { label: "AI Generator", href: "/generator" },
-  { label: "Explore", href: "/explore" },
-  { label: "Favorites", href: "/favorites" },
-  { label: "Calendar", href: "/calendar" },
-  { label: "History", href: "/history" },
-  { label: "Recipes", href: "/recipes" },
-  { label: "Blog", href: "/blog" },
-  { label: "Profile", href: "/profile" },
+  { label: "Generator", href: "/generator" },
 ];
 
 export function NavigationFallback() {
