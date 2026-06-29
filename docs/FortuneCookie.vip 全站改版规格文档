@@ -1,0 +1,442 @@
+# FortuneCookie.vip 全站改版规格文档
+**Version 2.0 — 纯工具站重构**
+
+> 本文档为完整的产品与技术规格，可直接交给 AI 编码助手（如 Claude）执行开发。
+
+---
+
+## 一、项目概述
+
+### 1.1 当前状态
+FortuneCookie.vip 是一个基于 Next.js + Vercel 的幸运饼干签文网站，目前包含首页交互、AI 生成器、签文浏览库、每日日历、博客、食谱、历史等多个版块。功能分散，内容维护成本高，生成器功能泛泛，缺乏差异化。
+
+### 1.2 改版目标
+将网站从"内容杂货铺"彻底重构为**纯工具站**——一个轻量、简洁、聚焦的 fortune cookie 生成工具，真正为用户提供价值。
+
+### 1.3 核心定位
+**"场景化预言定制工具"**——不是随机语录生成器，而是帮助用户在特定场景下获得高质量、有个性的 fortune cookie 签文。
+
+### 1.4 技术栈
+- 框架：Next.js（保持现有技术栈）
+- 托管：Vercel
+- AI：OpenAI API（用于签文生成）
+- 语言：英文为主（后续可扩展多语言）
+
+---
+
+## 二、需要砍掉的版块
+
+以下版块全部移除，不保留任何页面或路由：
+
+| 砍掉的版块 | 原因 |
+|-----------|------|
+| Calendar（每日运势日历） | 与首页功能重复，用户无每日访问习惯 |
+| Recipes（食谱） | 与核心功能无关，内容单薄 |
+| History（历史） | 纯百科内容，对工具站用户无价值 |
+| Explore（签文浏览库） | 静态内容在 AI 时代无竞争力 |
+| Blog（博客） | 内容维护成本高，SEO ROI 低 |
+| Fortune Cookie Messages（签文集合页） | 与 Explore 重复，改为生成器场景入口 |
+
+**处理方式**：
+- 删除所有相关页面、组件、数据文件
+- 对已有搜索引擎索引的 URL，设置 301 重定向至首页或生成器页
+- 清理导航栏，只保留核心入口
+
+---
+
+## 三、最终站点架构
+
+### 3.1 路由结构
+
+```
+/                   → 首页（Home）
+/generator          → 生成器（Generator）核心工具页
+/generator/oracle   → 经典预言模式
+/generator/event    → 活动定制模式
+/generator/rpg      → 跑团游戏模式
+/generator/persona  → 多重人格模式
+/profile            → 用户中心（登录后可见）
+/about              → 关于页面（极简，一段话）
+/privacy            → 隐私政策
+/terms              → 使用条款
+```
+
+### 3.2 导航栏
+
+```
+[Logo: FortuneCookie.vip]   [Home]   [Generator]   [Profile/Login]   [Theme Toggle]
+```
+
+- 导航栏极简，最多 3 个核心入口
+- Profile 未登录时显示为 Login 按钮
+- 保留明暗主题切换
+
+---
+
+## 四、页面详细规格
+
+### 4.1 Home（首页）
+
+**角色**：生成器的"试用装"，用一次交互钩住用户。
+
+**交互流程**：
+1. 页面中央展示一个精美的 fortune cookie 动画（保留现有动画）
+2. 用户点击/点触饼干 → 饼干裂开动画 → 展示一条高质量签文
+3. 签文使用"The True Oracle"模式生成（预言式，非鸡汤）
+4. 签文下方显示：
+   - 幸运数字（Lucky Numbers）
+   - 分享按钮（Copy / Twitter / WhatsApp）
+   - CTA 按钮："Want more? Try our Generator →"
+5. 每日限免 1 次首页抽签（无需登录），鼓励进入生成器
+
+**设计要求**：
+- 页面极简，无多余文字说明
+- 首屏即完整交互，无需滚动
+- 移动端优先设计
+
+### 4.2 Generator（生成器 — 核心页面）
+
+**角色**：网站的核心价值所在。
+
+**页面结构**：
+- 顶部：四大模式的 Tab 切换或卡片选择
+- 中部：根据所选模式展示对应的参数表单
+- 底部：生成结果展示区 + 操作按钮
+
+#### 模式一：The True Oracle（经典预言）
+
+**路由**：`/generator/oracle`
+
+**用户输入参数**：
+
+| 参数 | 类型 | 选项 | 说明 |
+|------|------|------|------|
+| Time Horizon | 单选 | Today / This Week / This Month / This Year / In Your Lifetime | 预言的时间范围 |
+| Intensity | 滑块 | 1-5 | 1=模糊隐喻，5=极其具体（如"明天下午3点注意左边"） |
+| Fortune Type | 多选 | Good / Neutral / Bad / Ominous | 允许生成坏运气（用户强烈需求） |
+| Quantity | 数字 | 1 / 5 / 10 / 20 | 一次生成多少条 |
+
+**AI Prompt 核心规则**：
+- 必须使用"You will..."或"A [noun] will..."句式
+- 禁止出现以下词汇：gratitude, journey, embrace, manifest, align, energy, universe（这些是用户最反感的 AI 鸡汤词）
+- 禁止给出建议或说教
+- 坏运气签文要有趣而非真正恶意（如"You will step on a Lego at 2am"）
+- 参考风格：经典 fortune cookie 的简短、神秘、有画面感
+
+**示例输出**：
+- Good: "You will find money in a coat you haven't worn since last winter."
+- Neutral: "A stranger will ask you for directions on Thursday."
+- Bad: "Your next password will be rejected three times."
+- Ominous: "The person behind you in line knows your name."
+
+#### 模式二：The Event Master（活动定制）
+
+**路由**：`/generator/event`
+
+**用户输入参数**：
+
+| 参数 | 类型 | 选项/说明 |
+|------|------|----------|
+| Event Type | 单选 | Wedding / Baby Announcement / Birthday / Graduation / Retirement / Team Building / Secret Santa / Housewarming / Farewell Party |
+| Personalization | 文本输入 | 自由输入关键信息（如新人名字、预产期、寿星爱好等） |
+| Tone | 单选 | Sweet / Funny / Sentimental / Playful |
+| Quantity | 数字 | 10 / 20 / 50 / 100 |
+| Avoid Duplicates | 开关 | 确保批量生成无重复 |
+
+**AI Prompt 核心规则**：
+- 必须将用户提供的个人信息自然融入签文
+- Wedding 模式：围绕爱情、未来、两人关系，可引用影视经典台词风格
+- Baby Announcement：巧妙暗示而非直说，保持"打开才知道"的惊喜感
+- Team Building：轻松有趣，适合职场，避免冒犯
+- 每条签文长度控制在 15 个单词以内（适合实际放入饼干）
+
+**特殊功能 — Print Export（打印导出）**：
+- 生成结果后显示 `[Export to PDF]` 按钮
+- 点击后生成 A4 尺寸的 PDF 文件：
+  - 每条签文排列在独立的小条格中
+  - 包含虚线剪裁标记
+  - 尺寸适配真实 fortune cookie 纸条（约 7cm × 1.5cm）
+  - 可选：添加幸运数字、日期、自定义 Logo
+- 技术实现建议：使用 `@react-pdf/renderer` 或 `jspdf` 在客户端生成
+
+#### 模式三：The Tabletop RPG（跑团游戏）
+
+**路由**：`/generator/rpg`
+
+**用户输入参数**：
+
+| 参数 | 类型 | 选项 |
+|------|------|------|
+| Target | 单选 | For the Character（游戏角色视角） / For the Player（打破第四面墙） |
+| Style | 单选 | Ominous Prophecy / Comic Relief / Quest Hook / Cryptic Riddle |
+| Setting | 单选 | Classic Fantasy / Sci-Fi / Horror / Pirate / Steampunk / Modern |
+| Quantity | 数字 | 1 / 5 / 10 / 20 |
+
+**AI Prompt 核心规则**：
+- For the Character：使用古老、神谕般的语言风格
+- For the Player：可以打破第四面墙，引用游戏机制（如"Your dice will betray you"）
+- Quest Hook：每条签文应该能作为一个冒险的起点
+- 避免现代用语（除非选择 Modern 设定）
+- 鼓励模糊性和多重解读
+
+**示例输出**：
+- Ominous: "The throne you seek sits atop bones you have not yet buried."
+- Comic: "Never trust a dwarf without a beard. Or a beard without a dwarf."
+- Quest Hook: "The blacksmith's daughter has not slept in thirteen days. No one has asked why."
+- For Player: "The DM is smiling. This is never good."
+
+#### 模式四：The Alter Ego（多重人格）
+
+**路由**：`/generator/persona`
+
+**用户输入参数**：
+
+| 参数 | 类型 | 选项 |
+|------|------|------|
+| Persona | 单选 | 见下方人格列表 |
+| Topic | 可选文本 | 用户可指定签文主题（如 love, career, health），留空则随机 |
+| Quantity | 数字 | 1 / 5 / 10 |
+
+**可选人格列表**：
+
+| 人格 | 描述 | 语言风格 |
+|------|------|---------|
+| Passive Aggressive | 表面友善实则扎心 | "I'm sure you'll figure it out. Eventually." |
+| The Existentialist | 存在主义哲学家 | "Nothing matters. Isn't that freeing?" |
+| Unhinged Optimist | 疯狂乐观主义者 | "EVERYTHING is about to get SO GOOD for you!!!" |
+| Corporate Buzzword | 职场黑话大师 | "Synergize your core competencies to unlock value." |
+| Villain Monologue | 反派独白 | "You dare open this cookie? Foolish mortal..." |
+| Grandma Energy | 奶奶的温暖 | "You look thin, dear. Eat something. Also, love is coming." |
+| Gen Z Oracle | Z世代预言家 | "bestie the universe is literally obsessed with you rn" |
+| Noir Detective | 黑色电影侦探 | "The dame walked in. She smelled like trouble and jasmine." |
+
+**AI Prompt 核心规则**：
+- 每个人格有严格的语言风格指南
+- 输出必须一眼就能辨认出是哪个人格
+- 保持签文简短（一句话，最多两句）
+- Passive Aggressive 是最受欢迎的人格，优先打磨
+
+---
+
+## 五、用户系统与 Profile 页
+
+### 5.1 登录方式
+- 保留 Google 登录（现有方案）
+- 可选：增加 Email Magic Link 登录
+
+### 5.2 Profile 页面内容
+
+```
+/profile
+├── My Favorites（收藏的签文）
+├── Generation History（生成历史，最近 50 条）
+├── Export All（一键导出所有收藏为 PDF/TXT）
+└── Settings（主题偏好、语言偏好）
+```
+
+### 5.3 未登录用户
+- 首页抽签：每日 1 次免费
+- 生成器：每日 3 次免费生成（单条）
+- 无法使用收藏和历史功能
+- 无法使用批量生成和打印导出
+
+### 5.4 登录用户
+- 首页抽签：无限
+- 生成器：每日 10 次免费生成
+- 可使用收藏、历史、导出功能
+- 批量生成（10条以上）和打印导出：可作为未来 Premium 功能
+
+---
+
+## 六、设计规范
+
+### 6.1 整体风格
+- 保持现有暖色调（橙色/金色为主色）
+- 极简设计，大量留白
+- 首页：全屏交互，无干扰
+- 生成器：左侧参数面板 + 右侧结果展示（桌面端）；上下布局（移动端）
+
+### 6.2 动画
+- 保留首页饼干裂开动画
+- 生成器结果出现时：签文像纸条一样"抽出"的动画效果
+- 保持轻量，不影响性能
+
+### 6.3 响应式
+- Mobile First 设计
+- 断点：640px / 768px / 1024px / 1280px
+
+---
+
+## 七、SEO 策略（无内容站的 SEO）
+
+### 7.1 核心页面 SEO
+
+| 页面 | Target Keyword |
+|------|---------------|
+| / | fortune cookie online, virtual fortune cookie |
+| /generator | fortune cookie generator, AI fortune cookie |
+| /generator/oracle | fortune cookie prediction, fortune teller cookie |
+| /generator/event | custom fortune cookies for wedding, fortune cookie messages for party |
+| /generator/rpg | DnD fortune cookie, tabletop RPG fortune generator |
+| /generator/persona | funny fortune cookie generator, passive aggressive fortune cookie |
+
+### 7.2 旧页面重定向
+
+| 旧 URL | 重定向至 |
+|--------|---------|
+| /blog/* | / (301) |
+| /history | / (301) |
+| /recipes | / (301) |
+| /calendar | / (301) |
+| /explore | /generator (301) |
+| /fortune-cookie-messages/* | /generator/event (301) |
+
+---
+
+## 八、商业化路径（可选，后续实施）
+
+### 8.1 Freemium 模型
+
+| 功能 | Free | Premium |
+|------|------|---------|
+| 首页抽签 | 1次/天 | 无限 |
+| 生成器单条生成 | 3次/天（未登录）/ 10次/天（登录） | 无限 |
+| 批量生成（20+条） | 不可用 | 可用 |
+| 打印导出 PDF | 不可用 | 可用 |
+| 高级人格模式 | 3个基础人格 | 全部 8+ 人格 |
+| 自定义人格 | 不可用 | 可用 |
+| API 访问 | 不可用 | 可用 |
+
+### 8.2 定价建议
+- Monthly: $4.99/月
+- Yearly: $29.99/年（省 50%）
+- Lifetime: $79.99（一次性）
+
+---
+
+## 九、开发优先级与 MVP 路线图
+
+### Phase 1: MVP（建议 2 周）
+- [ ] 砍掉所有旧版块，设置 301 重定向
+- [ ] 重构导航栏为极简版
+- [ ] 重构首页交互（使用新的 Oracle Prompt）
+- [ ] 实现 Generator 页面框架 + The True Oracle 模式
+- [ ] 实现 The Alter Ego 模式（Passive Aggressive + 2 个其他人格）
+
+### Phase 2: 完善（建议 2 周）
+- [ ] 实现 The Event Master 模式 + 批量生成
+- [ ] 实现 PDF 打印导出功能
+- [ ] 实现 The Tabletop RPG 模式
+- [ ] 完善 Profile 页面（收藏 + 历史）
+
+### Phase 3: 增长（建议 2 周）
+- [ ] 实现完整的 Freemium 限制系统
+- [ ] 添加剩余人格模式
+- [ ] 实现分享功能（生成签文图片卡片）
+- [ ] 性能优化 + Lighthouse 评分优化
+
+---
+
+## 十、AI Prompt 工程指南
+
+### 10.1 全局规则（适用于所有模式）
+
+```
+System Prompt 基础框架：
+
+You are a fortune cookie message writer. Your messages must:
+1. Be concise (under 15 words unless specified otherwise)
+2. NEVER sound like a LinkedIn post or self-help book
+3. NEVER use these words: journey, embrace, manifest, align, energy, universe, gratitude, mindful, authentic, empower
+4. NEVER give advice or be preachy
+5. Have a specific, vivid quality — not vague platitudes
+6. Feel like they were written by a human with personality, not an AI
+
+Anti-patterns to avoid:
+- "The key to X is Y" format
+- "Remember that..." format
+- "Life is a..." metaphor format
+- Any sentence that could appear on a motivational poster
+```
+
+### 10.2 Oracle 模式 Prompt
+
+```
+You are an ancient oracle delivering prophecies through fortune cookies.
+
+Rules:
+- Use "You will..." or "A [noun] will..." format
+- Be specific about time, place, or sensory details
+- Good fortunes should feel like pleasant surprises, not generic blessings
+- Bad fortunes should be funny/absurd, never genuinely harmful
+- Ominous fortunes should create intrigue, like a movie trailer
+
+Time Horizon: {user_selection}
+Intensity: {1-5 scale}
+Fortune Type: {good/neutral/bad/ominous}
+```
+
+### 10.3 Event Master Prompt
+
+```
+You are writing fortune cookie messages for a specific event.
+
+Event: {event_type}
+Personal Details: {user_input}
+Tone: {sweet/funny/sentimental/playful}
+
+Rules:
+- Weave personal details naturally into the message
+- Each message must feel unique (no two should have similar structure)
+- Keep under 15 words (must fit in a real fortune cookie)
+- For baby announcements: be clever and indirect, preserve the surprise
+- For weddings: reference the couple's story without being cheesy
+- Generate exactly {quantity} messages, all different in structure and approach
+```
+
+### 10.4 RPG 模式 Prompt
+
+```
+You are a mysterious oracle in a {setting} world.
+
+Target: {character/player}
+Style: {ominous/comic/quest_hook/riddle}
+
+Rules:
+- For characters: use archaic, prophetic language
+- For players: break the fourth wall, reference game mechanics
+- Quest hooks: each fortune should spark a story idea
+- Avoid modern slang unless setting is Modern
+- Be ambiguous enough to apply to multiple situations
+```
+
+### 10.5 Alter Ego Prompt
+
+```
+You are writing a fortune cookie message AS the following persona:
+
+Persona: {persona_name}
+Description: {persona_description}
+Topic: {user_topic or "random"}
+
+Rules:
+- Stay 100% in character
+- The reader should immediately recognize the persona from the writing style
+- One sentence only (two maximum)
+- Be entertaining above all else
+```
+
+---
+
+## 十一、注意事项
+
+1. **数据迁移**：如果现有用户有收藏数据，需要保留并迁移到新的 Profile 系统中。
+2. **Google 登录**：保持现有 OAuth 配置不变。
+3. **域名与部署**：保持 fortunecookie.vip 域名和 Vercel 部署不变。
+4. **分析工具**：保留现有的 Google Analytics 或其他分析工具配置。
+5. **GDPR**：保留数据收集同意弹窗。
+6. **Rate Limiting**：在 API 层面实现生成次数限制，防止滥用。
+
+---
+
+*文档版本：v2.0 | 最后更新：2026年6月29日*

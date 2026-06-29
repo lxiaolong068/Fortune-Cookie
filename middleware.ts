@@ -1,11 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EdgeCacheManager } from "./lib/edge-cache";
-import {
-  i18n,
-  isValidLocale,
-  pathConfig,
-  type Locale,
-} from "./lib/i18n-config";
 
 // 需要缓存的路径模式
 const CACHEABLE_PATHS = [
@@ -30,21 +23,8 @@ const STATIC_PATHS = [
 
 // 不需要处理的路径
 const SKIP_PATHS = ["/_next", "/api/cache", "/__nextjs_original-stack-frame"];
-// 不进行语言重定向的路径
-const LOCALE_SKIP_PATHS = [
-  "/api",
-  "/_next",
-  "/favicon",
-  "/robots.txt",
-  "/sitemap.xml",
-  "/ads.txt",
-  "/site.webmanifest",
-  "/app-manifest.json",
-  "/sw.js",
-  "/__nextjs_original-stack-frame",
-];
 
-// 静态文件扩展名和文件名（用于重定向到根路径）
+// 根路径静态文件（直接返回，不做任何处理）
 const STATIC_FILE_PATTERNS = [
   "app-manifest.json",
   "sw.js",
@@ -90,24 +70,10 @@ function generateNonce(): string {
 export function middleware(request: NextRequest) {
   const startTime = Date.now();
   const { pathname } = request.nextUrl;
-  const segments = pathname.split("/").filter(Boolean);
-  const firstSegment = segments[0] ?? "";
 
   // Bot 检测 — 对已知爬虫设置标记并跳过分析相关处理
-  // NOTE: Bots still need canonical redirects (e.g. /en/* → /*), so we only
-  // skip locale-preference detection for bots, NOT the canonical redirect logic.
   const userAgent = request.headers.get("user-agent");
-  const isKnownBot = isBot(userAgent);
-
-  if (isKnownBot) {
-    // If bot accesses /en/* path, redirect to canonical /* path first
-    const botSegments = pathname.split("/").filter(Boolean);
-    const botFirstSegment = botSegments[0] ?? "";
-    if (botFirstSegment === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
-      const canonicalUrl = new URL(request.url);
-      canonicalUrl.pathname = pathname.replace(`/${i18n.defaultLocale}`, "") || "/";
-      return NextResponse.redirect(canonicalUrl, 301);
-    }
+  if (isBot(userAgent)) {
     const response = NextResponse.next();
     response.headers.set("X-Is-Bot", "true");
     return response;
@@ -116,26 +82,9 @@ export function middleware(request: NextRequest) {
   // 生成 CSP Nonce
   const nonce = generateNonce();
 
-  // 检查是否是根路径的静态文件（如 /app-manifest.json）
-  // 这些文件应该直接返回，不进行任何语言检测或重定向
+  // 根路径静态文件（如 /app-manifest.json）直接返回
   if (STATIC_FILE_PATTERNS.some((file) => pathname === `/${file}`)) {
     return handleStaticAssets(request, startTime);
-  }
-
-  // 检查是否是带语言前缀的静态文件请求（如 /zh/app-manifest.json）
-  // 需要重定向到根路径
-  if (segments.length >= 2) {
-    const lastSegment = segments[segments.length - 1];
-    if (
-      lastSegment &&
-      STATIC_FILE_PATTERNS.includes(lastSegment) &&
-      isValidLocale(segments[0] ?? "")
-    ) {
-      // 重定向到根路径的静态文件
-      const rootUrl = new URL(request.url);
-      rootUrl.pathname = `/${lastSegment}`;
-      return NextResponse.redirect(rootUrl, 301);
-    }
   }
 
   // 跳过不需要处理的路径
@@ -153,183 +102,8 @@ export function middleware(request: NextRequest) {
     return handleApiCaching(request, startTime, nonce);
   }
 
-  // 处理多语言路由（在页面缓存之前）
-  const localeResponse = handleLocaleDetection(request, startTime, nonce);
-  if (localeResponse) {
-    return localeResponse;
-  }
-
   // 处理页面缓存
   return handlePageCaching(request, startTime, nonce);
-}
-
-/**
- * Detect preferred locale from Accept-Language header
- */
-function detectLocaleFromHeader(acceptLanguage: string | null): Locale {
-  if (!acceptLanguage) {
-    return i18n.defaultLocale;
-  }
-
-  // Parse Accept-Language header
-  const languages = acceptLanguage
-    .split(",")
-    .map((lang) => {
-      const parts = lang.trim().split(";q=");
-      const code = parts[0]?.toLowerCase() ?? "";
-      const qualityStr = parts[1];
-      return {
-        code,
-        quality: qualityStr ? parseFloat(qualityStr) : 1,
-      };
-    })
-    .sort((a, b) => b.quality - a.quality);
-
-  // Find the first supported locale
-  for (const { code } of languages) {
-    // Check exact match
-    if (isValidLocale(code)) {
-      return code;
-    }
-
-    // Check language code without region (e.g., "en-US" -> "en")
-    const languageCode = code.split("-")[0];
-    if (languageCode && isValidLocale(languageCode)) {
-      return languageCode;
-    }
-  }
-
-  return i18n.defaultLocale;
-}
-
-/**
- * Resolve the effective locale for the current request.
- * Prioritizes explicit locale in path, then cookie, then Accept-Language header.
- */
-function resolveRequestLocale(request: NextRequest): Locale {
-  const { pathname } = request.nextUrl;
-  const segments = pathname.split("/").filter(Boolean);
-  const pathLocale = segments[0];
-
-  if (pathLocale && isValidLocale(pathLocale)) {
-    return pathLocale;
-  }
-
-  const cookieLocale = request.cookies.get(pathConfig.detection.cookieName)
-    ?.value as Locale | undefined;
-  if (cookieLocale && isValidLocale(cookieLocale)) {
-    return cookieLocale;
-  }
-
-  if (pathConfig.detection.header) {
-    return detectLocaleFromHeader(request.headers.get("Accept-Language"));
-  }
-
-  return i18n.defaultLocale;
-}
-
-/**
- * Handle locale detection and redirection
- * Returns a response if redirection is needed, otherwise null
- */
-function handleLocaleDetection(
-  request: NextRequest,
-  startTime: number,
-  nonce: string,
-): NextResponse | null {
-  const { pathname } = request.nextUrl;
-
-  // Skip locale handling for certain paths
-  if (LOCALE_SKIP_PATHS.some((path) => pathname.startsWith(path))) {
-    return null;
-  }
-
-  // Check if pathname starts with a locale
-  const segments = pathname.split("/").filter(Boolean);
-  const firstSegment = segments[0] ?? "";
-  const pathnameHasLocale = isValidLocale(firstSegment);
-
-  // Get locale from cookie or Accept-Language header
-  const cookieLocale = request.cookies.get(pathConfig.detection.cookieName)
-    ?.value as Locale | undefined;
-  const headerLocale = pathConfig.detection.header
-    ? detectLocaleFromHeader(request.headers.get("Accept-Language"))
-    : i18n.defaultLocale;
-
-  // Determine the preferred locale
-  const preferredLocale =
-    cookieLocale && isValidLocale(cookieLocale) ? cookieLocale : headerLocale;
-
-  // If path already has a locale prefix, check if it's the default locale.
-  if (pathnameHasLocale) {
-    // If the path starts with the default locale (e.g. /en/generator) and we don't show
-    // the default locale prefix, redirect to the canonical path without prefix.
-    if (firstSegment === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
-      const canonicalUrl = new URL(request.url);
-      // Strip the /en prefix from the pathname
-      canonicalUrl.pathname = pathname.replace(`/${i18n.defaultLocale}`, "") || "/";
-      return NextResponse.redirect(canonicalUrl, 301);
-    }
-
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-locale", firstSegment);
-
-    const response = NextResponse.next({
-      request: { headers: requestHeaders },
-    });
-
-    // Only set locale cookie if no valid preference exists.
-    // Do NOT overwrite a user's explicit choice (e.g. they picked "en" while
-    // viewing an /es/ URL — we must honour that cookie so the next navigation
-    // lands on the correct locale instead of reverting to Spanish).
-    if (!cookieLocale || !isValidLocale(cookieLocale)) {
-      response.cookies.set(pathConfig.detection.cookieName, firstSegment, {
-        path: "/",
-        maxAge: pathConfig.detection.cookieMaxAge,
-      });
-    }
-    addSecurityHeaders(response, nonce);
-    return response;
-  }
-
-  // Path doesn't have a locale prefix
-  // For default locale without showDefaultLocale, don't redirect
-  if (preferredLocale === i18n.defaultLocale && !pathConfig.showDefaultLocale) {
-    // Set cookie for default locale if different
-    if (cookieLocale !== i18n.defaultLocale) {
-      const response = NextResponse.next();
-      response.cookies.set(
-        pathConfig.detection.cookieName,
-        i18n.defaultLocale,
-        {
-          path: "/",
-          maxAge: pathConfig.detection.cookieMaxAge,
-        },
-      );
-      addSecurityHeaders(response, nonce);
-      return response; // Return response with updated cookie
-    }
-    return null; // Don't redirect, serve default locale content
-  }
-
-  // Redirect to localized path for non-default locales
-  // Use 302 (Found) not 307 — 307 preserves HTTP method (for POST/PUT), but this is
-  // a GET browser navigation based on user preference, so 302 is semantically correct.
-  if (preferredLocale !== i18n.defaultLocale) {
-    const localizedUrl = new URL(request.url);
-    localizedUrl.pathname = `/${preferredLocale}${pathname === "/" ? "" : pathname}`;
-
-    const response = NextResponse.redirect(localizedUrl, 302);
-    response.cookies.set(pathConfig.detection.cookieName, preferredLocale, {
-      path: "/",
-      maxAge: pathConfig.detection.cookieMaxAge,
-    });
-    addServerTiming(response, startTime, "locale-redirect");
-    addSecurityHeaders(response, nonce);
-    return response;
-  }
-
-  return null;
 }
 
 // 添加Server-Timing头部的工具函数
@@ -413,7 +187,6 @@ function handleApiCaching(
 
   // 检查条件请求
   const ifNoneMatch = request.headers.get("If-None-Match");
-  const ifModifiedSince = request.headers.get("If-Modified-Since");
 
   if (ifNoneMatch === etag) {
     // 返回 304 Not Modified
@@ -521,44 +294,35 @@ function handlePageCaching(
   startTime: number,
   nonce: string,
 ): NextResponse {
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-locale", resolveRequestLocale(request));
-
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  const response = NextResponse.next();
   const pathname = request.nextUrl.pathname;
 
-  // 从路径中提取实际页面路径（去除语言前缀）
-  const segments = pathname.split("/").filter(Boolean);
-  const firstSegment = segments[0] ?? "";
-  const hasLocalePrefix = isValidLocale(firstSegment);
-  const actualPath = hasLocalePrefix
-    ? "/" + segments.slice(1).join("/")
-    : pathname;
-
   // 为页面设置适当的缓存头部 (optimized for low-traffic: ~14 sessions/day)
-  if (actualPath === "/" || actualPath === "") {
+  if (pathname === "/" || pathname === "") {
     // 首页 - 延长缓存以提高低流量下命中率
-    response.headers.set("Cache-Control", "public, max-age=120, s-maxage=600, stale-while-revalidate=300");
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=120, s-maxage=600, stale-while-revalidate=300",
+    );
     addServerTiming(response, startTime, "page-home");
-  } else if (actualPath.startsWith("/explore") || actualPath.startsWith("/messages")) {
-    // 浏览/消息页面 - 中期缓存
-    response.headers.set("Cache-Control", "public, max-age=300, s-maxage=900, stale-while-revalidate=600");
-    addServerTiming(response, startTime, "page-explore");
-  } else if (pathname.startsWith("/api/")) {
-    // API路由
-    addServerTiming(response, startTime, "page-api");
+  } else if (pathname.startsWith("/generator")) {
+    // 生成器 - 中期缓存
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=300, s-maxage=900, stale-while-revalidate=600",
+    );
+    addServerTiming(response, startTime, "page-generator");
   } else {
     // 其他页面 - 短缓存 + stale-while-revalidate 保证速度
-    response.headers.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=60, stale-while-revalidate=300",
+    );
     addServerTiming(response, startTime, "page-other");
   }
 
-  // 添加Vary头部 - 包含Accept-Language以支持多语言缓存
-  response.headers.set("Vary", "Accept-Encoding, User-Agent, Accept-Language");
+  // 添加Vary头部
+  response.headers.set("Vary", "Accept-Encoding, User-Agent");
 
   // 添加安全标头
   addSecurityHeaders(response, nonce);
