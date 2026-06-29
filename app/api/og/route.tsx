@@ -2,15 +2,13 @@
  * Dynamic OG Image Generation API
  *
  * Generates personalized Open Graph images for social sharing.
- * Supports three card types:
+ * Supports two card types:
  *   - fortune: Individual fortune cookie message card
- *   - pseo:    PSEO category page card (audience/occasion/quote/activity)
- *   - blog:    Blog article card
+ *   - pseo:    Landing/category page card (also used as the default fallback)
  *
  * Usage:
  *   /api/og?type=fortune&message=Your+fortune&category=inspirational&emoji=🌟
  *   /api/og?type=pseo&title=Teachers&emoji=🍎&badge=For+Teachers&gradient=purple
- *   /api/og?type=blog&title=Article+Title&description=Summary&tag=Tips
  *
  * Built with next/og (Satori) — Edge Runtime compatible, no external deps.
  */
@@ -391,177 +389,6 @@ function PSEOCard({
   );
 }
 
-function BlogCard({
-  title,
-  description,
-  tag,
-  date,
-}: {
-  title: string;
-  description: string;
-  tag?: string;
-  date?: string;
-}) {
-  const { from, to, accent } = DEFAULT_GRADIENT;
-
-  return (
-    <div
-      style={{
-        width: 1200,
-        height: 630,
-        display: "flex",
-        flexDirection: "column",
-        background: `linear-gradient(135deg, ${from} 0%, ${to} 100%)`,
-        fontFamily: "sans-serif",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Decorative */}
-      <div
-        style={{
-          position: "absolute",
-          top: -80,
-          right: -80,
-          width: 380,
-          height: 380,
-          borderRadius: "50%",
-          background: accent,
-          opacity: 0.07,
-        }}
-      />
-
-      {/* Site branding */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "32px 56px 0",
-          gap: 10,
-        }}
-      >
-        <span style={{ fontSize: 24 }}>🥠</span>
-        <span
-          style={{
-            fontSize: 18,
-            fontWeight: 700,
-            color: "rgba(255,255,255,0.5)",
-          }}
-        >
-          fortunecookie.vip · Blog
-        </span>
-      </div>
-
-      {/* Main content */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "24px 72px",
-          gap: 24,
-        }}
-      >
-        {/* Tag */}
-        {tag && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                background: "rgba(245,158,11,0.2)",
-                border: "1px solid rgba(245,158,11,0.4)",
-                color: accent,
-                fontSize: 14,
-                fontWeight: 700,
-                padding: "5px 16px",
-                borderRadius: 100,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}
-            >
-              {tag}
-            </div>
-          </div>
-        )}
-
-        {/* Title */}
-        <div
-          style={{
-            fontSize: title.length > 60 ? 40 : 52,
-            fontWeight: 800,
-            color: "#ffffff",
-            lineHeight: 1.2,
-            maxWidth: 1000,
-          }}
-        >
-          {truncate(title, 100)}
-        </div>
-
-        {/* Description */}
-        <div
-          style={{
-            fontSize: 22,
-            color: "rgba(255,255,255,0.6)",
-            lineHeight: 1.55,
-            maxWidth: 900,
-          }}
-        >
-          {truncate(description, 150)}
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "0 56px 32px",
-          gap: 12,
-        }}
-      >
-        <div
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: "50%",
-            background: accent,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 18,
-          }}
-        >
-          ✍
-        </div>
-        <span
-          style={{
-            fontSize: 16,
-            color: "rgba(255,255,255,0.5)",
-            fontWeight: 600,
-          }}
-        >
-          Fortune Cookie AI
-          {date ? ` · ${date}` : ""}
-        </span>
-        <div style={{ flex: 1 }} />
-        <div
-          style={{
-            height: 4,
-            width: 120,
-            background: `linear-gradient(90deg, ${accent}, transparent)`,
-            borderRadius: 2,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
 // ─── Route handler ────────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
@@ -620,33 +447,6 @@ export async function GET(request: NextRequest) {
           height: 630,
           headers: {
             "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=3600",
-          },
-        }
-      );
-    }
-
-    if (type === "blog") {
-      const title = searchParams.get("title") ?? "Fortune Cookie Blog";
-      const description =
-        searchParams.get("description") ??
-        "Insights, tips, and inspiration from the world of fortune cookies.";
-      const tag = searchParams.get("tag") ?? undefined;
-      const date = searchParams.get("date") ?? undefined;
-
-      return new ImageResponse(
-        (
-          <BlogCard
-            title={title}
-            description={description}
-            tag={tag}
-            date={date}
-          />
-        ),
-        {
-          width: 1200,
-          height: 630,
-          headers: {
-            "Cache-Control": "public, max-age=604800, s-maxage=604800, stale-while-revalidate=86400",
           },
         }
       );
