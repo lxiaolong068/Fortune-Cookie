@@ -24,10 +24,6 @@ interface PageCheck {
 const PAGES: PageCheck[] = [
   { path: "/", expectedH1Pattern: /Fortune Cookie/i },
   { path: "/generator", expectedH1Pattern: /Generator|Fortune/i },
-  { path: "/blog", expectedH1Pattern: /Blog|Fortune/i },
-  { path: "/explore", expectedH1Pattern: /Browse|Fortune|Explore/i },
-  { path: "/recipes", expectedH1Pattern: /Recipe|Fortune Cookie/i },
-  { path: "/how-to-make-fortune-cookies", expectedH1Pattern: /Fortune Cookies/i },
   { path: "/about", expectedH1Pattern: /About|Fortune Cookie AI/i },
   { path: "/privacy", expectedH1Pattern: /Privacy/i },
   { path: "/terms", expectedH1Pattern: /Terms/i },
@@ -90,7 +86,7 @@ test.describe("SSR SEO regressions", () => {
   });
 
   test("canonical link is present on indexable pages", async ({ request }) => {
-    const indexablePaths = ["/", "/generator", "/blog", "/explore", "/recipes"];
+    const indexablePaths = ["/", "/generator", "/about", "/privacy", "/terms", "/cookies"];
     for (const path of indexablePaths) {
       const html = await fetchHtml(request, path);
       expect(

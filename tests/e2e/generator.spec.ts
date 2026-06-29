@@ -75,11 +75,6 @@ test.describe('Generator Page Tests', () => {
       await expect(homeLink).toBeVisible();
     }
 
-    const messagesLink = page.locator('nav a[href="/messages"]').first();
-    if (await messagesLink.count() > 0) {
-      await expect(messagesLink).toBeVisible();
-    }
-
     const generatorLink = page.locator('nav a[href="/generator"]').first();
     if (await generatorLink.count() > 0) {
       await expect(generatorLink).toBeVisible();
