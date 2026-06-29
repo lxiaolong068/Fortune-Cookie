@@ -1,16 +1,7 @@
 import Link from "next/link";
 import { Sparkles, Heart, Github, Twitter, Mail } from "lucide-react";
-import { headers } from "next/headers";
-import { i18n, isValidLocale } from "@/lib/i18n-config";
-import { createServerTranslationContext } from "@/lib/translations";
 
-export async function Footer() {
-  const requestHeaders = headers();
-  const headerLocale = requestHeaders.get("x-locale") ?? "";
-  const locale = isValidLocale(headerLocale)
-    ? headerLocale
-    : i18n.defaultLocale;
-  const { t, getLocalizedHref } = await createServerTranslationContext(locale);
+export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -27,15 +18,14 @@ export async function Footer() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gray-800">
-                    {t("common.siteName")}
+                    Fortune Cookie AI
                   </h3>
-                  <p className="text-sm text-gray-600">
-                    {t("footer.poweredBy")}
-                  </p>
+                  <p className="text-sm text-gray-600">Powered by AI</p>
                 </div>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                {t("home.description")}
+                Get personalized fortune cookie messages powered by AI.
+                Inspirational quotes, funny sayings, and lucky numbers await!
               </p>
 
               {/* Social links - 44px touch targets */}
@@ -45,7 +35,7 @@ export async function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-white rounded-lg border border-amber-200 hover:bg-amber-50 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label={t("footer.followTwitter")}
+                  aria-label="Follow us on Twitter"
                 >
                   <Twitter className="w-5 h-5 text-gray-600" />
                 </a>
@@ -54,14 +44,14 @@ export async function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-white rounded-lg border border-amber-200 hover:bg-amber-50 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label={t("footer.viewGithub")}
+                  aria-label="View our GitHub repository"
                 >
                   <Github className="w-5 h-5 text-gray-600" />
                 </a>
                 <a
                   href="mailto:lxiaolong068@gmail.com"
                   className="p-3 bg-white rounded-lg border border-amber-200 hover:bg-amber-50 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label={t("footer.contactEmail")}
+                  aria-label="Contact us via email"
                 >
                   <Mail className="w-5 h-5 text-gray-600" />
                 </a>
@@ -73,45 +63,45 @@ export async function Footer() {
               <div className="grid md:grid-cols-3 gap-8">
                 {[
                   {
-                    title: t("footer.generate"),
+                    title: "Generate",
                     links: [
                       {
-                        href: getLocalizedHref("/"),
-                        title: t("footer.fortuneGenerator"),
+                        href: "/",
+                        title: "Fortune Generator",
                       },
                       {
-                        href: getLocalizedHref("/generator"),
-                        title: t("footer.aiGenerator"),
+                        href: "/generator",
+                        title: "AI Generator",
                       },
                       {
-                        href: getLocalizedHref("/explore"),
-                        title: t("footer.browseMessages"),
+                        href: "/explore",
+                        title: "Browse Messages",
                       },
                     ],
                   },
                   {
-                    title: t("footer.learn"),
+                    title: "Learn",
                     links: [
                       {
-                        href: getLocalizedHref("/history"),
-                        title: t("navigation.history"),
+                        href: "/history",
+                        title: "History",
                       },
                       {
                         href: "/who-invented-fortune-cookies",
-                        title: t("footer.whoInvented"),
+                        title: "Who Invented?",
                       },
                       {
-                        href: getLocalizedHref("/recipes"),
-                        title: t("navigation.recipes"),
+                        href: "/recipes",
+                        title: "Recipes",
                       },
                     ],
                   },
                   {
-                    title: t("footer.messages"),
+                    title: "Messages",
                     links: [
                       {
-                        href: getLocalizedHref("/explore"),
-                        title: t("footer.allMessages"),
+                        href: "/explore",
+                        title: "All Messages",
                       },
                       {
                         href: "/fortune-cookie-messages",
@@ -131,7 +121,7 @@ export async function Footer() {
                       },
                       {
                         href: "/funny-fortune-cookie-messages",
-                        title: t("footer.funnyMessages"),
+                        title: "Funny Messages",
                       },
                     ],
                   },
@@ -163,7 +153,7 @@ export async function Footer() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 text-sm">
               <div>
                 <h4 className="font-semibold text-gray-800 mb-4">
-                  {t("footer.popularSearches")}
+                  Popular Searches
                 </h4>
                 <ul className="space-y-3 text-gray-600">
                   <li>
@@ -171,7 +161,7 @@ export async function Footer() {
                       href="/funny-fortune-cookie-messages"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.funnyFortuneMessages")}
+                      Funny Fortune Messages
                     </Link>
                   </li>
                   <li>
@@ -179,7 +169,7 @@ export async function Footer() {
                       href="/who-invented-fortune-cookies"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.whoInventedFull")}
+                      Who Invented Fortune Cookies
                     </Link>
                   </li>
                   <li>
@@ -187,55 +177,15 @@ export async function Footer() {
                       href="/how-to-make-fortune-cookies"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.howToMakeFull")}
+                      How to Make Fortune Cookies
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/explore?category=inspirational")}
+                      href="/explore?category=inspirational"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.inspirationalQuotes")}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-gray-800 mb-4">
-                  {t("footer.fortuneCategories")}
-                </h4>
-                <ul className="space-y-3 text-gray-600">
-                  <li>
-                    <Link
-                      href={getLocalizedHref("/explore?category=love")}
-                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
-                    >
-                      {t("footer.loveFortunes")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href={getLocalizedHref("/explore?category=success")}
-                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
-                    >
-                      {t("footer.successMessages")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href={getLocalizedHref("/explore?category=wisdom")}
-                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
-                    >
-                      {t("footer.wisdomQuotes")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href={getLocalizedHref("/explore?category=friendship")}
-                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
-                    >
-                      {t("footer.friendshipMessages")}
+                      Inspirational Quotes
                     </Link>
                   </li>
                 </ul>
@@ -243,39 +193,77 @@ export async function Footer() {
 
               <div>
                 <h4 className="font-semibold text-gray-800 mb-4">
-                  {t("footer.learnMore")}
+                  Fortune Categories
                 </h4>
                 <ul className="space-y-3 text-gray-600">
                   <li>
                     <Link
-                      href={getLocalizedHref("/history")}
+                      href="/explore?category=love"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.fortuneHistory")}
+                      Love Fortune Cookies
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/recipes")}
+                      href="/explore?category=success"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.fortuneRecipes")}
+                      Success Messages
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/blog")}
+                      href="/explore?category=wisdom"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.blogArticles")}
+                      Wisdom Quotes
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href={getLocalizedHref("/generator")}
+                      href="/explore?category=friendship"
                       className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
                     >
-                      {t("footer.aiGenerator")}
+                      Friendship Messages
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-4">Learn More</h4>
+                <ul className="space-y-3 text-gray-600">
+                  <li>
+                    <Link
+                      href="/history"
+                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
+                    >
+                      Fortune Cookie History
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/recipes"
+                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
+                    >
+                      Fortune Cookie Recipes
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/blog"
+                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
+                    >
+                      Blog & Articles
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/generator"
+                      className="hover:text-amber-600 transition-colors inline-block py-1 min-h-[44px] leading-[44px]"
+                    >
+                      AI Generator
                     </Link>
                   </li>
                 </ul>
@@ -328,9 +316,9 @@ export async function Footer() {
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-sm text-gray-600">
                 <p>
-                  {t("footer.copyright", { year: currentYear })}{" "}
+                  {`© ${currentYear} Fortune Cookie AI. All rights reserved.`}{" "}
                   <span className="inline-flex items-center gap-1">
-                    {t("footer.madeWith")}
+                    Made with love for fortune seekers everywhere
                     <Heart className="w-4 h-4 inline text-red-500" />
                   </span>
                 </p>
@@ -342,32 +330,36 @@ export async function Footer() {
                   href="/about"
                   className="hover:text-amber-600 transition-colors py-2 min-h-[44px] flex items-center"
                 >
-                  {t("footer.about")}
+                  About
                 </Link>
                 <Link
                   href="/privacy"
                   className="hover:text-amber-600 transition-colors py-2 min-h-[44px] flex items-center"
                 >
-                  {t("footer.privacy")}
+                  Privacy Policy
                 </Link>
                 <Link
                   href="/terms"
                   className="hover:text-amber-600 transition-colors py-2 min-h-[44px] flex items-center"
                 >
-                  {t("footer.terms")}
+                  Terms of Service
                 </Link>
                 <Link
                   href="/cookies"
                   className="hover:text-amber-600 transition-colors py-2 min-h-[44px] flex items-center"
                 >
-                  {t("footer.cookies")}
+                  Cookie Policy
                 </Link>
               </div>
             </div>
 
             {/* SEO footer text */}
             <div className="mt-6 text-xs text-gray-500 leading-relaxed">
-              <p>{t("seo.homeDescription")}</p>
+              <p>
+                Free online AI-powered fortune cookie generator. Get
+                personalized inspirational messages, funny quotes, and lucky
+                numbers.
+              </p>
             </div>
           </div>
         </div>

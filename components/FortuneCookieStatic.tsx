@@ -1,7 +1,3 @@
-import { headers } from "next/headers";
-import { i18n, isValidLocale } from "@/lib/i18n-config";
-import { getTranslation, loadTranslations } from "@/lib/translations";
-
 /**
  * Modern Static LCP Component - Server-Side Rendered
  *
@@ -16,20 +12,12 @@ import { getTranslation, loadTranslations } from "@/lib/translations";
  *
  * Expected LCP improvement maintained: < 2.5s
  */
-export async function FortuneCookieStatic() {
-  const requestHeaders = headers();
-  const headerLocale = requestHeaders.get("x-locale") ?? "";
-  const locale = isValidLocale(headerLocale)
-    ? headerLocale
-    : i18n.defaultLocale;
-  const translations = await loadTranslations(locale);
-  const t = (key: string) => getTranslation(translations, key);
-
+export function FortuneCookieStatic() {
   return (
     <section
       className="fortune-cookie-lcp relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden"
       style={{ contentVisibility: "auto" }}
-      aria-label={t("home.experienceLabel")}
+      aria-label="Fortune Cookie Experience"
     >
       {/* Modern Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950" />
@@ -276,12 +264,12 @@ export async function FortuneCookieStatic() {
 
           {/* Main Title - Modern gradient text */}
           <h2 className="text-4xl md:text-5xl mb-4 font-heading font-bold text-gradient-gold relative z-10">
-            {t("home.heroTitleShort")}
+            Fortune Cookie
           </h2>
 
           {/* Subtitle */}
           <p className="text-lg text-slate-600 dark:text-slate-300 mb-6 relative z-10 font-body">
-            {t("home.tapToOpen")}
+            Tap the cookie to crack it open!
           </p>
 
           {/* Modern magic hint badge */}
@@ -297,7 +285,7 @@ export async function FortuneCookieStatic() {
             </svg>
 
             <span className="text-sm font-medium text-slate-700 dark:text-slate-200 font-body">
-              {t("home.magicAwaits")}
+              Magic awaits inside
             </span>
 
             {/* Second sparkle */}

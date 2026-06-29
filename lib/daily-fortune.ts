@@ -17,9 +17,12 @@ import {
   fortuneDatabase,
   type FortuneMessage,
   type FortuneCategory,
-  localizeFortune,
 } from "./fortune-database";
-import { i18n, type Locale } from "./i18n-config";
+
+// The site is English-only. These local aliases keep the deterministic
+// fortune data structures intact without depending on a global i18n config.
+type Locale = "en" | "zh" | "es" | "pt";
+const DEFAULT_LOCALE: Locale = "en";
 
 // ============================================================================
 // Types
@@ -418,7 +421,7 @@ function getLocalizedColorName(
   colorName: string,
   locale?: Locale,
 ): string {
-  if (!locale || locale === i18n.defaultLocale) {
+  if (!locale || locale === DEFAULT_LOCALE) {
     return colorName;
   }
   return LUCKY_COLOR_LABELS[locale]?.[colorName] ?? colorName;
@@ -428,7 +431,7 @@ function getLocalizedDirectionName(
   directionName: string,
   locale?: Locale,
 ): string {
-  if (!locale || locale === i18n.defaultLocale) {
+  if (!locale || locale === DEFAULT_LOCALE) {
     return directionName;
   }
   return LUCKY_DIRECTION_LABELS[locale]?.[directionName] ?? directionName;
@@ -446,13 +449,13 @@ export function selectDailyAdvice(
 
   let advicePool: string[];
   if (overallScore >= 8) {
-    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? i18n.defaultLocale] ??
+    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? DEFAULT_LOCALE] ??
       DAILY_ADVICE).high;
   } else if (overallScore >= 5) {
-    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? i18n.defaultLocale] ??
+    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? DEFAULT_LOCALE] ??
       DAILY_ADVICE).medium;
   } else {
-    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? i18n.defaultLocale] ??
+    advicePool = (DAILY_ADVICE_BY_LOCALE[locale ?? DEFAULT_LOCALE] ??
       DAILY_ADVICE).low;
   }
 
@@ -488,7 +491,7 @@ export function generateDailyFortune(
   const seed = getDateSeed(dateStr);
   const scores = generateFortuneScores(seed);
   const fortune = selectDailyFortune(seed, category);
-  const localizedFortune = locale ? localizeFortune(fortune, locale) : fortune;
+  const localizedFortune = fortune;
   const luckyColorObj = selectLuckyColor(seed);
   const luckyDirectionObj = selectLuckyDirection(seed);
   const advice = selectDailyAdvice(seed, scores.overall, locale);

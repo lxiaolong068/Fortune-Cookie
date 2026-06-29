@@ -8,7 +8,6 @@ import {
   type FortuneCategory,
 } from "@/lib/category-config";
 import { cn } from "@/lib/utils";
-import { useLocale } from "@/lib/locale-context";
 
 interface CategoryQuickLinksProps {
   className?: string;
@@ -23,8 +22,6 @@ export function CategoryQuickLinks({
   categories = allCategories.slice(0, 8),
   showDescriptions = false,
 }: CategoryQuickLinksProps) {
-  const { t, getLocalizedHref } = useLocale();
-
   return (
     <section
       className={cn("py-12 px-4", className)}
@@ -36,7 +33,7 @@ export function CategoryQuickLinks({
           id="category-links-heading"
           className="text-2xl md:text-3xl font-heading font-bold text-slate-800 dark:text-slate-100 mb-2"
         >
-          {t("home.popularCategories")}
+          Popular Categories
         </h2>
         <p className="text-slate-600 dark:text-slate-400 font-body">
           Explore fortunes by category
@@ -48,11 +45,8 @@ export function CategoryQuickLinks({
         {categories.map((category, index) => {
           const config = categoryConfig[category];
           const Icon = config.icon;
-          const labelKey = `generator.themes.${category}`;
-          const localizedLabel = t(labelKey);
-          const label =
-            localizedLabel === labelKey ? config.label : localizedLabel;
-          const categoryHref = `${getLocalizedHref("/browse")}?category=${encodeURIComponent(
+          const label = config.label;
+          const categoryHref = `/browse?category=${encodeURIComponent(
             category,
           )}`;
 
@@ -152,7 +146,7 @@ export function CategoryQuickLinks({
       {/* View All Link */}
       <div className="text-center mt-8">
         <Link
-          href={getLocalizedHref("/browse")}
+          href="/browse"
           className={cn(
             "inline-flex items-center gap-2 px-6 py-3",
             "text-indigo-600 dark:text-indigo-400",

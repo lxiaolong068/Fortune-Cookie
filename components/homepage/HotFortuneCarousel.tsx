@@ -12,11 +12,9 @@ import {
 } from "lucide-react";
 import {
   getPopularFortunes,
-  localizeFortunes,
   type FortuneMessage,
 } from "@/lib/fortune-database";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/lib/locale-context";
 import {
   allCategories,
   categoryConfig,
@@ -46,10 +44,9 @@ export function HotFortuneCarousel({
   count = 5,
   interval = 5000,
 }: HotFortuneCarouselProps) {
-  const { t, locale } = useTranslation();
   const fortunes = useMemo<FortuneMessage[]>(
-    () => localizeFortunes(getPopularFortunes(count), locale),
-    [count, locale],
+    () => getPopularFortunes(count),
+    [count],
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -99,9 +96,7 @@ export function HotFortuneCarousel({
   const config = allCategories.includes(categoryKey)
     ? categoryConfig[categoryKey]
     : null;
-  const localizedCategory = config
-    ? t(`generator.themes.${categoryKey}`)
-    : currentFortune.category;
+  const localizedCategory = config ? config.label : currentFortune.category;
 
   return (
     <section
@@ -120,7 +115,7 @@ export function HotFortuneCarousel({
             id="hot-fortunes-heading"
             className="text-2xl md:text-3xl font-heading font-bold text-slate-800 dark:text-slate-100"
           >
-            {t("home.hotFortunesTitle")}
+            Today&apos;s Popular Fortunes
           </h2>
         </div>
 
@@ -152,7 +147,7 @@ export function HotFortuneCarousel({
               "hover:scale-110 hover:bg-white dark:hover:bg-slate-700",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
             )}
-            aria-label={t("common.previousFortune")}
+            aria-label="Previous fortune"
           >
             <ChevronLeft className="h-5 w-5 text-slate-600 dark:text-slate-300" />
           </button>
@@ -170,7 +165,7 @@ export function HotFortuneCarousel({
               "hover:scale-110 hover:bg-white dark:hover:bg-slate-700",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
             )}
-            aria-label={t("common.nextFortune")}
+            aria-label="Next fortune"
           >
             <ChevronRight className="h-5 w-5 text-slate-600 dark:text-slate-300" />
           </button>
@@ -231,9 +226,7 @@ export function HotFortuneCarousel({
               "transition-all duration-200",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
             )}
-            aria-label={
-              isPaused ? t("common.resumeAutoPlay") : t("common.pauseAutoPlay")
-            }
+            aria-label={isPaused ? "Resume auto-play" : "Pause auto-play"}
           >
             {isPaused ? (
               <Play className="h-4 w-4" />
@@ -247,7 +240,7 @@ export function HotFortuneCarousel({
         <div
           className="flex justify-center gap-2 mt-6"
           role="tablist"
-          aria-label={t("common.carouselNavigation")}
+          aria-label="Fortune carousel navigation"
         >
           {fortunes.map((_, index) => (
             <button
@@ -262,7 +255,7 @@ export function HotFortuneCarousel({
               )}
               role="tab"
               aria-selected={index === currentIndex}
-              aria-label={t("common.goToFortune", { index: index + 1 })}
+              aria-label={`Go to fortune ${index + 1}`}
             />
           ))}
         </div>

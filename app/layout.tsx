@@ -20,9 +20,6 @@ import {
   WebsiteStructuredData,
 } from "@/components/StructuredData";
 import { Toaster } from "@/components/ui/sonner";
-import { i18n, isValidLocale } from "@/lib/i18n-config";
-import { LocaleProvider } from "@/lib/locale-context";
-import { getTranslation, loadTranslations } from "@/lib/translations";
 
 // Dynamic imports for non-critical components to reduce initial bundle size
 const Footer = dynamic(
@@ -150,12 +147,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.baseUrl),
   alternates: {
     canonical: "/",
-    languages: {
-      "en": "/",
-      "zh": "/zh",
-      "es": "/es",
-      "pt": "/pt",
-    },
   },
   openGraph: {
     type: "website",
@@ -207,13 +198,8 @@ export default async function RootLayout({
   const nonce =
     process.env.NODE_ENV === "production" ? requestHeaders.get("x-nonce") : null;
 
-  const headerLocale = requestHeaders.get("x-locale") ?? "";
-  const locale = isValidLocale(headerLocale) ? headerLocale : i18n.defaultLocale;
-  const translations = await loadTranslations(locale);
-  const skipToContentLabel = getTranslation(translations, "common.skipToContent");
-
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <CriticalCSS />
 
@@ -260,12 +246,11 @@ export default async function RootLayout({
         <link rel="manifest" href="/app-manifest.json" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        <LocaleProvider initialLocale={locale} initialTranslations={translations}>
-          {/* Skip to main content link for accessibility (WCAG 2.1) */}
-          <a href="#main-content" className="skip-link">
-            {skipToContentLabel}
-          </a>
-          <ThemeInitializer />
+        {/* Skip to main content link for accessibility (WCAG 2.1) */}
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <ThemeInitializer />
           <ServiceWorkerInitializer />
           <ErrorMonitorInitializer />
           <OptimizedPreloader />
@@ -292,7 +277,6 @@ export default async function RootLayout({
             <AnalyticsConsentBanner />
             <Toaster />
           </ErrorBoundary>
-        </LocaleProvider>
       </body>
     </html>
   );

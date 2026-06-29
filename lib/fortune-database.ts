@@ -1,8 +1,5 @@
 // Extended Fortune Cookie Database with 200+ messages
 
-import { type Locale, i18n } from "./i18n-config";
-import fortuneTranslationData from "@/content/fortune-translations.json";
-
 /**
  * Fortune message style types
  * - classic: Timeless wisdom, formal tone (古典)
@@ -36,51 +33,18 @@ export interface FortuneMessage {
   luckyNumbers: number[];
   popularity: number; // 1-10 scale
   dateAdded: string;
-  translations?: FortuneTranslationMap;
   // NEW: Style and length classification
   style: FortuneStyle;
   lengthType: "short" | "medium" | "long";
 }
 
-export type FortuneTranslationStatus = "machine" | "reviewed";
-
-export interface FortuneTranslation {
-  message: string;
-  status: FortuneTranslationStatus;
-}
-
-export type FortuneTranslationMap = Partial<
-  Record<Locale, FortuneTranslation>
->;
-
-export type FortuneLocaleStatus =
-  | "original"
-  | "missing"
-  | FortuneTranslationStatus;
+export type FortuneLocaleStatus = "original" | "missing";
 
 export interface LocalizedFortuneMessage extends FortuneMessage {
-  locale: Locale;
+  locale: string;
   translated: boolean;
   translationStatus: FortuneLocaleStatus;
-  sourceLocale: Locale;
-}
-
-const fortuneTranslations =
-  fortuneTranslationData as Partial<
-    Record<Locale, Record<string, FortuneTranslation>>
-  >;
-
-function getTranslationsForId(id: string): FortuneTranslationMap | undefined {
-  const translations: FortuneTranslationMap = {};
-
-  (Object.keys(fortuneTranslations) as Locale[]).forEach((locale) => {
-    const entry = fortuneTranslations[locale]?.[id];
-    if (entry) {
-      translations[locale] = entry;
-    }
-  });
-
-  return Object.keys(translations).length > 0 ? translations : undefined;
+  sourceLocale: string;
 }
 
 /**
@@ -1569,13 +1533,11 @@ export const fortuneDatabase: FortuneMessage[] = [
   ...travelMessages,
 ].map((message, index) => {
   const id = `fortune_${index + 1}`;
-  const translations = getTranslationsForId(id);
 
   return {
     ...message,
     id,
     dateAdded: new Date(2024, 0, 1 + (index % 365)).toISOString(),
-    translations,
     // Auto-classify style and compute length type
     style: classifyMessageStyle(message.message),
     lengthType: computeLengthType(message.message),
@@ -1584,78 +1546,54 @@ export const fortuneDatabase: FortuneMessage[] = [
 
 export function getLocalizedFortuneMessage(
   fortune: FortuneMessage,
-  locale: Locale,
+  _locale?: string,
 ): {
   message: string;
   translated: boolean;
   translationStatus: FortuneLocaleStatus;
-  sourceLocale: Locale;
+  sourceLocale: string;
 } {
-  if (locale === i18n.defaultLocale) {
-    return {
-      message: fortune.message,
-      translated: true,
-      translationStatus: "original",
-      sourceLocale: i18n.defaultLocale,
-    };
-  }
-
-  const translation = fortune.translations?.[locale];
-  if (translation?.message) {
-    return {
-      message: translation.message,
-      translated: true,
-      translationStatus: translation.status,
-      sourceLocale: locale,
-    };
-  }
-
   return {
     message: fortune.message,
-    translated: false,
-    translationStatus: "missing",
-    sourceLocale: i18n.defaultLocale,
+    translated: true,
+    translationStatus: "original",
+    sourceLocale: "en",
   };
 }
 
 export function localizeFortune(
   fortune: FortuneMessage,
-  locale: Locale,
+  _locale?: string,
 ): LocalizedFortuneMessage {
-  const localized = getLocalizedFortuneMessage(fortune, locale);
   return {
     ...fortune,
-    message: localized.message,
-    locale,
-    translated: localized.translated,
-    translationStatus: localized.translationStatus,
-    sourceLocale: localized.sourceLocale,
+    message: fortune.message,
+    locale: "en",
+    translated: true,
+    translationStatus: "original",
+    sourceLocale: "en",
   };
 }
 
 export function localizeFortunes(
   fortunes: FortuneMessage[],
-  locale: Locale,
+  _locale?: string,
 ): LocalizedFortuneMessage[] {
-  return fortunes.map((fortune) => localizeFortune(fortune, locale));
+  return fortunes.map((fortune) => localizeFortune(fortune));
 }
 
 // Search and filter functions
 export function searchFortunes(
   query: string,
   category?: string,
-  locale?: Locale,
 ): FortuneMessage[] {
   const searchTerm = query.toLowerCase().trim();
 
   return fortuneDatabase.filter((fortune) => {
     const matchesCategory = !category || fortune.category === category;
-    const messageToSearch = locale
-      ? getLocalizedFortuneMessage(fortune, locale).message
-      : fortune.message;
     const matchesSearch =
       !searchTerm ||
-      messageToSearch.toLowerCase().includes(searchTerm) ||
+      fortune.message.toLowerCase().includes(searchTerm) ||
       fortune.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
 
     return matchesCategory && matchesSearch;
@@ -1700,45 +1638,6 @@ export function getAvailableCategories(): string[] {
   return Array.from(new Set(fortuneDatabase.map((f) => f.category)));
 }
 
-function getTranslationStats() {
-  const total = fortuneDatabase.length;
-  const stats = {} as Record<
-    Locale,
-    {
-      total: number;
-      translated: number;
-      missing: number;
-      reviewed: number;
-      machine: number;
-    }
-  >;
-
-  (Object.keys(fortuneTranslations) as Locale[]).forEach((locale) => {
-    const translations = fortuneTranslations[locale] || {};
-    let reviewed = 0;
-    let machine = 0;
-
-    Object.values(translations).forEach((entry) => {
-      if (entry.status === "reviewed") {
-        reviewed += 1;
-      } else {
-        machine += 1;
-      }
-    });
-
-    const translated = reviewed + machine;
-    stats[locale] = {
-      total,
-      translated,
-      missing: total - translated,
-      reviewed,
-      machine,
-    };
-  });
-
-  return stats;
-}
-
 // Statistics
 export function getDatabaseStats() {
   const categories = fortuneDatabase.reduce(
@@ -1756,7 +1655,6 @@ export function getDatabaseStats() {
       fortuneDatabase.reduce((sum, f) => sum + f.popularity, 0) /
       fortuneDatabase.length,
     tags: Array.from(new Set(fortuneDatabase.flatMap((f) => f.tags))).length,
-    translations: getTranslationStats(),
   };
 }
 
@@ -1810,7 +1708,6 @@ export interface SearchFilterOptions {
   category?: string;
   sortBy?: "popularity" | "recent" | "alphabetical";
   limit?: number;
-  locale?: Locale;
 }
 
 /**
@@ -1859,7 +1756,6 @@ export function searchMessagesWithFilters(
     category,
     sortBy = "popularity",
     limit,
-    locale,
   } = options;
 
   const searchTerm = query?.toLowerCase().trim() || "";
@@ -1909,10 +1805,7 @@ export function searchMessagesWithFilters(
 
     // Keyword search (message text and tags)
     if (searchTerm) {
-      const messageToSearch = locale
-        ? getLocalizedFortuneMessage(fortune, locale).message
-        : fortune.message;
-      const matchesMessage = messageToSearch
+      const matchesMessage = fortune.message
         .toLowerCase()
         .includes(searchTerm);
       const matchesTags = fortune.tags.some((tag) =>
@@ -1938,25 +1831,13 @@ export function searchMessagesWithFilters(
       );
       break;
     case "alphabetical":
-      results = results.sort((a, b) => {
-        const messageA = locale
-          ? getLocalizedFortuneMessage(a, locale).message
-          : a.message;
-        const messageB = locale
-          ? getLocalizedFortuneMessage(b, locale).message
-          : b.message;
-        return messageA.localeCompare(messageB);
-      });
+      results = results.sort((a, b) => a.message.localeCompare(b.message));
       break;
   }
 
   // Limit results
   if (limit && limit > 0) {
     results = results.slice(0, limit);
-  }
-
-  if (locale) {
-    return localizeFortunes(results, locale);
   }
 
   return results;

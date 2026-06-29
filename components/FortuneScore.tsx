@@ -16,7 +16,6 @@ import {
   getScoreColorClass,
   getScoreBgClass,
 } from "@/lib/daily-fortune";
-import { useTranslation } from "@/lib/locale-context";
 
 // ============================================================================
 // Types
@@ -231,18 +230,17 @@ export function FortuneScore({
   animated = true,
   className,
 }: FortuneScoreProps) {
-  const { t } = useTranslation();
   const labels = {
-    career: t("dailyFortune.dimensions.career"),
-    love: t("dailyFortune.dimensions.love"),
-    health: t("dailyFortune.dimensions.health"),
-    wealth: t("dailyFortune.dimensions.wealth"),
+    career: "Career",
+    love: "Love",
+    health: "Health",
+    wealth: "Wealth",
   } satisfies Record<ScoreDimension["key"], string>;
   const ratingLabels = {
-    excellent: t("dailyFortune.ratings.excellent"),
-    good: t("dailyFortune.ratings.good"),
-    fair: t("dailyFortune.ratings.fair"),
-    challenging: t("dailyFortune.ratings.challenging"),
+    excellent: "Excellent Day!",
+    good: "Good Fortune",
+    fair: "Balanced Day",
+    challenging: "Growth Day",
   } satisfies Record<ReturnType<typeof getScoreRating>, string>;
 
   return (
@@ -251,7 +249,7 @@ export function FortuneScore({
       <OverallScore
         score={scores.overall}
         animated={animated}
-        label={t("dailyFortune.overallScore")}
+        label="Overall Fortune Score"
         ratingLabels={ratingLabels}
       />
 
@@ -260,7 +258,7 @@ export function FortuneScore({
         <div className="space-y-3 pt-2">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <TrendingUp className="w-4 h-4" />
-            <span>{t("dailyFortune.breakdown")}</span>
+            <span>Fortune Breakdown</span>
           </div>
           <div className="space-y-3">
             {SCORE_DIMENSIONS.map((dimension, index) => (

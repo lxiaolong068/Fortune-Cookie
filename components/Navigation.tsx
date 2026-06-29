@@ -23,68 +23,66 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { ThemeToggle } from "./ThemeToggle";
-import { LanguageSwitcher, CompactLanguageSwitcher } from "./LanguageSwitcher";
 import {
   startGoogleSignIn,
   startSignOut,
   useAuthSession,
 } from "@/lib/auth-client";
-import { useLocale } from "@/lib/locale-context";
 
 const navigationItems = [
   {
-    key: "home",
     href: "/",
     icon: Home,
-    descriptionKey: "homeDescription",
+    label: "Home",
+    description: "Generate fortune cookies",
   },
   {
-    key: "generator",
     href: "/generator",
     icon: Sparkles,
-    descriptionKey: "generatorDescription",
+    label: "AI Generator",
+    description: "AI-powered generator",
   },
   {
-    key: "explore",
     href: "/explore",
     icon: Search,
-    descriptionKey: "exploreDescription",
+    label: "Explore",
+    description: "Browse & search fortunes",
   },
   {
-    key: "favorites",
     href: "/favorites",
     icon: Heart,
-    descriptionKey: "favoritesDescription",
+    label: "Favorites",
+    description: "Your saved fortunes",
   },
   {
-    key: "calendar",
     href: "/calendar",
     icon: CalendarDays,
-    descriptionKey: "calendarDescription",
+    label: "Calendar",
+    description: "Daily fortune calendar",
   },
   {
-    key: "history",
     href: "/history",
     icon: Clock,
-    descriptionKey: "historyDescription",
+    label: "History",
+    description: "Learn the origins",
   },
   {
-    key: "recipes",
     href: "/recipes",
     icon: ChefHat,
-    descriptionKey: "recipesDescription",
+    label: "Recipes",
+    description: "Make your own",
   },
   {
-    key: "blog",
     href: "/blog",
     icon: BookOpen,
-    descriptionKey: "blogDescription",
+    label: "Blog",
+    description: "Articles & insights",
   },
   {
-    key: "profile",
     href: "/profile",
     icon: User,
-    descriptionKey: "profileDescription",
+    label: "Profile",
+    description: "Personal center",
   },
 ];
 
@@ -93,14 +91,13 @@ export function Navigation() {
   const pathname = usePathname();
   const { status } = useAuthSession();
   const isAuthenticated = status === "authenticated";
-  const { t, getLocalizedHref } = useLocale();
 
   return (
     <>
       {/* Desktop Navigation - Modern Glassmorphism */}
       <nav
         className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50"
-        aria-label={t("navigation.mainLabel")}
+        aria-label="Main navigation"
       >
         <motion.div
           initial={{ y: -20, opacity: 0 }}
@@ -127,15 +124,14 @@ export function Navigation() {
             >
               {navigationItems.map((item) => {
                 const Icon = item.icon;
-                const localizedHref = getLocalizedHref(item.href);
-                const isActive = pathname === localizedHref;
-                const label = t(`navigation.${item.key}`);
-                const description = t(`navigation.${item.descriptionKey}`);
+                const isActive = pathname === item.href;
+                const label = item.label;
+                const description = item.description;
 
                 return (
                   <li key={item.href} role="none">
                     <Link
-                      href={localizedHref}
+                      href={item.href}
                       role="menuitem"
                       aria-current={isActive ? "page" : undefined}
                       aria-label={`${label}: ${description}`}
@@ -183,24 +179,21 @@ export function Navigation() {
                   "rounded-xl transition-all duration-200",
                 )}
                 aria-label={
-                  isAuthenticated
-                    ? t("navigation.signOut")
-                    : t("auth.signInWithGoogle")
+                  isAuthenticated ? "Sign Out" : "Sign in with Google"
                 }
               >
                 {isAuthenticated ? (
                   <>
                     <LogOut className="w-4 h-4 mr-1.5" />
-                    <span className="font-body">{t("navigation.signOut")}</span>
+                    <span className="font-body">Sign Out</span>
                   </>
                 ) : (
                   <>
                     <LogIn className="w-4 h-4 mr-1.5" />
-                    <span className="font-body">{t("navigation.signIn")}</span>
+                    <span className="font-body">Sign In</span>
                   </>
                 )}
               </Button>
-              <LanguageSwitcher variant="dropdown" showNativeNames={false} />
               <ThemeToggle />
               <OfflineIndicator />
             </div>
@@ -226,7 +219,7 @@ export function Navigation() {
             "shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50",
           )}
           aria-label={
-            isOpen ? t("navigation.closeMenu") : t("navigation.openMenu")
+            isOpen ? "Close navigation menu" : "Open navigation menu"
           }
           aria-expanded={isOpen}
           aria-controls="mobile-navigation-menu"
@@ -284,18 +277,15 @@ export function Navigation() {
                 id="mobile-navigation-menu"
                 role="dialog"
                 aria-modal="true"
-                aria-label={t("navigation.menuLabel")}
+                aria-label="Navigation menu"
               >
-                <nav aria-label={t("navigation.mobileLabel")}>
+                <nav aria-label="Mobile navigation">
                   <ul className="mt-16 space-y-2 list-none m-0 p-0">
                     {navigationItems.map((item, index) => {
                       const Icon = item.icon;
-                      const localizedHref = getLocalizedHref(item.href);
-                      const isActive = pathname === localizedHref;
-                      const label = t(`navigation.${item.key}`);
-                      const description = t(
-                        `navigation.${item.descriptionKey}`,
-                      );
+                      const isActive = pathname === item.href;
+                      const label = item.label;
+                      const description = item.description;
 
                       return (
                         <motion.li
@@ -305,7 +295,7 @@ export function Navigation() {
                           transition={{ delay: index * 0.05, duration: 0.2 }}
                         >
                           <Link
-                            href={localizedHref}
+                            href={item.href}
                             onClick={() => setIsOpen(false)}
                             aria-current={isActive ? "page" : undefined}
                             className={cn(
@@ -342,11 +332,6 @@ export function Navigation() {
 
                 {/* Mobile bottom section */}
                 <div className="absolute bottom-6 left-6 right-6">
-                  {/* Language Switcher */}
-                  <div className="mb-4 flex justify-center">
-                    <CompactLanguageSwitcher />
-                  </div>
-
                   {/* Auth button */}
                   <div className="mb-6">
                     <Button
@@ -362,24 +347,18 @@ export function Navigation() {
                         isAuthenticated ? startSignOut() : startGoogleSignIn()
                       }
                       aria-label={
-                        isAuthenticated
-                          ? t("navigation.signOut")
-                          : t("auth.signInWithGoogle")
+                        isAuthenticated ? "Sign Out" : "Sign in with Google"
                       }
                     >
                       {isAuthenticated ? (
                         <>
                           <LogOut className="w-4 h-4 mr-2" />
-                          <span className="font-body">
-                            {t("navigation.signOut")}
-                          </span>
+                          <span className="font-body">Sign Out</span>
                         </>
                       ) : (
                         <>
                           <LogIn className="w-4 h-4 mr-2" />
-                          <span className="font-body">
-                            {t("auth.signInWithGoogle")}
-                          </span>
+                          <span className="font-body">Sign in with Google</span>
                         </>
                       )}
                     </Button>
@@ -391,7 +370,7 @@ export function Navigation() {
                       <Sparkles className="w-5 h-5 text-white" />
                     </div>
                     <p className="text-sm text-slate-500 dark:text-slate-400 font-body">
-                      {t("common.siteName")}
+                      Fortune Cookie AI
                     </p>
                   </div>
                 </div>
