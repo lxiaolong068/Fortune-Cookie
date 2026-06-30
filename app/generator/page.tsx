@@ -68,7 +68,7 @@ const MODES = [
     title: "The Event Master",
     description:
       "Custom fortunes for weddings, baby showers, birthdays, team building — printable in bulk.",
-    status: "soon" as const,
+    status: "live" as const,
   },
   {
     href: "/generator/rpg",

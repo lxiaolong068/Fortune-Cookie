@@ -225,7 +225,8 @@ class OpenRouterClient {
           { role: "user", content: userPrompt },
         ],
         temperature,
-        max_tokens: Math.min(2000, 120 + count * 40),
+        // ~40 tokens/message headroom; cap high enough for 100-message batches.
+        max_tokens: Math.min(4000, 120 + count * 40),
       }),
     });
 

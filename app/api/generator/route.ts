@@ -22,6 +22,11 @@ import {
   buildPersonaUserPrompt,
   getPersona,
 } from "@/lib/prompts/persona";
+import {
+  normalizeEventParams,
+  buildEventSystemPrompt,
+  buildEventUserPrompt,
+} from "@/lib/prompts/event";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +42,8 @@ interface GenerationPlan {
   temperature: number;
   /** Whether to drop AI-slop outputs (banned words / anti-patterns). */
   filterSlop: boolean;
+  /** Whether to remove duplicate messages from the batch. */
+  dedupe: boolean;
   /** Echoed back to the client + used for usage logging. */
   meta: unknown;
   usage: { theme: string; mood: string };
@@ -56,8 +63,25 @@ function planFor(
         count: params.quantity,
         temperature: 0.9,
         filterSlop: true,
+        dedupe: false,
         meta: params,
         usage: { theme: "oracle", mood: params.fortuneTypes.join(",") },
+      },
+    };
+  }
+
+  if (mode === "event") {
+    const params = normalizeEventParams(rawParams);
+    return {
+      plan: {
+        systemPrompt: buildEventSystemPrompt(),
+        userPrompt: buildEventUserPrompt(params),
+        count: params.quantity,
+        temperature: 0.95,
+        filterSlop: true,
+        dedupe: params.avoidDuplicates,
+        meta: params,
+        usage: { theme: "event", mood: params.eventType },
       },
     };
   }
@@ -91,6 +115,7 @@ function planFor(
         count: params.quantity,
         temperature: 1.0,
         filterSlop: false, // personas intentionally subvert the anti-cliché rules
+        dedupe: false,
         meta: params,
         usage: { theme: `persona:${persona.id}`, mood: params.topic || "random" },
       },
@@ -100,7 +125,7 @@ function planFor(
   return {
     error: NextResponse.json(
       createErrorResponse(
-        `Unsupported generator mode: ${String(mode)}. Supported: oracle, persona.`,
+        `Unsupported generator mode: ${String(mode)}. Supported: oracle, persona, event.`,
       ),
       { status: 400 },
     ),
@@ -181,11 +206,22 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // QA filter (Oracle only): drop AI-slop; keep raw if everything is filtered out.
+  // QA filter (oracle/event): drop AI-slop; keep raw if everything is filtered out.
   let finalMessages = messages;
   if (plan.filterSlop) {
     const clean = messages.filter((m) => validateFortune(m).valid);
     if (clean.length > 0) finalMessages = clean;
+  }
+
+  // Dedupe (event Avoid Duplicates): remove case-insensitive repeats.
+  if (plan.dedupe) {
+    const seen = new Set<string>();
+    finalMessages = finalMessages.filter((m) => {
+      const key = m.trim().toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }
 
   const fortunes: GeneratedFortune[] = finalMessages.map((message) => ({
