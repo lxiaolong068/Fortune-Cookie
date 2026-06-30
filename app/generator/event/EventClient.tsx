@@ -3,10 +3,19 @@
 import { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Copy, Loader2, Wand2, PartyPopper, ClipboardList } from "lucide-react";
+import {
+  Copy,
+  Loader2,
+  Wand2,
+  PartyPopper,
+  ClipboardList,
+  FileDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { exportFortunesToPDF } from "@/lib/pdf-export";
 import {
   EVENT_TYPES,
   EVENT_TONES,
@@ -66,6 +75,9 @@ export function EventClient() {
   const [avoidDuplicates, setAvoidDuplicates] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<GeneratedFortune[]>([]);
+  const [pdfLuckyNumbers, setPdfLuckyNumbers] = useState(false);
+  const [pdfDate, setPdfDate] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
 
   const generate = useCallback(async () => {
     setIsLoading(true);
@@ -117,6 +129,25 @@ export function EventClient() {
       () => toast.error("Copy failed"),
     );
   }, [results]);
+
+  const exportPdf = useCallback(async () => {
+    if (results.length === 0) return;
+    setIsExporting(true);
+    try {
+      const eventLabel =
+        EVENT_TYPES.find((e) => e.value === eventType)?.label ?? "Event";
+      await exportFortunesToPDF(results, {
+        title: `${eventLabel} Fortunes`,
+        includeLuckyNumbers: pdfLuckyNumbers,
+        includeDate: pdfDate,
+      });
+      toast.success("PDF downloaded");
+    } catch {
+      toast.error("PDF export failed");
+    } finally {
+      setIsExporting(false);
+    }
+  }, [results, eventType, pdfLuckyNumbers, pdfDate]);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)]">
@@ -207,14 +238,43 @@ export function EventClient() {
         )}
 
         {results.length > 0 && (
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-slate-500">
               {results.length} message{results.length === 1 ? "" : "s"}
             </p>
-            <Button variant="outline" size="sm" onClick={copyAll} className="rounded-lg">
-              <ClipboardList className="mr-1.5 h-4 w-4" />
-              Copy all
-            </Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="flex items-center gap-1.5 text-xs text-slate-500">
+                <Checkbox
+                  checked={pdfLuckyNumbers}
+                  onCheckedChange={(v) => setPdfLuckyNumbers(v === true)}
+                />
+                Lucky #s
+              </label>
+              <label className="flex items-center gap-1.5 text-xs text-slate-500">
+                <Checkbox
+                  checked={pdfDate}
+                  onCheckedChange={(v) => setPdfDate(v === true)}
+                />
+                Date
+              </label>
+              <Button variant="outline" size="sm" onClick={copyAll} className="rounded-lg">
+                <ClipboardList className="mr-1.5 h-4 w-4" />
+                Copy all
+              </Button>
+              <Button
+                size="sm"
+                onClick={exportPdf}
+                disabled={isExporting}
+                className="rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+              >
+                {isExporting ? (
+                  <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                ) : (
+                  <FileDown className="mr-1.5 h-4 w-4" />
+                )}
+                Export PDF
+              </Button>
+            </div>
           </div>
         )}
 
