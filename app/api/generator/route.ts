@@ -27,6 +27,11 @@ import {
   buildEventSystemPrompt,
   buildEventUserPrompt,
 } from "@/lib/prompts/event";
+import {
+  normalizeRpgParams,
+  buildRpgSystemPrompt,
+  buildRpgUserPrompt,
+} from "@/lib/prompts/rpg";
 
 export const dynamic = "force-dynamic";
 
@@ -86,6 +91,22 @@ function planFor(
     };
   }
 
+  if (mode === "rpg") {
+    const params = normalizeRpgParams(rawParams);
+    return {
+      plan: {
+        systemPrompt: buildRpgSystemPrompt(),
+        userPrompt: buildRpgUserPrompt(params),
+        count: params.quantity,
+        temperature: 0.95,
+        filterSlop: true,
+        dedupe: false,
+        meta: params,
+        usage: { theme: "rpg", mood: `${params.setting}:${params.style}` },
+      },
+    };
+  }
+
   if (mode === "persona") {
     const params = normalizePersonaParams(rawParams);
     const persona = getPersona(params.persona);
@@ -125,7 +146,7 @@ function planFor(
   return {
     error: NextResponse.json(
       createErrorResponse(
-        `Unsupported generator mode: ${String(mode)}. Supported: oracle, persona, event.`,
+        `Unsupported generator mode: ${String(mode)}. Supported: oracle, persona, event, rpg.`,
       ),
       { status: 400 },
     ),

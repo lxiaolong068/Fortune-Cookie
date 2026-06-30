@@ -76,7 +76,7 @@ const MODES = [
     title: "The Tabletop RPG",
     description:
       "Ominous prophecies, quest hooks, and cryptic riddles for your campaign — for the character or the player.",
-    status: "soon" as const,
+    status: "live" as const,
   },
   {
     href: "/generator/persona",
