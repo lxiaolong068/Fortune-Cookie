@@ -84,7 +84,7 @@ const MODES = [
     title: "The Alter Ego",
     description:
       "Fortunes with attitude — passive aggressive, existentialist, noir detective, and more personas.",
-    status: "soon" as const,
+    status: "live" as const,
   },
 ];
 

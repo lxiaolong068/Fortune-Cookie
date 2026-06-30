@@ -15,6 +15,12 @@ import {
   buildOracleSystemPrompt,
   buildOracleUserPrompt,
 } from "@/lib/prompts/oracle";
+import {
+  normalizePersonaParams,
+  buildPersonaSystemPrompt,
+  buildPersonaUserPrompt,
+  getPersona,
+} from "@/lib/prompts/persona";
 
 export const dynamic = "force-dynamic";
 
@@ -23,13 +29,88 @@ export interface GeneratedFortune {
   luckyNumbers: number[];
 }
 
+interface GenerationPlan {
+  systemPrompt: string;
+  userPrompt: string;
+  count: number;
+  temperature: number;
+  /** Whether to drop AI-slop outputs (banned words / anti-patterns). */
+  filterSlop: boolean;
+  /** Echoed back to the client + used for usage logging. */
+  meta: unknown;
+  usage: { theme: string; mood: string };
+}
+
+/** Build a generation plan for a mode, or return an error response. */
+function planFor(
+  mode: string,
+  rawParams: unknown,
+): { plan: GenerationPlan } | { error: NextResponse } {
+  if (mode === "oracle") {
+    const params = normalizeOracleParams(rawParams);
+    return {
+      plan: {
+        systemPrompt: buildOracleSystemPrompt(),
+        userPrompt: buildOracleUserPrompt(params),
+        count: params.quantity,
+        temperature: 0.9,
+        filterSlop: true,
+        meta: params,
+        usage: { theme: "oracle", mood: params.fortuneTypes.join(",") },
+      },
+    };
+  }
+
+  if (mode === "persona") {
+    const params = normalizePersonaParams(rawParams);
+    const persona = getPersona(params.persona);
+    if (!persona) {
+      return {
+        error: NextResponse.json(
+          createErrorResponse(`Unknown persona: ${params.persona}`),
+          { status: 400 },
+        ),
+      };
+    }
+    if (persona.tier === "premium") {
+      return {
+        error: NextResponse.json(
+          createErrorResponse(
+            `"${persona.label}" is a premium persona. Pick a free persona or upgrade.`,
+            { upgrade: true, persona: persona.id },
+          ),
+          { status: 403 },
+        ),
+      };
+    }
+    return {
+      plan: {
+        systemPrompt: buildPersonaSystemPrompt(persona),
+        userPrompt: buildPersonaUserPrompt(persona, params.topic, params.quantity),
+        count: params.quantity,
+        temperature: 1.0,
+        filterSlop: false, // personas intentionally subvert the anti-cliché rules
+        meta: params,
+        usage: { theme: `persona:${persona.id}`, mood: params.topic || "random" },
+      },
+    };
+  }
+
+  return {
+    error: NextResponse.json(
+      createErrorResponse(
+        `Unsupported generator mode: ${String(mode)}. Supported: oracle, persona.`,
+      ),
+      { status: 400 },
+    ),
+  };
+}
+
 /**
  * Unified generator endpoint for the v2 tool site.
- * POST { mode: "oracle", params: {...} } → { fortunes: GeneratedFortune[] }
- * Future modes (event / rpg / persona) add branches here.
+ * POST { mode: "oracle" | "persona", params: {...} } → { fortunes: GeneratedFortune[] }
  */
 export async function POST(request: NextRequest) {
-  // Parse body
   let body: { mode?: string; params?: unknown };
   try {
     body = await request.json();
@@ -40,15 +121,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const mode = body?.mode;
-  if (mode !== "oracle") {
-    return NextResponse.json(
-      createErrorResponse(
-        `Unsupported generator mode: ${String(mode)}. Supported: oracle.`,
-      ),
-      { status: 400 },
-    );
-  }
+  const planResult = planFor(String(body?.mode), body?.params);
+  if ("error" in planResult) return planResult.error;
+  const { plan } = planResult;
 
   // Identity + quota gate (check only; charge on success)
   const session = await getServerSession(authOptions);
@@ -66,18 +141,14 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  // Build prompts
-  const params = normalizeOracleParams(body.params);
-  const systemPrompt = buildOracleSystemPrompt();
-  const userPrompt = buildOracleUserPrompt(params);
-
   // Generate
   let messages: string[];
   try {
     messages = await openRouterClient.generateMessages({
-      systemPrompt,
-      userPrompt,
-      count: params.quantity,
+      systemPrompt: plan.systemPrompt,
+      userPrompt: plan.userPrompt,
+      count: plan.count,
+      temperature: plan.temperature,
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
@@ -92,14 +163,17 @@ export async function POST(request: NextRequest) {
 
   if (messages.length === 0) {
     return NextResponse.json(
-      createErrorResponse("The oracle returned nothing. Please try again."),
+      createErrorResponse("The generator returned nothing. Please try again."),
       { status: 502 },
     );
   }
 
-  // QA filter: drop AI-slop outputs; keep raw if everything is filtered out.
-  const clean = messages.filter((m) => validateFortune(m).valid);
-  const finalMessages = clean.length > 0 ? clean : messages;
+  // QA filter (Oracle only): drop AI-slop; keep raw if everything is filtered out.
+  let finalMessages = messages;
+  if (plan.filterSlop) {
+    const clean = messages.filter((m) => validateFortune(m).valid);
+    if (clean.length > 0) finalMessages = clean;
+  }
 
   const fortunes: GeneratedFortune[] = finalMessages.map((message) => ({
     message,
@@ -110,8 +184,8 @@ export async function POST(request: NextRequest) {
   try {
     await recordFortuneUsage({
       identity,
-      theme: "oracle",
-      mood: params.fortuneTypes.join(","),
+      theme: plan.usage.theme,
+      mood: plan.usage.mood,
       length: "short",
       hasCustomPrompt: false,
       source: "ai",
@@ -124,8 +198,8 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(
     createSuccessResponse({
-      mode: "oracle",
-      params,
+      mode: body.mode,
+      params: plan.meta,
       fortunes,
       quota: refreshedQuota,
       source: "ai",
