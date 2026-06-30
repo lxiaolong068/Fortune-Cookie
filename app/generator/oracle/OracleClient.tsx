@@ -97,6 +97,7 @@ export function OracleClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode: "oracle",
+          source: "generator",
           params: { timeHorizon, intensity, fortuneTypes, quantity },
         }),
       });

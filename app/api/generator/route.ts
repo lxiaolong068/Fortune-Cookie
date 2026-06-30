@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
-  getDailyQuotaStatus,
+  getScopedQuotaStatus,
   recordFortuneUsage,
   resolveGuestId,
   type QuotaIdentity,
+  type QuotaScope,
 } from "@/lib/quota";
 import { createSuccessResponse, createErrorResponse } from "@/types/api";
 import { openRouterClient } from "@/lib/openrouter";
@@ -111,7 +112,7 @@ function planFor(
  * POST { mode: "oracle" | "persona", params: {...} } → { fortunes: GeneratedFortune[] }
  */
 export async function POST(request: NextRequest) {
-  let body: { mode?: string; params?: unknown };
+  let body: { mode?: string; params?: unknown; source?: string };
   try {
     body = await request.json();
   } catch {
@@ -125,17 +126,29 @@ export async function POST(request: NextRequest) {
   if ("error" in planResult) return planResult.error;
   const { plan } = planResult;
 
+  // Quota scope: the homepage daily draw has its own counter, separate from
+  // the in-generator counter. Untrusted input is clamped to the two scopes.
+  const scope: QuotaScope = body?.source === "home" ? "home" : "generator";
+
   // Identity + quota gate (check only; charge on success)
   const session = await getServerSession(authOptions);
   const identity: QuotaIdentity = session?.user?.id
     ? { isAuthenticated: true, userId: session.user.id }
     : { isAuthenticated: false, guestId: resolveGuestId(request) };
 
-  const quota = await getDailyQuotaStatus(identity);
+  const quota = await getScopedQuotaStatus(identity, scope);
   if (quota.remaining <= 0) {
-    const message = quota.isAuthenticated
-      ? "You have reached your daily fortune limit. Please try again tomorrow (UTC)."
-      : "You have reached the guest daily limit. Sign in to get more fortunes today.";
+    let message: string;
+    if (scope === "home") {
+      message =
+        "You've used your free daily draw. Come back tomorrow, or open the Generator.";
+    } else if (quota.isAuthenticated) {
+      message =
+        "You have reached your daily generator limit. Please try again tomorrow (UTC).";
+    } else {
+      message =
+        "You have reached the guest daily limit. Sign in to get more fortunes today.";
+    }
     return NextResponse.json(createErrorResponse(message, { quota }), {
       status: 429,
     });
@@ -188,13 +201,13 @@ export async function POST(request: NextRequest) {
       mood: plan.usage.mood,
       length: "short",
       hasCustomPrompt: false,
-      source: "ai",
+      source: scope, // scope tag drives the per-entry-point counter
     });
   } catch {
     // Non-fatal: never fail a successful generation on usage logging.
   }
 
-  const refreshedQuota = await getDailyQuotaStatus(identity);
+  const refreshedQuota = await getScopedQuotaStatus(identity, scope);
 
   return NextResponse.json(
     createSuccessResponse({

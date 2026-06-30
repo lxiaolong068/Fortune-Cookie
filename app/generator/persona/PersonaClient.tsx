@@ -39,6 +39,7 @@ export function PersonaClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode: "persona",
+          source: "generator",
           params: { persona, topic, quantity },
         }),
       });

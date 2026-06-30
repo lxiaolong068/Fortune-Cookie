@@ -67,6 +67,7 @@ export function FortuneCookieInteractive() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode: "oracle",
+          source: "home",
           params: {
             timeHorizon: "today",
             intensity: 3,
