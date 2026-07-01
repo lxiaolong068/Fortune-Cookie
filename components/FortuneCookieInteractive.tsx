@@ -4,9 +4,17 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Sparkles, Copy, Twitter, MessageCircle, ArrowRight } from "lucide-react";
+import {
+  Sparkles,
+  Copy,
+  Twitter,
+  MessageCircle,
+  ArrowRight,
+  ImageDown,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
+import { buildShareCardUrl, shareOrDownloadCard } from "@/lib/share-card";
 
 type CookieState = "unopened" | "cracking" | "opened";
 
@@ -136,6 +144,18 @@ export function FortuneCookieInteractive() {
     [fortune],
   );
 
+  const shareImage = useCallback(async () => {
+    if (!fortune) return;
+    const url = buildShareCardUrl({
+      message: fortune.message,
+      luckyNumbers: fortune.numbers,
+      category: "Oracle",
+      emoji: "🔮",
+    });
+    const result = await shareOrDownloadCard(url, fortune.message);
+    if (result === "downloaded") toast.success("Image saved");
+  }, [fortune]);
+
   if (!isHydrated) return null;
 
   // Unopened: transparent click target over the static cookie.
@@ -260,6 +280,15 @@ export function FortuneCookieInteractive() {
                     className="rounded-full"
                   >
                     <MessageCircle className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={shareImage}
+                    aria-label="Share as image"
+                    className="rounded-full"
+                  >
+                    <ImageDown className="h-4 w-4" />
                   </Button>
                 </div>
 

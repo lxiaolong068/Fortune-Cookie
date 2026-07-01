@@ -11,6 +11,7 @@ import {
   ClipboardList,
   FileDown,
   Lock,
+  ImageDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -18,6 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useAuthSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { exportFortunesToPDF } from "@/lib/pdf-export";
+import { buildShareCardUrl, shareOrDownloadCard } from "@/lib/share-card";
 import {
   EVENT_TYPES,
   EVENT_TONES,
@@ -134,6 +136,22 @@ export function EventClient() {
       () => toast.error("Copy failed"),
     );
   }, []);
+
+  const shareImage = useCallback(
+    async (fortune: GeneratedFortune) => {
+      const label =
+        EVENT_TYPES.find((e) => e.value === eventType)?.label ?? "Event";
+      const url = buildShareCardUrl({
+        message: fortune.message,
+        luckyNumbers: fortune.luckyNumbers,
+        category: label,
+        emoji: "🎉",
+      });
+      const result = await shareOrDownloadCard(url, fortune.message);
+      if (result === "downloaded") toast.success("Image saved");
+    },
+    [eventType],
+  );
 
   const copyAll = useCallback(() => {
     const all = results.map((r) => r.message).join("\n");
@@ -353,7 +371,7 @@ export function EventClient() {
                   ease: "easeOut",
                 }}
                 style={{ transformOrigin: "top" }}
-                className="group relative flex items-start gap-3 rounded-lg border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-3 pr-10 dark:border-amber-500/30 dark:from-slate-800 dark:to-slate-800/60"
+                className="group relative flex items-start gap-3 rounded-lg border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-3 pr-16 dark:border-amber-500/30 dark:from-slate-800 dark:to-slate-800/60"
               >
                 <span className="mt-0.5 text-xs font-medium text-amber-500">
                   {index + 1}
@@ -361,14 +379,24 @@ export function EventClient() {
                 <p className="flex-1 font-serif text-sm text-slate-800 dark:text-slate-100">
                   {fortune.message}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => copyOne(fortune.message)}
-                  aria-label="Copy message"
-                  className="absolute right-2 top-2 rounded-lg p-1.5 text-slate-400 opacity-0 transition-opacity hover:bg-white/60 hover:text-amber-600 group-hover:opacity-100 dark:hover:bg-slate-700/60"
-                >
-                  <Copy className="h-4 w-4" />
-                </button>
+                <div className="absolute right-2 top-2 flex items-center opacity-0 transition-opacity group-hover:opacity-100">
+                  <button
+                    type="button"
+                    onClick={() => copyOne(fortune.message)}
+                    aria-label="Copy message"
+                    className="rounded-lg p-1.5 text-slate-400 hover:bg-white/60 hover:text-amber-600 dark:hover:bg-slate-700/60"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => shareImage(fortune)}
+                    aria-label="Share as image"
+                    className="rounded-lg p-1.5 text-slate-400 hover:bg-white/60 hover:text-amber-600 dark:hover:bg-slate-700/60"
+                  >
+                    <ImageDown className="h-4 w-4" />
+                  </button>
+                </div>
               </motion.li>
             ))}
           </AnimatePresence>

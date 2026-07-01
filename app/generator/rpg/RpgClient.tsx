@@ -3,9 +3,10 @@
 import { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Dices, Copy, Loader2, Wand2 } from "lucide-react";
+import { Dices, Copy, Loader2, Wand2, ImageDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { buildShareCardUrl, shareOrDownloadCard } from "@/lib/share-card";
 import { cn } from "@/lib/utils";
 import {
   RPG_TARGETS,
@@ -106,6 +107,22 @@ export function RpgClient() {
     );
   }, []);
 
+  const shareImage = useCallback(
+    async (fortune: GeneratedFortune) => {
+      const settingLabel =
+        RPG_SETTINGS.find((s) => s.value === setting)?.label ?? "Quest";
+      const url = buildShareCardUrl({
+        message: fortune.message,
+        luckyNumbers: fortune.luckyNumbers,
+        category: settingLabel,
+        emoji: "🎲",
+      });
+      const result = await shareOrDownloadCard(url, fortune.message);
+      if (result === "downloaded") toast.success("Image saved");
+    },
+    [setting],
+  );
+
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)]">
       {/* Parameter panel */}
@@ -158,7 +175,7 @@ export function RpgClient() {
                 exit={{ opacity: 0 }}
                 transition={{ delay: index * 0.08, duration: 0.35, ease: "easeOut" }}
                 style={{ transformOrigin: "top" }}
-                className="group relative overflow-hidden rounded-xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-4 pr-20 shadow-sm dark:border-amber-500/30 dark:from-slate-800 dark:to-slate-800/60"
+                className="group relative overflow-hidden rounded-xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-4 pr-28 shadow-sm dark:border-amber-500/30 dark:from-slate-800 dark:to-slate-800/60"
               >
                 <p className="font-serif text-slate-800 dark:text-slate-100">
                   {fortune.message}
@@ -178,6 +195,14 @@ export function RpgClient() {
                     className="rounded-lg p-2 text-slate-400 opacity-0 transition-opacity hover:bg-white/60 hover:text-amber-600 group-hover:opacity-100 dark:hover:bg-slate-700/60"
                   >
                     <Copy className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => shareImage(fortune)}
+                    aria-label="Share as image"
+                    className="rounded-lg p-2 text-slate-400 opacity-0 transition-opacity hover:bg-white/60 hover:text-amber-600 group-hover:opacity-100 dark:hover:bg-slate-700/60"
+                  >
+                    <ImageDown className="h-4 w-4" />
                   </button>
                 </div>
               </motion.li>

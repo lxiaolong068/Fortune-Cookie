@@ -119,6 +119,7 @@ function FortuneCookieCard({
         <div style={{ fontSize: 36 }}>{emoji}</div>
         <div
           style={{
+            display: "flex",
             fontSize: 18,
             fontWeight: 700,
             color: accent,
