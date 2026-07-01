@@ -1,10 +1,5 @@
 import { Metadata } from "next";
 import { getFullUrl, getImageUrl, getSiteMetadata } from "@/lib/site";
-import {
-  i18n,
-  getLanguageConfig,
-  stripLocalePrefix,
-} from "@/lib/i18n-config";
 
 interface SEOProps {
   title?: string;
@@ -17,8 +12,6 @@ interface SEOProps {
   author?: string;
   section?: string;
   tags?: string[];
-  /** Disable automatic multi-language alternates (for locale-specific pages that handle it themselves) */
-  noAlternates?: boolean;
 }
 
 export function generateSEOMetadata({
@@ -32,7 +25,6 @@ export function generateSEOMetadata({
   author,
   section,
   tags = [],
-  noAlternates = false,
 }: SEOProps): Metadata {
   const siteMetadata = getSiteMetadata();
   const finalTitle = title || siteMetadata.title;
@@ -46,38 +38,11 @@ export function generateSEOMetadata({
   const fullUrl = url ? getFullUrl(url) : baseUrl;
   const fullImageUrl = getImageUrl(image);
 
-  // Generate multi-language alternates for hreflang SEO
   const canonicalPath = url
     ? url === baseUrl
       ? "/"
       : url.replace(baseUrl, "")
     : "/";
-  const alternateLanguages: Record<string, string> = {};
-
-  if (!noAlternates) {
-    // Get the path without any existing locale prefix
-    const pathWithoutLocale = stripLocalePrefix(canonicalPath);
-
-    // Generate alternates for all supported locales
-    for (const locale of i18n.locales) {
-      const config = getLanguageConfig(locale);
-      if (locale === i18n.defaultLocale) {
-        // Default locale (en) uses root path
-        alternateLanguages[config.hreflang] =
-          `${baseUrl}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
-      } else {
-        // Other locales use prefixed path
-        const localePath =
-          pathWithoutLocale === "/"
-            ? `/${locale}`
-            : `/${locale}${pathWithoutLocale}`;
-        alternateLanguages[config.hreflang] = `${baseUrl}${localePath}`;
-      }
-    }
-    // Add x-default pointing to English version
-    alternateLanguages["x-default"] =
-      `${baseUrl}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
-  }
 
   return {
     title: {
@@ -96,9 +61,6 @@ export function generateSEOMetadata({
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: canonicalPath,
-      ...(Object.keys(alternateLanguages).length > 0 && {
-        languages: alternateLanguages,
-      }),
     },
     openGraph: {
       type,

@@ -286,15 +286,14 @@ export async function submitUrlsToAllEngines(
 export async function submitSitemapUrls(): Promise<IndexNowResult> {
   const siteUrl = `https://${INDEXNOW_CONFIG.host}`;
 
-  // 核心页面 URL
+  // 核心页面 URL（与 app/sitemap.ts 保持一致，仅包含现存可索引路由）
   const coreUrls = [
     `${siteUrl}/`,
     `${siteUrl}/generator`,
-    `${siteUrl}/messages`,
     `${siteUrl}/about`,
-    `${siteUrl}/history`,
-    `${siteUrl}/blog`,
-    `${siteUrl}/browse`,
+    `${siteUrl}/cookies`,
+    `${siteUrl}/privacy`,
+    `${siteUrl}/terms`,
   ];
 
   return submitUrls(coreUrls);
@@ -308,17 +307,6 @@ export async function notifyPageUpdate(
 ): Promise<IndexNowResult> {
   console.log(`[IndexNow] Notifying page update: ${path}`);
   return submitUrl(path);
-}
-
-/**
- * 通知博客文章更新
- */
-export async function notifyBlogPostUpdate(
-  slug: string,
-): Promise<IndexNowResult> {
-  const url = `/blog/${slug}`;
-  console.log(`[IndexNow] Notifying blog post update: ${url}`);
-  return submitUrl(url);
 }
 
 /**

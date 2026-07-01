@@ -12,17 +12,17 @@ datasource db {
 
 // fortune cookie表
 model Fortune {
-  id          String   @id @default(cuid())
-  message     String
-  category    String
-  mood        String
-  length      String
-  source      String   @default("database")
-  popularity  Int      @default(0)
-  tags        String?  // JSON 字符串存储标签
-  language    String   @default("zh")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  message    String
+  category   String
+  mood       String
+  length     String
+  source     String   @default("database")
+  popularity Int      @default(0)
+  tags       String? // JSON 字符串存储标签
+  language   String   @default("zh")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   // 索引optimization
   @@index([category])
@@ -30,21 +30,20 @@ model Fortune {
   @@index([popularity])
   @@index([createdAt])
   @@index([category, mood])
-
   @@map("fortunes")
 }
 
 // 用户session表
 model UserSession {
-  id          String   @id @default(cuid())
-  sessionId   String   @unique
-  userId      String?
-  ipAddress   String?
-  userAgent   String?
-  data        String?  // JSON 字符串存储sessiondata
-  expiresAt   DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  sessionId String   @unique
+  userId    String?
+  ipAddress String?
+  userAgent String?
+  data      String? // JSON 字符串存储sessiondata
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([sessionId])
   @@index([userId])
@@ -54,15 +53,15 @@ model UserSession {
 
 // API usestatistics表
 model ApiUsage {
-  id          String   @id @default(cuid())
-  endpoint    String
-  method      String
-  statusCode  Int
+  id           String   @id @default(cuid())
+  endpoint     String
+  method       String
+  statusCode   Int
   responseTime Int
-  ipAddress   String?
-  userAgent   String?
-  keyId       String?
-  timestamp   DateTime @default(now())
+  ipAddress    String?
+  userAgent    String?
+  keyId        String?
+  timestamp    DateTime @default(now())
 
   @@index([endpoint])
   @@index([timestamp])
@@ -73,15 +72,15 @@ model ApiUsage {
 
 // Web Vitals performancemetrics表
 model WebVital {
-  id            String   @id @default(cuid())
-  name          String   // CLS, INP, FCP, LCP, TTFB
-  value         Float
-  delta         Float
-  rating        String   // good, needs-improvement, poor
+  id             String   @id @default(cuid())
+  name           String // CLS, INP, FCP, LCP, TTFB
+  value          Float
+  delta          Float
+  rating         String // good, needs-improvement, poor
   navigationType String?
-  url           String?
-  userAgent     String?
-  timestamp     DateTime @default(now())
+  url            String?
+  userAgent      String?
+  timestamp      DateTime @default(now())
 
   @@index([name])
   @@index([timestamp])
@@ -91,17 +90,17 @@ model WebVital {
 
 // 错误log表
 model ErrorLog {
-  id          String   @id @default(cuid())
-  level       String   // error, warning, info
-  message     String
-  stack       String?
-  context     String?  // JSON 字符串存储上下文
-  component   String?
-  userId      String?
-  sessionId   String?
-  ipAddress   String?
-  userAgent   String?
-  timestamp   DateTime @default(now())
+  id        String   @id @default(cuid())
+  level     String // error, warning, info
+  message   String
+  stack     String?
+  context   String? // JSON 字符串存储上下文
+  component String?
+  userId    String?
+  sessionId String?
+  ipAddress String?
+  userAgent String?
+  timestamp DateTime @default(now())
 
   @@index([level])
   @@index([timestamp])
@@ -112,12 +111,12 @@ model ErrorLog {
 
 // cachestatistics表
 model CacheStats {
-  id          String   @id @default(cuid())
-  key         String
-  operation   String   // get, set, del, hit, miss
-  size        Int?
-  ttl         Int?
-  timestamp   DateTime @default(now())
+  id        String   @id @default(cuid())
+  key       String
+  operation String // get, set, del, hit, miss
+  size      Int?
+  ttl       Int?
+  timestamp DateTime @default(now())
 
   @@index([key])
   @@index([operation])
@@ -127,17 +126,17 @@ model CacheStats {
 
 // 用户反馈表
 model UserFeedback {
-  id          String   @id @default(cuid())
-  type        String   // rating, comment, bug_report
-  content     String
-  rating      Int?     // 1-5 星评分
-  fortuneId   String?
-  sessionId   String?
-  ipAddress   String?
-  userAgent   String?
-  status      String   @default("pending") // pending, reviewed, resolved
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  type      String // rating, comment, bug_report
+  content   String
+  rating    Int? // 1-5 星评分
+  fortuneId String?
+  sessionId String?
+  ipAddress String?
+  userAgent String?
+  status    String   @default("pending") // pending, reviewed, resolved
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([type])
   @@index([status])
@@ -147,20 +146,24 @@ model UserFeedback {
 
 // NextAuth 用户表
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  image          String?
-  accounts       Account[]
-  sessions       Session[]
-  mobileSessions MobileSession[]
-  fortuneQuota   FortuneQuota[]
-  fortuneUsage   FortuneUsage[]
-  favorites      Favorite[]
-  checkIns       DailyCheckIn[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                String              @id @default(cuid())
+  name              String?
+  email             String?             @unique
+  emailVerified     DateTime?
+  image             String?
+  // No purchase flow exists yet (spec 8 commercialization is deferred); this
+  // flag is the gating hook for whichever payment integration ships later.
+  isPremium         Boolean             @default(false)
+  accounts          Account[]
+  sessions          Session[]
+  mobileSessions    MobileSession[]
+  fortuneQuota      FortuneQuota[]
+  fortuneUsage      FortuneUsage[]
+  favorites         Favorite[]
+  generationHistory GenerationHistory[]
+  checkIns          DailyCheckIn[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 
   @@map("auth_users")
 }
@@ -173,8 +176,8 @@ model MobileSession {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
   createdAt DateTime @default(now())
-  provider  String   // "apple" | "google"
-  deviceId  String?  // Optional device identifier
+  provider  String // "apple" | "google"
+  deviceId  String? // Optional device identifier
 
   @@index([token])
   @@index([userId])
@@ -236,11 +239,11 @@ model FortuneQuota {
   updatedAt  DateTime @updatedAt
   user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, dateKey])
+  @@unique([guestId, dateKey])
   @@index([dateKey])
   @@index([userId])
   @@index([guestId])
-  @@unique([userId, dateKey])
-  @@unique([guestId, dateKey])
   @@map("fortune_quota")
 }
 
@@ -269,26 +272,41 @@ model Favorite {
   id           String   @id @default(cuid())
   userId       String
   message      String
-  luckyNumbers String?  // JSON 数组存储
+  luckyNumbers String? // JSON 数组存储
   theme        String?
   category     String?
   source       String?
   createdAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, message])
   @@index([userId])
   @@index([createdAt])
-  @@unique([userId, message])
   @@map("favorites")
+}
+
+// v2 generator history (已登录用户, Profile 页 "Generation History" 最近 50 条)
+model GenerationHistory {
+  id           String   @id @default(cuid())
+  userId       String
+  mode         String // oracle | event | rpg | persona
+  params       String // JSON-serialized mode params
+  message      String
+  luckyNumbers String? // JSON 数组存储
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("generation_history")
 }
 
 // 每日签到记录
 model DailyCheckIn {
   id          String   @id @default(cuid())
   userId      String
-  dateKey     String   // YYYY-MM-DD format
-  streakCount Int      @default(1)  // consecutive days streak
-  bonusQuota  Int      @default(0)  // extra fortune quota earned
+  dateKey     String // YYYY-MM-DD format
+  streakCount Int      @default(1) // consecutive days streak
+  bonusQuota  Int      @default(0) // extra fortune quota earned
   createdAt   DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

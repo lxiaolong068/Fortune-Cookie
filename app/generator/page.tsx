@@ -1,39 +1,34 @@
 import { Metadata } from "next";
+import Link from "next/link";
+import { Sparkles, PartyPopper, Dices, Drama, ArrowRight } from "lucide-react";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import { BreadcrumbStructuredData } from "@/components/StructuredData";
 import { FAQStructuredData } from "@/components/FAQStructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
-import { generateAlternateLanguages } from "@/lib/i18n-config";
-import { GeneratorClient } from "./GeneratorClient";
 import { AdUnit } from "@/components/AdUnit";
 
 const baseUrl = getSiteUrl();
 
-// ISR: force-static + revalidate every 24 hours
-// The generator page shell is static (metadata, layout, FAQ schema).
-// All interactive AI generation happens client-side via GeneratorClient.
-// Caching the shell eliminates unnecessary SSR on every visit.
+// ISR: the hub is static (cards + metadata). Interactive generation lives in
+// each mode's own route (/generator/oracle, etc.).
 export const dynamic = "force-static";
 export const revalidate = 86400; // 24 hours
 
 export const metadata: Metadata = {
-  title: "Fortune Cookie Generator — Free AI-Powered, Instant & Personalized",
+  title: "Fortune Cookie Generator — 4 AI Modes, Free & Instant",
   description:
-    "Generate a free AI fortune cookie in seconds. Choose from 6 themes (Inspirational, Funny, Love, Wisdom, Success, Mystical), get lucky numbers, and share instantly. No signup needed — 5 free fortunes per day.",
+    "Pick a mode and craft fortune cookie messages with AI: The True Oracle (predictions), The Event Master (custom party fortunes), The Tabletop RPG, and The Alter Ego (personas). Free, no signup.",
   keywords: [
     "fortune cookie generator",
     "AI fortune cookie generator",
-    "free fortune cookie generator",
-    "online fortune cookie",
-    "fortune cookie online free",
-    "random fortune cookie",
+    "custom fortune cookie messages",
     "fortune cookie maker",
     "personalized fortune cookie",
   ],
   openGraph: {
-    title: "Free AI Fortune Cookie Generator — Instant & Personalized",
+    title: "Fortune Cookie Generator — 4 AI Modes, Free & Instant",
     description:
-      "Generate a free AI fortune cookie in seconds. Choose from 6 themes, get lucky numbers, and share instantly. No signup needed.",
+      "Pick a mode and craft fortune cookie messages with AI: predictions, custom party fortunes, tabletop RPG prophecies, and persona-driven fortunes.",
     type: "website",
     url: `${baseUrl}/generator`,
     images: [
@@ -41,23 +36,57 @@ export const metadata: Metadata = {
         url: getImageUrl("/og-image.png"),
         width: 1200,
         height: 630,
-        alt: "Free AI Fortune Cookie Generator",
+        alt: "AI Fortune Cookie Generator",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Free AI Fortune Cookie Generator — Instant & Personalized",
+    title: "Fortune Cookie Generator — 4 AI Modes, Free & Instant",
     description:
-      "Generate a free AI fortune cookie in seconds. Choose from 6 themes, get lucky numbers, and share instantly. No signup needed.",
+      "Pick a mode and craft fortune cookie messages with AI: predictions, custom party fortunes, RPG prophecies, and persona fortunes.",
     images: [getImageUrl("/twitter-image.png")],
     creator: "@fortunecookieai",
   },
   alternates: {
     canonical: "/generator",
-    languages: generateAlternateLanguages("/generator", baseUrl),
   },
 };
+
+const MODES = [
+  {
+    href: "/generator/oracle",
+    icon: Sparkles,
+    title: "The True Oracle",
+    description:
+      "Classic predictions tuned by time horizon and intensity — good, neutral, bad, or ominous.",
+    status: "live" as const,
+  },
+  {
+    href: "/generator/event",
+    icon: PartyPopper,
+    title: "The Event Master",
+    description:
+      "Custom fortunes for weddings, baby showers, birthdays, team building — printable in bulk.",
+    status: "live" as const,
+  },
+  {
+    href: "/generator/rpg",
+    icon: Dices,
+    title: "The Tabletop RPG",
+    description:
+      "Ominous prophecies, quest hooks, and cryptic riddles for your campaign — for the character or the player.",
+    status: "live" as const,
+  },
+  {
+    href: "/generator/persona",
+    icon: Drama,
+    title: "The Alter Ego",
+    description:
+      "Fortunes with attitude — passive aggressive, existentialist, noir detective, and more personas.",
+    status: "live" as const,
+  },
+];
 
 export default function GeneratorPage() {
   return (
@@ -71,52 +100,97 @@ export default function GeneratorPage() {
       <FAQStructuredData
         faqs={[
           {
-            question: "How do I use the AI fortune cookie generator?",
+            question: "What can the fortune cookie generator do?",
             answer:
-              "Simply choose a theme (like Inspirational, Funny, or Love), select your mood, and click the fortune cookie to crack it open. Our AI will generate a unique personalized fortune message with lucky numbers instantly. No account or signup is required.",
+              "Choose from four AI modes: The True Oracle for predictions (good, neutral, bad, or ominous), The Event Master for custom party and wedding fortunes, The Tabletop RPG for campaign prophecies, and The Alter Ego for persona-driven fortunes. Each mode has its own controls.",
           },
           {
-            question: "How many fortune cookies can I generate for free?",
+            question: "Is the fortune cookie generator free?",
             answer:
-              "Guest users can generate up to 5 free AI fortune cookies per day. Sign in with Google to unlock 20 daily fortunes — completely free, no payment required!",
+              "Yes. You get a number of free AI fortunes every day as a guest, and signing in with Google unlocks a higher daily limit — no payment required.",
           },
           {
-            question: "Can I customize my fortune cookie message?",
+            question: "Do I need an account?",
             answer:
-              "Yes! You can select from 6 different themes (Inspirational, Funny, Love, Wisdom, Success, Mystical) and various moods to personalize your fortune. Each combination produces a unique AI-generated message tailored to your preferences.",
+              "No signup is needed to generate fortunes. Signing in only unlocks extras like saving favorites, generation history, and a higher daily limit.",
           },
           {
-            question: "Are the fortune cookie messages generated by real AI?",
+            question: "Are the fortunes generated by real AI?",
             answer:
-              "Yes, our fortune messages are generated by advanced AI models in real-time. Each fortune is unique and created specifically for you based on your chosen theme and mood. We also maintain a 500+ message offline library as a backup.",
-          },
-          {
-            question: "Is this fortune cookie generator really free?",
-            answer:
-              "Yes, completely free. Guest users get 5 AI fortunes per day. Sign in with Google for 20 daily fortunes. No credit card, no subscription, no hidden fees.",
-          },
-          {
-            question: "Can I use the generated fortunes for my business or event?",
-            answer:
-              "Absolutely. The fortunes are suitable for personal and commercial use. Many users print them for wedding favors, corporate events, restaurant menus, and branded gift packaging.",
-          },
-          {
-            question: "What languages does the fortune cookie generator support?",
-            answer:
-              "The generator supports English, Spanish, French, German, Chinese (Simplified), Japanese, and several other languages. Select your preferred language in the Personalization panel before generating.",
+              "Yes, each fortune is generated by an AI model in real time and written to read like a human wrote it — no generic self-help platitudes.",
           },
           {
             question: "How do the lucky numbers work?",
             answer:
-              "Each fortune comes with a set of AI-selected lucky numbers generated algorithmically. They are meant purely for fun — think of them as your personal lottery picks or a playful nod to the tradition of fortune cookie lucky numbers.",
+              "Each fortune comes with a set of algorithmically selected lucky numbers, purely for fun — a playful nod to the classic fortune cookie tradition.",
           },
         ]}
       />
       <main className="min-h-screen w-full overflow-x-hidden relative">
         <DynamicBackgroundEffects />
-        <div className="relative z-10">
-          <GeneratorClient />
-          <div className="py-4 flex justify-center">
+        <div className="relative z-10 container mx-auto max-w-5xl px-4 pb-20 pt-24 md:pt-28">
+          <header className="mb-10 text-center">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 md:text-4xl">
+              Fortune Cookie Generator
+            </h1>
+            <p className="mx-auto mt-3 max-w-2xl text-slate-600 dark:text-slate-300">
+              Four ways to craft a fortune. Pick a mode to begin.
+            </p>
+          </header>
+
+          <ul className="grid list-none gap-5 p-0 sm:grid-cols-2">
+            {MODES.map((mode) => {
+              const Icon = mode.icon;
+              const isLive = mode.status === "live";
+              const inner = (
+                <>
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    {isLive ? (
+                      <ArrowRight className="h-5 w-5 text-amber-500 transition-transform group-hover:translate-x-1" />
+                    ) : (
+                      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                        Coming soon
+                      </span>
+                    )}
+                  </div>
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    {mode.title}
+                  </h2>
+                  <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+                    {mode.description}
+                  </p>
+                </>
+              );
+
+              const baseClass =
+                "group block h-full rounded-2xl border p-6 transition-all";
+
+              return (
+                <li key={mode.href}>
+                  {isLive ? (
+                    <Link
+                      href={mode.href}
+                      className={`${baseClass} border-amber-200 bg-white/80 backdrop-blur hover:-translate-y-0.5 hover:border-amber-400 hover:shadow-lg dark:border-amber-500/30 dark:bg-slate-900/60`}
+                    >
+                      {inner}
+                    </Link>
+                  ) : (
+                    <div
+                      aria-disabled="true"
+                      className={`${baseClass} cursor-not-allowed border-slate-200 bg-white/50 opacity-75 dark:border-slate-700 dark:bg-slate-900/40`}
+                    >
+                      {inner}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="py-8 flex justify-center">
             <AdUnit slot="8173598207" />
           </div>
         </div>

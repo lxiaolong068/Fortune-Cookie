@@ -169,6 +169,94 @@ export async function consumeDailyQuota(
   };
 }
 
+// ---------------------------------------------------------------------------
+// Scoped quota (v2): independent per-entry-point counters.
+//   home      → the homepage daily draw (guest 1/day, authenticated unlimited)
+//   generator → the /generator modes      (guest 3/day, authenticated 10/day)
+// Counting is derived from FortuneUsage rows tagged with `source = scope`, so
+// it needs no schema change and is isolated from the legacy FortuneQuota
+// counter still used by /api/fortune.
+// ---------------------------------------------------------------------------
+
+export type QuotaScope = "home" | "generator";
+
+const UNLIMITED = 9999;
+
+function envInt(name: string, fallback: number): number {
+  const parsed = Number.parseInt(process.env[name] || `${fallback}`, 10);
+  return Number.isNaN(parsed) ? fallback : parsed;
+}
+
+const SCOPE_LIMITS: Record<QuotaScope, { guest: number; auth: number }> = {
+  home: {
+    guest: envInt("HOME_GUEST_DAILY_LIMIT", 1),
+    auth: envInt("HOME_AUTH_DAILY_LIMIT", UNLIMITED),
+  },
+  generator: {
+    guest: envInt("GENERATOR_GUEST_DAILY_LIMIT", 3),
+    auth: envInt("GENERATOR_AUTH_DAILY_LIMIT", 10),
+  },
+};
+
+export function getScopedLimit(
+  scope: QuotaScope,
+  isAuthenticated: boolean,
+): number {
+  const limits = SCOPE_LIMITS[scope];
+  return isAuthenticated ? limits.auth : limits.guest;
+}
+
+async function countScopedUsage(
+  identity: QuotaIdentity,
+  dateKey: string,
+  scope: QuotaScope,
+): Promise<number | null> {
+  if (identity.userId) {
+    return db.fortuneUsage.count({
+      where: { userId: identity.userId, dateKey, source: scope },
+    });
+  }
+  if (identity.guestId) {
+    return db.fortuneUsage.count({
+      where: { guestId: identity.guestId, dateKey, source: scope },
+    });
+  }
+  return null;
+}
+
+/**
+ * Per-scope daily quota status. The counter is the number of FortuneUsage rows
+ * for this identity+day tagged with `source = scope`; record one (via
+ * recordFortuneUsage with source: scope) on each successful generation.
+ */
+export async function getScopedQuotaStatus(
+  identity: QuotaIdentity,
+  scope: QuotaScope,
+): Promise<QuotaStatus> {
+  const dateKey = getUtcDateKey();
+  const limit = getScopedLimit(scope, identity.isAuthenticated);
+  const resetAt = getNextUtcReset().toISOString();
+
+  const used = await countScopedUsage(identity, dateKey, scope);
+  if (used === null) {
+    return {
+      limit,
+      used: limit,
+      remaining: 0,
+      resetsAtUtc: resetAt,
+      isAuthenticated: identity.isAuthenticated,
+    };
+  }
+
+  return {
+    limit,
+    used,
+    remaining: Math.max(0, limit - used),
+    resetsAtUtc: resetAt,
+    isAuthenticated: identity.isAuthenticated,
+  };
+}
+
 export async function recordFortuneUsage(input: {
   identity: QuotaIdentity;
   theme: string;

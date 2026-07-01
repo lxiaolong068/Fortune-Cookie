@@ -9,10 +9,7 @@ import {
   getDatabaseStats,
   localizeFortune,
   localizeFortunes,
-  getLocalizedFortuneMessage,
 } from "@/lib/fortune-database";
-import { detectLocaleFromHeader } from "@/lib/translations";
-import { i18n, isValidLocale, type Locale } from "@/lib/i18n-config";
 import {
   rateLimiters,
   cacheManager,
@@ -33,25 +30,6 @@ function sanitizeString(input: string, maxLength: number = 100): string {
     .replace(/on\w+\s*=/gi, "")
     .trim()
     .slice(0, maxLength);
-}
-
-function resolveRequestLocale(request: NextRequest): Locale {
-  const { searchParams } = new URL(request.url);
-  const localeParam = sanitizeString(searchParams.get("locale") || "", 10)
-    .toLowerCase()
-    .trim();
-
-  if (localeParam) {
-    if (isValidLocale(localeParam)) {
-      return localeParam;
-    }
-    const shortCode = localeParam.split("-")[0];
-    if (shortCode && isValidLocale(shortCode)) {
-      return shortCode;
-    }
-  }
-
-  return detectLocaleFromHeader(request.headers.get("accept-language"));
 }
 
 function validatePositiveInteger(
@@ -119,7 +97,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const locale = resolveRequestLocale(request);
+    const locale = "en";
     const action = searchParams.get("action") || "list";
 
     switch (action) {
@@ -165,7 +143,7 @@ export async function GET(request: NextRequest) {
 
         CachePerformanceMonitor.recordMiss();
 
-        const results = searchFortunes(query, category, locale).slice(0, limit);
+        const results = searchFortunes(query, category).slice(0, limit);
         const localizedResults = localizeFortunes(results, locale);
 
         const responseData = {
@@ -378,13 +356,7 @@ export async function GET(request: NextRequest) {
             );
             break;
           case "alphabetical": {
-            const getSortMessage = (fortune: typeof results[number]) =>
-              locale === i18n.defaultLocale
-                ? fortune.message
-                : getLocalizedFortuneMessage(fortune, locale).message;
-            results.sort((a, b) =>
-              getSortMessage(a).localeCompare(getSortMessage(b)),
-            );
+            results.sort((a, b) => a.message.localeCompare(b.message));
             break;
           }
         }

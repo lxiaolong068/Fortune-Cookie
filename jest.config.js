@@ -58,10 +58,14 @@ const customJestConfig = {
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
+    '<rootDir>/.claude/', // Exclude git worktrees (duplicate checkouts)
     '<rootDir>/tests/e2e/', // Exclude Playwright tests
     '<rootDir>/__tests__/utils/', // Exclude test utilities (not actual tests)
     '<rootDir>/analytics-test\\.spec\\.js', // Exclude Playwright test in root
   ],
+
+  // Prevent jest-haste-map collisions from worktree checkouts under .claude/
+  modulePathIgnorePatterns: ['<rootDir>/.claude/'],
 
   // Transform configuration
   transform: {

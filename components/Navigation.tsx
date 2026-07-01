@@ -4,103 +4,55 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Menu,
-  X,
-  Home,
-  Sparkles,
-  Clock,
-  ChefHat,
-  Search,
-  User,
-  BookOpen,
-  Heart,
-  LogIn,
-  LogOut,
-  CalendarDays,
-} from "lucide-react";
+import { Menu, X, Home, Sparkles, User, LogIn, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { ThemeToggle } from "./ThemeToggle";
-import { LanguageSwitcher, CompactLanguageSwitcher } from "./LanguageSwitcher";
 import {
   startGoogleSignIn,
   startSignOut,
   useAuthSession,
 } from "@/lib/auth-client";
-import { useLocale } from "@/lib/locale-context";
 
-const navigationItems = [
+const baseNavigationItems = [
   {
-    key: "home",
     href: "/",
     icon: Home,
-    descriptionKey: "homeDescription",
+    label: "Home",
+    description: "Draw a fortune cookie",
   },
   {
-    key: "generator",
     href: "/generator",
     icon: Sparkles,
-    descriptionKey: "generatorDescription",
-  },
-  {
-    key: "explore",
-    href: "/explore",
-    icon: Search,
-    descriptionKey: "exploreDescription",
-  },
-  {
-    key: "favorites",
-    href: "/favorites",
-    icon: Heart,
-    descriptionKey: "favoritesDescription",
-  },
-  {
-    key: "calendar",
-    href: "/calendar",
-    icon: CalendarDays,
-    descriptionKey: "calendarDescription",
-  },
-  {
-    key: "history",
-    href: "/history",
-    icon: Clock,
-    descriptionKey: "historyDescription",
-  },
-  {
-    key: "recipes",
-    href: "/recipes",
-    icon: ChefHat,
-    descriptionKey: "recipesDescription",
-  },
-  {
-    key: "blog",
-    href: "/blog",
-    icon: BookOpen,
-    descriptionKey: "blogDescription",
-  },
-  {
-    key: "profile",
-    href: "/profile",
-    icon: User,
-    descriptionKey: "profileDescription",
+    label: "Generator",
+    description: "Craft custom fortunes",
   },
 ];
+
+const profileNavigationItem = {
+  href: "/profile",
+  icon: User,
+  label: "Profile",
+  description: "Your favorites & history",
+};
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { status } = useAuthSession();
   const isAuthenticated = status === "authenticated";
-  const { t, getLocalizedHref } = useLocale();
+
+  const navigationItems = isAuthenticated
+    ? [...baseNavigationItems, profileNavigationItem]
+    : baseNavigationItems;
 
   return (
     <>
       {/* Desktop Navigation - Modern Glassmorphism */}
       <nav
         className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50"
-        aria-label={t("navigation.mainLabel")}
+        aria-label="Main navigation"
       >
         <motion.div
           initial={{ y: -20, opacity: 0 }}
@@ -127,15 +79,14 @@ export function Navigation() {
             >
               {navigationItems.map((item) => {
                 const Icon = item.icon;
-                const localizedHref = getLocalizedHref(item.href);
-                const isActive = pathname === localizedHref;
-                const label = t(`navigation.${item.key}`);
-                const description = t(`navigation.${item.descriptionKey}`);
+                const isActive = pathname === item.href;
+                const label = item.label;
+                const description = item.description;
 
                 return (
                   <li key={item.href} role="none">
                     <Link
-                      href={localizedHref}
+                      href={item.href}
                       role="menuitem"
                       aria-current={isActive ? "page" : undefined}
                       aria-label={`${label}: ${description}`}
@@ -168,7 +119,7 @@ export function Navigation() {
             {/* Divider */}
             <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-3" />
 
-            {/* Theme toggle, language switcher and actions */}
+            {/* Theme toggle and auth actions */}
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
@@ -183,24 +134,21 @@ export function Navigation() {
                   "rounded-xl transition-all duration-200",
                 )}
                 aria-label={
-                  isAuthenticated
-                    ? t("navigation.signOut")
-                    : t("auth.signInWithGoogle")
+                  isAuthenticated ? "Sign Out" : "Sign in with Google"
                 }
               >
                 {isAuthenticated ? (
                   <>
                     <LogOut className="w-4 h-4 mr-1.5" />
-                    <span className="font-body">{t("navigation.signOut")}</span>
+                    <span className="font-body">Sign Out</span>
                   </>
                 ) : (
                   <>
                     <LogIn className="w-4 h-4 mr-1.5" />
-                    <span className="font-body">{t("navigation.signIn")}</span>
+                    <span className="font-body">Sign In</span>
                   </>
                 )}
               </Button>
-              <LanguageSwitcher variant="dropdown" showNativeNames={false} />
               <ThemeToggle />
               <OfflineIndicator />
             </div>
@@ -226,7 +174,7 @@ export function Navigation() {
             "shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50",
           )}
           aria-label={
-            isOpen ? t("navigation.closeMenu") : t("navigation.openMenu")
+            isOpen ? "Close navigation menu" : "Open navigation menu"
           }
           aria-expanded={isOpen}
           aria-controls="mobile-navigation-menu"
@@ -284,18 +232,15 @@ export function Navigation() {
                 id="mobile-navigation-menu"
                 role="dialog"
                 aria-modal="true"
-                aria-label={t("navigation.menuLabel")}
+                aria-label="Navigation menu"
               >
-                <nav aria-label={t("navigation.mobileLabel")}>
+                <nav aria-label="Mobile navigation">
                   <ul className="mt-16 space-y-2 list-none m-0 p-0">
                     {navigationItems.map((item, index) => {
                       const Icon = item.icon;
-                      const localizedHref = getLocalizedHref(item.href);
-                      const isActive = pathname === localizedHref;
-                      const label = t(`navigation.${item.key}`);
-                      const description = t(
-                        `navigation.${item.descriptionKey}`,
-                      );
+                      const isActive = pathname === item.href;
+                      const label = item.label;
+                      const description = item.description;
 
                       return (
                         <motion.li
@@ -305,7 +250,7 @@ export function Navigation() {
                           transition={{ delay: index * 0.05, duration: 0.2 }}
                         >
                           <Link
-                            href={localizedHref}
+                            href={item.href}
                             onClick={() => setIsOpen(false)}
                             aria-current={isActive ? "page" : undefined}
                             className={cn(
@@ -342,9 +287,9 @@ export function Navigation() {
 
                 {/* Mobile bottom section */}
                 <div className="absolute bottom-6 left-6 right-6">
-                  {/* Language Switcher */}
+                  {/* Theme toggle */}
                   <div className="mb-4 flex justify-center">
-                    <CompactLanguageSwitcher />
+                    <ThemeToggle />
                   </div>
 
                   {/* Auth button */}
@@ -362,24 +307,18 @@ export function Navigation() {
                         isAuthenticated ? startSignOut() : startGoogleSignIn()
                       }
                       aria-label={
-                        isAuthenticated
-                          ? t("navigation.signOut")
-                          : t("auth.signInWithGoogle")
+                        isAuthenticated ? "Sign Out" : "Sign in with Google"
                       }
                     >
                       {isAuthenticated ? (
                         <>
                           <LogOut className="w-4 h-4 mr-2" />
-                          <span className="font-body">
-                            {t("navigation.signOut")}
-                          </span>
+                          <span className="font-body">Sign Out</span>
                         </>
                       ) : (
                         <>
                           <LogIn className="w-4 h-4 mr-2" />
-                          <span className="font-body">
-                            {t("auth.signInWithGoogle")}
-                          </span>
+                          <span className="font-body">Sign in with Google</span>
                         </>
                       )}
                     </Button>
@@ -391,7 +330,7 @@ export function Navigation() {
                       <Sparkles className="w-5 h-5 text-white" />
                     </div>
                     <p className="text-sm text-slate-500 dark:text-slate-400 font-body">
-                      {t("common.siteName")}
+                      Fortune Cookie AI
                     </p>
                   </div>
                 </div>

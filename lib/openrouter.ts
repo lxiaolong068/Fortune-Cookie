@@ -161,6 +161,87 @@ class OpenRouterClient {
     return FortuneGenerator.generateLuckyNumbers();
   }
 
+  /** Public accessor for lucky numbers (reused by the v2 generator routes). */
+  getLuckyNumbers(): number[] {
+    return this.generateLuckyNumbers();
+  }
+
+  /**
+   * Parse a model completion into an array of message strings.
+   * Handles JSON arrays (optionally fenced in ```json), and falls back to
+   * line-splitting with list-marker / numbering / quote stripping.
+   */
+  static parseMessages(raw: string, count: number): string[] {
+    let text = (raw ?? "").trim();
+    const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence && fence[1]) text = fence[1].trim();
+
+    let items: string[] = [];
+    try {
+      const parsed = JSON.parse(text);
+      if (Array.isArray(parsed)) {
+        items = parsed.map((x) =>
+          typeof x === "string" ? x : String((x && x.message) ?? x ?? ""),
+        );
+      }
+    } catch {
+      items = text
+        .split(/\n+/)
+        .map((line) => line.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, "").trim())
+        .filter(Boolean);
+    }
+
+    return items
+      .map((s) => s.replace(/^["'“”]+|["'“”]+$/g, "").trim())
+      .filter(Boolean)
+      .slice(0, count);
+  }
+
+  /**
+   * Generic batch generation for the v2 generator modes
+   * (oracle / event / rpg / persona). Sends a custom system + user prompt and
+   * returns up to `count` parsed message strings.
+   * Throws when the API key is missing or the request fails — callers decide
+   * how to fall back.
+   */
+  async generateMessages(args: {
+    systemPrompt: string;
+    userPrompt: string;
+    count: number;
+    temperature?: number;
+  }): Promise<string[]> {
+    const { systemPrompt, userPrompt, count, temperature = 0.9 } = args;
+    if (!this.apiKey) {
+      throw new Error("OpenRouter API key not configured");
+    }
+
+    const response = await fetch(`${this.baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: this.buildHeaders(),
+      body: JSON.stringify({
+        model: this.model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        temperature,
+        // ~40 tokens/message headroom; cap high enough for 100-message batches.
+        max_tokens: Math.min(4000, 120 + count * 40),
+      }),
+    });
+
+    if (!response.ok) {
+      const aiError = await this.parseOpenRouterError(response);
+      throw new Error(
+        aiError?.message || `OpenRouter request failed (${response.status})`,
+      );
+    }
+
+    const data = await response.json();
+    const raw: string = data?.choices?.[0]?.message?.content?.trim() || "";
+    return OpenRouterClient.parseMessages(raw, count);
+  }
+
   async generateFortune(request: FortuneRequest): Promise<FortuneResponse> {
     // If no API key, return a fallback fortune
     if (!this.apiKey) {

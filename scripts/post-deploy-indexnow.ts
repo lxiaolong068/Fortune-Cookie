@@ -3,19 +3,15 @@
 /**
  * Post-deploy IndexNow notification
  *
- * Runs after `next build` (via the postbuild npm hook). Submits recently
- * published blog posts and a small set of core URLs to IndexNow so that
- * Bing / Yandex / IndexNow.org-aware engines pick up changes faster than
- * waiting for their next sitemap crawl.
+ * Runs after `next build` (via the postbuild npm hook). Submits the site's
+ * core URLs to IndexNow so that Bing / Yandex / IndexNow.org-aware engines
+ * pick up changes faster than waiting for their next sitemap crawl.
  *
  * Behavior:
  *   - Only runs on Vercel production deploys (VERCEL_ENV === "production").
  *     Skips local builds and preview deploys.
- *   - Reads content/blog/{en,zh,es,pt}/*.mdx, filters to posts with a
- *     frontmatter `date` within the last RECENCY_DAYS days.
- *   - Always submits a fixed list of CORE_URLS (homepage, blog index,
- *     explore, generator, recipes) so that homepage/listing freshness signals
- *     reach search engines on every deploy.
+ *   - Submits a fixed list of CORE_URLS on every deploy so that homepage /
+ *     listing freshness signals reach search engines.
  *   - Never fails the build: all errors are caught and logged.
  *
  * Manual overrides:
@@ -25,17 +21,10 @@
  *                             (no network call; pairs well with INDEXNOW_FORCE)
  */
 
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
 import { submitUrlsToAllEngines, INDEXNOW_CONFIG } from "../lib/indexnow";
 
-const RECENCY_DAYS = 30;
-const LOCALES = ["en", "zh", "es", "pt"] as const;
-type Locale = (typeof LOCALES)[number];
-const DEFAULT_LOCALE: Locale = "en";
-
-const CORE_URLS = ["/", "/blog", "/explore", "/generator", "/recipes"];
+// Keep in sync with app/sitemap.ts — only currently-existing, indexable routes.
+const CORE_URLS = ["/", "/generator", "/about", "/cookies", "/privacy", "/terms"];
 
 interface Decision {
   run: boolean;
@@ -62,47 +51,6 @@ function shouldRun(): Decision {
   return { run: true, reason: "Vercel production deploy" };
 }
 
-function getRecentBlogPaths(): string[] {
-  const cutoff = Date.now() - RECENCY_DAYS * 24 * 60 * 60 * 1000;
-  const paths: string[] = [];
-
-  for (const locale of LOCALES) {
-    const dir = path.join(process.cwd(), "content/blog", locale);
-    if (!fs.existsSync(dir)) continue;
-
-    let files: string[];
-    try {
-      files = fs.readdirSync(dir).filter((f) => /\.mdx?$/.test(f));
-    } catch (err) {
-      console.warn(`[IndexNow] Could not read ${dir}:`, err);
-      continue;
-    }
-
-    for (const file of files) {
-      const filePath = path.join(dir, file);
-      try {
-        const { data } = matter(fs.readFileSync(filePath, "utf-8"));
-        if (!data.date) continue;
-
-        const postDate = new Date(data.date).getTime();
-        if (Number.isNaN(postDate)) continue;
-        if (postDate < cutoff) continue;
-
-        const slug = file.replace(/\.mdx?$/, "");
-        const urlPath =
-          locale === DEFAULT_LOCALE
-            ? `/blog/${slug}`
-            : `/${locale}/blog/${slug}`;
-        paths.push(urlPath);
-      } catch (err) {
-        console.warn(`[IndexNow] Could not parse ${filePath}:`, err);
-      }
-    }
-  }
-
-  return paths;
-}
-
 async function main(): Promise<void> {
   const decision = shouldRun();
   if (!decision.run) {
@@ -111,20 +59,10 @@ async function main(): Promise<void> {
   }
   console.log(`[IndexNow] Running: ${decision.reason}`);
 
-  const blogPaths = getRecentBlogPaths();
-  const allPaths = Array.from(new Set([...CORE_URLS, ...blogPaths]));
-
   const baseUrl = `https://${INDEXNOW_CONFIG.host}`;
-  const fullUrls = allPaths.map((p) => `${baseUrl}${p}`);
+  const fullUrls = CORE_URLS.map((p) => `${baseUrl}${p}`);
 
-  console.log(
-    `[IndexNow] Submitting ${fullUrls.length} URLs (${blogPaths.length} recent posts + ${CORE_URLS.length} core).`,
-  );
-
-  if (fullUrls.length === 0) {
-    console.log("[IndexNow] No URLs to submit, exiting.");
-    return;
-  }
+  console.log(`[IndexNow] Submitting ${fullUrls.length} core URLs.`);
 
   if (process.env.INDEXNOW_DRY_RUN === "1") {
     console.log("[IndexNow] DRY RUN — URLs that would be submitted:");

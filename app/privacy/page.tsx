@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
-import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { PrivacyPageContent } from "./PrivacyPageContent";
 
 const baseUrl = getSiteUrl();
@@ -38,7 +37,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/privacy",
-    languages: generateAlternateLanguages("/privacy", baseUrl),
   },
   robots: "index, follow",
 };

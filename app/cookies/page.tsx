@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
-import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { BreadcrumbStructuredData } from "@/components/StructuredData";
 import { CookiesPageContent } from "./CookiesPageContent";
 
@@ -39,7 +38,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/cookies",
-    languages: generateAlternateLanguages("/cookies", baseUrl),
   },
   robots: "index, follow",
 };

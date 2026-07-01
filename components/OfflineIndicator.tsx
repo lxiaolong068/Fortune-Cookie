@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { offlineDetector } from '@/lib/service-worker'
 import { captureUserAction } from '@/lib/error-monitoring'
-import { useTranslation } from '@/lib/locale-context'
 
 interface OfflineIndicatorProps {
   className?: string
@@ -19,7 +18,6 @@ export function OfflineIndicator({ className, showDetails = false }: OfflineIndi
   const [showBanner, setShowBanner] = useState(false)
   const [connectionAttempts, setConnectionAttempts] = useState(0)
   const [lastOnlineTime, setLastOnlineTime] = useState<Date | null>(null)
-  const { t } = useTranslation()
 
   useEffect(() => {
     // 订阅离线状态变化
@@ -95,14 +93,14 @@ export function OfflineIndicator({ className, showDetails = false }: OfflineIndi
           <>
             <WifiOff className="w-4 h-4 text-red-500" />
             <Badge variant="destructive" className="text-xs">
-              {t("common.offline")}
+              Offline
             </Badge>
           </>
         ) : (
           <>
             <Wifi className="w-4 h-4 text-green-500" />
             <Badge variant="default" className="text-xs">
-              {t("common.online")}
+              Online
             </Badge>
           </>
         )}

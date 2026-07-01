@@ -121,9 +121,9 @@ const milestones = [
   },
   {
     year: "2025",
-    title: "Content Expansion",
+    title: "Focused Experience",
     description:
-      "Added blog articles, recipes, history guides, and educational content about fortune cookie culture.",
+      "Streamlined the site around a fast, free AI fortune generator for any occasion.",
   },
 ];
 

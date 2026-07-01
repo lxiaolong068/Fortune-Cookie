@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
-import { generateAlternateLanguages } from "@/lib/i18n-config";
 import { TermsPageContent } from "./TermsPageContent";
 
 const baseUrl = getSiteUrl();
@@ -38,7 +37,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/terms",
-    languages: generateAlternateLanguages("/terms", baseUrl),
   },
   robots: "index, follow",
 };
