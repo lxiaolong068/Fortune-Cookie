@@ -27,6 +27,8 @@ import {
   normalizeEventParams,
   buildEventSystemPrompt,
   buildEventUserPrompt,
+  isEventQuantityAllowed,
+  FREE_EVENT_MAX_QUANTITY,
 } from "@/lib/prompts/event";
 import {
   normalizeRpgParams,
@@ -59,6 +61,7 @@ interface GenerationPlan {
 function planFor(
   mode: string,
   rawParams: unknown,
+  isPremium: boolean,
 ): { plan: GenerationPlan } | { error: NextResponse } {
   if (mode === "oracle") {
     const params = normalizeOracleParams(rawParams);
@@ -78,6 +81,17 @@ function planFor(
 
   if (mode === "event") {
     const params = normalizeEventParams(rawParams);
+    if (!isEventQuantityAllowed(params.quantity, isPremium)) {
+      return {
+        error: NextResponse.json(
+          createErrorResponse(
+            `Batches over ${FREE_EVENT_MAX_QUANTITY} messages are a Premium feature. Pick ${FREE_EVENT_MAX_QUANTITY} or fewer, or upgrade.`,
+            { upgrade: true, maxFreeQuantity: FREE_EVENT_MAX_QUANTITY },
+          ),
+          { status: 403 },
+        ),
+      };
+    }
     return {
       plan: {
         systemPrompt: buildEventSystemPrompt(),
@@ -119,7 +133,7 @@ function planFor(
         ),
       };
     }
-    if (persona.tier === "premium") {
+    if (persona.tier === "premium" && !isPremium) {
       return {
         error: NextResponse.json(
           createErrorResponse(
@@ -169,7 +183,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const planResult = planFor(String(body?.mode), body?.params);
+  // Identity resolved first: persona/event gating and the quota bypass below
+  // both depend on whether this user is Premium (spec 8.1).
+  const session = await getServerSession(authOptions);
+  const isPremium = Boolean(session?.user?.isPremium);
+  const identity: QuotaIdentity = session?.user?.id
+    ? { isAuthenticated: true, userId: session.user.id }
+    : { isAuthenticated: false, guestId: resolveGuestId(request) };
+
+  const planResult = planFor(String(body?.mode), body?.params, isPremium);
   if ("error" in planResult) return planResult.error;
   const { plan } = planResult;
 
@@ -177,14 +199,10 @@ export async function POST(request: NextRequest) {
   // the in-generator counter. Untrusted input is clamped to the two scopes.
   const scope: QuotaScope = body?.source === "home" ? "home" : "generator";
 
-  // Identity + quota gate (check only; charge on success)
-  const session = await getServerSession(authOptions);
-  const identity: QuotaIdentity = session?.user?.id
-    ? { isAuthenticated: true, userId: session.user.id }
-    : { isAuthenticated: false, guestId: resolveGuestId(request) };
-
+  // Premium: unlimited generator usage (spec 8.1). Home draws are already
+  // unlimited for any authenticated user (spec 5.4) regardless of Premium.
   const quota = await getScopedQuotaStatus(identity, scope);
-  if (quota.remaining <= 0) {
+  if (!(isPremium && scope === "generator") && quota.remaining <= 0) {
     let message: string;
     if (scope === "home") {
       message =
@@ -280,13 +298,23 @@ export async function POST(request: NextRequest) {
   }
 
   const refreshedQuota = await getScopedQuotaStatus(identity, scope);
+  // Report Premium generator usage as unlimited — the DB-tracked count is
+  // still incremented (for stats), but the gate above never enforces it.
+  const reportedQuota =
+    isPremium && scope === "generator"
+      ? {
+          ...refreshedQuota,
+          limit: Number.MAX_SAFE_INTEGER,
+          remaining: Number.MAX_SAFE_INTEGER,
+        }
+      : refreshedQuota;
 
   return NextResponse.json(
     createSuccessResponse({
       mode: body.mode,
       params: plan.meta,
       fortunes,
-      quota: refreshedQuota,
+      quota: reportedQuota,
       source: "ai",
     }),
   );

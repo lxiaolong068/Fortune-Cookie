@@ -27,6 +27,17 @@ export type EventTone = (typeof EVENT_TONES)[number]["value"];
 
 export const EVENT_QUANTITIES = [10, 20, 50, 100] as const;
 
+// Spec 8.1: batches of 20+ are a Premium feature; free tier tops out at 10.
+export const FREE_EVENT_MAX_QUANTITY = 10;
+
+/** Whether a given batch size is allowed for this user's tier (spec 8.1). */
+export function isEventQuantityAllowed(
+  quantity: number,
+  isPremium: boolean,
+): boolean {
+  return isPremium || quantity <= FREE_EVENT_MAX_QUANTITY;
+}
+
 const MAX_PERSONALIZATION_LEN = 200;
 
 export interface EventParams {

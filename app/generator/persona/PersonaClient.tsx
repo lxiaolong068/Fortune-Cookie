@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Drama, Copy, Loader2, Wand2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { useAuthSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import {
   PERSONAS,
@@ -21,14 +22,22 @@ interface GeneratedFortune {
 const FREE = new Set(FREE_PERSONA_IDS);
 
 export function PersonaClient() {
+  const { data: session } = useAuthSession();
+  const isPremium = Boolean(session?.user?.isPremium);
+
   const [persona, setPersona] = useState<string>("passive-aggressive");
   const [topic, setTopic] = useState("");
   const [quantity, setQuantity] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<GeneratedFortune[]>([]);
 
+  const canUse = useCallback(
+    (id: string) => isPremium || FREE.has(id),
+    [isPremium],
+  );
+
   const generate = useCallback(async () => {
-    if (!FREE.has(persona)) {
+    if (!canUse(persona)) {
       toast.error("That persona is premium. Pick a free one for now.");
       return;
     }
@@ -60,7 +69,7 @@ export function PersonaClient() {
     } finally {
       setIsLoading(false);
     }
-  }, [persona, topic, quantity]);
+  }, [persona, topic, quantity, canUse]);
 
   const copyFortune = useCallback((text: string) => {
     navigator.clipboard?.writeText(text).then(
@@ -79,19 +88,19 @@ export function PersonaClient() {
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
             {PERSONAS.map((p) => {
-              const isFree = FREE.has(p.id);
+              const unlocked = canUse(p.id);
               const active = persona === p.id;
               return (
                 <button
                   key={p.id}
                   type="button"
-                  disabled={!isFree}
-                  onClick={() => isFree && setPersona(p.id)}
+                  disabled={!unlocked}
+                  onClick={() => unlocked && setPersona(p.id)}
                   aria-pressed={active}
-                  title={isFree ? p.example : "Premium persona"}
+                  title={unlocked ? p.example : "Premium persona"}
                   className={cn(
                     "rounded-xl border p-3 text-left transition-all",
-                    !isFree && "cursor-not-allowed opacity-60",
+                    !unlocked && "cursor-not-allowed opacity-60",
                     active
                       ? "border-amber-400 bg-amber-100 dark:border-amber-500/60 dark:bg-amber-500/20"
                       : "border-slate-200 bg-white hover:border-amber-300 dark:border-slate-700 dark:bg-slate-800",
@@ -101,7 +110,7 @@ export function PersonaClient() {
                     <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                       {p.label}
                     </span>
-                    {!isFree && <Lock className="h-3.5 w-3.5 text-slate-400" />}
+                    {!unlocked && <Lock className="h-3.5 w-3.5 text-slate-400" />}
                   </div>
                   <p className="mt-1 line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
                     {p.description}
@@ -110,9 +119,11 @@ export function PersonaClient() {
               );
             })}
           </div>
-          <p className="mt-2 text-xs text-slate-400">
-            Locked personas unlock with Premium.
-          </p>
+          {!isPremium && (
+            <p className="mt-2 text-xs text-slate-400">
+              Locked personas unlock with Premium.
+            </p>
+          )}
         </div>
 
         <div>

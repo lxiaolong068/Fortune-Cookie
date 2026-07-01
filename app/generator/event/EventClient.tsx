@@ -10,16 +10,20 @@ import {
   PartyPopper,
   ClipboardList,
   FileDown,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAuthSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { exportFortunesToPDF } from "@/lib/pdf-export";
 import {
   EVENT_TYPES,
   EVENT_TONES,
   EVENT_QUANTITIES,
+  FREE_EVENT_MAX_QUANTITY,
+  isEventQuantityAllowed,
   type EventType,
   type EventTone,
 } from "@/lib/prompts/event";
@@ -68,6 +72,9 @@ function Segmented<T extends string | number>({
 }
 
 export function EventClient() {
+  const { data: session } = useAuthSession();
+  const isPremium = Boolean(session?.user?.isPremium);
+
   const [eventType, setEventType] = useState<EventType>("wedding");
   const [personalization, setPersonalization] = useState("");
   const [tone, setTone] = useState<EventTone>("sweet");
@@ -80,6 +87,12 @@ export function EventClient() {
   const [isExporting, setIsExporting] = useState(false);
 
   const generate = useCallback(async () => {
+    if (!isEventQuantityAllowed(quantity, isPremium)) {
+      toast.error(
+        `Batches over ${FREE_EVENT_MAX_QUANTITY} are a Premium feature.`,
+      );
+      return;
+    }
     setIsLoading(true);
     setResults([]);
     try {
@@ -113,7 +126,7 @@ export function EventClient() {
     } finally {
       setIsLoading(false);
     }
-  }, [eventType, personalization, tone, quantity, avoidDuplicates]);
+  }, [eventType, personalization, tone, quantity, avoidDuplicates, isPremium]);
 
   const copyOne = useCallback((text: string) => {
     navigator.clipboard?.writeText(text).then(
@@ -132,6 +145,10 @@ export function EventClient() {
 
   const exportPdf = useCallback(async () => {
     if (results.length === 0) return;
+    if (!isPremium) {
+      toast.error("PDF export is a Premium feature.");
+      return;
+    }
     setIsExporting(true);
     try {
       const eventLabel =
@@ -147,7 +164,7 @@ export function EventClient() {
     } finally {
       setIsExporting(false);
     }
-  }, [results, eventType, pdfLuckyNumbers, pdfDate]);
+  }, [results, eventType, pdfLuckyNumbers, pdfDate, isPremium]);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)]">
@@ -188,12 +205,48 @@ export function EventClient() {
           onChange={setTone}
         />
 
-        <Segmented
-          label="Quantity"
-          options={EVENT_QUANTITIES.map((q) => ({ value: q, label: String(q) }))}
-          value={quantity}
-          onChange={setQuantity}
-        />
+        <div>
+          <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+            Quantity
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {EVENT_QUANTITIES.map((q) => {
+              const locked = !isEventQuantityAllowed(q, isPremium);
+              return (
+                <button
+                  key={q}
+                  type="button"
+                  onClick={() => {
+                    if (locked) {
+                      toast.error(
+                        `Batches over ${FREE_EVENT_MAX_QUANTITY} are a Premium feature.`,
+                      );
+                      return;
+                    }
+                    setQuantity(q);
+                  }}
+                  aria-pressed={quantity === q}
+                  title={locked ? "Premium feature" : undefined}
+                  className={cn(
+                    "flex items-center gap-1 rounded-xl border px-3 py-2 text-sm font-medium transition-all",
+                    locked && "text-slate-400",
+                    quantity === q
+                      ? "border-amber-400 bg-amber-100 text-amber-800 dark:border-amber-500/60 dark:bg-amber-500/20 dark:text-amber-200"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-amber-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300",
+                  )}
+                >
+                  {q}
+                  {locked && <Lock className="h-3 w-3" />}
+                </button>
+              );
+            })}
+          </div>
+          {!isPremium && (
+            <p className="mt-2 text-xs text-slate-400">
+              Batches over {FREE_EVENT_MAX_QUANTITY} unlock with Premium.
+            </p>
+          )}
+        </div>
 
         <div className="flex items-center justify-between">
           <label
@@ -265,12 +318,20 @@ export function EventClient() {
                 size="sm"
                 onClick={exportPdf}
                 disabled={isExporting}
-                className="rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                title={isPremium ? undefined : "Premium feature"}
+                className={cn(
+                  "rounded-lg",
+                  isPremium
+                    ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                    : "bg-slate-200 text-slate-500 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-400",
+                )}
               >
                 {isExporting ? (
                   <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                ) : (
+                ) : isPremium ? (
                   <FileDown className="mr-1.5 h-4 w-4" />
+                ) : (
+                  <Lock className="mr-1.5 h-4 w-4" />
                 )}
                 Export PDF
               </Button>

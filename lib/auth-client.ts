@@ -8,6 +8,7 @@ export interface AuthSession {
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    isPremium?: boolean;
   };
   expires?: string;
 }

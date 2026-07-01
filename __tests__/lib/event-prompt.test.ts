@@ -2,6 +2,9 @@ import {
   normalizeEventParams,
   buildEventSystemPrompt,
   buildEventUserPrompt,
+  isEventQuantityAllowed,
+  FREE_EVENT_MAX_QUANTITY,
+  EVENT_QUANTITIES,
 } from "@/lib/prompts/event";
 import { GLOBAL_SYSTEM_PROMPT } from "@/lib/prompts";
 
@@ -76,5 +79,25 @@ describe("event prompts", () => {
       avoidDuplicates: false,
     });
     expect(prompt).toMatch(/none provided/i);
+  });
+});
+
+describe("isEventQuantityAllowed (spec 8.1 Premium gating)", () => {
+  it("allows the free max quantity for free users", () => {
+    expect(isEventQuantityAllowed(FREE_EVENT_MAX_QUANTITY, false)).toBe(true);
+  });
+
+  it("blocks quantities above the free max for free users", () => {
+    for (const q of EVENT_QUANTITIES) {
+      if (q > FREE_EVENT_MAX_QUANTITY) {
+        expect(isEventQuantityAllowed(q, false)).toBe(false);
+      }
+    }
+  });
+
+  it("allows every quantity for premium users", () => {
+    for (const q of EVENT_QUANTITIES) {
+      expect(isEventQuantityAllowed(q, true)).toBe(true);
+    }
   });
 });
