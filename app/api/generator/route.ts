@@ -8,6 +8,7 @@ import {
   type QuotaIdentity,
   type QuotaScope,
 } from "@/lib/quota";
+import { recordGenerationHistory } from "@/lib/generation-history";
 import { createSuccessResponse, createErrorResponse } from "@/types/api";
 import { openRouterClient } from "@/lib/openrouter";
 import { validateFortune } from "@/lib/prompts";
@@ -262,6 +263,20 @@ export async function POST(request: NextRequest) {
     });
   } catch {
     // Non-fatal: never fail a successful generation on usage logging.
+  }
+
+  // Generation History (Profile page) — authenticated users only (spec 5.3:
+  // guests can't use history). Best-effort; recordGenerationHistory never throws.
+  if (identity.userId) {
+    await recordGenerationHistory(
+      identity.userId,
+      fortunes.map((f) => ({
+        mode: String(body.mode),
+        params: plan.meta,
+        message: f.message,
+        luckyNumbers: f.luckyNumbers,
+      })),
+    );
   }
 
   const refreshedQuota = await getScopedQuotaStatus(identity, scope);
