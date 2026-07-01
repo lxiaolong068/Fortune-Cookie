@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import {
   i18n,
@@ -8,7 +8,19 @@ import {
 } from "@/lib/i18n-config";
 import { getSiteMetadata, getOGImageConfig } from "@/lib/site";
 import { loadTranslations } from "@/lib/translations";
-import { LocaleProvider } from "@/lib/locale-context";
+import { AppShell } from "@/app/_shell/AppShell";
+
+// Root layout for the /[locale] branch — mirror the default-branch viewport.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fffbeb" },
+    { media: "(prefers-color-scheme: dark)", color: "#1e1b4b" },
+  ],
+  colorScheme: "light dark",
+};
 
 /**
  * Generate static params for all supported locales
@@ -126,14 +138,11 @@ export default async function LocaleLayout({
   // Load translations on the server
   const translations = await loadTranslations(locale);
 
-  // Get language direction
-  const langConfig = languages[locale];
-
+  // Root layout for the /[locale] subtree: AppShell owns <html lang={locale}> so
+  // the localized pages prerender statically with the correct server-side lang.
   return (
-    <div lang={locale} dir={langConfig.dir}>
-      <LocaleProvider initialLocale={locale} initialTranslations={translations}>
-        {children}
-      </LocaleProvider>
-    </div>
+    <AppShell locale={locale} translations={translations}>
+      {children}
+    </AppShell>
   );
 }

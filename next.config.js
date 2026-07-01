@@ -86,6 +86,38 @@ const nextConfig = {
         destination: "/:locale/explore",
         permanent: true,
       },
+
+      // v2 重建后失联的旧本地化 URL（GA 确认仍有中文自然流量，避免 404 流失）
+      // → 301 到最接近的现存本地化页，把用户留在同语言。
+      {
+        // /zh/history 等：定向到同主题的中文博客文章
+        source: "/:locale(zh|es|pt)/history",
+        destination: "/:locale/blog/history-of-fortune-cookies",
+        permanent: true,
+      },
+      {
+        // /zh/free-online-fortune-cookie：意图即"免费在线生成" → 生成器页
+        source: "/:locale(zh|es|pt)/free-online-fortune-cookie",
+        destination: "/:locale/generator",
+        permanent: true,
+      },
+      {
+        // /zh/calendar：无本地化日历页 → 本地化首页（含每日运势）
+        source: "/:locale(zh|es|pt)/calendar",
+        destination: "/:locale",
+        permanent: true,
+      },
+      {
+        // /zh/fortune-cookie-quotes/good-luck 等：语录浏览 → explore 浏览/搜索中枢
+        source: "/:locale(zh|es|pt)/fortune-cookie-quotes/:path*",
+        destination: "/:locale/explore",
+        permanent: true,
+      },
+      {
+        source: "/:locale(zh|es|pt)/fortune-cookie-quotes",
+        destination: "/:locale/explore",
+        permanent: true,
+      },
     ];
   },
 

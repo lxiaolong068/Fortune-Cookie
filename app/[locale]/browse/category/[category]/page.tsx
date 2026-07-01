@@ -104,6 +104,9 @@ function resolveCategoryDescription(
   return `Explore ${label} fortune cookie messages.`;
 }
 
+// force-static so localized category pages prerender (mirrors SSG English /browse/category/[category]).
+export const dynamic = "force-static";
+
 export function generateStaticParams() {
   // Exclude default locale ('en') — English category pages are at /browse/category/[category], not /en/browse/...
   return i18n.locales

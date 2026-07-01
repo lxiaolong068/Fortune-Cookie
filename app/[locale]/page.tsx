@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
+// Aliased to avoid colliding with the `export const dynamic` route-segment config below.
+import nextDynamic from "next/dynamic";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import {
@@ -22,8 +23,11 @@ import { WaveDivider } from "@/components/homepage/SectionDivider";
 import { i18n, isValidLocale, getLanguageConfig, getSEOConfig, type Locale } from "@/lib/i18n-config";
 import { loadTranslations, getTranslation } from "@/lib/translations";
 
-// Optimize for Edge Runtime - faster TTFB
-export const runtime = "edge";
+// Run on the Node.js runtime (not edge) and force-static so this localized
+// homepage is actually prerendered via generateStaticParams under the new
+// [locale] root layout (which no longer calls headers()). Mirrors the English
+// root homepage. Served HTML comes from the ISR cache.
+export const dynamic = "force-static";
 
 // Enable static generation with revalidation for optimal performance
 // Increased from 1h to 6h: i18n homepage content is stable.
@@ -98,7 +102,7 @@ export async function generateMetadata({
 }
 
 // Dynamic imports for interactive components
-const FortuneCookieInteractive = dynamic(
+const FortuneCookieInteractive = nextDynamic(
   () =>
     import("@/components/FortuneCookieInteractive").then(
       (mod) => mod.FortuneCookieInteractive,
@@ -109,7 +113,7 @@ const FortuneCookieInteractive = dynamic(
   },
 );
 
-const CategoryQuickLinks = dynamic(
+const CategoryQuickLinks = nextDynamic(
   () =>
     import("@/components/homepage/CategoryQuickLinks").then(
       (mod) => mod.CategoryQuickLinks,
@@ -117,7 +121,7 @@ const CategoryQuickLinks = dynamic(
   { ssr: false, loading: () => null },
 );
 
-const HotFortuneCarousel = dynamic(
+const HotFortuneCarousel = nextDynamic(
   () =>
     import("@/components/homepage/HotFortuneCarousel").then(
       (mod) => mod.HotFortuneCarousel,
@@ -125,12 +129,12 @@ const HotFortuneCarousel = dynamic(
   { ssr: false, loading: () => null },
 );
 
-const DailyFortune = dynamic(
+const DailyFortune = nextDynamic(
   () => import("@/components/DailyFortune").then((mod) => mod.DailyFortune),
   { ssr: false, loading: () => null },
 );
 
-const UseCaseScenes = dynamic(
+const UseCaseScenes = nextDynamic(
   () =>
     import("@/components/homepage/UseCaseScenes").then(
       (mod) => mod.UseCaseScenes,
@@ -138,17 +142,17 @@ const UseCaseScenes = dynamic(
   { ssr: false, loading: () => null },
 );
 
-const ScrollReveal = dynamic(
+const ScrollReveal = nextDynamic(
   () => import("@/components/ScrollReveal").then((mod) => mod.ScrollReveal),
   { ssr: false, loading: () => null },
 );
 
-const StaggerContainer = dynamic(
+const StaggerContainer = nextDynamic(
   () => import("@/components/ScrollReveal").then((mod) => mod.StaggerContainer),
   { ssr: false, loading: () => null },
 );
 
-const StaggerItem = dynamic(
+const StaggerItem = nextDynamic(
   () => import("@/components/ScrollReveal").then((mod) => mod.StaggerItem),
   { ssr: false, loading: () => null },
 );

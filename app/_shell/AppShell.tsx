@@ -1,17 +1,9 @@
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
 import { Suspense } from "react";
-import Script from "next/script";
-import dynamic from "next/dynamic";
-import { headers } from "next/headers";
+import { Inter } from "next/font/google";
+import nextDynamic from "next/dynamic";
+import "@/app/globals.css";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ThemeScript } from "@/components/ThemeInitializer";
-import {
-  getSiteMetadata,
-  getOGImageConfig,
-  getTwitterImageConfig,
-} from "@/lib/site";
 import { getBlobUrl } from "@/lib/blob-urls";
 import { CriticalCSS } from "@/components/CriticalCSS";
 import { NavigationFallback } from "@/components/NavigationFallback";
@@ -20,30 +12,36 @@ import {
   WebsiteStructuredData,
 } from "@/components/StructuredData";
 import { Toaster } from "@/components/ui/sonner";
-import { i18n, isValidLocale } from "@/lib/i18n-config";
+import {
+  i18n,
+  isValidLocale,
+  languages,
+  type Locale,
+} from "@/lib/i18n-config";
 import { LocaleProvider } from "@/lib/locale-context";
-import { getTranslation, loadTranslations } from "@/lib/translations";
+import { getTranslation } from "@/lib/translations";
+import type { TranslationFile } from "@/lib/translations";
 
 // Dynamic imports for non-critical components to reduce initial bundle size
-const Footer = dynamic(
+const Footer = nextDynamic(
   () => import("@/components/Footer").then((mod) => ({ default: mod.Footer })),
   { ssr: true },
 );
-const Navigation = dynamic(
+const Navigation = nextDynamic(
   () =>
     import("@/components/Navigation").then((mod) => ({
       default: mod.Navigation,
     })),
   { ssr: false, loading: () => <NavigationFallback /> },
 );
-const PerformanceMonitor = dynamic(
+const PerformanceMonitor = nextDynamic(
   () =>
     import("@/components/PerformanceMonitor").then((mod) => ({
       default: mod.PerformanceMonitor,
     })),
   { ssr: false },
 );
-const GoogleAnalytics = dynamic(
+const GoogleAnalytics = nextDynamic(
   () =>
     import("@/components/PerformanceMonitor").then((mod) => ({
       default: mod.GoogleAnalytics,
@@ -51,59 +49,59 @@ const GoogleAnalytics = dynamic(
   { ssr: false },
 );
 // Use optimized AdSense Facade instead of direct AdSense component
-const OptimizedAdSense = dynamic(() => import("@/components/AdSenseFacade"), {
+const OptimizedAdSense = nextDynamic(() => import("@/components/AdSenseFacade"), {
   ssr: false,
 });
-const OptimizedPreloader = dynamic(
+const OptimizedPreloader = nextDynamic(
   () =>
     import("@/components/ResourcePreloader").then((mod) => ({
       default: mod.OptimizedPreloader,
     })),
   { ssr: false },
 );
-const ErrorMonitorInitializer = dynamic(
+const ErrorMonitorInitializer = nextDynamic(
   () =>
     import("@/components/ErrorMonitorInitializer").then((mod) => ({
       default: mod.ErrorMonitorInitializer,
     })),
   { ssr: false },
 );
-const ServiceWorkerInitializer = dynamic(
+const ServiceWorkerInitializer = nextDynamic(
   () =>
     import("@/components/ServiceWorkerInitializer").then((mod) => ({
       default: mod.ServiceWorkerInitializer,
     })),
   { ssr: false },
 );
-const ThemeInitializer = dynamic(
+const ThemeInitializer = nextDynamic(
   () =>
     import("@/components/ThemeInitializer").then((mod) => ({
       default: mod.ThemeInitializer,
     })),
   { ssr: false },
 );
-const AnalyticsInitializer = dynamic(
+const AnalyticsInitializer = nextDynamic(
   () =>
     import("@/components/AnalyticsInitializer").then((mod) => ({
       default: mod.AnalyticsInitializer,
     })),
   { ssr: false },
 );
-const AnalyticsConsentBanner = dynamic(
+const AnalyticsConsentBanner = nextDynamic(
   () =>
     import("@/components/AnalyticsInitializer").then((mod) => ({
       default: mod.AnalyticsConsentBanner,
     })),
   { ssr: false },
 );
-const DeferredScripts = dynamic(
+const DeferredScripts = nextDynamic(
   () =>
     import("@/components/DeferredScripts").then((mod) => ({
       default: mod.DeferredScripts,
     })),
   { ssr: false },
 );
-const RouteProgress = dynamic(
+const RouteProgress = nextDynamic(
   () =>
     import("@/components/RouteProgress").then((mod) => ({
       default: mod.RouteProgress,
@@ -117,109 +115,43 @@ const inter = Inter({
   preload: true,
 });
 
-const siteMetadata = getSiteMetadata();
-const ogImage = getOGImageConfig();
-const twitterImage = getTwitterImageConfig();
-
-// Viewport configuration for optimal mobile experience
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 5, // Allow user zoom for accessibility
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fffbeb" }, // amber-50
-    { media: "(prefers-color-scheme: dark)", color: "#1e1b4b" }, // indigo-950
-  ],
-  colorScheme: "light dark",
-};
-
-export const metadata: Metadata = {
-  title: {
-    default: siteMetadata.title,
-    template: "%s | Fortune Cookie AI",
-  },
-  description: siteMetadata.description,
-  authors: [{ name: siteMetadata.author }],
-  creator: siteMetadata.creator,
-  publisher: siteMetadata.publisher,
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL(siteMetadata.baseUrl),
-  alternates: {
-    canonical: "/",
-    languages: {
-      "en": "/",
-      "zh": "/zh",
-      "es": "/es",
-      "pt": "/pt",
-    },
-  },
-  openGraph: {
-    type: "website",
-    locale: siteMetadata.locale,
-    url: siteMetadata.url,
-    title: siteMetadata.title,
-    description: siteMetadata.description,
-    siteName: siteMetadata.siteName,
-    images: [
-      {
-        url: ogImage.url,
-        width: ogImage.width,
-        height: ogImage.height,
-        alt: ogImage.alt,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteMetadata.title,
-    description: siteMetadata.description,
-    images: [twitterImage.url],
-    creator: "@fortunecookieai",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  verification: {
-    google:
-      process.env.GOOGLE_VERIFICATION_CODE || "your-google-verification-code",
-  },
-};
-
-export default async function RootLayout({
+/**
+ * Shared application shell: owns <html>/<head>/<body>, global chrome, providers.
+ *
+ * Rendered by each root layout so the `<html lang>` is produced statically from
+ * the branch's known locale (English root vs the /[locale] subtree) without any
+ * dynamic headers() call — which is what lets every page be prerendered / ISR.
+ *
+ * No CSP nonce is threaded here: the middleware CSP uses `script-src
+ * 'unsafe-inline'` (Next.js hydration scripts can't take a nonce), so a nonce
+ * on these tags was always inert. See docs/i18n-static-lang-refactor.md §6.
+ */
+export function AppShell({
+  locale,
+  translations,
   children,
 }: {
+  locale: string;
+  translations: TranslationFile;
   children: React.ReactNode;
 }) {
-  // 获取 nonce 用于 CSP（仅在生产环境）
-  const requestHeaders = headers();
-  const nonce =
-    process.env.NODE_ENV === "production" ? requestHeaders.get("x-nonce") : null;
-
-  const headerLocale = requestHeaders.get("x-locale") ?? "";
-  const locale = isValidLocale(headerLocale) ? headerLocale : i18n.defaultLocale;
-  const translations = await loadTranslations(locale);
-  const skipToContentLabel = getTranslation(translations, "common.skipToContent");
+  const activeLocale: Locale = isValidLocale(locale)
+    ? locale
+    : i18n.defaultLocale;
+  const dir = languages[activeLocale].dir;
+  const skipToContentLabel = getTranslation(
+    translations,
+    "common.skipToContent",
+  );
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={activeLocale} dir={dir} suppressHydrationWarning>
       <head>
         <CriticalCSS />
 
         {/* Global structured data for Google Rich Results */}
-        <WebsiteStructuredData nonce={nonce} />
-        <OrganizationStructuredData nonce={nonce} />
+        <WebsiteStructuredData />
+        <OrganizationStructuredData />
 
         {/* Preconnect to critical origins for faster resource loading */}
         <link
@@ -237,7 +169,7 @@ export default async function RootLayout({
 
         {/* Fonts are handled by next/font (self-hosted) */}
 
-        <ThemeScript nonce={nonce} />
+        <ThemeScript />
         <link rel="icon" href={getBlobUrl("/favicon.ico")} />
         <link
           rel="apple-touch-icon"
@@ -260,7 +192,7 @@ export default async function RootLayout({
         <link rel="manifest" href="/app-manifest.json" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        <LocaleProvider initialLocale={locale} initialTranslations={translations}>
+        <LocaleProvider initialLocale={activeLocale} initialTranslations={translations}>
           {/* Skip to main content link for accessibility (WCAG 2.1) */}
           <a href="#main-content" className="skip-link">
             {skipToContentLabel}

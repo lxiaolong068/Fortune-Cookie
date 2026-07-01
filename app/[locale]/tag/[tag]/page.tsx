@@ -76,6 +76,9 @@ function getLocalizedCategoryLabel(
   return category.charAt(0).toUpperCase() + category.slice(1);
 }
 
+// force-static so localized tag pages prerender (mirrors SSG English /tag/[tag]).
+export const dynamic = "force-static";
+
 export async function generateStaticParams() {
   const tags = getAllTags();
   // Exclude default locale ('en') — English tag pages are at /tag/[tag], not /en/tag/[tag]

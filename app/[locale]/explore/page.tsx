@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ExplorePageContent } from "@/app/explore/ExplorePageContent";
+import { ExplorePageContent } from "@/app/(main)/explore/ExplorePageContent";
 import { getSiteUrl, getImageUrl } from "@/lib/site";
 import {
   i18n,
@@ -20,6 +20,9 @@ import {
 } from "@/components/StructuredData";
 
 const baseUrl = getSiteUrl();
+
+// force-static so this localized page prerenders (mirrors the static English /explore).
+export const dynamic = "force-static";
 
 // Generate static params for non-default locales only (exclude 'en' to avoid duplicate routes)
 export function generateStaticParams() {
