@@ -43,6 +43,9 @@ interface BlogPostPageProps {
   params: Promise<PageParams>;
 }
 
+// force-static so localized blog posts prerender (mirrors the SSG English /blog/[slug]).
+export const dynamic = "force-static";
+
 /**
  * Generate static params for all blog posts in non-default locales only
  * Exclude 'en' — English blog posts are served at /blog/[slug] (root), not /en/blog/[slug]

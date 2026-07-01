@@ -3,12 +3,17 @@ import { notFound } from "next/navigation";
 import { DynamicBackgroundEffects } from "@/components/DynamicBackgroundEffects";
 import { BreadcrumbStructuredData } from "@/components/StructuredData";
 import { getImageUrl, getSiteUrl } from "@/lib/site";
-import { GeneratorClient } from "@/app/generator/GeneratorClient";
+import { GeneratorClient } from "@/app/(main)/generator/GeneratorClient";
 import { i18n, isValidLocale, getLanguageConfig, getSEOConfig, type Locale } from "@/lib/i18n-config";
 import { loadTranslations, getTranslation } from "@/lib/translations";
 import { LocaleProvider } from "@/lib/locale-context";
 
 const baseUrl = getSiteUrl();
+
+// Match the English /generator page: force-static so useSearchParams() in the
+// client subtree (GeneratorClient) returns empty during prerender instead of
+// triggering the CSR-bailout error, letting this localized page be SSG.
+export const dynamic = "force-static";
 
 // Generate static params for non-default locales only
 // English is served at /generator (root), not /en/generator — exclude 'en' to avoid duplicate routes
