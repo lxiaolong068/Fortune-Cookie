@@ -6,7 +6,11 @@ import { toast } from "sonner";
 import { Dices, Copy, Loader2, Wand2, ImageDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { QuotaGateCard } from "@/components/QuotaGateCard";
 import { buildShareCardUrl, shareOrDownloadCard } from "@/lib/share-card";
+import { withClientId } from "@/lib/client-id";
+import { extractQuota, type QuotaInfo } from "@/lib/quota-client";
+import { trackEvent } from "@/lib/track";
 import { cn } from "@/lib/utils";
 import {
   RPG_TARGETS,
@@ -68,22 +72,40 @@ export function RpgClient() {
   const [quantity, setQuantity] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<GeneratedFortune[]>([]);
+  const [quotaGate, setQuotaGate] = useState<QuotaInfo | null>(null);
+  const [quotaMessage, setQuotaMessage] = useState<string | undefined>();
 
   const generate = useCallback(async () => {
     setIsLoading(true);
-    setResults([]);
+    // Clear any previous gate up front: a stale card (e.g. pre-sign-in guest
+    // numbers) left on screen next to a fresh non-429 error reads as "signing
+    // in did nothing".
+    setQuotaGate(null);
+    setQuotaMessage(undefined);
     try {
       const res = await fetch("/api/generator", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: withClientId({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           mode: "rpg",
           source: "generator",
           params: { target, style, setting, quantity },
         }),
       });
-      const json = await res.json();
+      // Bare .json() throws on the HTML error pages a CDN/edge can return,
+      // which the outer catch would mislabel as "Network error".
+      const json = await res.json().catch(() => null);
       if (!res.ok) {
+        // Daily limit: show an in-place card (results above are kept) instead
+        // of a toast the user can miss.
+        const quota = res.status === 429 ? extractQuota(json) : null;
+        if (quota) {
+          setQuotaGate(quota);
+          setQuotaMessage(
+            typeof json?.error === "string" ? json.error : undefined,
+          );
+          return;
+        }
         toast.error(json?.error || "Generation failed. Please try again.");
         return;
       }
@@ -92,7 +114,15 @@ export function RpgClient() {
         toast.error("The oracle stayed silent. Try again.");
         return;
       }
+      // Reported on a successful reveal only. Generator modes have no local
+      // fallback (failures surface as a toast and return early), so
+      // is_fallback is structurally false here.
+      trackEvent("cookie_cracked", {
+        source: "generator",
+        is_fallback: false,
+      });
       setResults(fortunes);
+      setQuotaGate(null);
     } catch {
       toast.error("Network error. Please try again.");
     } finally {
@@ -158,7 +188,15 @@ export function RpgClient() {
 
       {/* Results */}
       <div className="min-h-[200px]">
-        {results.length === 0 && !isLoading && (
+        {quotaGate && (
+          <QuotaGateCard
+            quota={quotaGate}
+            message={quotaMessage}
+            className="mb-4"
+          />
+        )}
+
+        {results.length === 0 && !isLoading && !quotaGate && (
           <div className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-400 dark:border-slate-700">
             <Dices className="mb-3 h-8 w-8" />
             <p>Set the scene and roll for prophecy.</p>

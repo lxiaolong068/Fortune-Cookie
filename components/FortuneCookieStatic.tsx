@@ -39,6 +39,21 @@ export function FortuneCookieStatic() {
       />
 
       <div className="w-full max-w-2xl min-h-[600px] flex flex-col items-center justify-center relative z-10">
+        {/*
+          Ambient ritual line — sits above the cookie so the reader picks a
+          person before they tap, which is the whole point of the ritual.
+          Deliberately quiet (small, low contrast) so it primes the mood
+          without competing with the CTA below the cookie. Rendered in the
+          static layer to keep it inside the LCP paint instead of the
+          ssr:false interactive layer.
+          The two inline-block spans force a clean break at the em dash on
+          narrow viewports (390px) instead of an orphaned trailing word.
+        */}
+        <p className="mx-auto mb-6 max-w-sm px-4 text-center text-sm text-slate-500/90 dark:text-slate-400/90 relative z-10 font-body">
+          <span className="inline-block">Whoever just came to mind &mdash;</span>{" "}
+          <span className="inline-block">this one&rsquo;s about them.</span>
+        </p>
+
         {/* LCP Element: Modern 3D Cookie Visual */}
         <div className="fortune-cookie-static w-48 h-48 flex items-center justify-center mb-8 animate-cookie-float">
           <div className="relative cursor-pointer group">
@@ -268,7 +283,7 @@ export function FortuneCookieStatic() {
           </h2>
 
           {/* Subtitle */}
-          <p className="text-lg text-slate-600 dark:text-slate-300 mb-6 relative z-10 font-body">
+          <p className="text-lg text-slate-600 dark:text-slate-300 mb-2 relative z-10 font-body">
             Tap the cookie to crack it open!
           </p>
 

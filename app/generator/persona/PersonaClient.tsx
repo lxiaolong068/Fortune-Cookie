@@ -6,8 +6,12 @@ import { toast } from "sonner";
 import { Drama, Copy, Loader2, Wand2, Lock, ImageDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { QuotaGateCard } from "@/components/QuotaGateCard";
 import { useAuthSession } from "@/lib/auth-client";
 import { buildShareCardUrl, shareOrDownloadCard } from "@/lib/share-card";
+import { withClientId } from "@/lib/client-id";
+import { extractQuota, type QuotaInfo } from "@/lib/quota-client";
+import { trackEvent } from "@/lib/track";
 import { cn } from "@/lib/utils";
 import {
   PERSONAS,
@@ -32,6 +36,8 @@ export function PersonaClient() {
   const [quantity, setQuantity] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<GeneratedFortune[]>([]);
+  const [quotaGate, setQuotaGate] = useState<QuotaInfo | null>(null);
+  const [quotaMessage, setQuotaMessage] = useState<string | undefined>();
 
   const canUse = useCallback(
     (id: string) => isPremium || FREE.has(id),
@@ -44,19 +50,35 @@ export function PersonaClient() {
       return;
     }
     setIsLoading(true);
-    setResults([]);
+    // Clear any previous gate up front: a stale card (e.g. pre-sign-in guest
+    // numbers) left on screen next to a fresh non-429 error reads as "signing
+    // in did nothing".
+    setQuotaGate(null);
+    setQuotaMessage(undefined);
     try {
       const res = await fetch("/api/generator", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: withClientId({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           mode: "persona",
           source: "generator",
           params: { persona, topic, quantity },
         }),
       });
-      const json = await res.json();
+      // Bare .json() throws on the HTML error pages a CDN/edge can return,
+      // which the outer catch would mislabel as "Network error".
+      const json = await res.json().catch(() => null);
       if (!res.ok) {
+        // Daily limit: show an in-place card (results above are kept) instead
+        // of a toast the user can miss.
+        const quota = res.status === 429 ? extractQuota(json) : null;
+        if (quota) {
+          setQuotaGate(quota);
+          setQuotaMessage(
+            typeof json?.error === "string" ? json.error : undefined,
+          );
+          return;
+        }
         toast.error(json?.error || "Generation failed. Please try again.");
         return;
       }
@@ -65,7 +87,15 @@ export function PersonaClient() {
         toast.error("Nothing came back. Try again.");
         return;
       }
+      // Reported on a successful reveal only. Generator modes have no local
+      // fallback (failures surface as a toast and return early), so
+      // is_fallback is structurally false here.
+      trackEvent("cookie_cracked", {
+        source: "generator",
+        is_fallback: false,
+      });
       setResults(fortunes);
+      setQuotaGate(null);
     } catch {
       toast.error("Network error. Please try again.");
     } finally {
@@ -209,7 +239,15 @@ export function PersonaClient() {
 
       {/* Results */}
       <div className="min-h-[200px]">
-        {results.length === 0 && !isLoading && (
+        {quotaGate && (
+          <QuotaGateCard
+            quota={quotaGate}
+            message={quotaMessage}
+            className="mb-4"
+          />
+        )}
+
+        {results.length === 0 && !isLoading && !quotaGate && (
           <div className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-400 dark:border-slate-700">
             <Drama className="mb-3 h-8 w-8" />
             <p>Pick a persona and let them speak.</p>
