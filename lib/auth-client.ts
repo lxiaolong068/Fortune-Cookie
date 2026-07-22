@@ -56,8 +56,19 @@ export function useAuthSession() {
   return { data: session, status };
 }
 
-export function startGoogleSignIn() {
-  window.location.href = "/api/auth/signin/google";
+/**
+ * Kick off Google OAuth. Pass `callbackUrl` (defaults to the current path) so
+ * the user lands back where they were instead of on the homepage — important
+ * for in-place sign-in prompts like the quota gate card.
+ */
+export function startGoogleSignIn(callbackUrl?: string) {
+  // Browser-only by construction: both callers are click handlers, and the
+  // navigation below needs `window` regardless — guarding only the callbackUrl
+  // lookup would have been theatre.
+  const target =
+    callbackUrl ?? `${window.location.pathname}${window.location.search}`;
+
+  window.location.href = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(target)}`;
 }
 
 export function startSignOut() {
