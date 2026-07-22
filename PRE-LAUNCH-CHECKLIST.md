@@ -290,13 +290,29 @@ npm start && npm run test:local
 4. **Premium 的 `limit`/`remaining` 仍是 `MAX_SAFE_INTEGER`** — 已加 `unlimited: true`,待前端确认只读该字段后可清掉魔法数字。
 5. **首页恢复逻辑对 localStorage 的校验不够** — 只检查 `saved.fortune?.message`,不检查 `numbers`。若日后字段改名或写入不完整,整个首页会崩进 error boundary,用户必须手动清缓存才能恢复。
 
-6. **⚠️ AI 兜底率约 15%,值得单独查** — 查生产库 `FortuneUsage` 的 source 分布:
-   `ai` 396 条 / `fallback` 70 条 / `generator` 234 / `home` 121。也就是**约六分之一的生成
-   根本没拿到 AI 内容,走的是本地预置签文**。这意味着走查里「内容不够有梗、反复撞同一个梗」
-   的抱怨,有一部分可能根本不是 prompt 的问题,而是用户压根没看到 AI 生成的东西。
-   新埋的 `cookie_cracked` 事件带了 `is_fallback` 参数,上线后可持续监控这个比例。
-   **在投入 Oracle prompt 重写之前,建议先查清楚这 15% 是怎么来的**(OpenRouter 限额?
-   超时?模型返回被 `lib/prompts/validate.ts` 的反套路校验拦掉了?)。
+6. **⚠️ AI 兜底率目前完全不可见 —— 这是个观测盲区** — `FortuneUsage.source` 字段在
+   2026-07-01 的 v2 改版时**换了含义**,但没有改名:
+   - 改版前(2025-12-20 ~ 2026-06-29):记录 `ai` / `fallback`,即 AI 是否成功
+   - 改版后(2026-07-01 起):记录 `home` / `generator`,即额度 scope
+     (见 `app/api/generator/route.ts` 写入处 `source: scope`)
+
+   后果:**过去 22 天里 AI 失败了多少次,查不出来**。AI 成功与否只出现在 API 响应体的
+   `"source":"ai"` 字段里,从未落库。
+
+   (历史参考:改版前那半年的兜底率是 70/466 ≈ 15%,但这**不能**代表现状,
+   代码和模型都换过了。)
+
+   因此新埋的 `cookie_cracked` 事件的 `is_fallback` 参数,是目前**唯一**能测这件事的手段
+   —— 这也是第 10.3 节那 7 个自定义维度必须尽快注册的原因之一。
+
+   **在投入 Oracle prompt 重写之前,先用 `is_fallback` 攒一周数据**。如果兜底率不低,
+   那么走查里「内容不够有梗、反复撞同一个梗」的抱怨,有一部分根本不是 prompt 的问题,
+   而是用户压根没看到 AI 生成的东西。可疑来源:OpenRouter 限额 / 超时 /
+   函数冷启动 + Neon 唤醒(实测部署后首批请求会 502)/ 模型返回被
+   `lib/prompts/validate.ts` 的反套路校验拦掉。
+
+   **顺带建议**:把 `FortuneUsage` 的 AI 成败重新落库(加一列,别再复用 `source`),
+   这样服务端自己就能回答这个问题,不必依赖前端埋点。归后端待办。
 
 7. **遗留接口 `/api/fortune` 已 21 天零流量** — 生产库 `FortuneQuota` 最后写入停在
    2026-07-01(正是 v2 改版上线日),`FortuneUsage` 每天都在写。前端五处 fetch 全部指向
