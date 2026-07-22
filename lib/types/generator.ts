@@ -123,6 +123,20 @@ export interface QuotaStatus {
   remaining: number;
   resetsAtUtc: string;
   isAuthenticated: boolean;
+  /**
+   * True when this identity has no daily ceiling (Premium generator usage,
+   * signed-in home draws). Read this instead of testing `limit` against a
+   * sentinel — `limit`/`remaining` may still carry a huge placeholder number
+   * for backwards compatibility and must not be rendered when this is true.
+   * Optional: responses from older deployments omit it.
+   */
+  unlimited?: boolean;
+  /**
+   * The daily limit this scope grants to signed-in users. Use it for
+   * "sign in for N per day" copy instead of hardcoding N.
+   * Optional: responses from older deployments omit it.
+   */
+  authLimit?: number;
 }
 
 // ============================================================================

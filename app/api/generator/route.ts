@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
+  checkGuestIpDailyCap,
+  getScopedLimit,
   getScopedQuotaStatus,
   recordFortuneUsage,
   resolveGuestId,
@@ -214,9 +216,31 @@ export async function POST(request: NextRequest) {
       message =
         "You have reached the guest daily limit. Sign in to get more fortunes today.";
     }
-    return NextResponse.json(createErrorResponse(message, { quota }), {
-      status: 429,
-    });
+    return NextResponse.json(
+      createErrorResponse(message, {
+        quota,
+        scope,
+        // Explicit limits so the client never has to hardcode them or read a
+        // parallel NEXT_PUBLIC_* env var that can silently drift from these.
+        guestLimit: getScopedLimit(scope, false),
+        authLimit: getScopedLimit(scope, true),
+      }),
+      { status: 429 },
+    );
+  }
+
+  // Anti-abuse backstop: the per-device guest bucket is cheap to mint by
+  // rotating X-Client-Id, so cap total guest generations per network per day
+  // before spending anything at the model provider.
+  const ipCap = await checkGuestIpDailyCap(identity);
+  if (!ipCap.allowed) {
+    return NextResponse.json(
+      createErrorResponse(
+        "Too many free fortunes from your network today. Sign in to keep generating.",
+        { quota, scope, reason: "network_limit", authLimit: getScopedLimit(scope, true) },
+      ),
+      { status: 429 },
+    );
   }
 
   // Generate
@@ -300,10 +324,13 @@ export async function POST(request: NextRequest) {
   const refreshedQuota = await getScopedQuotaStatus(identity, scope);
   // Report Premium generator usage as unlimited — the DB-tracked count is
   // still incremented (for stats), but the gate above never enforces it.
+  // `unlimited` is the field clients should read; the MAX_SAFE_INTEGER values
+  // are kept only so older clients that compare numbers keep working.
   const reportedQuota =
     isPremium && scope === "generator"
       ? {
           ...refreshedQuota,
+          unlimited: true,
           limit: Number.MAX_SAFE_INTEGER,
           remaining: Number.MAX_SAFE_INTEGER,
         }

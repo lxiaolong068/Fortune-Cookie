@@ -19,6 +19,8 @@ import { createSuccessResponse, createErrorResponse } from "@/types/api";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
+  AUTH_DAILY_LIMIT,
+  checkGuestIpDailyCap,
   consumeDailyQuota,
   recordFortuneUsage,
   resolveGuestId,
@@ -258,6 +260,20 @@ export async function POST(request: NextRequest) {
     const quotaIdentity: QuotaIdentity = session?.user?.id
       ? { isAuthenticated: true, userId: session.user.id }
       : { isAuthenticated: false, guestId: resolveGuestId(request) };
+
+    // Anti-abuse backstop before we charge quota or call the model provider:
+    // guest buckets are per-browser and therefore cheap to mint by rotating
+    // X-Client-Id, so cap total guest generations per network per day.
+    const ipCap = await checkGuestIpDailyCap(quotaIdentity);
+    if (!ipCap.allowed) {
+      return NextResponse.json(
+        createErrorResponse(
+          "Too many free fortunes from your network today. Sign in to keep generating.",
+          { reason: "network_limit", authLimit: AUTH_DAILY_LIMIT },
+        ),
+        { status: 429 },
+      );
+    }
 
     const quotaResult = await consumeDailyQuota(quotaIdentity);
     if (!quotaResult.allowed) {
