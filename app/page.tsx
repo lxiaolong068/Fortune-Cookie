@@ -60,30 +60,46 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Same function-first naming and same order as the /generator hub, so the two
+ * entry points never disagree. `subtitle` carries the original brand name.
+ * DOM order = mobile order (Quick Fortune first, visually promoted); on the
+ * 2-column desktop grid it puts Tabletop RPG Fortunes second.
+ */
 const MODES = [
   {
     href: "/generator/oracle",
     icon: Sparkles,
-    title: "The True Oracle",
-    description: "Predictions — good, neutral, bad, or ominous.",
-  },
-  {
-    href: "/generator/persona",
-    icon: Drama,
-    title: "The Alter Ego",
-    description: "Fortunes with attitude, in a persona's voice.",
-  },
-  {
-    href: "/generator/event",
-    icon: PartyPopper,
-    title: "The Event Master",
-    description: "Custom fortunes for weddings & parties.",
+    title: "Quick Fortune",
+    subtitle: "The True Oracle",
+    description: "One tap, one prophecy. No settings needed.",
+    featured: true,
   },
   {
     href: "/generator/rpg",
     icon: Dices,
-    title: "The Tabletop RPG",
-    description: "Prophecies & quest hooks for your campaign.",
+    title: "Tabletop RPG Fortunes",
+    subtitle: "Prophecies & Quest Hooks",
+    description: "Omens, riddles, and quest hooks for your next session.",
+    featured: false,
+  },
+  {
+    href: "/generator/event",
+    icon: PartyPopper,
+    title: "Party & Event Fortunes",
+    subtitle: "The Event Master",
+    description:
+      "Custom fortune cookie messages for weddings, birthdays, and team nights.",
+    featured: false,
+  },
+  {
+    href: "/generator/persona",
+    icon: Drama,
+    title: "Character Voice",
+    subtitle: "The Alter Ego",
+    description:
+      "Get your fortune from a noir detective, a villain, or your grandma.",
+    featured: false,
   },
 ];
 
@@ -94,9 +110,9 @@ const FAQS = [
       "A free online tool that writes fortune cookie messages with AI. Crack the cookie on the homepage for a daily prediction, or open the Generator to craft custom fortunes across four modes.",
   },
   {
-    question: "Is it free?",
+    question: "How many free fortunes do I get?",
     answer:
-      "Yes. You get a free fortune every day with no signup. Signing in with Google unlocks a higher daily limit plus saved favorites and history.",
+      "The cookie on this page gives you one free fortune a day, no account needed. The Generator gives guests 3 more AI fortunes a day, and signing in with Google raises that to 10 — plus saved favorites and history. Limits reset at midnight UTC.",
   },
   {
     question: "Are the fortunes written by AI?",
@@ -106,7 +122,7 @@ const FAQS = [
   {
     question: "What can I do in the Generator?",
     answer:
-      "Pick a mode: The True Oracle for predictions, The Alter Ego for persona-driven fortunes, plus The Event Master and The Tabletop RPG. Each mode has its own controls.",
+      "Pick a mode: Quick Fortune (The True Oracle) for predictions, Tabletop RPG Fortunes for omens and quest hooks, Party & Event Fortunes (The Event Master) for weddings and parties, and Character Voice (The Alter Ego) for persona-driven fortunes. Each mode has its own controls.",
   },
 ];
 
@@ -145,7 +161,11 @@ export default function HomePage() {
                   <li key={mode.href}>
                     <Link
                       href={mode.href}
-                      className="group flex h-full items-start gap-3 rounded-2xl border border-amber-200 bg-white/80 p-5 transition-all hover:-translate-y-0.5 hover:border-amber-400 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/60"
+                      className={`group flex h-full items-start gap-3 rounded-2xl border border-amber-200 bg-white/80 p-5 transition-all hover:-translate-y-0.5 hover:border-amber-400 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/60 ${
+                        mode.featured
+                          ? "ring-2 ring-amber-400/70 shadow-md sm:ring-0 sm:shadow-none"
+                          : ""
+                      }`}
                     >
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white">
                         <Icon className="h-5 w-5" />
@@ -155,6 +175,9 @@ export default function HomePage() {
                           {mode.title}
                           <ArrowRight className="h-4 w-4 text-amber-500 opacity-0 transition-opacity group-hover:opacity-100" />
                         </h2>
+                        <p className="mt-0.5 text-sm font-medium text-amber-700 dark:text-amber-300">
+                          {mode.subtitle}
+                        </p>
                         <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-400">
                           {mode.description}
                         </p>
