@@ -1,5 +1,7 @@
 // Injected content via Sentry wizard below
 
+const isProd = process.env.NODE_ENV === "production";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Image optimization
@@ -93,12 +95,20 @@ const nextConfig = {
   async headers() {
     return [
       // 静态资源缓存 - 长期缓存不可变资源
+      //
+      // 仅限生产:生产构建的 chunk 文件名带 hash,内容变了 URL 也会变,
+      // 所以 immutable 是安全的。开发模式下 chunk 的 URL 是固定的
+      // (例如 /_next/static/chunks/app/page.js),再发 immutable 会让浏览器
+      // 把开发产物缓存一年 —— 表现为"改了代码页面纹丝不动",而且清 .next、
+      // 重启 dev server 都无效,因为浏览器根本不会回源。
       {
         source: "/_next/static/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: isProd
+              ? "public, max-age=31536000, immutable"
+              : "no-store, must-revalidate",
           },
         ],
       },
