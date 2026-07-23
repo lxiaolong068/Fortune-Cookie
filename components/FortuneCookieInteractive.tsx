@@ -293,8 +293,11 @@ export function FortuneCookieInteractive() {
       setState("opened");
       return;
     }
+    // "generator", matching the scope this draw actually spent. Reporting
+    // "home" here would collapse first-draw and repeat-draw into one bucket
+    // and make the Crack another funnel unreadable.
     trackEvent("cookie_cracked", {
-      source: "home",
+      source: "generator",
       is_fallback: outcome.isFallback,
     });
     setFortune(outcome.fortune);
